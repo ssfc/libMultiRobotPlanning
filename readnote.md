@@ -142,22 +142,22 @@ Graphviz广泛用于多个领域，包括软件工程、数据分析、网络拓
 
 ### Q: test_next_best_assignment.py这个文件是干啥的？
 
-这个文件是一个用Python编写的单元测试代码，用来测试一个名为next_best_assignment的程序。这个程序的功能是找出一个映射问题的最优解和次优解。映射问题是指将一组代理（a0, a1, a2, …)分配给一组任务（t0, t1, t2, …)，使得每个代理只能分配一个任务，每个任务只能被一个代理分配，且分配的总成本最小。成本是由输入文件中给出的每对代理和任务之间的值决定的。
+这个文件是一个用Python编写的单元测试代码，用来测试一个名为next_best_assignment的程序。这个程序的功能是找出一个映射问题的最优解和次优解。映射问题是指将一组智能体（a0, a1, a2, …)分配给一组任务（t0, t1, t2, …)，使得每个智能体只能分配一个任务，每个任务只能被一个智能体分配，且分配的总成本最小。成本是由输入文件中给出的每对智能体和任务之间的值决定的。
 
 这个单元测试代码包含了以下几个部分：
 
-- `runNextBestAssignment`方法：这个方法用来运行next_best_assignment程序，并将输入文件和输出文件作为参数传递。输入文件是一个包含代理和任务之间的值的文本文件，输出文件是一个包含最优解和次优解的YAML文件。这个方法返回输出文件中的内容。
+- `runNextBestAssignment`方法：这个方法用来运行next_best_assignment程序，并将输入文件和输出文件作为参数传递。输入文件是一个包含智能体和任务之间的值的文本文件，输出文件是一个包含最优解和次优解的YAML文件。这个方法返回输出文件中的内容。
 - `test_empty`方法：这个方法用来测试当输入文件为空时，输出文件中没有任何解。
-- `test_1by2`方法：这个方法用来测试当输入文件中有一个代理和两个任务时，输出文件中有两个解，分别是最优解和次优解。
-- `test_2by1`方法：这个方法用来测试当输入文件中有两个代理和一个任务时，输出文件中有两个解，分别是最优解和次优解。
-- `test_2by2`方法：这个方法用来测试当输入文件中有两个代理和两个任务时，输出文件中有两个解，分别是最优解和次优解。
-- `test_4by4`方法：这个方法用来测试当输入文件中有四个代理和四个任务时，输出文件中有24个解，按照成本从小到大排序。
+- `test_1by2`方法：这个方法用来测试当输入文件中有一个智能体和两个任务时，输出文件中有两个解，分别是最优解和次优解。
+- `test_2by1`方法：这个方法用来测试当输入文件中有两个智能体和一个任务时，输出文件中有两个解，分别是最优解和次优解。
+- `test_2by2`方法：这个方法用来测试当输入文件中有两个智能体和两个任务时，输出文件中有两个解，分别是最优解和次优解。
+- `test_4by4`方法：这个方法用来测试当输入文件中有四个智能体和四个任务时，输出文件中有24个解，按照成本从小到大排序。
 
 如果你想了解更多关于单元测试的知识，你可以参考这篇文章。
 
 ### Q: python3 ../test/test_next_best_assignment.py TestNextBestAssignment.test_1by2是什么意思？
 
-python3 …/test/test_next_best_assignment.py TestNextBestAssignment.test_1by2是一个命令，用来运行一个名为test_1by2的单元测试方法。这个方法是在test_next_best_assignment.py文件中定义的，属于TestNextBestAssignment这个测试类。这个方法的作用是测试当输入文件中有一个代理和两个任务时，输出文件中有两个解，分别是最优解和次优解。这个命令需要在终端中输入，并且要确保你在test文件夹的上一级目录中。运行这个命令后，你可以看到终端中显示了测试的结果，包括测试是否通过，以及运行时间。如果你想运行所有的单元测试方法，你可以输入python3 …/test/test_next_best_assignment.py TestNextBestAssignment，或者直接输入python3 …/test/test_next_best_assignment.py。
+python3 …/test/test_next_best_assignment.py TestNextBestAssignment.test_1by2是一个命令，用来运行一个名为test_1by2的单元测试方法。这个方法是在test_next_best_assignment.py文件中定义的，属于TestNextBestAssignment这个测试类。这个方法的作用是测试当输入文件中有一个智能体和两个任务时，输出文件中有两个解，分别是最优解和次优解。这个命令需要在终端中输入，并且要确保你在test文件夹的上一级目录中。运行这个命令后，你可以看到终端中显示了测试的结果，包括测试是否通过，以及运行时间。如果你想运行所有的单元测试方法，你可以输入python3 …/test/test_next_best_assignment.py TestNextBestAssignment，或者直接输入python3 …/test/test_next_best_assignment.py。
 
 ### Q: 上面代码后面的TestNextBestAssignment.test_1by2在哪里能找到？
 
@@ -172,3 +172,14 @@ def __init__(self, methodName='runTest')
 ```
 
 这个构造函数接受一个参数，表示要运行的测试方法的名字。如果不指定这个参数，就会运行默认的runTest方法。你可以在[这篇文章](https://realpython.com/python-class-constructor/)中了解更多关于Python类构造函数的知识。
+
+### Q: 什么是unittest?
+
+unittest是Python的一个单元测试框架，它可以用来编写和运行测试代码，检查其他代码的功能和正确性。unittest支持以下几个核心概念：
+
+- 测试固件（test fixture）：指为测试准备和清理环境所需要的操作，例如创建临时文件或数据库，启动或停止服务器等。
+- 测试用例（test case）：指一个单独的测试单元，它检查一个特定的输入是否能得到预期的输出。unittest提供了一个基类TestCase，可以用来创建新的测试用例。
+- 测试套件（test suite）：指一个集合，包含多个测试用例、测试套件或两者的组合。它可以用来组织和管理测试。
+- 测试运行器（test runner）：指一个组件，负责执行测试套件中的测试用例，并向用户展示测试结果。测试运行器可以有不同的界面，例如图形界面、文本界面或返回特殊值。
+
+unittest模块提供了丰富的工具和方法来编写和运行测试，例如断言方法、装饰器、类方法等。你可以参考[这篇文章]()来了解更多关于Python单元测试的知识。
