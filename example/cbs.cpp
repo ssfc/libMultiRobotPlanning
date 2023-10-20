@@ -413,14 +413,18 @@ class Environment
   }
 
   void createConstraintsFromConflict(
-      const Conflict& conflict, std::map<size_t, Constraints>& constraints) {
-    if (conflict.type == Conflict::Vertex) {
+      const Conflict& conflict, map<size_t, Constraints>& constraints)
+  {
+    if (conflict.type == Conflict::Vertex)
+    {
       Constraints c1;
       c1.vertexConstraints.emplace(
           VertexConstraint(conflict.time, conflict.x1, conflict.y1));
       constraints[conflict.agent1] = c1;
       constraints[conflict.agent2] = c1;
-    } else if (conflict.type == Conflict::Edge) {
+    }
+    else if (conflict.type == Conflict::Edge)
+    {
       Constraints c1;
       c1.edgeConstraints.emplace(EdgeConstraint(
           conflict.time, conflict.x1, conflict.y1, conflict.x2, conflict.y2));
@@ -445,23 +449,28 @@ class Environment
 
  private:
   State getState(size_t agentIdx,
-                 const std::vector<PlanResult<State, Action, int> >& solution,
-                 size_t t) {
+                 const vector<PlanResult<State, Action, int> >& solution,
+                 size_t t)
+  {
     assert(agentIdx < solution.size());
-    if (t < solution[agentIdx].states.size()) {
+    if (t < solution[agentIdx].states.size())
+    {
       return solution[agentIdx].states[t].first;
     }
     assert(!solution[agentIdx].states.empty());
-    if (m_disappearAtGoal) {
+    if (m_disappearAtGoal)
+    {
       // This is a trick to avoid changing the rest of the code significantly
       // After an agent disappeared, put it at a unique but invalid position
       // This will cause all calls to equalExceptTime(.) to return false.
       return State(-1, -1 * (agentIdx + 1), -1);
     }
+
     return solution[agentIdx].states.back().first;
   }
 
-  bool stateValid(const State& s) {
+  bool stateValid(const State& s)
+  {
     assert(m_constraints);
     const auto& con = m_constraints->vertexConstraints;
     return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
@@ -469,7 +478,8 @@ class Environment
            con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
   }
 
-  bool transitionValid(const State& s1, const State& s2) {
+  bool transitionValid(const State& s1, const State& s2)
+  {
     assert(m_constraints);
     const auto& con = m_constraints->edgeConstraints;
     return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
@@ -487,8 +497,8 @@ class Environment
       HeuristicEnvironment(
         size_t dimx,
         size_t dimy,
-        const std::unordered_set<Location>& obstacles,
-        std::vector<int>* heuristic)
+        const unordered_set<Location>& obstacles,
+        vector<int>* heuristic)
         : m_dimx(dimx)
         , m_dimy(dimy)
         , m_obstacles(obstacles)
@@ -510,7 +520,7 @@ class Environment
 
       void getNeighbors(
         const Location& s,
-        std::vector<Neighbor<Location, Action, int> >& neighbors)
+        vector<Neighbor<Location, Action, int> >& neighbors)
       {
         neighbors.clear();
 
@@ -569,17 +579,18 @@ class Environment
     private:
       int m_dimx;
       int m_dimy;
-      const std::unordered_set<Location>& m_obstacles;
-      std::vector<int>* m_heuristic;
+      const unordered_set<Location>& m_obstacles;
+      vector<int>* m_heuristic;
 
     };
 
     m_heuristic.resize(m_goals.size());
 
-    std::vector< Neighbor<State, Action, int> > neighbors;
+    vector< Neighbor<State, Action, int> > neighbors;
 
-    for (size_t i = 0; i < m_goals.size(); ++i) {
-      m_heuristic[i].assign(m_dimx * m_dimy, std::numeric_limits<int>::max());
+    for (size_t i = 0; i < m_goals.size(); ++i)
+    {
+      m_heuristic[i].assign(m_dimx * m_dimy, numeric_limits<int>::max());
       HeuristicEnvironment henv(m_dimx, m_dimy, m_obstacles, &m_heuristic[i]);
       AStar<Location, Action, int, HeuristicEnvironment> astar(henv);
       PlanResult<Location, Action, int> dummy;
@@ -591,9 +602,9 @@ class Environment
  private:
   int m_dimx;
   int m_dimy;
-  std::unordered_set<Location> m_obstacles;
-  std::vector<Location> m_goals;
-  // std::vector< std::vector<int> > m_heuristic;
+  unordered_set<Location> m_obstacles;
+  vector<Location> m_goals;
+  // vector< vector<int> > m_heuristic;
   size_t m_agentIdx;
   const Constraints* m_constraints;
   int m_lastGoalConstraint;
