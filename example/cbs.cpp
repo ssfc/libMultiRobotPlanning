@@ -186,7 +186,7 @@ namespace std
             boost::hash_combine(seed, s.y1);
             boost::hash_combine(seed, s.x2);
             boost::hash_combine(seed, s.y2);
-            
+
             return seed;
         }
     };

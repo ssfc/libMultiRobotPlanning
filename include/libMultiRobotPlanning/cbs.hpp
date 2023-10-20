@@ -90,7 +90,8 @@ class CBS {
     start.cost = 0;
     start.id = 0;
 
-    for (size_t i = 0; i < initialStates.size(); ++i) {
+    for (size_t i = 0; i < initialStates.size(); ++i)
+    {
       // if (   i < solution.size()
       //     && solution[i].states.size() > 1) {
       //   start.solution[i] = solution[i];
@@ -99,8 +100,9 @@ class CBS {
       LowLevelEnvironment llenv(m_env, i, start.constraints[i]);
       LowLevelSearch_t lowLevel(llenv);
       bool success = lowLevel.search(initialStates[i], start.solution[i]);
-      if (!success) {
-        return false;
+      if (!success)
+      {
+          return false;
       }
       // }
       start.cost += start.solution[i].cost;
@@ -116,7 +118,8 @@ class CBS {
 
     solution.clear();
     int id = 1;
-    while (!open.empty()) {
+    while (!open.empty())
+    {
       HighLevelNode P = open.top();
       m_env.onExpandHighLevelNode(P.cost);
       // std::cout << "expand: " << P << std::endl;
@@ -124,7 +127,8 @@ class CBS {
       open.pop();
 
       Conflict conflict;
-      if (!m_env.getFirstConflict(P.solution, conflict)) {
+      if (!m_env.getFirstConflict(P.solution, conflict))
+      {
         std::cout << "done; cost: " << P.cost << std::endl;
         solution = P.solution;
         return true;
