@@ -14,22 +14,27 @@ using libMultiRobotPlanning::CBS;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
-struct State {
-  State(int time, int x, int y) : time(time), x(x), y(y) {}
+struct State
+{
+    State(int time, int x, int y) : time(time), x(x), y(y) {}
 
-  bool operator==(const State& s) const {
-    return time == s.time && x == s.x && y == s.y;
-  }
+    bool operator==(const State& s) const
+    {
+        return time == s.time && x == s.x && y == s.y;
+    }
 
-  bool equalExceptTime(const State& s) const { return x == s.x && y == s.y; }
+    bool equalExceptTime(const State& s) const { return x == s.x && y == s.y; }
 
-  friend ostream& operator<<(ostream& os, const State& s) {
-    return os << s.time << ": (" << s.x << "," << s.y << ")";
-    // return os << "(" << s.x << "," << s.y << ")";
-  }
-  int time;
-  int x;
-  int y;
+    friend ostream& operator<<(ostream& os, const State& s)
+    {
+        return os << s.time << ": (" << s.x << "," << s.y << ")";
+      // return os << "(" << s.x << "," << s.y << ")";
+
+    }
+
+    int time;
+    int x;
+    int y;
 };
 
 namespace std
