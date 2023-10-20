@@ -245,17 +245,21 @@ struct Location
   }
 };
 
-namespace std {
-template <>
-struct hash<Location> {
-  size_t operator()(const Location& s) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, s.x);
-    boost::hash_combine(seed, s.y);
-    return seed;
-  }
-};
-}  // namespace std
+namespace std
+{
+    template <>
+    struct hash<Location>
+    {
+        size_t operator()(const Location& s) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.x);
+            boost::hash_combine(seed, s.y);
+
+            return seed;
+        }
+    };
+}
 
 ///
 class Environment
