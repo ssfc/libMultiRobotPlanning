@@ -115,11 +115,13 @@ struct VertexConstraint {
     return tie(time, x, y) < tie(other.time, other.x, other.y);
   }
 
-  bool operator==(const VertexConstraint& other) const {
-    return std::tie(time, x, y) == std::tie(other.time, other.x, other.y);
+  bool operator==(const VertexConstraint& other) const
+  {
+    return tie(time, x, y) == tie(other.time, other.x, other.y);
   }
 
-  friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& c) {
+  friend ostream& operator<<(ostream& os, const VertexConstraint& c)
+  {
     return os << "VC(" << c.time << "," << c.x << "," << c.y << ")";
   }
 };
@@ -146,17 +148,19 @@ struct EdgeConstraint {
   int x2;
   int y2;
 
-  bool operator<(const EdgeConstraint& other) const {
-    return std::tie(time, x1, y1, x2, y2) <
-           std::tie(other.time, other.x1, other.y1, other.x2, other.y2);
+  bool operator<(const EdgeConstraint& other) const
+  {
+    return tie(time, x1, y1, x2, y2) <
+           tie(other.time, other.x1, other.y1, other.x2, other.y2);
   }
 
-  bool operator==(const EdgeConstraint& other) const {
-    return std::tie(time, x1, y1, x2, y2) ==
-           std::tie(other.time, other.x1, other.y1, other.x2, other.y2);
+  bool operator==(const EdgeConstraint& other) const
+  {
+    return tie(time, x1, y1, x2, y2) ==
+           tie(other.time, other.x1, other.y1, other.x2, other.y2);
   }
 
-  friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& c) {
+  friend ostream& operator<<(ostream& os, const EdgeConstraint& c) {
     return os << "EC(" << c.time << "," << c.x1 << "," << c.y1 << "," << c.x2
               << "," << c.y2 << ")";
   }
@@ -177,9 +181,10 @@ struct hash<EdgeConstraint> {
 };
 }  // namespace std
 
-struct Constraints {
-  std::unordered_set<VertexConstraint> vertexConstraints;
-  std::unordered_set<EdgeConstraint> edgeConstraints;
+struct Constraints
+{
+  unordered_set<VertexConstraint> vertexConstraints;
+  unordered_set<EdgeConstraint> edgeConstraints;
 
   void add(const Constraints& other) {
     vertexConstraints.insert(other.vertexConstraints.begin(),
@@ -202,13 +207,18 @@ struct Constraints {
     return false;
   }
 
-  friend std::ostream& operator<<(std::ostream& os, const Constraints& c) {
-    for (const auto& vc : c.vertexConstraints) {
-      os << vc << std::endl;
+  friend ostream& operator<<(ostream& os, const Constraints& c)
+  {
+    for (const auto& vc : c.vertexConstraints)
+    {
+      os << vc << endl;
     }
-    for (const auto& ec : c.edgeConstraints) {
-      os << ec << std::endl;
+
+    for (const auto& ec : c.edgeConstraints)
+    {
+      os << ec << endl;
     }
+
     return os;
   }
 };
@@ -218,15 +228,18 @@ struct Location {
   int x;
   int y;
 
-  bool operator<(const Location& other) const {
-    return std::tie(x, y) < std::tie(other.x, other.y);
+  bool operator<(const Location& other) const
+  {
+    return tie(x, y) < tie(other.x, other.y);
   }
 
-  bool operator==(const Location& other) const {
-    return std::tie(x, y) == std::tie(other.x, other.y);
+  bool operator==(const Location& other) const
+  {
+    return tie(x, y) == tie(other.x, other.y);
   }
 
-  friend std::ostream& operator<<(std::ostream& os, const Location& c) {
+  friend ostream& operator<<(ostream& os, const Location& c) \
+  {
     return os << "(" << c.x << "," << c.y << ")";
   }
 };
@@ -651,38 +664,41 @@ int main(int argc, char* argv[]) {
     int makespan = 0;
     for (const auto& s : solution) {
       cost += s.cost;
-      makespan = std::max<int>(makespan, s.cost);
+      makespan = max<int>(makespan, s.cost);
     }
 
-    std::ofstream fout(outputFile);
-    fout << "statistics:" << std::endl;
-    fout << "  cost: " << cost << std::endl;
-    fout << "  makespan: " << makespan << std::endl;
-    fout << "  runtime: " << timer.elapsedSeconds() << std::endl;
+    ofstream fout(outputFile);
+    fout << "statistics:" << endl;
+    fout << "  cost: " << cost << endl;
+    fout << "  makespan: " << makespan << endl;
+    fout << "  runtime: " << timer.elapsedSeconds() << endl;
     cerr << "  runtime: " << timer.elapsedSeconds() << endl;
-    fout << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
-    fout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
-    fout << "schedule:" << std::endl;
-    for (size_t a = 0; a < solution.size(); ++a) {
-      // std::cout << "Solution for: " << a << std::endl;
+    fout << "  highLevelExpanded: " << mapf.highLevelExpanded() << endl;
+    fout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
+    fout << "schedule:" << endl;
+    for (size_t a = 0; a < solution.size(); ++a)
+    {
+      // cout << "Solution for: " << a << endl;
       // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-      //   std::cout << solution[a].states[i].second << ": " <<
+      //   cout << solution[a].states[i].second << ": " <<
       //   solution[a].states[i].first << "->" << solution[a].actions[i].first
-      //   << "(cost: " << solution[a].actions[i].second << ")" << std::endl;
+      //   << "(cost: " << solution[a].actions[i].second << ")" << endl;
       // }
-      // std::cout << solution[a].states.back().second << ": " <<
-      // solution[a].states.back().first << std::endl;
+      // cout << solution[a].states.back().second << ": " <<
+      // solution[a].states.back().first << endl;
 
-      fout << "  agent" << a << ":" << std::endl;
+      fout << "  agent" << a << ":" << endl;
       for (const auto& state : solution[a].states)
       {
-        fout << "    - x: " << state.first.x << std::endl
-            << "      y: " << state.first.y << std::endl
-            << "      t: " << state.second << std::endl;
+        fout << "    - x: " << state.first.x << endl
+            << "      y: " << state.first.y << endl
+            << "      t: " << state.second << endl;
       }
     }
-  } else {
-    std::cout << "Planning NOT successful!" << std::endl;
+  }
+  else
+  {
+    cout << "Planning NOT successful!" << endl;
   }
 
   return 0;
