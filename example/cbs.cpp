@@ -646,8 +646,7 @@ int main(int argc, char* argv[]) {
   timer.stop();
 
   if (success) {
-    std::cout << "Planning successful! " << std::endl;
-    std::cout << "hello\n";
+    cout << "Planning successful! " << endl;
     int cost = 0;
     int makespan = 0;
     for (const auto& s : solution) {
@@ -660,6 +659,7 @@ int main(int argc, char* argv[]) {
     fout << "  cost: " << cost << std::endl;
     fout << "  makespan: " << makespan << std::endl;
     fout << "  runtime: " << timer.elapsedSeconds() << std::endl;
+    cerr << "  runtime: " << timer.elapsedSeconds() << endl;
     fout << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
     fout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
     fout << "schedule:" << std::endl;
