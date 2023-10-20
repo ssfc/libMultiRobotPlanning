@@ -158,3 +158,7 @@ Graphviz广泛用于多个领域，包括软件工程、数据分析、网络拓
 ### Q: python3 ../test/test_next_best_assignment.py TestNextBestAssignment.test_1by2是什么意思？
 
 python3 …/test/test_next_best_assignment.py TestNextBestAssignment.test_1by2是一个命令，用来运行一个名为test_1by2的单元测试方法。这个方法是在test_next_best_assignment.py文件中定义的，属于TestNextBestAssignment这个测试类。这个方法的作用是测试当输入文件中有一个代理和两个任务时，输出文件中有两个解，分别是最优解和次优解。这个命令需要在终端中输入，并且要确保你在test文件夹的上一级目录中。运行这个命令后，你可以看到终端中显示了测试的结果，包括测试是否通过，以及运行时间。如果你想运行所有的单元测试方法，你可以输入python3 …/test/test_next_best_assignment.py TestNextBestAssignment，或者直接输入python3 …/test/test_next_best_assignment.py。
+
+### Q: 上面代码后面的TestNextBestAssignment.test_1by2在哪里能找到？
+
+TestNextBestAssignment.test_1by2是在test_next_best_assignment.py文件中定义的一个单元测试方法，你可以用一个文本编辑器打开这个文件，然后搜索这个方法的名字，就可以找到它。这个文件的路径是…/test/test_next_best_assignment.py，也就是说，它在test文件夹中，而test文件夹在你当前的工作目录的上一级目录中。你也可以用[Edge浏览器]打开这个文件，只要你知道它的完整路径。
