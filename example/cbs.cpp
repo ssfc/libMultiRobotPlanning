@@ -32,18 +32,22 @@ struct State {
   int y;
 };
 
-namespace std {
-template <>
-struct hash<State> {
-  size_t operator()(const State& s) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, s.time);
-    boost::hash_combine(seed, s.x);
-    boost::hash_combine(seed, s.y);
-    return seed;
-  }
-};
-}  // namespace std
+namespace std
+{
+    template <>
+    struct hash<State>
+    {
+        size_t operator()(const State& s) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.x);
+            boost::hash_combine(seed, s.y);
+
+            return seed;
+        }
+    };
+}
 
 ///
 enum class Action {
