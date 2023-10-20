@@ -655,14 +655,14 @@ int main(int argc, char* argv[]) {
       makespan = std::max<int>(makespan, s.cost);
     }
 
-    std::ofstream out(outputFile);
-    out << "statistics:" << std::endl;
-    out << "  cost: " << cost << std::endl;
-    out << "  makespan: " << makespan << std::endl;
-    out << "  runtime: " << timer.elapsedSeconds() << std::endl;
-    out << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
-    out << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
-    out << "schedule:" << std::endl;
+    std::ofstream fout(outputFile);
+    fout << "statistics:" << std::endl;
+    fout << "  cost: " << cost << std::endl;
+    fout << "  makespan: " << makespan << std::endl;
+    fout << "  runtime: " << timer.elapsedSeconds() << std::endl;
+    fout << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
+    fout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
+    fout << "schedule:" << std::endl;
     for (size_t a = 0; a < solution.size(); ++a) {
       // std::cout << "Solution for: " << a << std::endl;
       // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
@@ -673,9 +673,10 @@ int main(int argc, char* argv[]) {
       // std::cout << solution[a].states.back().second << ": " <<
       // solution[a].states.back().first << std::endl;
 
-      out << "  agent" << a << ":" << std::endl;
-      for (const auto& state : solution[a].states) {
-        out << "    - x: " << state.first.x << std::endl
+      fout << "  agent" << a << ":" << std::endl;
+      for (const auto& state : solution[a].states)
+      {
+        fout << "    - x: " << state.first.x << std::endl
             << "      y: " << state.first.y << std::endl
             << "      t: " << state.second << std::endl;
       }
