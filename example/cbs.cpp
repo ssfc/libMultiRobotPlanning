@@ -223,7 +223,8 @@ struct Constraints
   }
 };
 
-struct Location {
+struct Location
+{
   Location(int x, int y) : x(x), y(y) {}
   int x;
   int y;
@@ -257,14 +258,15 @@ struct hash<Location> {
 }  // namespace std
 
 ///
-class Environment {
+class Environment
+{
  public:
-  Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-              std::vector<Location> goals, bool disappearAtGoal = false)
+  Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles,
+              vector<Location> goals, bool disappearAtGoal = false)
       : m_dimx(dimx),
         m_dimy(dimy),
-        m_obstacles(std::move(obstacles)),
-        m_goals(std::move(goals)),
+        m_obstacles(move(obstacles)),
+        m_goals(move(goals)),
         m_agentIdx(0),
         m_constraints(nullptr),
         m_lastGoalConstraint(-1),
@@ -284,30 +286,32 @@ class Environment {
     m_lastGoalConstraint = -1;
     for (const auto& vc : constraints->vertexConstraints) {
       if (vc.x == m_goals[m_agentIdx].x && vc.y == m_goals[m_agentIdx].y) {
-        m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
+        m_lastGoalConstraint = max(m_lastGoalConstraint, vc.time);
       }
     }
   }
 
-  int admissibleHeuristic(const State& s) {
-    // std::cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + m_dimx *
-    // s.y] << std::endl;
+  int admissibleHeuristic(const State& s)
+  {
+    // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + m_dimx *
+    // s.y] << endl;
     // return m_heuristic[m_agentIdx][s.x + m_dimx * s.y];
-    return std::abs(s.x - m_goals[m_agentIdx].x) +
-           std::abs(s.y - m_goals[m_agentIdx].y);
+    return abs(s.x - m_goals[m_agentIdx].x) +
+           abs(s.y - m_goals[m_agentIdx].y);
   }
 
-  bool isSolution(const State& s) {
+  bool isSolution(const State& s)
+  {
     return s.x == m_goals[m_agentIdx].x && s.y == m_goals[m_agentIdx].y &&
            s.time > m_lastGoalConstraint;
   }
 
   void getNeighbors(const State& s,
-                    std::vector<Neighbor<State, Action, int> >& neighbors) {
-    // std::cout << "#VC " << constraints.vertexConstraints.size() << std::endl;
+                    vector<Neighbor<State, Action, int> >& neighbors) {
+    // cout << "#VC " << constraints.vertexConstraints.size() << endl;
     // for(const auto& vc : constraints.vertexConstraints) {
-    //   std::cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
-    //   std::endl;
+    //   cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
+    //   endl;
     // }
     neighbors.clear();
     {
@@ -347,41 +351,50 @@ class Environment {
   }
 
   bool getFirstConflict(
-      const std::vector<PlanResult<State, Action, int> >& solution,
-      Conflict& result) {
+      const vector<PlanResult<State, Action, int> >& solution,
+      Conflict& result)
+  {
     int max_t = 0;
-    for (const auto& sol : solution) {
-      max_t = std::max<int>(max_t, sol.states.size() - 1);
+    for (const auto& sol : solution)
+    {
+      max_t = max<int>(max_t, sol.states.size() - 1);
     }
 
-    for (int t = 0; t <= max_t; ++t) {
+    for (int t = 0; t <= max_t; ++t)
+    {
       // check drive-drive vertex collisions
-      for (size_t i = 0; i < solution.size(); ++i) {
+      for (size_t i = 0; i < solution.size(); ++i)
+      {
         State state1 = getState(i, solution, t);
-        for (size_t j = i + 1; j < solution.size(); ++j) {
+        for (size_t j = i + 1; j < solution.size(); ++j)
+        {
           State state2 = getState(j, solution, t);
-          if (state1.equalExceptTime(state2)) {
+          if (state1.equalExceptTime(state2))
+          {
             result.time = t;
             result.agent1 = i;
             result.agent2 = j;
             result.type = Conflict::Vertex;
             result.x1 = state1.x;
             result.y1 = state1.y;
-            // std::cout << "VC " << t << "," << state1.x << "," << state1.y <<
-            // std::endl;
+            // cout << "VC " << t << "," << state1.x << "," << state1.y <<
+            // endl;
             return true;
           }
         }
       }
       // drive-drive edge (swap)
-      for (size_t i = 0; i < solution.size(); ++i) {
+      for (size_t i = 0; i < solution.size(); ++i)
+      {
         State state1a = getState(i, solution, t);
         State state1b = getState(i, solution, t + 1);
-        for (size_t j = i + 1; j < solution.size(); ++j) {
+        for (size_t j = i + 1; j < solution.size(); ++j)
+        {
           State state2a = getState(j, solution, t);
           State state2b = getState(j, solution, t + 1);
           if (state1a.equalExceptTime(state2b) &&
-              state1b.equalExceptTime(state2a)) {
+              state1b.equalExceptTime(state2a))
+          {
             result.time = t;
             result.agent1 = i;
             result.agent2 = j;
