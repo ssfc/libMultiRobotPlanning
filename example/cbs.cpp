@@ -648,9 +648,9 @@ int main(int argc, char* argv[])
 
   YAML::Node config = YAML::LoadFile(inputFile);
 
-  std::unordered_set<Location> obstacles;
-  std::vector<Location> goals;
-  std::vector<State> startStates;
+  unordered_set<Location> obstacles;
+  vector<Location> goals;
+  vector<State> startStates;
 
   const auto& dim = config["map"]["dimensions"];
   int dimx = dim[0].as<int>();
@@ -660,37 +660,44 @@ int main(int argc, char* argv[])
     obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
   }
 
-  for (const auto& node : config["agents"]) {
+  for (const auto& node : config["agents"])
+  {
     const auto& start = node["start"];
     const auto& goal = node["goal"];
     startStates.emplace_back(State(0, start[0].as<int>(), start[1].as<int>()));
-    // std::cout << "s: " << startStates.back() << std::endl;
+    // cout << "s: " << startStates.back() << endl;
     goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
   }
 
   // sanity check: no identical start states
-  std::unordered_set<State> startStatesSet;
-  for (const auto& s : startStates) {
-    if (startStatesSet.find(s) != startStatesSet.end()) {
-      std::cout << "Identical start states detected -> no solution!" << std::endl;
+  unordered_set<State> startStatesSet;
+  for (const auto& s : startStates)
+  {
+    if (startStatesSet.find(s) != startStatesSet.end())
+    {
+      cout << "Identical start states detected -> no solution!" << endl;
+
       return 0;
     }
+
     startStatesSet.insert(s);
   }
 
   Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
   CBS<State, Action, int, Conflict, Constraints, Environment> cbs(mapf);
-  std::vector<PlanResult<State, Action, int> > solution;
+  vector<PlanResult<State, Action, int> > solution;
 
   Timer timer;
   bool success = cbs.search(startStates, solution);
   timer.stop();
 
-  if (success) {
+  if (success)
+  {
     cout << "Planning successful! " << endl;
     int cost = 0;
     int makespan = 0;
-    for (const auto& s : solution) {
+    for (const auto& s : solution)
+    {
       cost += s.cost;
       makespan = max<int>(makespan, s.cost);
     }
