@@ -55,12 +55,13 @@ namespace std
 }
 
 ///
-enum class Action {
-  Up,
-  Down,
-  Left,
-  Right,
-  Wait,
+enum class Action
+{
+    Up,
+    Down,
+    Left,
+    Right,
+    Wait,
 };
 
 ostream& operator<<(ostream& os, const Action& a) {
