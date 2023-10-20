@@ -54,7 +54,7 @@ enum class Action {
   Wait,
 };
 
-std::ostream& operator<<(std::ostream& os, const Action& a) {
+ostream& operator<<(ostream& os, const Action& a) {
   switch (a) {
     case Action::Up:
       os << "Up";
@@ -93,7 +93,7 @@ struct Conflict {
   int x2;
   int y2;
 
-  friend std::ostream& operator<<(std::ostream& os, const Conflict& c) {
+  friend ostream& operator<<(ostream& os, const Conflict& c) {
     switch (c.type) {
       case Vertex:
         return os << c.time << ": Vertex(" << c.x1 << "," << c.y1 << ")";
@@ -112,7 +112,7 @@ struct VertexConstraint {
   int y;
 
   bool operator<(const VertexConstraint& other) const {
-    return std::tie(time, x, y) < std::tie(other.time, other.x, other.y);
+    return tie(time, x, y) < tie(other.time, other.x, other.y);
   }
 
   bool operator==(const VertexConstraint& other) const {
