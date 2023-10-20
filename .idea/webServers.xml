@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="cdaeec0b-b35f-4389-bfe8-8a19c2be1e09" name="home-server">
+        <fileTransfer rootFolder="/home/ssfc" accessType="SFTP" host="1.15.63.146" port="6000" sshConfigId="6fccaee7-ba0f-4d47-a7b5-133d17d68f09" sshConfig="ssfc@1.15.63.146:6000 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

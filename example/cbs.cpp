@@ -9,6 +9,7 @@
 #include <libMultiRobotPlanning/cbs.hpp>
 #include "timer.hpp"
 
+using namespace std;
 using libMultiRobotPlanning::CBS;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
@@ -22,11 +23,10 @@ struct State {
 
   bool equalExceptTime(const State& s) const { return x == s.x && y == s.y; }
 
-  friend std::ostream& operator<<(std::ostream& os, const State& s) {
+  friend ostream& operator<<(ostream& os, const State& s) {
     return os << s.time << ": (" << s.x << "," << s.y << ")";
     // return os << "(" << s.x << "," << s.y << ")";
   }
-
   int time;
   int x;
   int y;
@@ -647,6 +647,7 @@ int main(int argc, char* argv[]) {
 
   if (success) {
     std::cout << "Planning successful! " << std::endl;
+    std::cout << "hello\n";
     int cost = 0;
     int makespan = 0;
     for (const auto& s : solution) {
