@@ -130,18 +130,21 @@ struct VertexConstraint {
   }
 };
 
-namespace std {
-template <>
-struct hash<VertexConstraint> {
-  size_t operator()(const VertexConstraint& s) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, s.time);
-    boost::hash_combine(seed, s.x);
-    boost::hash_combine(seed, s.y);
-    return seed;
-  }
-};
-}  // namespace std
+namespace std
+{
+    template <>
+    struct hash<VertexConstraint>
+    {
+        size_t operator()(const VertexConstraint& s) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.x);
+            boost::hash_combine(seed, s.y);
+            return seed;
+        }
+    };
+}
 
 struct EdgeConstraint {
   EdgeConstraint(int time, int x1, int y1, int x2, int y2)
