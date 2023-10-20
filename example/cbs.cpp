@@ -239,7 +239,7 @@ struct Location
     return tie(x, y) == tie(other.x, other.y);
   }
 
-  friend ostream& operator<<(ostream& os, const Location& c) \
+  friend ostream& operator<<(ostream& os, const Location& c)
   {
     return os << "(" << c.x << "," << c.y << ")";
   }
@@ -613,17 +613,18 @@ class Environment
   bool m_disappearAtGoal;
 };
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
   namespace po = boost::program_options;
   // Declare the supported options.
   po::options_description desc("Allowed options");
-  std::string inputFile;
-  std::string outputFile;
+  string inputFile;
+  string outputFile;
   bool disappearAtGoal;
   desc.add_options()("help", "produce help message")(
-      "input,i", po::value<std::string>(&inputFile)->required(),
+      "input,i", po::value<string>(&inputFile)->required(),
       "input file (YAML)")("output,o",
-                           po::value<std::string>(&outputFile)->required(),
+                           po::value<string>(&outputFile)->required(),
                            "output file (YAML)")(
       "disappear-at-goal", po::bool_switch(&disappearAtGoal), "make agents to disappear at goal rather than staying there");
 
@@ -632,13 +633,16 @@ int main(int argc, char* argv[]) {
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
-    if (vm.count("help") != 0u) {
-      std::cout << desc << "\n";
+    if (vm.count("help") != 0u)
+    {
+      cout << desc << "\n";
       return 0;
     }
-  } catch (po::error& e) {
-    std::cerr << e.what() << std::endl << std::endl;
-    std::cerr << desc << std::endl;
+  }
+  catch (po::error& e)
+  {
+    cerr << e.what() << endl << endl;
+    cerr << desc << endl;
     return 1;
   }
 
