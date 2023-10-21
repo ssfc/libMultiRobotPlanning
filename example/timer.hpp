@@ -6,12 +6,15 @@
 class Timer
 {
 public:
-  Timer()
-      : start_(std::chrono::high_resolution_clock::now()),
-        end_(std::chrono::high_resolution_clock::now())
-        {}
+    Timer()
+    : start_(std::chrono::high_resolution_clock::now()),
+      end_(std::chrono::high_resolution_clock::now())
+    {}
 
-    void reset() { start_ = std::chrono::high_resolution_clock::now(); }
+    void reset()
+    {
+        start_ = std::chrono::high_resolution_clock::now();
+    }
 
     void stop() { end_ = std::chrono::high_resolution_clock::now(); }
 
