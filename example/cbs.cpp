@@ -674,64 +674,66 @@ public:
 
 int main(int argc, char* argv[])
 {
-  namespace po = boost::program_options;
-  // Declare the supported options.
-  po::options_description desc("Allowed options");
-  string inputFile;
-  string outputFile;
-  bool disappearAtGoal;
-  desc.add_options()("help", "produce help message")(
+    namespace po = boost::program_options;
+    // Declare the supported options.
+    po::options_description desc("Allowed options");
+    string inputFile;
+    string outputFile;
+    bool disappearAtGoal;
+    desc.add_options()("help", "produce help message")(
       "input,i", po::value<string>(&inputFile)->required(),
       "input file (YAML)")("output,o",
                            po::value<string>(&outputFile)->required(),
                            "output file (YAML)")(
       "disappear-at-goal", po::bool_switch(&disappearAtGoal), "make agents to disappear at goal rather than staying there");
 
-  try {
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-
-    if (vm.count("help") != 0u)
+    try
     {
-      cout << desc << "\n";
-      return 0;
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
+
+        if (vm.count("help") != 0u)
+        {
+          cout << desc << "\n";
+          return 0;
+        }
     }
-  }
-  catch (po::error& e)
-  {
-    cerr << e.what() << endl << endl;
-    cerr << desc << endl;
-    return 1;
-  }
+    catch (po::error& e)
+    {
+        cerr << e.what() << endl << endl;
+        cerr << desc << endl;
+        return 1;
+    }
 
-  YAML::Node config = YAML::LoadFile(inputFile);
+    YAML::Node config = YAML::LoadFile(inputFile);
 
-  unordered_set<Location> obstacles;
-  vector<Location> goals;
-  vector<State> startStates;
+    unordered_set<Location> obstacles;
+    vector<Location> goals;
+    vector<State> startStates;
 
-  const auto& dim = config["map"]["dimensions"];
-  int dimx = dim[0].as<int>();
-  int dimy = dim[1].as<int>();
+    const auto& dim = config["map"]["dimensions"];
+    int dimx = dim[0].as<int>();
+    int dimy = dim[1].as<int>();
 
-  for (const auto& node : config["map"]["obstacles"]) {
-    obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
-  }
+    for (const auto& node : config["map"]["obstacles"])
+    {
+        obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
+    }
 
-  for (const auto& node : config["agents"])
-  {
+    for (const auto& node : config["agents"])
+    {
     const auto& start = node["start"];
     const auto& goal = node["goal"];
     startStates.emplace_back(State(0, start[0].as<int>(), start[1].as<int>()));
     // cout << "s: " << startStates.back() << endl;
     goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
-  }
+    }
 
-  // sanity check: no identical start states
-  unordered_set<State> startStatesSet;
-  for (const auto& s : startStates)
-  {
+    // sanity check: no identical start states
+    unordered_set<State> startStatesSet;
+    for (const auto& s : startStates)
+    {
     if (startStatesSet.find(s) != startStatesSet.end())
     {
       cout << "Identical start states detected -> no solution!" << endl;
@@ -740,18 +742,18 @@ int main(int argc, char* argv[])
     }
 
     startStatesSet.insert(s);
-  }
+    }
 
-  Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
-  CBS<State, Action, int, Conflict, Constraints, Environment> cbs(mapf);
-  vector<PlanResult<State, Action, int> > solution;
+    Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
+    CBS<State, Action, int, Conflict, Constraints, Environment> cbs(mapf);
+    vector<PlanResult<State, Action, int> > solution;
 
-  Timer timer;
-  bool success = cbs.search(startStates, solution);
-  timer.stop();
+    Timer timer;
+    bool success = cbs.search(startStates, solution);
+    timer.stop();
 
-  if (success)
-  {
+    if (success)
+    {
     cout << "Planning successful! " << endl;
     int cost = 0;
     int makespan = 0;
@@ -789,11 +791,11 @@ int main(int argc, char* argv[])
             << "      t: " << state.second << endl;
       }
     }
-  }
-  else
-  {
+    }
+    else
+    {
     cout << "Planning NOT successful!" << endl;
-  }
+    }
 
-  return 0;
+    return 0;
 }
