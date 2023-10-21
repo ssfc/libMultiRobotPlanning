@@ -794,7 +794,7 @@ int main(int argc, char* argv[])
     }
     else
     {
-    cout << "Planning NOT successful!" << endl;
+        cout << "Planning NOT successful!" << endl;
     }
 
     return 0;
