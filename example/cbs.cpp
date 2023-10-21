@@ -544,7 +544,7 @@ public:
     {
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
-        
+
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
                con.end();
     }
@@ -554,112 +554,112 @@ public:
     // symmetric and by not terminating the AStar search until the queue is empty
     void computeHeuristic()
     {
-    class HeuristicEnvironment
-    {
-    public:
-      HeuristicEnvironment(
-        size_t dimx,
-        size_t dimy,
-        const unordered_set<Location>& obstacles,
-        vector<int>* heuristic)
-        : m_dimx(dimx)
-        , m_dimy(dimy)
-        , m_obstacles(obstacles)
-        , m_heuristic(heuristic)
-      {
-      }
-
-      int admissibleHeuristic(
-        const Location& s)
-      {
-        return 0;
-      }
-
-      bool isSolution(
-        const Location& s)
-      {
-        return false;
-      }
-
-      void getNeighbors(
-        const Location& s,
-        vector<Neighbor<Location, Action, int> >& neighbors)
-      {
-        neighbors.clear();
-
+        class HeuristicEnvironment
         {
-          Location n(s.x-1, s.y);
-          if (stateValid(n)) {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(n, Action::Left, 1));
+        public:
+          HeuristicEnvironment(
+            size_t dimx,
+            size_t dimy,
+            const unordered_set<Location>& obstacles,
+            vector<int>* heuristic)
+            : m_dimx(dimx)
+            , m_dimy(dimy)
+            , m_obstacles(obstacles)
+            , m_heuristic(heuristic)
+          {
           }
-        }
+
+          int admissibleHeuristic(
+            const Location& s)
+          {
+            return 0;
+          }
+
+          bool isSolution(
+            const Location& s)
+          {
+            return false;
+          }
+
+          void getNeighbors(
+            const Location& s,
+            vector<Neighbor<Location, Action, int> >& neighbors)
+          {
+            neighbors.clear();
+
+            {
+              Location n(s.x-1, s.y);
+              if (stateValid(n)) {
+                neighbors.emplace_back(Neighbor<Location, Action, int>(n, Action::Left, 1));
+              }
+            }
+            {
+              Location n(s.x+1, s.y);
+              if (stateValid(n)) {
+                neighbors.emplace_back(Neighbor<Location, Action, int>(n, Action::Right, 1));
+              }
+            }
+            {
+              Location n(s.x, s.y+1);
+              if (stateValid(n)) {
+                neighbors.emplace_back(Neighbor<Location, Action, int>(n, Action::Up, 1));
+              }
+            }
+            {
+              Location n(s.x, s.y-1);
+              if (stateValid(n)) {
+                neighbors.emplace_back(Neighbor<Location, Action, int>(n, Action::Down, 1));
+              }
+            }
+          }
+
+          void onExpandNode(
+            const Location& s,
+            int fScore,
+            int gScore)
+          {
+          }
+
+          void onDiscover(
+            const Location& s,
+            int fScore,
+            int gScore)
+          {
+            (*m_heuristic)[s.x + m_dimx * s.y] = gScore;
+          }
+
+        private:
+          bool stateValid(
+            const Location& s)
+          {
+            return    s.x >= 0
+                   && s.x < m_dimx
+                   && s.y >= 0
+                   && s.y < m_dimy
+                   && m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end();
+          }
+
+        private:
+          int m_dimx;
+          int m_dimy;
+          const unordered_set<Location>& m_obstacles;
+          vector<int>* m_heuristic;
+
+        };
+
+        m_heuristic.resize(m_goals.size());
+
+        vector< Neighbor<State, Action, int> > neighbors;
+
+        for (size_t i = 0; i < m_goals.size(); ++i)
         {
-          Location n(s.x+1, s.y);
-          if (stateValid(n)) {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(n, Action::Right, 1));
-          }
+          m_heuristic[i].assign(m_dimx * m_dimy, numeric_limits<int>::max());
+          HeuristicEnvironment henv(m_dimx, m_dimy, m_obstacles, &m_heuristic[i]);
+          AStar<Location, Action, int, HeuristicEnvironment> astar(henv);
+          PlanResult<Location, Action, int> dummy;
+          astar.search(m_goals[i], dummy);
+          m_heuristic[i][m_goals[i].x + m_dimx * m_goals[i].y] = 0;
         }
-        {
-          Location n(s.x, s.y+1);
-          if (stateValid(n)) {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(n, Action::Up, 1));
-          }
-        }
-        {
-          Location n(s.x, s.y-1);
-          if (stateValid(n)) {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(n, Action::Down, 1));
-          }
-        }
-      }
-
-      void onExpandNode(
-        const Location& s,
-        int fScore,
-        int gScore)
-      {
-      }
-
-      void onDiscover(
-        const Location& s,
-        int fScore,
-        int gScore)
-      {
-        (*m_heuristic)[s.x + m_dimx * s.y] = gScore;
-      }
-
-    private:
-      bool stateValid(
-        const Location& s)
-      {
-        return    s.x >= 0
-               && s.x < m_dimx
-               && s.y >= 0
-               && s.y < m_dimy
-               && m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end();
-      }
-
-    private:
-      int m_dimx;
-      int m_dimy;
-      const unordered_set<Location>& m_obstacles;
-      vector<int>* m_heuristic;
-
-    };
-
-    m_heuristic.resize(m_goals.size());
-
-    vector< Neighbor<State, Action, int> > neighbors;
-
-    for (size_t i = 0; i < m_goals.size(); ++i)
-    {
-      m_heuristic[i].assign(m_dimx * m_dimy, numeric_limits<int>::max());
-      HeuristicEnvironment henv(m_dimx, m_dimy, m_obstacles, &m_heuristic[i]);
-      AStar<Location, Action, int, HeuristicEnvironment> astar(henv);
-      PlanResult<Location, Action, int> dummy;
-      astar.search(m_goals[i], dummy);
-      m_heuristic[i][m_goals[i].x + m_dimx * m_goals[i].y] = 0;
-    }
     }
     #endif
     private:
