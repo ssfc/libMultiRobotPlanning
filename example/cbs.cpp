@@ -399,13 +399,12 @@ public:
         }
     }
 
-    bool getFirstConflict(const vector<PlanResult<State, Action, int> >& solution,
-      Conflict& result)
+    bool getFirstConflict(const vector<PlanResult<State, Action, int> >& solution, Conflict& result)
     {
         int max_t = 0;
         for (const auto& sol : solution)
         {
-          max_t = max<int>(max_t, sol.states.size() - 1);
+            max_t = max<int>(max_t, sol.states.size() - 1);
         }
 
         for (int t = 0; t <= max_t; ++t)
