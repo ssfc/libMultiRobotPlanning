@@ -88,25 +88,25 @@ ostream& operator<<(ostream& os, const Action& a)
     return os;
 }
 
-///
+struct Conflict
+{
+    enum Type
+    {
+        Vertex,
+        Edge,
+    };
 
-struct Conflict {
-  enum Type {
-    Vertex,
-    Edge,
-  };
+    int time;
+    size_t agent1;
+    size_t agent2;
+    Type type;
 
-  int time;
-  size_t agent1;
-  size_t agent2;
-  Type type;
+    int x1;
+    int y1;
+    int x2;
+    int y2;
 
-  int x1;
-  int y1;
-  int x2;
-  int y2;
-
-  friend ostream& operator<<(ostream& os, const Conflict& c) {
+    friend ostream& operator<<(ostream& os, const Conflict& c) {
     switch (c.type) {
       case Vertex:
         return os << c.time << ": Vertex(" << c.x1 << "," << c.y1 << ")";
@@ -115,7 +115,7 @@ struct Conflict {
                   << "," << c.y2 << ")";
     }
     return os;
-  }
+    }
 };
 
 struct VertexConstraint {
