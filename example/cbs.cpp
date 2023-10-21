@@ -210,32 +210,40 @@ namespace std
 
 struct Constraints
 {
-  unordered_set<VertexConstraint> vertexConstraints;
-  unordered_set<EdgeConstraint> edgeConstraints;
+    unordered_set<VertexConstraint> vertexConstraints;
+    unordered_set<EdgeConstraint> edgeConstraints;
 
-  void add(const Constraints& other) {
-    vertexConstraints.insert(other.vertexConstraints.begin(),
-                             other.vertexConstraints.end());
-    edgeConstraints.insert(other.edgeConstraints.begin(),
-                           other.edgeConstraints.end());
-  }
-
-  bool overlap(const Constraints& other) const {
-    for (const auto& vc : vertexConstraints) {
-      if (other.vertexConstraints.count(vc) > 0) {
-        return true;
-      }
+    void add(const Constraints& other)
+    {
+        vertexConstraints.insert(other.vertexConstraints.begin(),
+                                 other.vertexConstraints.end());
+        edgeConstraints.insert(other.edgeConstraints.begin(),
+                               other.edgeConstraints.end());
     }
-    for (const auto& ec : edgeConstraints) {
-      if (other.edgeConstraints.count(ec) > 0) {
-        return true;
-      }
-    }
-    return false;
-  }
 
-  friend ostream& operator<<(ostream& os, const Constraints& c)
-  {
+    bool overlap(const Constraints& other) const
+    {
+        for (const auto& vc : vertexConstraints)
+        {
+          if (other.vertexConstraints.count(vc) > 0)
+          {
+              return true;
+          }
+        }
+
+        for (const auto& ec : edgeConstraints)
+        {
+            if (other.edgeConstraints.count(ec) > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    friend ostream& operator<<(ostream& os, const Constraints& c)
+    {
     for (const auto& vc : c.vertexConstraints)
     {
       os << vc << endl;
@@ -247,7 +255,7 @@ struct Constraints
     }
 
     return os;
-  }
+    }
 };
 
 struct Location
