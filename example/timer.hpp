@@ -25,7 +25,7 @@ public:
     {
         auto timeSpan = std::chrono::duration_cast<std::chrono::duration<double>>(
             end_ - start_);
-        
+
         return timeSpan.count();
     }
 
@@ -34,12 +34,14 @@ private:
     std::chrono::high_resolution_clock::time_point end_;
 };
 
-class ScopedTimer : public Timer {
- public:
-  ScopedTimer() {}
+class ScopedTimer : public Timer
+{
+    public:
+    ScopedTimer() {}
 
-  ~ScopedTimer() {
-    stop();
-    std::cout << "Elapsed: " << elapsedSeconds() << " s" << std::endl;
-  }
+    ~ScopedTimer()
+    {
+        stop();
+        std::cout << "Elapsed: " << elapsedSeconds() << " s" << std::endl;
+    }
 };
