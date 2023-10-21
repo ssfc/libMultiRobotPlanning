@@ -432,30 +432,30 @@ public:
                 }
             }
 
-          // drive-drive edge (swap)
-          for (size_t i = 0; i < solution.size(); ++i)
-          {
-            State state1a = getState(i, solution, t);
-            State state1b = getState(i, solution, t + 1);
-            for (size_t j = i + 1; j < solution.size(); ++j)
+            // drive-drive edge (swap)
+            for (size_t i = 0; i < solution.size(); ++i)
             {
-              State state2a = getState(j, solution, t);
-              State state2b = getState(j, solution, t + 1);
-              if (state1a.equalExceptTime(state2b) &&
-                  state1b.equalExceptTime(state2a))
-              {
-                result.time = t;
-                result.agent1 = i;
-                result.agent2 = j;
-                result.type = Conflict::Edge;
-                result.x1 = state1a.x;
-                result.y1 = state1a.y;
-                result.x2 = state1b.x;
-                result.y2 = state1b.y;
-                return true;
-              }
+                State state1a = getState(i, solution, t);
+                State state1b = getState(i, solution, t + 1);
+                for (size_t j = i + 1; j < solution.size(); ++j)
+                {
+                    State state2a = getState(j, solution, t);
+                    State state2b = getState(j, solution, t + 1);
+                    if (state1a.equalExceptTime(state2b) && state1b.equalExceptTime(state2a))
+                    {
+                        result.time = t;
+                        result.agent1 = i;
+                        result.agent2 = j;
+                        result.type = Conflict::Edge;
+                        result.x1 = state1a.x;
+                        result.y1 = state1a.y;
+                        result.x2 = state1b.x;
+                        result.y2 = state1b.y;
+
+                        return true;
+                    }
+                }
             }
-          }
         }
 
         return false;
