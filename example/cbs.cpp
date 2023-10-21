@@ -106,15 +106,18 @@ struct Conflict
     int x2;
     int y2;
 
-    friend ostream& operator<<(ostream& os, const Conflict& c) {
-    switch (c.type) {
-      case Vertex:
-        return os << c.time << ": Vertex(" << c.x1 << "," << c.y1 << ")";
-      case Edge:
-        return os << c.time << ": Edge(" << c.x1 << "," << c.y1 << "," << c.x2
-                  << "," << c.y2 << ")";
-    }
-    return os;
+    friend ostream& operator<<(ostream& os, const Conflict& c)
+    {
+        switch (c.type)
+        {
+          case Vertex:
+            return os << c.time << ": Vertex(" << c.x1 << "," << c.y1 << ")";
+          case Edge:
+            return os << c.time << ": Edge(" << c.x1 << "," << c.y1 << "," << c.x2
+                      << "," << c.y2 << ")";
+        }
+
+        return os;
     }
 };
 
