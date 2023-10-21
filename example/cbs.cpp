@@ -64,9 +64,9 @@ enum class Action
     Wait,
 };
 
-ostream& operator<<(ostream& os, const Action& a)
+ostream& operator<<(ostream& os, const Action& this_action)
 {
-    switch (a)
+    switch (this_action)
     {
     case Action::Up:
         os << "Up";
