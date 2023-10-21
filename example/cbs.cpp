@@ -557,11 +557,8 @@ public:
         class HeuristicEnvironment
         {
         public:
-            HeuristicEnvironment(
-            size_t dimx,
-            size_t dimy,
-            const unordered_set<Location>& obstacles,
-            vector<int>* heuristic)
+            HeuristicEnvironment(size_t dimx, size_t dimy,
+            const unordered_set<Location>& obstacles, vector<int>* heuristic)
             : m_dimx(dimx)
             , m_dimy(dimy)
             , m_obstacles(obstacles)
@@ -569,11 +566,10 @@ public:
             {
             }
 
-          int admissibleHeuristic(
-            const Location& s)
-          {
-            return 0;
-          }
+            int admissibleHeuristic(const Location& s)
+            {
+                return 0;
+            }
 
           bool isSolution(
             const Location& s)
