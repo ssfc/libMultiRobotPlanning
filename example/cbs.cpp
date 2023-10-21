@@ -500,37 +500,44 @@ public:
         return m_highLevelExpanded;
     }
 
-    int lowLevelExpanded() const { return m_lowLevelExpanded; }
+    int lowLevelExpanded() const
+    {
+        return m_lowLevelExpanded;
+    }
 
     private:
     State getState(size_t agentIdx,
                  const vector<PlanResult<State, Action, int> >& solution,
                  size_t t)
     {
-    assert(agentIdx < solution.size());
-    if (t < solution[agentIdx].states.size())
-    {
-      return solution[agentIdx].states[t].first;
-    }
-    assert(!solution[agentIdx].states.empty());
-    if (m_disappearAtGoal)
-    {
-      // This is a trick to avoid changing the rest of the code significantly
-      // After an agent disappeared, put it at a unique but invalid position
-      // This will cause all calls to equalExceptTime(.) to return false.
-      return State(-1, -1 * (agentIdx + 1), -1);
-    }
+        assert(agentIdx < solution.size());
 
-    return solution[agentIdx].states.back().first;
+        if (t < solution[agentIdx].states.size())
+        {
+          return solution[agentIdx].states[t].first;
+        }
+
+        assert(!solution[agentIdx].states.empty());
+
+        if (m_disappearAtGoal)
+        {
+          // This is a trick to avoid changing the rest of the code significantly
+          // After an agent disappeared, put it at a unique but invalid position
+          // This will cause all calls to equalExceptTime(.) to return false.
+          return State(-1, -1 * (agentIdx + 1), -1);
+        }
+
+        return solution[agentIdx].states.back().first;
     }
 
     bool stateValid(const State& s)
     {
-    assert(m_constraints);
-    const auto& con = m_constraints->vertexConstraints;
-    return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
-           m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end() &&
-           con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
+        assert(m_constraints);
+        const auto& con = m_constraints->vertexConstraints;
+        
+        return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
+               m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end() &&
+               con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
     }
 
     bool transitionValid(const State& s1, const State& s2)
