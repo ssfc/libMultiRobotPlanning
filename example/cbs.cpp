@@ -335,17 +335,17 @@ public:
 
     int admissibleHeuristic(const State& s)
     {
-    // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + m_dimx *
-    // s.y] << endl;
-    // return m_heuristic[m_agentIdx][s.x + m_dimx * s.y];
-    return abs(s.x - m_goals[m_agentIdx].x) +
-           abs(s.y - m_goals[m_agentIdx].y);
+        // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + m_dimx *
+        // s.y] << endl;
+        // return m_heuristic[m_agentIdx][s.x + m_dimx * s.y];
+        return abs(s.x - m_goals[m_agentIdx].x) +
+               abs(s.y - m_goals[m_agentIdx].y);
     }
 
     bool isSolution(const State& s)
     {
-    return s.x == m_goals[m_agentIdx].x && s.y == m_goals[m_agentIdx].y &&
-           s.time > m_lastGoalConstraint;
+        return s.x == m_goals[m_agentIdx].x && s.y == m_goals[m_agentIdx].y &&
+               s.time > m_lastGoalConstraint;
     }
 
     void getNeighbors(const State& s,
