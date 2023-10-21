@@ -64,25 +64,28 @@ enum class Action
     Wait,
 };
 
-ostream& operator<<(ostream& os, const Action& a) {
-  switch (a) {
+ostream& operator<<(ostream& os, const Action& a)
+{
+    switch (a)
+    {
     case Action::Up:
-      os << "Up";
-      break;
+        os << "Up";
+        break;
     case Action::Down:
-      os << "Down";
-      break;
+        os << "Down";
+        break;
     case Action::Left:
-      os << "Left";
-      break;
+        os << "Left";
+        break;
     case Action::Right:
-      os << "Right";
-      break;
+        os << "Right";
+        break;
     case Action::Wait:
-      os << "Wait";
-      break;
-  }
-  return os;
+        os << "Wait";
+        break;
+    }
+
+    return os;
 }
 
 ///
