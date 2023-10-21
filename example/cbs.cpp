@@ -534,7 +534,7 @@ public:
     {
         assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
-        
+
         return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
                m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end() &&
                con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
@@ -542,10 +542,11 @@ public:
 
     bool transitionValid(const State& s1, const State& s2)
     {
-    assert(m_constraints);
-    const auto& con = m_constraints->edgeConstraints;
-    return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
-           con.end();
+        assert(m_constraints);
+        const auto& con = m_constraints->edgeConstraints;
+        
+        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
+               con.end();
     }
     #if 0
     // We use another A* search for simplicity
