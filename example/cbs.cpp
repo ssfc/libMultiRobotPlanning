@@ -299,8 +299,8 @@ namespace std
 ///
 class Environment
 {
- public:
-  Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles,
+public:
+    Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles,
               vector<Location> goals, bool disappearAtGoal = false)
       : m_dimx(dimx),
         m_dimy(dimy),
@@ -312,40 +312,43 @@ class Environment
         m_highLevelExpanded(0),
         m_lowLevelExpanded(0),
         m_disappearAtGoal(disappearAtGoal)
-  {
-  }
-
-  Environment(const Environment&) = delete;
-  Environment& operator=(const Environment&) = delete;
-
-  void setLowLevelContext(size_t agentIdx, const Constraints* constraints) {
-    assert(constraints);  // NOLINT
-    m_agentIdx = agentIdx;
-    m_constraints = constraints;
-    m_lastGoalConstraint = -1;
-    for (const auto& vc : constraints->vertexConstraints) {
-      if (vc.x == m_goals[m_agentIdx].x && vc.y == m_goals[m_agentIdx].y) {
-        m_lastGoalConstraint = max(m_lastGoalConstraint, vc.time);
-      }
+    {
     }
-  }
 
-  int admissibleHeuristic(const State& s)
-  {
+    Environment(const Environment&) = delete;
+    Environment& operator=(const Environment&) = delete;
+
+    void setLowLevelContext(size_t agentIdx, const Constraints* constraints)
+    {
+        assert(constraints);  // NOLINT
+        m_agentIdx = agentIdx;
+        m_constraints = constraints;
+        m_lastGoalConstraint = -1;
+        for (const auto& vc : constraints->vertexConstraints)
+        {
+            if (vc.x == m_goals[m_agentIdx].x && vc.y == m_goals[m_agentIdx].y)
+            {
+                m_lastGoalConstraint = max(m_lastGoalConstraint, vc.time);
+            }
+        }
+    }
+
+    int admissibleHeuristic(const State& s)
+    {
     // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + m_dimx *
     // s.y] << endl;
     // return m_heuristic[m_agentIdx][s.x + m_dimx * s.y];
     return abs(s.x - m_goals[m_agentIdx].x) +
            abs(s.y - m_goals[m_agentIdx].y);
-  }
+    }
 
-  bool isSolution(const State& s)
-  {
+    bool isSolution(const State& s)
+    {
     return s.x == m_goals[m_agentIdx].x && s.y == m_goals[m_agentIdx].y &&
            s.time > m_lastGoalConstraint;
-  }
+    }
 
-  void getNeighbors(const State& s,
+    void getNeighbors(const State& s,
                     vector<Neighbor<State, Action, int> >& neighbors) {
     // cout << "#VC " << constraints.vertexConstraints.size() << endl;
     // for(const auto& vc : constraints.vertexConstraints) {
@@ -387,12 +390,12 @@ class Environment
             Neighbor<State, Action, int>(n, Action::Down, 1));
       }
     }
-  }
+    }
 
-  bool getFirstConflict(
+    bool getFirstConflict(
       const vector<PlanResult<State, Action, int> >& solution,
       Conflict& result)
-  {
+    {
     int max_t = 0;
     for (const auto& sol : solution)
     {
@@ -449,11 +452,11 @@ class Environment
     }
 
     return false;
-  }
+    }
 
-  void createConstraintsFromConflict(
+    void createConstraintsFromConflict(
       const Conflict& conflict, map<size_t, Constraints>& constraints)
-  {
+    {
     if (conflict.type == Conflict::Vertex)
     {
       Constraints c1;
@@ -473,24 +476,24 @@ class Environment
           conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
       constraints[conflict.agent2] = c2;
     }
-  }
+    }
 
-  void onExpandHighLevelNode(int /*cost*/) { m_highLevelExpanded++; }
+    void onExpandHighLevelNode(int /*cost*/) { m_highLevelExpanded++; }
 
-  void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/,
+    void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/,
                             int /*gScore*/) {
     m_lowLevelExpanded++;
-  }
+    }
 
-  int highLevelExpanded() { return m_highLevelExpanded; }
+    int highLevelExpanded() { return m_highLevelExpanded; }
 
-  int lowLevelExpanded() const { return m_lowLevelExpanded; }
+    int lowLevelExpanded() const { return m_lowLevelExpanded; }
 
- private:
-  State getState(size_t agentIdx,
+    private:
+    State getState(size_t agentIdx,
                  const vector<PlanResult<State, Action, int> >& solution,
                  size_t t)
-  {
+    {
     assert(agentIdx < solution.size());
     if (t < solution[agentIdx].states.size())
     {
@@ -506,30 +509,30 @@ class Environment
     }
 
     return solution[agentIdx].states.back().first;
-  }
+    }
 
-  bool stateValid(const State& s)
-  {
+    bool stateValid(const State& s)
+    {
     assert(m_constraints);
     const auto& con = m_constraints->vertexConstraints;
     return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
            m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end() &&
            con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
-  }
+    }
 
-  bool transitionValid(const State& s1, const State& s2)
-  {
+    bool transitionValid(const State& s1, const State& s2)
+    {
     assert(m_constraints);
     const auto& con = m_constraints->edgeConstraints;
     return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
            con.end();
-  }
-#if 0
-  // We use another A* search for simplicity
-  // we compute the shortest path to each goal by using the fact that our getNeighbor function is
-  // symmetric and by not terminating the AStar search until the queue is empty
-  void computeHeuristic()
-  {
+    }
+    #if 0
+    // We use another A* search for simplicity
+    // we compute the shortest path to each goal by using the fact that our getNeighbor function is
+    // symmetric and by not terminating the AStar search until the queue is empty
+    void computeHeuristic()
+    {
     class HeuristicEnvironment
     {
     public:
@@ -636,20 +639,20 @@ class Environment
       astar.search(m_goals[i], dummy);
       m_heuristic[i][m_goals[i].x + m_dimx * m_goals[i].y] = 0;
     }
-  }
-#endif
- private:
-  int m_dimx;
-  int m_dimy;
-  unordered_set<Location> m_obstacles;
-  vector<Location> m_goals;
-  // vector< vector<int> > m_heuristic;
-  size_t m_agentIdx;
-  const Constraints* m_constraints;
-  int m_lastGoalConstraint;
-  int m_highLevelExpanded;
-  int m_lowLevelExpanded;
-  bool m_disappearAtGoal;
+    }
+    #endif
+    private:
+    int m_dimx;
+    int m_dimy;
+    unordered_set<Location> m_obstacles;
+    vector<Location> m_goals;
+    // vector< vector<int> > m_heuristic;
+    size_t m_agentIdx;
+    const Constraints* m_constraints;
+    int m_lastGoalConstraint;
+    int m_highLevelExpanded;
+    int m_lowLevelExpanded;
+    bool m_disappearAtGoal;
 };
 
 int main(int argc, char* argv[])
