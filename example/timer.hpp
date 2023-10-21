@@ -16,12 +16,16 @@ public:
         start_ = std::chrono::high_resolution_clock::now();
     }
 
-    void stop() { end_ = std::chrono::high_resolution_clock::now(); }
+    void stop()
+    {
+        end_ = std::chrono::high_resolution_clock::now();
+    }
 
     double elapsedSeconds() const
     {
         auto timeSpan = std::chrono::duration_cast<std::chrono::duration<double>>(
             end_ - start_);
+        
         return timeSpan.count();
     }
 
