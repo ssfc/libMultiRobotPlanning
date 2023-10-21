@@ -244,17 +244,17 @@ struct Constraints
 
     friend ostream& operator<<(ostream& os, const Constraints& c)
     {
-    for (const auto& vc : c.vertexConstraints)
-    {
-      os << vc << endl;
-    }
+        for (const auto& vc : c.vertexConstraints)
+        {
+            os << vc << endl;
+        }
 
-    for (const auto& ec : c.edgeConstraints)
-    {
-      os << ec << endl;
-    }
+        for (const auto& ec : c.edgeConstraints)
+        {
+            os << ec << endl;
+        }
 
-    return os;
+        return os;
     }
 };
 
