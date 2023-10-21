@@ -734,14 +734,14 @@ int main(int argc, char* argv[])
     unordered_set<State> startStatesSet;
     for (const auto& s : startStates)
     {
-    if (startStatesSet.find(s) != startStatesSet.end())
-    {
-      cout << "Identical start states detected -> no solution!" << endl;
+        if (startStatesSet.find(s) != startStatesSet.end())
+        {
+            cout << "Identical start states detected -> no solution!" << endl;
 
-      return 0;
-    }
+            return 0;
+        }
 
-    startStatesSet.insert(s);
+        startStatesSet.insert(s);
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
@@ -754,43 +754,43 @@ int main(int argc, char* argv[])
 
     if (success)
     {
-    cout << "Planning successful! " << endl;
-    int cost = 0;
-    int makespan = 0;
-    for (const auto& s : solution)
-    {
-      cost += s.cost;
-      makespan = max<int>(makespan, s.cost);
-    }
+        cout << "Planning successful! " << endl;
+        int cost = 0;
+        int makespan = 0;
+        for (const auto& s : solution)
+        {
+          cost += s.cost;
+          makespan = max<int>(makespan, s.cost);
+        }
 
-    ofstream fout(outputFile);
-    fout << "statistics:" << endl;
-    fout << "  cost: " << cost << endl;
-    fout << "  makespan: " << makespan << endl;
-    fout << "  runtime: " << timer.elapsedSeconds() << endl;
-    cerr << "  runtime: " << timer.elapsedSeconds() << endl;
-    fout << "  highLevelExpanded: " << mapf.highLevelExpanded() << endl;
-    fout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
-    fout << "schedule:" << endl;
-    for (size_t a = 0; a < solution.size(); ++a)
-    {
-      // cout << "Solution for: " << a << endl;
-      // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-      //   cout << solution[a].states[i].second << ": " <<
-      //   solution[a].states[i].first << "->" << solution[a].actions[i].first
-      //   << "(cost: " << solution[a].actions[i].second << ")" << endl;
-      // }
-      // cout << solution[a].states.back().second << ": " <<
-      // solution[a].states.back().first << endl;
+        ofstream fout(outputFile);
+        fout << "statistics:" << endl;
+        fout << "  cost: " << cost << endl;
+        fout << "  makespan: " << makespan << endl;
+        fout << "  runtime: " << timer.elapsedSeconds() << endl;
+        cerr << "  runtime: " << timer.elapsedSeconds() << endl;
+        fout << "  highLevelExpanded: " << mapf.highLevelExpanded() << endl;
+        fout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
+        fout << "schedule:" << endl;
+        for (size_t a = 0; a < solution.size(); ++a)
+        {
+          // cout << "Solution for: " << a << endl;
+          // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
+          //   cout << solution[a].states[i].second << ": " <<
+          //   solution[a].states[i].first << "->" << solution[a].actions[i].first
+          //   << "(cost: " << solution[a].actions[i].second << ")" << endl;
+          // }
+          // cout << solution[a].states.back().second << ": " <<
+          // solution[a].states.back().first << endl;
 
-      fout << "  agent" << a << ":" << endl;
-      for (const auto& state : solution[a].states)
-      {
-        fout << "    - x: " << state.first.x << endl
-            << "      y: " << state.first.y << endl
-            << "      t: " << state.second << endl;
-      }
-    }
+          fout << "  agent" << a << ":" << endl;
+          for (const auto& state : solution[a].states)
+          {
+            fout << "    - x: " << state.first.x << endl
+                << "      y: " << state.first.y << endl
+                << "      t: " << state.second << endl;
+          }
+        }
     }
     else
     {
