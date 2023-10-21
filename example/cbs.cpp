@@ -349,47 +349,49 @@ public:
     }
 
     void getNeighbors(const State& s,
-                    vector<Neighbor<State, Action, int> >& neighbors) {
-    // cout << "#VC " << constraints.vertexConstraints.size() << endl;
-    // for(const auto& vc : constraints.vertexConstraints) {
-    //   cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
-    //   endl;
-    // }
-    neighbors.clear();
+                    vector<Neighbor<State, Action, int> >& neighbors)
     {
-      State n(s.time + 1, s.x, s.y);
-      if (stateValid(n) && transitionValid(s, n)) {
-        neighbors.emplace_back(
-            Neighbor<State, Action, int>(n, Action::Wait, 1));
-      }
-    }
-    {
-      State n(s.time + 1, s.x - 1, s.y);
-      if (stateValid(n) && transitionValid(s, n)) {
-        neighbors.emplace_back(
-            Neighbor<State, Action, int>(n, Action::Left, 1));
-      }
-    }
-    {
-      State n(s.time + 1, s.x + 1, s.y);
-      if (stateValid(n) && transitionValid(s, n)) {
-        neighbors.emplace_back(
-            Neighbor<State, Action, int>(n, Action::Right, 1));
-      }
-    }
-    {
-      State n(s.time + 1, s.x, s.y + 1);
-      if (stateValid(n) && transitionValid(s, n)) {
-        neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Up, 1));
-      }
-    }
-    {
-      State n(s.time + 1, s.x, s.y - 1);
-      if (stateValid(n) && transitionValid(s, n)) {
-        neighbors.emplace_back(
-            Neighbor<State, Action, int>(n, Action::Down, 1));
-      }
-    }
+        // cout << "#VC " << constraints.vertexConstraints.size() << endl;
+        // for(const auto& vc : constraints.vertexConstraints) {
+        //   cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
+        //   endl;
+        // }
+        neighbors.clear();
+        {
+            State n(s.time + 1, s.x, s.y);
+            if (stateValid(n) && transitionValid(s, n))
+            {
+                neighbors.emplace_back(
+                    Neighbor<State, Action, int>(n, Action::Wait, 1));
+            }
+        }
+        {
+          State n(s.time + 1, s.x - 1, s.y);
+          if (stateValid(n) && transitionValid(s, n)) {
+            neighbors.emplace_back(
+                Neighbor<State, Action, int>(n, Action::Left, 1));
+          }
+        }
+        {
+          State n(s.time + 1, s.x + 1, s.y);
+          if (stateValid(n) && transitionValid(s, n)) {
+            neighbors.emplace_back(
+                Neighbor<State, Action, int>(n, Action::Right, 1));
+          }
+        }
+        {
+          State n(s.time + 1, s.x, s.y + 1);
+          if (stateValid(n) && transitionValid(s, n)) {
+            neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Up, 1));
+          }
+        }
+        {
+          State n(s.time + 1, s.x, s.y - 1);
+          if (stateValid(n) && transitionValid(s, n)) {
+            neighbors.emplace_back(
+                Neighbor<State, Action, int>(n, Action::Down, 1));
+          }
+        }
     }
 
     bool getFirstConflict(
