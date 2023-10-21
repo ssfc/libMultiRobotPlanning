@@ -260,24 +260,24 @@ struct Constraints
 
 struct Location
 {
-  Location(int x, int y) : x(x), y(y) {}
-  int x;
-  int y;
+    Location(int x, int y) : x(x), y(y) {}
+    int x;
+    int y;
 
-  bool operator<(const Location& other) const
-  {
-    return tie(x, y) < tie(other.x, other.y);
-  }
+    bool operator<(const Location& other) const
+    {
+        return tie(x, y) < tie(other.x, other.y);
+    }
 
-  bool operator==(const Location& other) const
-  {
-    return tie(x, y) == tie(other.x, other.y);
-  }
+    bool operator==(const Location& other) const
+    {
+        return tie(x, y) == tie(other.x, other.y);
+    }
 
-  friend ostream& operator<<(ostream& os, const Location& c)
-  {
-    return os << "(" << c.x << "," << c.y << ")";
-  }
+    friend ostream& operator<<(ostream& os, const Location& c)
+    {
+        return os << "(" << c.x << "," << c.y << ")";
+    }
 };
 
 namespace std
