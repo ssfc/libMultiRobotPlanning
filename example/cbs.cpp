@@ -55,7 +55,7 @@ namespace std
     };
 }
 
-// Action Custom action for the search. 
+// Action Custom action for the search.
 // 枚举类
 enum class Action
 {
@@ -90,6 +90,8 @@ ostream& operator<<(ostream& os, const Action& this_action)
     return os;
 }
 
+// Conflict Custom conflict description.
+// A conflict needs to be able to be transformed into a constraint.
 struct Conflict
 {
     enum Type
