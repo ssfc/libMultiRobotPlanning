@@ -16,8 +16,7 @@ Path-Finding (MAPF) problem
 
 This class implements the Conflict-Based-Search (CBS) algorithm.
 This algorithm can find collision-free path for multiple agents with start and
-goal locations
-given for each agent.
+goal locations given for each agent.
 CBS is a two-level search. On the low-level, A* is used to find paths for
 individual agents (ideally using a perfect heuristic).
 The high-level is a tree-search that resolves conflicts between agents as they
