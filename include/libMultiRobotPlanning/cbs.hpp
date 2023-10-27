@@ -176,40 +176,41 @@ public:
         return false;
   }
 
- private:
-  struct HighLevelNode {
-    std::vector<PlanResult<State, Action, Cost> > solution;
-    std::vector<Constraints> constraints;
-
-    Cost cost;
-
-    int id;
-
-    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-                                     boost::heap::mutable_<true> >::handle_type handle;
-
-    bool operator<(const HighLevelNode& n) const
+private:
+    struct HighLevelNode
     {
-      // if (cost != n.cost)
-      return cost > n.cost;
-      // return id > n.id;
-    }
+        std::vector<PlanResult<State, Action, Cost> > solution;
+        std::vector<Constraints> constraints;
 
-    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c) {
-      os << "id: " << c.id << " cost: " << c.cost << std::endl;
-      for (size_t i = 0; i < c.solution.size(); ++i) {
-        os << "Agent: " << i << std::endl;
-        os << " States:" << std::endl;
-        for (size_t t = 0; t < c.solution[i].states.size(); ++t) {
-          os << "  " << c.solution[i].states[t].first << std::endl;
+        Cost cost;
+
+        int id;
+
+        typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+                                         boost::heap::mutable_<true> >::handle_type handle;
+
+        bool operator<(const HighLevelNode& n) const
+        {
+          // if (cost != n.cost)
+          return cost > n.cost;
+          // return id > n.id;
         }
-        os << " Constraints:" << std::endl;
-        os << c.constraints[i];
-        os << " cost: " << c.solution[i].cost << std::endl;
-      }
-      return os;
-    }
-  };
+
+        friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c) {
+          os << "id: " << c.id << " cost: " << c.cost << std::endl;
+          for (size_t i = 0; i < c.solution.size(); ++i) {
+            os << "Agent: " << i << std::endl;
+            os << " States:" << std::endl;
+            for (size_t t = 0; t < c.solution[i].states.size(); ++t) {
+              os << "  " << c.solution[i].states[t].first << std::endl;
+            }
+            os << " Constraints:" << std::endl;
+            os << c.constraints[i];
+            os << " cost: " << c.solution[i].cost << std::endl;
+          }
+          return os;
+        }
+    };
 
   struct LowLevelEnvironment {
     LowLevelEnvironment(Environment& env, size_t agentIdx,
