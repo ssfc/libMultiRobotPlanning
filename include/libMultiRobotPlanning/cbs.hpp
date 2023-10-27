@@ -133,42 +133,43 @@ public:
                 return true;
             }
 
-          // create additional nodes to resolve conflict
-          // std::cout << "Found conflict: " << conflict << std::endl;
-          // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
-          // conflict.type << std::endl;
+            // create additional nodes to resolve conflict
+            // std::cout << "Found conflict: " << conflict << std::endl;
+            // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
+            // conflict.type << std::endl;
 
-          std::map<size_t, Constraints> constraints;
-          m_env.createConstraintsFromConflict(conflict, constraints);
-          for (const auto& c : constraints) {
-            // std::cout << "Add HL node for " << c.first << std::endl;
-            size_t i = c.first;
-            // std::cout << "create child with id " << id << std::endl;
-            HighLevelNode newNode = P;
-            newNode.id = id;
-            // (optional) check that this constraint was not included already
-            // std::cout << newNode.constraints[i] << std::endl;
-            // std::cout << c.second << std::endl;
-            assert(!newNode.constraints[i].overlap(c.second));
+            std::map<size_t, Constraints> constraints;
+            m_env.createConstraintsFromConflict(conflict, constraints);
+            for (const auto& c : constraints)
+            {
+                // std::cout << "Add HL node for " << c.first << std::endl;
+                size_t i = c.first;
+                // std::cout << "create child with id " << id << std::endl;
+                HighLevelNode newNode = P;
+                newNode.id = id;
+                // (optional) check that this constraint was not included already
+                // std::cout << newNode.constraints[i] << std::endl;
+                // std::cout << c.second << std::endl;
+                assert(!newNode.constraints[i].overlap(c.second));
 
-            newNode.constraints[i].add(c.second);
+                newNode.constraints[i].add(c.second);
 
-            newNode.cost -= newNode.solution[i].cost;
+                newNode.cost -= newNode.solution[i].cost;
 
-            LowLevelEnvironment llenv(m_env, i, newNode.constraints[i]);
-            LowLevelSearch_t lowLevel(llenv);
-            bool success = lowLevel.search(initialStates[i], newNode.solution[i]);
+                LowLevelEnvironment llenv(m_env, i, newNode.constraints[i]);
+                LowLevelSearch_t lowLevel(llenv);
+                bool success = lowLevel.search(initialStates[i], newNode.solution[i]);
 
-            newNode.cost += newNode.solution[i].cost;
+                newNode.cost += newNode.solution[i].cost;
 
-            if (success) {
-              // std::cout << "  success. cost: " << newNode.cost << std::endl;
-              auto handle = open.push(newNode);
-              (*handle).handle = handle;
+                if (success) {
+                  // std::cout << "  success. cost: " << newNode.cost << std::endl;
+                  auto handle = open.push(newNode);
+                  (*handle).handle = handle;
+                }
+
+                ++id;
             }
-
-            ++id;
-          }
         }
 
         return false;
