@@ -699,14 +699,16 @@ int main(int argc, char* argv[])
 
         if (vm.count("help") != 0u)
         {
-          cout << desc << "\n";
-          return 0;
+            cout << desc << "\n";
+            
+            return 0;
         }
     }
     catch (po::error& e)
     {
         cerr << e.what() << endl << endl;
         cerr << desc << endl;
+
         return 1;
     }
 
@@ -727,11 +729,11 @@ int main(int argc, char* argv[])
 
     for (const auto& node : config["agents"])
     {
-    const auto& start = node["start"];
-    const auto& goal = node["goal"];
-    startStates.emplace_back(State(0, start[0].as<int>(), start[1].as<int>()));
-    // cout << "s: " << startStates.back() << endl;
-    goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
+        const auto& start = node["start"];
+        const auto& goal = node["goal"];
+        startStates.emplace_back(State(0, start[0].as<int>(), start[1].as<int>()));
+        // cout << "s: " << startStates.back() << endl;
+        goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }
 
     // sanity check: no identical start states
