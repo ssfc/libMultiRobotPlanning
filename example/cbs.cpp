@@ -700,7 +700,7 @@ int main(int argc, char* argv[])
         if (vm.count("help") != 0u)
         {
             cout << desc << "\n";
-            
+
             return 0;
         }
     }
@@ -761,6 +761,7 @@ int main(int argc, char* argv[])
     if (success)
     {
         cout << "Planning successful! " << endl;
+        // cout << "hello" << endl;
         int cost = 0;
         int makespan = 0;
         for (const auto& s : solution)

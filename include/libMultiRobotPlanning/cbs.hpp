@@ -77,10 +77,10 @@ statistical purposes.
 template <typename State, typename Action, typename Cost, typename Conflict,
           typename Constraints, typename Environment>
 class CBS {
- public:
-  CBS(Environment& environment) : m_env(environment) {}
+public:
+    CBS(Environment& environment) : m_env(environment) {}
 
-  bool search(const std::vector<State>& initialStates,
+    bool search(const std::vector<State>& initialStates,
               std::vector<PlanResult<State, Action, Cost> >& solution) {
     HighLevelNode start;
     start.solution.resize(initialStates.size());
