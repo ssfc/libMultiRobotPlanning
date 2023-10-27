@@ -100,6 +100,7 @@ public:
             LowLevelEnvironment llenv(m_env, i, start.constraints[i]);
             LowLevelSearch_t lowLevel(llenv);
             bool success = lowLevel.search(initialStates[i], start.solution[i]);
+
             if (!success)
             {
                 return false;
@@ -118,19 +119,19 @@ public:
         int id = 1;
         while (!open.empty())
         {
-          HighLevelNode P = open.top();
-          m_env.onExpandHighLevelNode(P.cost);
-          // std::cout << "expand: " << P << std::endl;
+            HighLevelNode P = open.top();
+            m_env.onExpandHighLevelNode(P.cost);
+            // std::cout << "expand: " << P << std::endl;
 
-          open.pop();
+            open.pop();
 
-          Conflict conflict;
-          if (!m_env.getFirstConflict(P.solution, conflict))
-          {
-            std::cout << "done; cost: " << P.cost << std::endl;
-            solution = P.solution;
-            return true;
-          }
+            Conflict conflict;
+            if (!m_env.getFirstConflict(P.solution, conflict))
+            {
+                std::cout << "done; cost: " << P.cost << std::endl;
+                solution = P.solution;
+                return true;
+            }
 
           // create additional nodes to resolve conflict
           // std::cout << "Found conflict: " << conflict << std::endl;
