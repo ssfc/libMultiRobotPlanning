@@ -219,42 +219,44 @@ private:
         }
     };
 
-  struct LowLevelEnvironment {
-    LowLevelEnvironment(Environment& env, size_t agentIdx,
-                        const Constraints& constraints)
-        : m_env(env)
-    // , m_agentIdx(agentIdx)
-    // , m_constraints(constraints)
+    struct LowLevelEnvironment
     {
-      m_env.setLowLevelContext(agentIdx, &constraints);
-    }
+        LowLevelEnvironment(Environment& env, size_t agentIdx,
+                            const Constraints& constraints)
+            : m_env(env)
+        // , m_agentIdx(agentIdx)
+        // , m_constraints(constraints)
+        {
+            m_env.setLowLevelContext(agentIdx, &constraints);
+        }
 
-    Cost admissibleHeuristic(const State& s) {
-      return m_env.admissibleHeuristic(s);
-    }
+        Cost admissibleHeuristic(const State& s)
+        {
+            return m_env.admissibleHeuristic(s);
+        }
 
-    bool isSolution(const State& s) { return m_env.isSolution(s); }
+        bool isSolution(const State& s) { return m_env.isSolution(s); }
 
-    void getNeighbors(const State& s,
-                      std::vector<Neighbor<State, Action, Cost> >& neighbors) {
-      m_env.getNeighbors(s, neighbors);
-    }
+        void getNeighbors(const State& s,
+                          std::vector<Neighbor<State, Action, Cost> >& neighbors) {
+          m_env.getNeighbors(s, neighbors);
+        }
 
-    void onExpandNode(const State& s, Cost fScore, Cost gScore) {
-      // std::cout << "LL expand: " << s << std::endl;
-      m_env.onExpandLowLevelNode(s, fScore, gScore);
-    }
+        void onExpandNode(const State& s, Cost fScore, Cost gScore) {
+          // std::cout << "LL expand: " << s << std::endl;
+          m_env.onExpandLowLevelNode(s, fScore, gScore);
+        }
 
-    void onDiscover(const State& /*s*/, Cost /*fScore*/, Cost /*gScore*/) {
-      // std::cout << "LL discover: " << s << std::endl;
-      // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
-    }
+        void onDiscover(const State& /*s*/, Cost /*fScore*/, Cost /*gScore*/) {
+          // std::cout << "LL discover: " << s << std::endl;
+          // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
+        }
 
-   private:
-    Environment& m_env;
-    // size_t m_agentIdx;
-    // const Constraints& m_constraints;
-  };
+        private:
+        Environment& m_env;
+        // size_t m_agentIdx;
+        // const Constraints& m_constraints;
+    };
 
  private:
   Environment& m_env;
