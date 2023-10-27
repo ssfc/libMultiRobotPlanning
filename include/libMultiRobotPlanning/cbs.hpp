@@ -162,10 +162,11 @@ public:
 
                 newNode.cost += newNode.solution[i].cost;
 
-                if (success) {
-                  // std::cout << "  success. cost: " << newNode.cost << std::endl;
-                  auto handle = open.push(newNode);
-                  (*handle).handle = handle;
+                if (success)
+                {
+                    // std::cout << "  success. cost: " << newNode.cost << std::endl;
+                    auto handle = open.push(newNode);
+                    (*handle).handle = handle;
                 }
 
                 ++id;
