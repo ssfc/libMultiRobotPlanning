@@ -76,99 +76,101 @@ statistical purposes.
 */
 template <typename State, typename Action, typename Cost, typename Conflict,
           typename Constraints, typename Environment>
-class CBS {
+class CBS
+{
 public:
     CBS(Environment& environment) : m_env(environment) {}
 
     bool search(const std::vector<State>& initialStates,
-              std::vector<PlanResult<State, Action, Cost> >& solution) {
-    HighLevelNode start;
-    start.solution.resize(initialStates.size());
-    start.constraints.resize(initialStates.size());
-    start.cost = 0;
-    start.id = 0;
-
-    for (size_t i = 0; i < initialStates.size(); ++i)
+              std::vector<PlanResult<State, Action, Cost> >& solution)
     {
-      // if (   i < solution.size()
-      //     && solution[i].states.size() > 1) {
-      //   start.solution[i] = solution[i];
-      //   std::cout << "use existing solution for agent: " << i << std::endl;
-      // } else {
-      LowLevelEnvironment llenv(m_env, i, start.constraints[i]);
-      LowLevelSearch_t lowLevel(llenv);
-      bool success = lowLevel.search(initialStates[i], start.solution[i]);
-      if (!success)
-      {
-          return false;
-      }
-      // }
-      start.cost += start.solution[i].cost;
-    }
+        HighLevelNode start;
+        start.solution.resize(initialStates.size());
+        start.constraints.resize(initialStates.size());
+        start.cost = 0;
+        start.id = 0;
 
-    // std::priority_queue<HighLevelNode> open;
-    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-                                     boost::heap::mutable_<true> > open;
-    auto handle = open.push(start);
-    (*handle).handle = handle;
-
-    solution.clear();
-    int id = 1;
-    while (!open.empty())
-    {
-      HighLevelNode P = open.top();
-      m_env.onExpandHighLevelNode(P.cost);
-      // std::cout << "expand: " << P << std::endl;
-
-      open.pop();
-
-      Conflict conflict;
-      if (!m_env.getFirstConflict(P.solution, conflict))
-      {
-        std::cout << "done; cost: " << P.cost << std::endl;
-        solution = P.solution;
-        return true;
-      }
-
-      // create additional nodes to resolve conflict
-      // std::cout << "Found conflict: " << conflict << std::endl;
-      // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
-      // conflict.type << std::endl;
-
-      std::map<size_t, Constraints> constraints;
-      m_env.createConstraintsFromConflict(conflict, constraints);
-      for (const auto& c : constraints) {
-        // std::cout << "Add HL node for " << c.first << std::endl;
-        size_t i = c.first;
-        // std::cout << "create child with id " << id << std::endl;
-        HighLevelNode newNode = P;
-        newNode.id = id;
-        // (optional) check that this constraint was not included already
-        // std::cout << newNode.constraints[i] << std::endl;
-        // std::cout << c.second << std::endl;
-        assert(!newNode.constraints[i].overlap(c.second));
-
-        newNode.constraints[i].add(c.second);
-
-        newNode.cost -= newNode.solution[i].cost;
-
-        LowLevelEnvironment llenv(m_env, i, newNode.constraints[i]);
-        LowLevelSearch_t lowLevel(llenv);
-        bool success = lowLevel.search(initialStates[i], newNode.solution[i]);
-
-        newNode.cost += newNode.solution[i].cost;
-
-        if (success) {
-          // std::cout << "  success. cost: " << newNode.cost << std::endl;
-          auto handle = open.push(newNode);
-          (*handle).handle = handle;
+        for (size_t i = 0; i < initialStates.size(); ++i)
+        {
+            // if (   i < solution.size()
+            //     && solution[i].states.size() > 1) {
+            //   start.solution[i] = solution[i];
+            //   std::cout << "use existing solution for agent: " << i << std::endl;
+            // } else {
+            LowLevelEnvironment llenv(m_env, i, start.constraints[i]);
+            LowLevelSearch_t lowLevel(llenv);
+            bool success = lowLevel.search(initialStates[i], start.solution[i]);
+            if (!success)
+            {
+                return false;
+            }
+            // }
+            start.cost += start.solution[i].cost;
         }
 
-        ++id;
-      }
-    }
+        // std::priority_queue<HighLevelNode> open;
+        typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+                                         boost::heap::mutable_<true> > open;
+        auto handle = open.push(start);
+        (*handle).handle = handle;
 
-    return false;
+        solution.clear();
+        int id = 1;
+        while (!open.empty())
+        {
+          HighLevelNode P = open.top();
+          m_env.onExpandHighLevelNode(P.cost);
+          // std::cout << "expand: " << P << std::endl;
+
+          open.pop();
+
+          Conflict conflict;
+          if (!m_env.getFirstConflict(P.solution, conflict))
+          {
+            std::cout << "done; cost: " << P.cost << std::endl;
+            solution = P.solution;
+            return true;
+          }
+
+          // create additional nodes to resolve conflict
+          // std::cout << "Found conflict: " << conflict << std::endl;
+          // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
+          // conflict.type << std::endl;
+
+          std::map<size_t, Constraints> constraints;
+          m_env.createConstraintsFromConflict(conflict, constraints);
+          for (const auto& c : constraints) {
+            // std::cout << "Add HL node for " << c.first << std::endl;
+            size_t i = c.first;
+            // std::cout << "create child with id " << id << std::endl;
+            HighLevelNode newNode = P;
+            newNode.id = id;
+            // (optional) check that this constraint was not included already
+            // std::cout << newNode.constraints[i] << std::endl;
+            // std::cout << c.second << std::endl;
+            assert(!newNode.constraints[i].overlap(c.second));
+
+            newNode.constraints[i].add(c.second);
+
+            newNode.cost -= newNode.solution[i].cost;
+
+            LowLevelEnvironment llenv(m_env, i, newNode.constraints[i]);
+            LowLevelSearch_t lowLevel(llenv);
+            bool success = lowLevel.search(initialStates[i], newNode.solution[i]);
+
+            newNode.cost += newNode.solution[i].cost;
+
+            if (success) {
+              // std::cout << "  success. cost: " << newNode.cost << std::endl;
+              auto handle = open.push(newNode);
+              (*handle).handle = handle;
+            }
+
+            ++id;
+          }
+        }
+
+        return false;
   }
 
  private:
@@ -183,7 +185,8 @@ public:
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
                                      boost::heap::mutable_<true> >::handle_type handle;
 
-    bool operator<(const HighLevelNode& n) const {
+    bool operator<(const HighLevelNode& n) const
+    {
       // if (cost != n.cost)
       return cost > n.cost;
       // return id > n.id;
