@@ -781,22 +781,23 @@ int main(int argc, char* argv[])
         fout << "schedule:" << endl;
         for (size_t a = 0; a < solution.size(); ++a)
         {
-          // cout << "Solution for: " << a << endl;
-          // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-          //   cout << solution[a].states[i].second << ": " <<
-          //   solution[a].states[i].first << "->" << solution[a].actions[i].first
-          //   << "(cost: " << solution[a].actions[i].second << ")" << endl;
-          // }
-          // cout << solution[a].states.back().second << ": " <<
-          // solution[a].states.back().first << endl;
+            // cout << "Solution for: " << a << endl;
+            // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
+            //   cout << solution[a].states[i].second << ": " <<
+            //   solution[a].states[i].first << "->" << solution[a].actions[i].first
+            //   << "(cost: " << solution[a].actions[i].second << ")" << endl;
+            // }
+            // cout << solution[a].states.back().second << ": " <<
+            // solution[a].states.back().first << endl;
 
-          fout << "  agent" << a << ":" << endl;
-          for (const auto& state : solution[a].states)
-          {
-            fout << "    - x: " << state.first.x << endl
-                << "      y: " << state.first.y << endl
-                << "      t: " << state.second << endl;
-          }
+            fout << "  agent" << a << ":" << endl;
+
+            for (const auto& state : solution[a].states)
+            {
+                fout << "    - x: " << state.first.x << endl
+                    << "      y: " << state.first.y << endl
+                    << "      t: " << state.second << endl;
+            }
         }
     }
     else
