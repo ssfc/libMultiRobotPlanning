@@ -108,9 +108,7 @@ public:
 
     // std::priority_queue<HighLevelNode> open;
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-                                     boost::heap::mutable_<true> >
-        open;
-
+                                     boost::heap::mutable_<true> > open;
     auto handle = open.push(start);
     (*handle).handle = handle;
 
@@ -183,8 +181,7 @@ public:
     int id;
 
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-                                     boost::heap::mutable_<true> >::handle_type
-        handle;
+                                     boost::heap::mutable_<true> >::handle_type handle;
 
     bool operator<(const HighLevelNode& n) const {
       // if (cost != n.cost)
