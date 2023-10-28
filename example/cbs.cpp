@@ -575,12 +575,10 @@ int main(int argc, char* argv[])
     string inputFile;
     string outputFile;
     bool disappearAtGoal;
-    desc.add_options()("help", "produce help message")(
-      "input,i", po::value<string>(&inputFile)->required(),
-      "input file (YAML)")("output,o",
-                           po::value<string>(&outputFile)->required(),
-                           "output file (YAML)")(
-      "disappear-at-goal", po::bool_switch(&disappearAtGoal), "make agents to disappear at goal rather than staying there");
+    desc.add_options()("help", "produce help message")
+    ("input,i", po::value<string>(&inputFile)->required(), "input file (YAML)")
+    ("output,o", po::value<string>(&outputFile)->required(), "output file (YAML)")
+    ("disappear-at-goal", po::bool_switch(&disappearAtGoal), "make agents to disappear at goal rather than staying there");
 
     try
     {
