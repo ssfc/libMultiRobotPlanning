@@ -791,13 +791,19 @@ int main(int argc, char* argv[])
             // solution[a].states.back().first << endl;
 
             fout << "  agent" << a << ":" << endl;
-
             for (const auto& state : solution[a].states)
             {
                 fout << "    - x: " << state.first.x << endl
                     << "      y: " << state.first.y << endl
                     << "      t: " << state.second << endl;
             }
+
+            cerr << "agent " << a << ": ";
+            for (const auto& state : solution[a].states)
+            {
+                cerr << "(" << state.first.x << "," << state.first.y << "),";
+            }
+            cerr << endl;
         }
     }
     else
