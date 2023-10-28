@@ -663,12 +663,21 @@ int main(int argc, char* argv[])
 
         ofstream fout(outputFile);
         fout << "statistics:" << endl;
+
         fout << "  cost: " << cost << endl;
+        cerr << "  cost: " << cost << endl;
+
         fout << "  makespan: " << makespan << endl;
-        fout << "  runtime: " << timer.elapsedSeconds() << endl;
-        cerr << "  runtime: " << timer.elapsedSeconds() << endl;
-        fout << "  highLevelExpanded: " << mapf.highLevelExpanded() << endl;
-        fout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
+
+        fout << "runtime: " << timer.elapsedSeconds() << endl;
+        cerr << "runtime: " << timer.elapsedSeconds() << endl;
+
+        fout << "highLevelExpanded: " << mapf.highLevelExpanded() << endl;
+        cerr << "highLevelExpanded: " << mapf.highLevelExpanded() << endl;
+
+        fout << "lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
+        cerr << "lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
+
         fout << "schedule:" << endl;
         for (size_t a = 0; a < solution.size(); ++a)
         {
