@@ -664,10 +664,10 @@ int main(int argc, char* argv[])
         ofstream fout(outputFile);
         fout << "statistics:" << endl;
 
-        fout << "  cost: " << cost << endl;
-        cerr << "  cost: " << cost << endl;
+        fout << "cost: " << cost << endl;
+        cerr << "cost: " << cost << endl;
 
-        fout << "  makespan: " << makespan << endl;
+        fout << "makespan: " << makespan << endl;
 
         fout << "runtime: " << timer.elapsedSeconds() << endl;
         cerr << "runtime: " << timer.elapsedSeconds() << endl;
