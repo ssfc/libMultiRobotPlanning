@@ -552,7 +552,7 @@ public:
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
                con.end();
     }
- 
+
     private:
     int m_dimx;
     int m_dimy;
