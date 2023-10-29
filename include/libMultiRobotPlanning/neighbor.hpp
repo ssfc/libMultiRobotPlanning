@@ -14,15 +14,15 @@ namespace libMultiRobotPlanning
     template <typename State, typename Action, typename Cost>
     struct Neighbor
     {
-        Neighbor(const State& state, const Action& action, Cost cost)
-          : state(state), action(action), cost(cost) {}
-
         //! neighboring state
         State state;
         //! action to get to the neighboring state
         Action action;
         //! cost to get to the neighboring state
         Cost cost;
+
+        Neighbor(const State& state, const Action& action, Cost cost)
+          : state(state), action(action), cost(cost) {}
     };
 
 }  // namespace libMultiRobotPlanning
