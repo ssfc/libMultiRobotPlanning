@@ -78,6 +78,9 @@ statistical purposes.
               typename Constraints, typename Environment>
     class CBS
     {
+
+
+
     public:
         CBS(Environment& environment) : m_env(environment) {}
 
@@ -221,6 +224,12 @@ statistical purposes.
 
         struct LowLevelEnvironment
         {
+        private:
+            Environment& m_env;
+            // size_t m_agentIdx;
+            // const Constraints& m_constraints;
+
+        public:
             LowLevelEnvironment(Environment& env, size_t agentIdx,
                                 const Constraints& constraints)
                 : m_env(env)
@@ -257,11 +266,6 @@ statistical purposes.
                 // std::cout << "LL discover: " << s << std::endl;
                 // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
             }
-
-            private:
-                Environment& m_env;
-                // size_t m_agentIdx;
-                // const Constraints& m_constraints;
         };
 
         private:
