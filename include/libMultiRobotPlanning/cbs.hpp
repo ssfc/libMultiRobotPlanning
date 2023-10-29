@@ -184,11 +184,8 @@ statistical purposes.
         {
             std::vector<PlanResult<State, Action, Cost> > solution;
             std::vector<Constraints> constraints;
-
             Cost cost;
-
             int id;
-
             typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
                                              boost::heap::mutable_<true> >::handle_type handle;
 
@@ -222,7 +219,7 @@ statistical purposes.
             }
         };
 
-        struct LowLevelEnvironment
+        class LowLevelEnvironment
         {
         private:
             Environment& m_env;
