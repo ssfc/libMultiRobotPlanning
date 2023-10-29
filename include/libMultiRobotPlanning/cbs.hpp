@@ -78,9 +78,6 @@ statistical purposes.
               typename Constraints, typename Environment>
     class CBS
     {
-
-
-
     public:
         CBS(Environment& environment) : m_env(environment) {}
 
