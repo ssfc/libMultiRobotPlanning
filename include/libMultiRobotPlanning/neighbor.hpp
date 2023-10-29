@@ -1,7 +1,7 @@
 #pragma once
 
-namespace libMultiRobotPlanning {
-
+namespace libMultiRobotPlanning
+{
     /*! \brief Represents state transations
 
         This class represents a transition from a start state applying an action
@@ -12,16 +12,17 @@ namespace libMultiRobotPlanning {
         \tparam Cost Custom Cost type (integer or floating point types)
     */
     template <typename State, typename Action, typename Cost>
-    struct Neighbor {
-      Neighbor(const State& state, const Action& action, Cost cost)
+    struct Neighbor
+    {
+        Neighbor(const State& state, const Action& action, Cost cost)
           : state(state), action(action), cost(cost) {}
 
-      //! neighboring state
-      State state;
-      //! action to get to the neighboring state
-      Action action;
-      //! cost to get to the neighboring state
-      Cost cost;
+        //! neighboring state
+        State state;
+        //! action to get to the neighboring state
+        Action action;
+        //! cost to get to the neighboring state
+        Cost cost;
     };
 
 }  // namespace libMultiRobotPlanning
