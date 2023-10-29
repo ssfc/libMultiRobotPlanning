@@ -261,10 +261,9 @@ statistical purposes.
                 // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
             }
         };
-
-        private:
-            Environment& m_env;
-            typedef AStar<State, Action, Cost, LowLevelEnvironment> LowLevelSearch_t;
+        
+        Environment& m_env;
+        typedef AStar<State, Action, Cost, LowLevelEnvironment> LowLevelSearch_t;
     };
 
 }  // namespace libMultiRobotPlanning
