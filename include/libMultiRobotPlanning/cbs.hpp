@@ -174,7 +174,7 @@ statistical purposes.
             }
 
             return false;
-      }
+        }
 
     private:
         struct HighLevelNode
@@ -261,7 +261,7 @@ statistical purposes.
                 // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
             }
         };
-        
+
         Environment& m_env;
         typedef AStar<State, Action, Cost, LowLevelEnvironment> LowLevelSearch_t;
     };
