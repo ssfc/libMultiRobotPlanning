@@ -88,35 +88,39 @@ public:
       m_goal(std::move(goal))  // NOLINT
     {}
 
-    int admissibleHeuristic(const State& s) {
-    return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
+    int admissibleHeuristic(const State& s)
+    {
+        return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
     }
 
-    bool isSolution(const State& s) { return s == m_goal; }
+    bool isSolution(const State& s)
+    {
+        return s == m_goal;
+    }
 
-    void getNeighbors(const State& s,
-                    std::vector<Neighbor<State, Action, int> >& neighbors) {
-    neighbors.clear();
+    void getNeighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
+    {
+        neighbors.clear();
 
-    State up(s.x, s.y + 1);
-    if (stateValid(up)) {
-      neighbors.emplace_back(Neighbor<State, Action, int>(up, Action::Up, 1));
-    }
-    State down(s.x, s.y - 1);
-    if (stateValid(down)) {
-      neighbors.emplace_back(
-          Neighbor<State, Action, int>(down, Action::Down, 1));
-    }
-    State left(s.x - 1, s.y);
-    if (stateValid(left)) {
-      neighbors.emplace_back(
-          Neighbor<State, Action, int>(left, Action::Left, 1));
-    }
-    State right(s.x + 1, s.y);
-    if (stateValid(right)) {
-      neighbors.emplace_back(
-          Neighbor<State, Action, int>(right, Action::Right, 1));
-    }
+        State up(s.x, s.y + 1);
+        if (stateValid(up)) {
+          neighbors.emplace_back(Neighbor<State, Action, int>(up, Action::Up, 1));
+        }
+        State down(s.x, s.y - 1);
+        if (stateValid(down)) {
+          neighbors.emplace_back(
+              Neighbor<State, Action, int>(down, Action::Down, 1));
+        }
+        State left(s.x - 1, s.y);
+        if (stateValid(left)) {
+          neighbors.emplace_back(
+              Neighbor<State, Action, int>(left, Action::Left, 1));
+        }
+        State right(s.x + 1, s.y);
+        if (stateValid(right)) {
+          neighbors.emplace_back(
+              Neighbor<State, Action, int>(right, Action::Right, 1));
+        }
     }
 
     void onExpandNode(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
