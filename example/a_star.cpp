@@ -6,6 +6,7 @@
 
 #include <libMultiRobotPlanning/a_star.hpp>
 
+using namespace std;
 using libMultiRobotPlanning::AStar;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
@@ -24,10 +25,10 @@ struct State
 
     bool operator==(const State& other) const
     {
-        return std::tie(x, y) == std::tie(other.x, other.y);
+        return tie(x, y) == tie(other.x, other.y);
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const State& s)
+    friend ostream& operator<<(ostream& os, const State& s)
     {
         return os << "(" << s.x << "," << s.y << ")";
     }
@@ -57,7 +58,7 @@ enum class Action
     Right,
 };
 
-std::ostream& operator<<(std::ostream& os, const Action& a)
+ostream& operator<<(ostream& os, const Action& a)
 {
     switch (a)
     {
@@ -83,20 +84,20 @@ class Environment
 private:
     int m_dimx;
     int m_dimy;
-    std::unordered_set<State> m_obstacles;
+    unordered_set<State> m_obstacles;
     State m_goal;
 
 public:
-    Environment(size_t dimx, size_t dimy, std::unordered_set<State> obstacles, State goal)
+    Environment(size_t dimx, size_t dimy, unordered_set<State> obstacles, State goal)
     : m_dimx(dimx),
       m_dimy(dimy),
-      m_obstacles(std::move(obstacles)),
+      m_obstacles(move(obstacles)),
       m_goal(std::move(goal))  // NOLINT
     {}
 
     int admissibleHeuristic(const State& s)
     {
-        return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
+        return abs(s.x - m_goal.x) + abs(s.y - m_goal.y);
     }
 
     bool isSolution(const State& s)
@@ -104,7 +105,7 @@ public:
         return s == m_goal;
     }
 
-    void getNeighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
+    void getNeighbors(const State& s, vector<Neighbor<State, Action, int> >& neighbors)
     {
         neighbors.clear();
 
@@ -154,15 +155,15 @@ int main(int argc, char* argv[])
     // Declare the supported options.
     po::options_description desc("Allowed options");
     int startX, startY, goalX, goalY;
-    std::string mapFile;
-    std::string outputFile;
+    string mapFile;
+    string outputFile;
     desc.add_options()("help", "produce help message")
     ("startX", po::value<int>(&startX)->required(), "start position x-component")
     ("startY", po::value<int>(&startY)->required(), "start position y-component")
     ("goalX", po::value<int>(&goalX)->required(), "goal position x-component")
     ("goalY", po::value<int>(&goalY)->required(), "goal position y-component")
-    ("map,m", po::value<std::string>(&mapFile)->required(), "input map (txt)")
-    ("output,o", po::value<std::string>(&outputFile)->required(), "output file (YAML)");
+    ("map,m", po::value<string>(&mapFile)->required(), "input map (txt)")
+    ("output,o", po::value<string>(&outputFile)->required(), "output file (YAML)");
 
     try
     {
@@ -172,7 +173,7 @@ int main(int argc, char* argv[])
 
         if (vm.count("help") != 0u)
         {
-            std::cout << desc << "\n";
+            cout << desc << "\n";
             return 0;
         }
     }
