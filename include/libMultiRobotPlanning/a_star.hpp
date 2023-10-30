@@ -119,10 +119,11 @@ purposes.
                 m_env.getNeighbors(current.state, neighbors);
                 for (const Neighbor<State, Action, Cost>& neighbor : neighbors)
                 {
-                    if (closedSet.find(neighbor.state) == closedSet.end()) {
-                      Cost tentative_gScore = current.gScore + neighbor.cost;
-                      auto iter = stateToHeap.find(neighbor.state);
-                      if (iter == stateToHeap.end()) {  // Discover a new node
+                    if (closedSet.find(neighbor.state) == closedSet.end())
+                    {
+                        Cost tentative_gScore = current.gScore + neighbor.cost;
+                        auto iter = stateToHeap.find(neighbor.state);
+                        if (iter == stateToHeap.end()) {  // Discover a new node
                         Cost fScore =
                             tentative_gScore + m_env.admissibleHeuristic(neighbor.state);
                         auto handle =
@@ -132,7 +133,7 @@ purposes.
                         m_env.onDiscover(neighbor.state, fScore, tentative_gScore);
                         // std::cout << "  this is a new node " << fScore << "," <<
                         // tentative_gScore << std::endl;
-                      } else {
+                        } else {
                         auto handle = iter->second;
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
                         // << (*handle).gScore << std::endl;
@@ -148,13 +149,13 @@ purposes.
                         openSet.increase(handle);
                         m_env.onDiscover(neighbor.state, (*handle).fScore,
                                          (*handle).gScore);
-                      }
+                        }
 
-                      // Best path for this node so far
-                      // TODO: this is not the best way to update "cameFrom", but otherwise
-                      // default c'tors of State and Action are required
-                      cameFrom.erase(neighbor.state);
-                      cameFrom.insert(std::make_pair<>(
+                        // Best path for this node so far
+                        // TODO: this is not the best way to update "cameFrom", but otherwise
+                        // default c'tors of State and Action are required
+                        cameFrom.erase(neighbor.state);
+                        cameFrom.insert(std::make_pair<>(
                           neighbor.state,
                           std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
                                             tentative_gScore)));
