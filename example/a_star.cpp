@@ -12,6 +12,9 @@ using libMultiRobotPlanning::PlanResult;
 
 struct State
 {
+    int x;
+    int y;
+
     State(int x, int y) : x(x), y(y) {}
 
     State(const State&) = default;
@@ -28,9 +31,6 @@ struct State
     {
         return os << "(" << s.x << "," << s.y << ")";
     }
-
-    int x;
-    int y;
 };
 
 namespace std {
