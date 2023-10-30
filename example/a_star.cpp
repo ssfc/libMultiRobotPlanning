@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
     unordered_set<State> obstacles;
 
     ifstream map(mapFile);
-    int dimX = 0;
+    int dim_x = 0;
     int y = 0;
 
     while (map.good())
@@ -211,17 +211,20 @@ int main(int argc, char* argv[])
             ++x; // x是列
         }
 
-        dimX = max(dimX, x);
+        dim_x = max(dim_x, x);
         ++y; // y是行
     }
 
-    cout << dimX << " " << y << endl;
+    // 文中dim_x这个变量是有必要的，因为它用来记录地图的宽度，以便在读取地图文件时判断坐标是否有效。
+    // dim_x的值是根据地图文件中每一行的字符数来确定的，所以它可能不等于地图文件的列数。
+    // dim_x的最大值是地图文件中最长的一行的字符数。
+    cout << dim_x << " " << y << endl;
 
     bool success = false;
 
     State goal(goalX, goalY);
     State start(startX, startY);
-    Environment env(dimX, y - 1, obstacles, goal);
+    Environment env(dim_x, y - 1, obstacles, goal);
 
     AStar<State, Action, int, Environment> astar(env);
 
