@@ -173,6 +173,17 @@ purposes.
     private:
         struct Node
         {
+            State state;
+            Cost fScore;
+            Cost gScore;
+
+            #ifdef USE_FIBONACCI_HEAP
+            typename boost::heap::fibonacci_heap<Node>::handle_type handle;
+            #else
+            typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+            boost::heap::mutable_<true>>::handle_type handle;
+            #endif
+
             Node(const State& state, Cost fScore, Cost gScore)
                 : state(state), fScore(fScore), gScore(gScore) {}
 
@@ -193,24 +204,13 @@ purposes.
                 }
             }
 
-            friend std::ostream& operator<<(std::ostream& os, const Node& node) {
-              os << "state: " << node.state << " fScore: " << node.fScore
+            friend std::ostream& operator<<(std::ostream& os, const Node& node)
+            {
+                os << "state: " << node.state << " fScore: " << node.fScore
                  << " gScore: " << node.gScore;
-              return os;
+
+                return os;
             }
-
-            State state;
-
-            Cost fScore;
-            Cost gScore;
-
-            #ifdef USE_FIBONACCI_HEAP
-            typename boost::heap::fibonacci_heap<Node>::handle_type handle;
-            #else
-            typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
-                                             boost::heap::mutable_<true> >::handle_type
-                handle;
-            #endif
         };
 
     #ifdef USE_FIBONACCI_HEAP
