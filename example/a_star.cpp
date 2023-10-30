@@ -33,23 +33,28 @@ struct State
     }
 };
 
-namespace std {
-template <>
-struct hash<State> {
-  size_t operator()(const State& s) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, s.x);
-    boost::hash_combine(seed, s.y);
-    return seed;
-  }
-};
+namespace std
+{
+    template <>
+    struct hash<State>
+    {
+        size_t operator()(const State& s) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.x);
+            boost::hash_combine(seed, s.y);
+
+            return seed;
+        }
+    };
 }  // namespace std
 
-enum class Action {
-  Up,
-  Down,
-  Left,
-  Right,
+enum class Action
+{
+    Up,
+    Down,
+    Left,
+    Right,
 };
 
 std::ostream& operator<<(std::ostream& os, const Action& a) {
