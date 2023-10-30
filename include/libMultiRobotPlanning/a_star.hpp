@@ -123,32 +123,36 @@ purposes.
                     {
                         Cost tentative_gScore = current.gScore + neighbor.cost;
                         auto iter = stateToHeap.find(neighbor.state);
-                        if (iter == stateToHeap.end()) {  // Discover a new node
-                        Cost fScore =
-                            tentative_gScore + m_env.admissibleHeuristic(neighbor.state);
-                        auto handle =
-                            openSet.push(Node(neighbor.state, fScore, tentative_gScore));
-                        (*handle).handle = handle;
-                        stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
-                        m_env.onDiscover(neighbor.state, fScore, tentative_gScore);
-                        // std::cout << "  this is a new node " << fScore << "," <<
-                        // tentative_gScore << std::endl;
-                        } else {
-                        auto handle = iter->second;
-                        // std::cout << "  this is an old node: " << tentative_gScore << ","
-                        // << (*handle).gScore << std::endl;
-                        // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).gScore) {
-                          continue;
+                        if (iter == stateToHeap.end())
+                        {  // Discover a new node
+                            Cost fScore =
+                                tentative_gScore + m_env.admissibleHeuristic(neighbor.state);
+                            auto handle =
+                                openSet.push(Node(neighbor.state, fScore, tentative_gScore));
+                            (*handle).handle = handle;
+                            stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
+                            m_env.onDiscover(neighbor.state, fScore, tentative_gScore);
+                            // std::cout << "  this is a new node " << fScore << "," <<
+                            // tentative_gScore << std::endl;
                         }
+                        else
+                        {
+                            auto handle = iter->second;
+                            // std::cout << "  this is an old node: " << tentative_gScore << ","
+                            // << (*handle).gScore << std::endl;
+                            // We found this node before with a better path
+                            if (tentative_gScore >= (*handle).gScore)
+                            {
+                                continue;
+                            }
 
-                        // update f and gScore
-                        Cost delta = (*handle).gScore - tentative_gScore;
-                        (*handle).gScore = tentative_gScore;
-                        (*handle).fScore -= delta;
-                        openSet.increase(handle);
-                        m_env.onDiscover(neighbor.state, (*handle).fScore,
-                                         (*handle).gScore);
+                            // update f and gScore
+                            Cost delta = (*handle).gScore - tentative_gScore;
+                            (*handle).gScore = tentative_gScore;
+                            (*handle).fScore -= delta;
+                            openSet.increase(handle);
+                            m_env.onDiscover(neighbor.state, (*handle).fScore,
+                                             (*handle).gScore);
                         }
 
                         // Best path for this node so far
@@ -167,42 +171,47 @@ purposes.
         }
 
     private:
-      struct Node {
-        Node(const State& state, Cost fScore, Cost gScore)
-            : state(state), fScore(fScore), gScore(gScore) {}
+        struct Node
+        {
+            Node(const State& state, Cost fScore, Cost gScore)
+                : state(state), fScore(fScore), gScore(gScore) {}
 
-        bool operator<(const Node& other) const {
-          // Sort order
-          // 1. lowest fScore
-          // 2. highest gScore
+            bool operator<(const Node& other) const
+            {
+                // Sort order
+                // 1. lowest fScore
+                // 2. highest gScore
 
-          // Our heap is a maximum heap, so we invert the comperator function here
-          if (fScore != other.fScore) {
-            return fScore > other.fScore;
-          } else {
-            return gScore < other.gScore;
-          }
-        }
+                // Our heap is a maximum heap, so we invert the comperator function here
+                if (fScore != other.fScore)
+                {
+                    return fScore > other.fScore;
+                }
+                else
+                {
+                    return gScore < other.gScore;
+                }
+            }
 
-        friend std::ostream& operator<<(std::ostream& os, const Node& node) {
-          os << "state: " << node.state << " fScore: " << node.fScore
-             << " gScore: " << node.gScore;
-          return os;
-        }
+            friend std::ostream& operator<<(std::ostream& os, const Node& node) {
+              os << "state: " << node.state << " fScore: " << node.fScore
+                 << " gScore: " << node.gScore;
+              return os;
+            }
 
-        State state;
+            State state;
 
-        Cost fScore;
-        Cost gScore;
+            Cost fScore;
+            Cost gScore;
 
-    #ifdef USE_FIBONACCI_HEAP
-        typename boost::heap::fibonacci_heap<Node>::handle_type handle;
-    #else
-        typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
-                                         boost::heap::mutable_<true> >::handle_type
-            handle;
-    #endif
-      };
+            #ifdef USE_FIBONACCI_HEAP
+            typename boost::heap::fibonacci_heap<Node>::handle_type handle;
+            #else
+            typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+                                             boost::heap::mutable_<true> >::handle_type
+                handle;
+            #endif
+        };
 
     #ifdef USE_FIBONACCI_HEAP
       typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
