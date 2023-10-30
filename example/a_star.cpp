@@ -57,41 +57,44 @@ enum class Action
     Right,
 };
 
-std::ostream& operator<<(std::ostream& os, const Action& a) {
-  switch (a) {
+std::ostream& operator<<(std::ostream& os, const Action& a)
+{
+    switch (a)
+    {
     case Action::Up:
-      os << "Up";
-      break;
+        os << "Up";
+        break;
     case Action::Down:
-      os << "Down";
-      break;
+        os << "Down";
+        break;
     case Action::Left:
-      os << "Left";
-      break;
+        os << "Left";
+        break;
     case Action::Right:
-      os << "Right";
-      break;
-  }
-  return os;
+        os << "Right";
+        break;
+    }
+
+    return os;
 }
 
-class Environment {
- public:
-  Environment(size_t dimx, size_t dimy, std::unordered_set<State> obstacles,
-              State goal)
-      : m_dimx(dimx),
-        m_dimy(dimy),
-        m_obstacles(std::move(obstacles)),
-        m_goal(std::move(goal))  // NOLINT
-  {}
+class Environment
+{
+public:
+    Environment(size_t dimx, size_t dimy, std::unordered_set<State> obstacles, State goal)
+    : m_dimx(dimx),
+      m_dimy(dimy),
+      m_obstacles(std::move(obstacles)),
+      m_goal(std::move(goal))  // NOLINT
+    {}
 
-  int admissibleHeuristic(const State& s) {
+    int admissibleHeuristic(const State& s) {
     return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
-  }
+    }
 
-  bool isSolution(const State& s) { return s == m_goal; }
+    bool isSolution(const State& s) { return s == m_goal; }
 
-  void getNeighbors(const State& s,
+    void getNeighbors(const State& s,
                     std::vector<Neighbor<State, Action, int> >& neighbors) {
     neighbors.clear();
 
@@ -114,11 +117,11 @@ class Environment {
       neighbors.emplace_back(
           Neighbor<State, Action, int>(right, Action::Right, 1));
     }
-  }
+    }
 
-  void onExpandNode(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
+    void onExpandNode(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
-  void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
+    void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
  public:
   bool stateValid(const State& s) {
