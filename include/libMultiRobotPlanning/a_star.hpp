@@ -63,106 +63,106 @@ purposes.
         AStar(Environment& environment) : m_env(environment) {}
 
         bool search(const State& startState,
-                  PlanResult<State, Action, Cost>& solution, Cost initialCost = 0) {
-        solution.states.clear();
-        solution.states.push_back(std::make_pair<>(startState, 0));
-        solution.actions.clear();
-        solution.cost = 0;
-
-        openSet_t openSet;
-        std::unordered_map<State, fibHeapHandle_t, StateHasher> stateToHeap;
-        std::unordered_set<State, StateHasher> closedSet;
-        std::unordered_map<State, std::tuple<State, Action, Cost, Cost>,
-                           StateHasher>
-            cameFrom;
-
-        auto handle = openSet.push(Node(startState, m_env.admissibleHeuristic(startState), initialCost));
-        stateToHeap.insert(std::make_pair<>(startState, handle));
-        (*handle).handle = handle;
-
-        std::vector<Neighbor<State, Action, Cost> > neighbors;
-        neighbors.reserve(10);
-
-        while (!openSet.empty())
+                  PlanResult<State, Action, Cost>& solution, Cost initialCost = 0)
         {
-            Node current = openSet.top();
-            m_env.onExpandNode(current.state, current.fScore, current.gScore);
+            solution.states.clear();
+            solution.states.push_back(std::make_pair<>(startState, 0));
+            solution.actions.clear();
+            solution.cost = 0;
 
-            if (m_env.isSolution(current.state))
+            openSet_t openSet;
+            std::unordered_map<State, fibHeapHandle_t, StateHasher> stateToHeap;
+            std::unordered_set<State, StateHasher> closedSet;
+            std::unordered_map<State, std::tuple<State,Action,Cost,Cost>,StateHasher> cameFrom;
+
+            auto handle = openSet.push(Node(startState, m_env.admissibleHeuristic(startState), initialCost));
+            stateToHeap.insert(std::make_pair<>(startState, handle));
+            (*handle).handle = handle;
+
+            std::vector<Neighbor<State, Action, Cost> > neighbors;
+            neighbors.reserve(10);
+
+            while (!openSet.empty())
             {
-                solution.states.clear();
-                solution.actions.clear();
-                auto iter = cameFrom.find(current.state);
-                while (iter != cameFrom.end())
+                Node current = openSet.top();
+                m_env.onExpandNode(current.state, current.fScore, current.gScore);
+
+                if (m_env.isSolution(current.state))
                 {
-                    solution.states.push_back(
-                      std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                    solution.actions.push_back(std::make_pair<>(
-                      std::get<1>(iter->second), std::get<2>(iter->second)));
-                    iter = cameFrom.find(std::get<0>(iter->second));
+                    solution.states.clear();
+                    solution.actions.clear();
+                    auto iter = cameFrom.find(current.state);
+                    while (iter != cameFrom.end())
+                    {
+                        solution.states.push_back(
+                          std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                        solution.actions.push_back(std::make_pair<>(
+                          std::get<1>(iter->second), std::get<2>(iter->second)));
+                        iter = cameFrom.find(std::get<0>(iter->second));
+                    }
+
+                    solution.states.push_back(std::make_pair<>(startState, initialCost));
+                    std::reverse(solution.states.begin(), solution.states.end());
+                    std::reverse(solution.actions.begin(), solution.actions.end());
+                    solution.cost = current.gScore;
+                    solution.fmin = current.fScore;
+
+                    return true;
                 }
 
-                solution.states.push_back(std::make_pair<>(startState, initialCost));
-                std::reverse(solution.states.begin(), solution.states.end());
-                std::reverse(solution.actions.begin(), solution.actions.end());
-                solution.cost = current.gScore;
-                solution.fmin = current.fScore;
+                openSet.pop();
+                stateToHeap.erase(current.state);
+                closedSet.insert(current.state);
 
-                return true;
-            }
+                // traverse neighbors
+                neighbors.clear();
+                m_env.getNeighbors(current.state, neighbors);
+                for (const Neighbor<State, Action, Cost>& neighbor : neighbors)
+                {
+                    if (closedSet.find(neighbor.state) == closedSet.end()) {
+                      Cost tentative_gScore = current.gScore + neighbor.cost;
+                      auto iter = stateToHeap.find(neighbor.state);
+                      if (iter == stateToHeap.end()) {  // Discover a new node
+                        Cost fScore =
+                            tentative_gScore + m_env.admissibleHeuristic(neighbor.state);
+                        auto handle =
+                            openSet.push(Node(neighbor.state, fScore, tentative_gScore));
+                        (*handle).handle = handle;
+                        stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
+                        m_env.onDiscover(neighbor.state, fScore, tentative_gScore);
+                        // std::cout << "  this is a new node " << fScore << "," <<
+                        // tentative_gScore << std::endl;
+                      } else {
+                        auto handle = iter->second;
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // << (*handle).gScore << std::endl;
+                        // We found this node before with a better path
+                        if (tentative_gScore >= (*handle).gScore) {
+                          continue;
+                        }
 
-            openSet.pop();
-            stateToHeap.erase(current.state);
-            closedSet.insert(current.state);
+                        // update f and gScore
+                        Cost delta = (*handle).gScore - tentative_gScore;
+                        (*handle).gScore = tentative_gScore;
+                        (*handle).fScore -= delta;
+                        openSet.increase(handle);
+                        m_env.onDiscover(neighbor.state, (*handle).fScore,
+                                         (*handle).gScore);
+                      }
 
-            // traverse neighbors
-            neighbors.clear();
-            m_env.getNeighbors(current.state, neighbors);
-            for (const Neighbor<State, Action, Cost>& neighbor : neighbors) {
-            if (closedSet.find(neighbor.state) == closedSet.end()) {
-              Cost tentative_gScore = current.gScore + neighbor.cost;
-              auto iter = stateToHeap.find(neighbor.state);
-              if (iter == stateToHeap.end()) {  // Discover a new node
-                Cost fScore =
-                    tentative_gScore + m_env.admissibleHeuristic(neighbor.state);
-                auto handle =
-                    openSet.push(Node(neighbor.state, fScore, tentative_gScore));
-                (*handle).handle = handle;
-                stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
-                m_env.onDiscover(neighbor.state, fScore, tentative_gScore);
-                // std::cout << "  this is a new node " << fScore << "," <<
-                // tentative_gScore << std::endl;
-              } else {
-                auto handle = iter->second;
-                // std::cout << "  this is an old node: " << tentative_gScore << ","
-                // << (*handle).gScore << std::endl;
-                // We found this node before with a better path
-                if (tentative_gScore >= (*handle).gScore) {
-                  continue;
+                      // Best path for this node so far
+                      // TODO: this is not the best way to update "cameFrom", but otherwise
+                      // default c'tors of State and Action are required
+                      cameFrom.erase(neighbor.state);
+                      cameFrom.insert(std::make_pair<>(
+                          neighbor.state,
+                          std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
+                                            tentative_gScore)));
+                    }
                 }
-
-                // update f and gScore
-                Cost delta = (*handle).gScore - tentative_gScore;
-                (*handle).gScore = tentative_gScore;
-                (*handle).fScore -= delta;
-                openSet.increase(handle);
-                m_env.onDiscover(neighbor.state, (*handle).fScore,
-                                 (*handle).gScore);
-              }
-
-              // Best path for this node so far
-              // TODO: this is not the best way to update "cameFrom", but otherwise
-              // default c'tors of State and Action are required
-              cameFrom.erase(neighbor.state);
-              cameFrom.insert(std::make_pair<>(
-                  neighbor.state,
-                  std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
-                                    tentative_gScore)));
             }
-            }
-        }
 
-        return false;
+            return false;
         }
 
     private:
