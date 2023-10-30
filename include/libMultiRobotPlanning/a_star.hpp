@@ -213,18 +213,18 @@ purposes.
             }
         };
 
-    #ifdef USE_FIBONACCI_HEAP
-      typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
-      typedef typename openSet_t::handle_type fibHeapHandle_t;
-    #else
-      typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
-                                               boost::heap::mutable_<true> >
-          openSet_t;
-      typedef typename openSet_t::handle_type fibHeapHandle_t;
-    #endif
+        #ifdef USE_FIBONACCI_HEAP
+            typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
+            typedef typename openSet_t::handle_type fibHeapHandle_t;
+        #else
+            typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+                                                   boost::heap::mutable_<true> >
+              openSet_t;
+            typedef typename openSet_t::handle_type fibHeapHandle_t;
+        #endif
 
-     private:
-      Environment& m_env;
+    private:
+        Environment& m_env;
     };
 
 }  // namespace libMultiRobotPlanning
