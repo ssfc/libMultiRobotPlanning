@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
     {
         std::cerr << e.what() << std::endl << std::endl;
         std::cerr << desc << std::endl;
-        
+
         return 1;
     }
 
@@ -189,19 +189,25 @@ int main(int argc, char* argv[])
     std::ifstream map(mapFile);
     int dimX = 0;
     int y = 0;
-    while (map.good()) {
-    std::string line;
-    std::getline(map, line);
-    int x = 0;
-    for (char c : line) {
-      if (c == '#') {
-        obstacles.insert(State(x, y));
-      }
-      ++x;
+    while (map.good())
+    {
+        std::string line;
+        std::getline(map, line);
+        int x = 0;
+        for (char c : line)
+        {
+            if (c == '#')
+            {
+                obstacles.insert(State(x, y));
+            }
+
+            ++x;
+        }
+
+        dimX = std::max(dimX, x);
+        ++y;
     }
-    dimX = std::max(dimX, x);
-    ++y;
-    }
+    
     std::cout << dimX << " " << y << std::endl;
 
     bool success = false;
