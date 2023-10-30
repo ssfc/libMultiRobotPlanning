@@ -248,8 +248,10 @@ int main(int argc, char* argv[])
               << "      y: " << solution.states[i].first.y << std::endl
               << "      t: " << i << std::endl;
         }
-    } else {
-    std::cout << "Planning NOT successful!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Planning NOT successful!" << std::endl;
     }
 
     return 0;
