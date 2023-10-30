@@ -164,19 +164,24 @@ int main(int argc, char* argv[])
     ("map,m", po::value<std::string>(&mapFile)->required(), "input map (txt)")
     ("output,o", po::value<std::string>(&outputFile)->required(), "output file (YAML)");
 
-    try {
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
+    try
+    {
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
 
-    if (vm.count("help") != 0u) {
-      std::cout << desc << "\n";
-      return 0;
+        if (vm.count("help") != 0u)
+        {
+            std::cout << desc << "\n";
+            return 0;
+        }
     }
-    } catch (po::error& e) {
-    std::cerr << e.what() << std::endl << std::endl;
-    std::cerr << desc << std::endl;
-    return 1;
+    catch (po::error& e)
+    {
+        std::cerr << e.what() << std::endl << std::endl;
+        std::cerr << desc << std::endl;
+        
+        return 1;
     }
 
     std::unordered_set<State> obstacles;
