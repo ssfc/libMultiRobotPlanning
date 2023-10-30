@@ -208,11 +208,11 @@ int main(int argc, char* argv[])
                 obstacles.insert(State(x, y));
             }
 
-            ++x;
+            ++x; // x是列
         }
 
         dimX = max(dimX, x);
-        ++y;
+        ++y; // y是行
     }
 
     cout << dimX << " " << y << endl;
