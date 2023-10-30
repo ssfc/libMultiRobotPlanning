@@ -11,11 +11,13 @@ using libMultiRobotPlanning::AStar;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
-struct State
+class State
 {
+public:
     int x;
     int y;
 
+public:
     State(int x, int y) : x(x), y(y) {}
 
     State(const State&) = default;
@@ -199,7 +201,7 @@ int main(int argc, char* argv[])
         int x = 0;
         for (char c : line)
         {
-            if (c == '#')
+            if (c == '#')  // # 代表障碍物, . 代表空间。
             {
                 obstacles.insert(State(x, y));
             }
