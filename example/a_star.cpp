@@ -241,8 +241,10 @@ int main(int argc, char* argv[])
 
         out << "schedule:" << std::endl;
         out << "  agent1:" << std::endl;
-        for (size_t i = 0; i < solution.states.size(); ++i) {
-          out << "    - x: " << solution.states[i].first.x << std::endl
+
+        for (size_t i = 0; i < solution.states.size(); ++i)
+        {
+            out << "    - x: " << solution.states[i].first.x << std::endl
               << "      y: " << solution.states[i].first.y << std::endl
               << "      t: " << i << std::endl;
         }
