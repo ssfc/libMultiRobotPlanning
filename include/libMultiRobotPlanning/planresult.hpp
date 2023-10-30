@@ -15,16 +15,17 @@ namespace libMultiRobotPlanning {
     \tparam Action Custom action for the search. Needs to be copy'able
     \tparam Cost Custom Cost type (integer or floating point types)
 */
-template <typename State, typename Action, typename Cost>
-struct PlanResult {
-  //! states and their gScore
-  std::vector<std::pair<State, Cost> > states;
-  //! actions and their cost
-  std::vector<std::pair<Action, Cost> > actions;
-  //! actual cost of the result
-  Cost cost;
-  //! lower bound of the cost (for suboptimal solvers)
-  Cost fmin;
-};
+    template <typename State, typename Action, typename Cost>
+    struct PlanResult
+    {
+        //! states and their gScore
+        std::vector<std::pair<State, Cost> > states;
+        //! actions and their cost
+        std::vector<std::pair<Action, Cost> > actions;
+        //! actual cost of the result
+        Cost cost;
+        //! lower bound of the cost (for suboptimal solvers)
+        Cost fmin;
+    };
 
 }  // namespace libMultiRobotPlanning
