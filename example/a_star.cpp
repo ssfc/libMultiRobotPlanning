@@ -252,7 +252,7 @@ int main(int argc, char* argv[])
     }
     else
     {
-        std::cout << "Planning NOT successful!" << std::endl;
+        cout << "Planning NOT successful!" << endl;
     }
 
     return 0;
