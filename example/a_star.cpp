@@ -124,9 +124,10 @@ public:
         }
 
         State right(s.x + 1, s.y);
-        if (stateValid(right)) {
-          neighbors.emplace_back(
-              Neighbor<State, Action, int>(right, Action::Right, 1));
+
+        if (stateValid(right))
+        {
+            neighbors.emplace_back(Neighbor<State, Action, int>(right, Action::Right, 1));
         }
     }
 
