@@ -203,7 +203,7 @@ int main(int argc, char* argv[])
         int x = 0;
         for (char c : line)
         {
-            if (c == '#')  // # 代表障碍物, . 代表空间。
+            if (c == '@')  // # 代表障碍物, . 代表空间。
             {
                 obstacles.insert(State(x, y));
             }
