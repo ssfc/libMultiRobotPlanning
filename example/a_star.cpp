@@ -178,6 +178,7 @@ int main(int argc, char* argv[])
         if (vm.count("help") != 0u)
         {
             cout << desc << "\n";
+
             return 0;
         }
     }
@@ -194,6 +195,7 @@ int main(int argc, char* argv[])
     ifstream map(mapFile);
     int dimX = 0;
     int y = 0;
+
     while (map.good())
     {
         string line;
