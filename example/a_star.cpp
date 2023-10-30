@@ -10,24 +10,27 @@ using libMultiRobotPlanning::AStar;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
-struct State {
-  State(int x, int y) : x(x), y(y) {}
+struct State
+{
+    State(int x, int y) : x(x), y(y) {}
 
-  State(const State&) = default;
-  State(State&&) = default;
-  State& operator=(const State&) = default;
-  State& operator=(State&&) = default;
+    State(const State&) = default;
+    State(State&&) = default;
+    State& operator=(const State&) = default;
+    State& operator=(State&&) = default;
 
-  bool operator==(const State& other) const {
-    return std::tie(x, y) == std::tie(other.x, other.y);
-  }
+    bool operator==(const State& other) const
+    {
+        return std::tie(x, y) == std::tie(other.x, other.y);
+    }
 
-  friend std::ostream& operator<<(std::ostream& os, const State& s) {
-    return os << "(" << s.x << "," << s.y << ")";
-  }
+    friend std::ostream& operator<<(std::ostream& os, const State& s)
+    {
+        return os << "(" << s.x << "," << s.y << ")";
+    }
 
-  int x;
-  int y;
+    int x;
+    int y;
 };
 
 namespace std {
