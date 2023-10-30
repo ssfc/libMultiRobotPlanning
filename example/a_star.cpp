@@ -154,9 +154,11 @@ int main(int argc, char* argv[])
     namespace po = boost::program_options;
     // Declare the supported options.
     po::options_description desc("Allowed options");
+
     int startX, startY, goalX, goalY;
     string mapFile;
     string outputFile;
+
     desc.add_options()("help", "produce help message")
     ("startX", po::value<int>(&startX)->required(), "start position x-component")
     ("startY", po::value<int>(&startY)->required(), "start position y-component")
