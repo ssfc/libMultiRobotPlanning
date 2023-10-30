@@ -179,21 +179,21 @@ int main(int argc, char* argv[])
     }
     catch (po::error& e)
     {
-        std::cerr << e.what() << std::endl << std::endl;
-        std::cerr << desc << std::endl;
+        cerr << e.what() << endl << endl;
+        cerr << desc << endl;
 
         return 1;
     }
 
-    std::unordered_set<State> obstacles;
+    unordered_set<State> obstacles;
 
-    std::ifstream map(mapFile);
+    ifstream map(mapFile);
     int dimX = 0;
     int y = 0;
     while (map.good())
     {
-        std::string line;
-        std::getline(map, line);
+        string line;
+        getline(map, line);
         int x = 0;
         for (char c : line)
         {
@@ -205,11 +205,11 @@ int main(int argc, char* argv[])
             ++x;
         }
 
-        dimX = std::max(dimX, x);
+        dimX = max(dimX, x);
         ++y;
     }
 
-    std::cout << dimX << " " << y << std::endl;
+    cout << dimX << " " << y << endl;
 
     bool success = false;
 
@@ -226,28 +226,28 @@ int main(int argc, char* argv[])
         success = astar.search(start, solution);
     }
 
-    std::ofstream out(outputFile);
+    ofstream out(outputFile);
     if (success)
     {
-        std::cout << "Planning successful! Total cost: " << solution.cost << std::endl;
+        cout << "Planning successful! Total cost: " << solution.cost << endl;
         for (size_t i = 0; i < solution.actions.size(); ++i)
         {
-            std::cout << solution.states[i].second << ": " << solution.states[i].first
-                    << "->" << solution.actions[i].first
-                    << "(cost: " << solution.actions[i].second << ")" << std::endl;
+            cout << solution.states[i].second << ": " << solution.states[i].first
+            << "->" << solution.actions[i].first
+            << "(cost: " << solution.actions[i].second << ")" << endl;
         }
 
-        std::cout << solution.states.back().second << ": "
-                  << solution.states.back().first << std::endl;
+        cout << solution.states.back().second << ": "
+        << solution.states.back().first << endl;
 
-        out << "schedule:" << std::endl;
-        out << "  agent1:" << std::endl;
+        out << "schedule:" << endl;
+        out << "  agent1:" << endl;
 
         for (size_t i = 0; i < solution.states.size(); ++i)
         {
-            out << "    - x: " << solution.states[i].first.x << std::endl
-              << "      y: " << solution.states[i].first.y << std::endl
-              << "      t: " << i << std::endl;
+            out << "    - x: " << solution.states[i].first.x << endl
+              << "      y: " << solution.states[i].first.y << endl
+              << "      t: " << i << endl;
         }
     }
     else
