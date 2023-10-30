@@ -103,19 +103,26 @@ public:
         neighbors.clear();
 
         State up(s.x, s.y + 1);
-        if (stateValid(up)) {
-          neighbors.emplace_back(Neighbor<State, Action, int>(up, Action::Up, 1));
+
+        if (stateValid(up))
+        {
+            neighbors.emplace_back(Neighbor<State, Action, int>(up, Action::Up, 1));
         }
+
         State down(s.x, s.y - 1);
-        if (stateValid(down)) {
-          neighbors.emplace_back(
-              Neighbor<State, Action, int>(down, Action::Down, 1));
+
+        if (stateValid(down))
+        {
+            neighbors.emplace_back(Neighbor<State, Action, int>(down, Action::Down, 1));
         }
+
         State left(s.x - 1, s.y);
-        if (stateValid(left)) {
-          neighbors.emplace_back(
-              Neighbor<State, Action, int>(left, Action::Left, 1));
+
+        if (stateValid(left))
+        {
+            neighbors.emplace_back(Neighbor<State, Action, int>(left, Action::Left, 1));
         }
+
         State right(s.x + 1, s.y);
         if (stateValid(right)) {
           neighbors.emplace_back(
