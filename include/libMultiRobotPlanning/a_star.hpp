@@ -60,9 +60,9 @@ purposes.
     class AStar
     {
     public:
-      AStar(Environment& environment) : m_env(environment) {}
+        AStar(Environment& environment) : m_env(environment) {}
 
-      bool search(const State& startState,
+        bool search(const State& startState,
                   PlanResult<State, Action, Cost>& solution, Cost initialCost = 0) {
         solution.states.clear();
         solution.states.push_back(std::make_pair<>(startState, 0));
@@ -76,46 +76,49 @@ purposes.
                            StateHasher>
             cameFrom;
 
-        auto handle = openSet.push(
-            Node(startState, m_env.admissibleHeuristic(startState), initialCost));
+        auto handle = openSet.push(Node(startState, m_env.admissibleHeuristic(startState), initialCost));
         stateToHeap.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
 
         std::vector<Neighbor<State, Action, Cost> > neighbors;
         neighbors.reserve(10);
 
-        while (!openSet.empty()) {
-          Node current = openSet.top();
-          m_env.onExpandNode(current.state, current.fScore, current.gScore);
+        while (!openSet.empty())
+        {
+            Node current = openSet.top();
+            m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
-          if (m_env.isSolution(current.state)) {
-            solution.states.clear();
-            solution.actions.clear();
-            auto iter = cameFrom.find(current.state);
-            while (iter != cameFrom.end()) {
-              solution.states.push_back(
-                  std::make_pair<>(iter->first, std::get<3>(iter->second)));
-              solution.actions.push_back(std::make_pair<>(
-                  std::get<1>(iter->second), std::get<2>(iter->second)));
-              iter = cameFrom.find(std::get<0>(iter->second));
+            if (m_env.isSolution(current.state))
+            {
+                solution.states.clear();
+                solution.actions.clear();
+                auto iter = cameFrom.find(current.state);
+                while (iter != cameFrom.end())
+                {
+                    solution.states.push_back(
+                      std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    solution.actions.push_back(std::make_pair<>(
+                      std::get<1>(iter->second), std::get<2>(iter->second)));
+                    iter = cameFrom.find(std::get<0>(iter->second));
+                }
+
+                solution.states.push_back(std::make_pair<>(startState, initialCost));
+                std::reverse(solution.states.begin(), solution.states.end());
+                std::reverse(solution.actions.begin(), solution.actions.end());
+                solution.cost = current.gScore;
+                solution.fmin = current.fScore;
+
+                return true;
             }
-            solution.states.push_back(std::make_pair<>(startState, initialCost));
-            std::reverse(solution.states.begin(), solution.states.end());
-            std::reverse(solution.actions.begin(), solution.actions.end());
-            solution.cost = current.gScore;
-            solution.fmin = current.fScore;
 
-            return true;
-          }
+            openSet.pop();
+            stateToHeap.erase(current.state);
+            closedSet.insert(current.state);
 
-          openSet.pop();
-          stateToHeap.erase(current.state);
-          closedSet.insert(current.state);
-
-          // traverse neighbors
-          neighbors.clear();
-          m_env.getNeighbors(current.state, neighbors);
-          for (const Neighbor<State, Action, Cost>& neighbor : neighbors) {
+            // traverse neighbors
+            neighbors.clear();
+            m_env.getNeighbors(current.state, neighbors);
+            for (const Neighbor<State, Action, Cost>& neighbor : neighbors) {
             if (closedSet.find(neighbor.state) == closedSet.end()) {
               Cost tentative_gScore = current.gScore + neighbor.cost;
               auto iter = stateToHeap.find(neighbor.state);
@@ -156,12 +159,12 @@ purposes.
                   std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
                                     tentative_gScore)));
             }
-          }
+            }
         }
 
         return false;
-      }
-      
+        }
+
     private:
       struct Node {
         Node(const State& state, Cost fScore, Cost gScore)
