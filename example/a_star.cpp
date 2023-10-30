@@ -134,18 +134,18 @@ public:
     void onExpandNode(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
     void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
+    
+    bool stateValid(const State& s)
+    {
+        return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
+               m_obstacles.find(s) == m_obstacles.end();
+    }
 
- public:
-  bool stateValid(const State& s) {
-    return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
-           m_obstacles.find(s) == m_obstacles.end();
-  }
-
- private:
-  int m_dimx;
-  int m_dimy;
-  std::unordered_set<State> m_obstacles;
-  State m_goal;
+private:
+    int m_dimx;
+    int m_dimy;
+    std::unordered_set<State> m_obstacles;
+    State m_goal;
 };
 
 int main(int argc, char* argv[]) {
