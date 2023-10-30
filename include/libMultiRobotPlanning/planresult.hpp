@@ -2,7 +2,8 @@
 
 #include <vector>
 
-namespace libMultiRobotPlanning {
+namespace libMultiRobotPlanning
+{
 
 /*! \brief Represents the path for an agent
 
