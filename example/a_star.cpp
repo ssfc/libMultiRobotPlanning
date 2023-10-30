@@ -207,7 +207,7 @@ int main(int argc, char* argv[])
         dimX = std::max(dimX, x);
         ++y;
     }
-    
+
     std::cout << dimX << " " << y << std::endl;
 
     bool success = false;
@@ -220,29 +220,32 @@ int main(int argc, char* argv[])
 
     PlanResult<State, Action, int> solution;
 
-    if (env.stateValid(start)) {
-    success = astar.search(start, solution);
+    if (env.stateValid(start))
+    {
+        success = astar.search(start, solution);
     }
 
     std::ofstream out(outputFile);
-    if (success) {
-    std::cout << "Planning successful! Total cost: " << solution.cost
-              << std::endl;
-    for (size_t i = 0; i < solution.actions.size(); ++i) {
-      std::cout << solution.states[i].second << ": " << solution.states[i].first
-                << "->" << solution.actions[i].first
-                << "(cost: " << solution.actions[i].second << ")" << std::endl;
-    }
-    std::cout << solution.states.back().second << ": "
-              << solution.states.back().first << std::endl;
+    if (success)
+    {
+        std::cout << "Planning successful! Total cost: " << solution.cost << std::endl;
+        for (size_t i = 0; i < solution.actions.size(); ++i)
+        {
+            std::cout << solution.states[i].second << ": " << solution.states[i].first
+                    << "->" << solution.actions[i].first
+                    << "(cost: " << solution.actions[i].second << ")" << std::endl;
+        }
 
-    out << "schedule:" << std::endl;
-    out << "  agent1:" << std::endl;
-    for (size_t i = 0; i < solution.states.size(); ++i) {
-      out << "    - x: " << solution.states[i].first.x << std::endl
-          << "      y: " << solution.states[i].first.y << std::endl
-          << "      t: " << i << std::endl;
-    }
+        std::cout << solution.states.back().second << ": "
+                  << solution.states.back().first << std::endl;
+
+        out << "schedule:" << std::endl;
+        out << "  agent1:" << std::endl;
+        for (size_t i = 0; i < solution.states.size(); ++i) {
+          out << "    - x: " << solution.states[i].first.x << std::endl
+              << "      y: " << solution.states[i].first.y << std::endl
+              << "      t: " << i << std::endl;
+        }
     } else {
     std::cout << "Planning NOT successful!" << std::endl;
     }
