@@ -80,6 +80,12 @@ std::ostream& operator<<(std::ostream& os, const Action& a)
 
 class Environment
 {
+private:
+    int m_dimx;
+    int m_dimy;
+    std::unordered_set<State> m_obstacles;
+    State m_goal;
+
 public:
     Environment(size_t dimx, size_t dimy, std::unordered_set<State> obstacles, State goal)
     : m_dimx(dimx),
@@ -134,39 +140,31 @@ public:
     void onExpandNode(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
     void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
-    
+
     bool stateValid(const State& s)
     {
         return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
                m_obstacles.find(s) == m_obstacles.end();
     }
-
-private:
-    int m_dimx;
-    int m_dimy;
-    std::unordered_set<State> m_obstacles;
-    State m_goal;
 };
 
-int main(int argc, char* argv[]) {
-  namespace po = boost::program_options;
-  // Declare the supported options.
-  po::options_description desc("Allowed options");
-  int startX, startY, goalX, goalY;
-  std::string mapFile;
-  std::string outputFile;
-  desc.add_options()("help", "produce help message")(
-      "startX", po::value<int>(&startX)->required(),
-      "start position x-component")("startY",
-                                    po::value<int>(&startY)->required(),
-                                    "start position y-component")(
-      "goalX", po::value<int>(&goalX)->required(), "goal position x-component")(
-      "goalY", po::value<int>(&goalY)->required(), "goal position y-component")(
-      "map,m", po::value<std::string>(&mapFile)->required(), "input map (txt)")(
-      "output,o", po::value<std::string>(&outputFile)->required(),
-      "output file (YAML)");
+int main(int argc, char* argv[])
+{
+    namespace po = boost::program_options;
+    // Declare the supported options.
+    po::options_description desc("Allowed options");
+    int startX, startY, goalX, goalY;
+    std::string mapFile;
+    std::string outputFile;
+    desc.add_options()("help", "produce help message")
+    ("startX", po::value<int>(&startX)->required(), "start position x-component")
+    ("startY", po::value<int>(&startY)->required(), "start position y-component")
+    ("goalX", po::value<int>(&goalX)->required(), "goal position x-component")
+    ("goalY", po::value<int>(&goalY)->required(), "goal position y-component")
+    ("map,m", po::value<std::string>(&mapFile)->required(), "input map (txt)")
+    ("output,o", po::value<std::string>(&outputFile)->required(), "output file (YAML)");
 
-  try {
+    try {
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
@@ -175,18 +173,18 @@ int main(int argc, char* argv[]) {
       std::cout << desc << "\n";
       return 0;
     }
-  } catch (po::error& e) {
+    } catch (po::error& e) {
     std::cerr << e.what() << std::endl << std::endl;
     std::cerr << desc << std::endl;
     return 1;
-  }
+    }
 
-  std::unordered_set<State> obstacles;
+    std::unordered_set<State> obstacles;
 
-  std::ifstream map(mapFile);
-  int dimX = 0;
-  int y = 0;
-  while (map.good()) {
+    std::ifstream map(mapFile);
+    int dimX = 0;
+    int y = 0;
+    while (map.good()) {
     std::string line;
     std::getline(map, line);
     int x = 0;
@@ -198,25 +196,25 @@ int main(int argc, char* argv[]) {
     }
     dimX = std::max(dimX, x);
     ++y;
-  }
-  std::cout << dimX << " " << y << std::endl;
+    }
+    std::cout << dimX << " " << y << std::endl;
 
-  bool success = false;
+    bool success = false;
 
-  State goal(goalX, goalY);
-  State start(startX, startY);
-  Environment env(dimX, y - 1, obstacles, goal);
+    State goal(goalX, goalY);
+    State start(startX, startY);
+    Environment env(dimX, y - 1, obstacles, goal);
 
-  AStar<State, Action, int, Environment> astar(env);
+    AStar<State, Action, int, Environment> astar(env);
 
-  PlanResult<State, Action, int> solution;
+    PlanResult<State, Action, int> solution;
 
-  if (env.stateValid(start)) {
+    if (env.stateValid(start)) {
     success = astar.search(start, solution);
-  }
+    }
 
-  std::ofstream out(outputFile);
-  if (success) {
+    std::ofstream out(outputFile);
+    if (success) {
     std::cout << "Planning successful! Total cost: " << solution.cost
               << std::endl;
     for (size_t i = 0; i < solution.actions.size(); ++i) {
@@ -234,9 +232,9 @@ int main(int argc, char* argv[]) {
           << "      y: " << solution.states[i].first.y << std::endl
           << "      t: " << i << std::endl;
     }
-  } else {
+    } else {
     std::cout << "Planning NOT successful!" << std::endl;
-  }
+    }
 
-  return 0;
+    return 0;
 }
