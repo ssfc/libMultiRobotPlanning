@@ -59,6 +59,60 @@ purposes.
               typename StateHasher = std::hash<Location> >
     class AStar
     {
+    private:
+        struct Node
+        {
+            Location state;
+            Cost fScore;
+            Cost gScore;
+
+        #ifdef USE_FIBONACCI_HEAP
+            typename boost::heap::fibonacci_heap<Node>::handle_type handle;
+        #else
+            typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+            boost::heap::mutable_<true>>::handle_type handle;
+        #endif
+
+            Node(const Location& state, Cost fScore, Cost gScore)
+                    : state(state), fScore(fScore), gScore(gScore) {}
+
+            bool operator<(const Node& other) const
+            {
+                // Sort order
+                // 1. lowest fScore
+                // 2. highest gScore
+
+                // Our heap is a maximum heap, so we invert the comperator function here
+                if (fScore != other.fScore)
+                {
+                    return fScore > other.fScore;
+                }
+                else
+                {
+                    return gScore < other.gScore;
+                }
+            }
+
+            friend std::ostream& operator<<(std::ostream& os, const Node& node)
+            {
+                os << "state: " << node.state << " fScore: " << node.fScore
+                   << " gScore: " << node.gScore;
+
+                return os;
+            }
+        };
+
+        #ifdef USE_FIBONACCI_HEAP
+            typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
+                typedef typename openSet_t::handle_type fibHeapHandle_t;
+        #else
+            typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+            boost::heap::mutable_<true>> openSet_t;
+            typedef typename openSet_t::handle_type fibHeapHandle_t;
+        #endif
+            
+        Environment& m_env;
+
     public:
         AStar(Environment& environment) : m_env(environment) {}
 
@@ -164,62 +218,6 @@ purposes.
 
             return false;
         }
-
-    private:
-        struct Node
-        {
-            Location state;
-            Cost fScore;
-            Cost gScore;
-
-            #ifdef USE_FIBONACCI_HEAP
-            typename boost::heap::fibonacci_heap<Node>::handle_type handle;
-            #else
-            typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
-            boost::heap::mutable_<true>>::handle_type handle;
-            #endif
-
-            Node(const Location& state, Cost fScore, Cost gScore)
-                : state(state), fScore(fScore), gScore(gScore) {}
-
-            bool operator<(const Node& other) const
-            {
-                // Sort order
-                // 1. lowest fScore
-                // 2. highest gScore
-
-                // Our heap is a maximum heap, so we invert the comperator function here
-                if (fScore != other.fScore)
-                {
-                    return fScore > other.fScore;
-                }
-                else
-                {
-                    return gScore < other.gScore;
-                }
-            }
-
-            friend std::ostream& operator<<(std::ostream& os, const Node& node)
-            {
-                os << "state: " << node.state << " fScore: " << node.fScore
-                 << " gScore: " << node.gScore;
-
-                return os;
-            }
-        };
-
-        #ifdef USE_FIBONACCI_HEAP
-            typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
-            typedef typename openSet_t::handle_type fibHeapHandle_t;
-        #else
-            typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
-                                                   boost::heap::mutable_<true> >
-              openSet_t;
-            typedef typename openSet_t::handle_type fibHeapHandle_t;
-        #endif
-
-    private:
-        Environment& m_env;
     };
 
 }  // namespace libMultiRobotPlanning
