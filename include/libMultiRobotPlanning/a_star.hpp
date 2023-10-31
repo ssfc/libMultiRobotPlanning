@@ -85,7 +85,6 @@ purposes.
             while (!openSet.empty())
             {
                 Node current = openSet.top();
-                m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
                 if (m_env.is_solution(current.state))
                 {
