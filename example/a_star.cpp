@@ -146,9 +146,6 @@ public:
             neighbors.emplace_back(Neighbor<Location, Action, int>(right, Action::Right, 1));
         }
     }
-
-    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
-
 };
 
 int main(int argc, char* argv[])

@@ -129,7 +129,6 @@ purposes.
                                 openSet.push(Node(neighbor.state, fScore, tentative_gScore));
                             (*handle).handle = handle;
                             stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
-                            m_env.onDiscover(neighbor.state, fScore, tentative_gScore);
                             // std::cout << "  this is a new node " << fScore << "," <<
                             // tentative_gScore << std::endl;
                         }
@@ -149,8 +148,6 @@ purposes.
                             (*handle).gScore = tentative_gScore;
                             (*handle).fScore -= delta;
                             openSet.increase(handle);
-                            m_env.onDiscover(neighbor.state, (*handle).fScore,
-                                             (*handle).gScore);
                         }
 
                         // Best path for this node so far
