@@ -318,7 +318,7 @@ class Environment {
     return atGoal && s.time > m_lastGoalConstraint;
   }
 
-  void getNeighbors(const State& s,
+  void get_neighbors(const State& s,
                     std::vector<Neighbor<State, Action, int> >& neighbors) {
     // std::cout << "#VC " << constraints.vertexConstraints.size() << std::endl;
     // for(const auto& vc : constraints.vertexConstraints) {

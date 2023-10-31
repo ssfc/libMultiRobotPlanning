@@ -95,7 +95,7 @@ class Environment {
 
   bool is_solution(const State& s) { return s == m_goal; }
 
-  void getNeighbors(const State& s,
+  void get_neighbors(const State& s,
                     std::vector<Neighbor<State, Action, int> >& neighbors) {
     neighbors.clear();
 

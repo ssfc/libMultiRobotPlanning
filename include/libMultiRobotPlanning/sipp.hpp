@@ -49,7 +49,7 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
   - `bool is_solution(const State& s)`\n
     Return true if the given state is a goal state.
 
-  - `void getNeighbors(const State& s, std::vector<Neighbor<State, Action,
+  - `void get_neighbors(const State& s, std::vector<Neighbor<State, Action,
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
@@ -188,11 +188,11 @@ class SIPP {
                  std::numeric_limits<Cost>::max();
     }
 
-    void getNeighbors(
+    void get_neighbors(
         const SIPPState& s,
         std::vector<Neighbor<SIPPState, SIPPAction, Cost> >& neighbors) {
       std::vector<Neighbor<State, Action, Cost> > motions;
-      m_env.getNeighbors(s.state, motions);
+      m_env.get_neighbors(s.state, motions);
       for (const auto& m : motions) {
         // std::cout << "gN " << m.state << std::endl;
         Cost m_time = m.cost;
@@ -228,7 +228,7 @@ class SIPP {
       // std::cout << "expand: " << s.state << "," << interval.start << " to "
       // << interval.end << "(g: " << gScore << " f: " << fScore << ")" <<
       // std::endl;
-      // This is called before getNeighbors(). We use the callback to find the
+      // This is called before get_neighbors(). We use the callback to find the
       // current cost (=time) of the expanded node
       m_lastGScore = gScore;
       m_env.onExpandNode(s.state, fScore, gScore);

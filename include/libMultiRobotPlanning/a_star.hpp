@@ -40,7 +40,7 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
   - `bool is_solution(const Location& s)`\n
     Return true if the given state is a goal state.
 
-  - `void getNeighbors(const Location& s, std::vector<Neighbor<Location, Action,
+  - `void get_neighbors(const Location& s, std::vector<Neighbor<Location, Action,
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
@@ -116,7 +116,7 @@ purposes.
 
                 // traverse neighbors
                 neighbors.clear();
-                m_env.getNeighbors(current.state, neighbors);
+                m_env.get_neighbors(current.state, neighbors);
                 for (const Neighbor<Location, Action, Cost>& neighbor : neighbors)
                 {
                     if (closedSet.find(neighbor.state) == closedSet.end())

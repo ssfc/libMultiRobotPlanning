@@ -107,7 +107,7 @@ public:
         return current_location == goal;
     }
 
-    void getNeighbors(const Location& s, vector<Neighbor<Location, Action, int> >& neighbors)
+    void get_neighbors(const Location& s, vector<Neighbor<Location, Action, int> >& neighbors)
     {
         neighbors.clear();
 

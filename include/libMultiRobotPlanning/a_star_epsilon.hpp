@@ -61,7 +61,7 @@ state transition.
   - `bool is_solution(const State& s)`\n
     Return true if the given state is a goal state.
 
-  - `void getNeighbors(const State& s, std::vector<Neighbor<State, Action,
+  - `void get_neighbors(const State& s, std::vector<Neighbor<State, Action,
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
@@ -219,7 +219,7 @@ class AStarEpsilon {
 
       // traverse neighbors
       neighbors.clear();
-      m_env.getNeighbors(current.state, neighbors);
+      m_env.get_neighbors(current.state, neighbors);
       for (const Neighbor<State, Action, Cost>& neighbor : neighbors) {
         if (closedSet.find(neighbor.state) == closedSet.end()) {
           Cost tentative_gScore = current.gScore + neighbor.cost;

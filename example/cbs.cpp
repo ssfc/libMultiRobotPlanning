@@ -364,7 +364,7 @@ public:
                s.time > m_lastGoalConstraint;
     }
 
-    void getNeighbors(const State& s,
+    void get_neighbors(const State& s,
                     vector<Neighbor<State, Action, int> >& neighbors)
     {
         // cout << "#VC " << constraints.vertexConstraints.size() << endl;

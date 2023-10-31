@@ -56,7 +56,7 @@ constraints
   - `bool is_solution(const State& s)`\n
     Return true if the given state is a goal state for the current agent.
 
-  - `void getNeighbors(const State& s, std::vector<Neighbor<State, Action, int>
+  - `void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int>
 >& neighbors)`\n
     Fill the list of neighboring state for the given state s and the current
 agent.
@@ -276,9 +276,9 @@ class CBSTA {
 
     bool is_solution(const State& s) { return m_env.is_solution(s); }
 
-    void getNeighbors(const State& s,
+    void get_neighbors(const State& s,
                       std::vector<Neighbor<State, Action, Cost> >& neighbors) {
-      m_env.getNeighbors(s, neighbors);
+      m_env.get_neighbors(s, neighbors);
     }
 
     void onExpandNode(const State& s, Cost fScore, Cost gScore) {

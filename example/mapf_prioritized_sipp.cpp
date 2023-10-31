@@ -93,7 +93,7 @@ class Environment {
 
   State getLocation(const State& s) { return s; }
 
-  void getNeighbors(const State& s,
+  void get_neighbors(const State& s,
                     std::vector<Neighbor<State, Action, int> >& neighbors) {
     neighbors.clear();
 
