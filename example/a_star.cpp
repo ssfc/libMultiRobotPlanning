@@ -154,15 +154,15 @@ int main(int argc, char* argv[])
     // Declare the supported options.
     po::options_description desc("Allowed options");
 
-    int start_x, start_y, goalX, goalY;
+    int start_x, start_y, goal_x, goal_y;
     string mapFile;
     string outputFile;
 
     desc.add_options()("help", "produce help message")
     ("startX", po::value<int>(&start_x)->required(), "start position x-component")
     ("startY", po::value<int>(&start_y)->required(), "start position y-component")
-    ("goalX", po::value<int>(&goalX)->required(), "goal position x-component")
-    ("goalY", po::value<int>(&goalY)->required(), "goal position y-component")
+    ("goalX", po::value<int>(&goal_x)->required(), "goal position x-component")
+    ("goalY", po::value<int>(&goal_y)->required(), "goal position y-component")
     ("map,m", po::value<string>(&mapFile)->required(), "input map (txt)")
     ("output,o", po::value<string>(&outputFile)->required(), "output file (YAML)");
 
@@ -219,7 +219,7 @@ int main(int argc, char* argv[])
 
     bool success = false;
 
-    Location goal(goalX, goalY);
+    Location goal(goal_x, goal_y);
     Location start(start_x, start_y);
     Environment env(dim_x, y - 1, obstacles, goal);
 
