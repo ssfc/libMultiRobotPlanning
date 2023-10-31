@@ -96,9 +96,10 @@ public:
       m_goal(std::move(goal))  // NOLINT
     {}
 
-    int admissible_heuristic(const Location& s)
+    int admissible_heuristic(const Location& current_location)
     {
-        return abs(s.x - m_goal.x) + abs(s.y - m_goal.y);
+        return abs(current_location.x - m_goal.x)
+        + abs(current_location.y - m_goal.y);
     }
 
     bool isSolution(const Location& s)
