@@ -98,21 +98,21 @@ class Environment {
     neighbors.clear();
 
     State up(s.x, s.y + 1);
-    if (stateValid(up)) {
+    if (location_valid(up)) {
       neighbors.emplace_back(Neighbor<State, Action, int>(up, Action::Up, 1));
     }
     State down(s.x, s.y - 1);
-    if (stateValid(down)) {
+    if (location_valid(down)) {
       neighbors.emplace_back(
           Neighbor<State, Action, int>(down, Action::Down, 1));
     }
     State left(s.x - 1, s.y);
-    if (stateValid(left)) {
+    if (location_valid(left)) {
       neighbors.emplace_back(
           Neighbor<State, Action, int>(left, Action::Left, 1));
     }
     State right(s.x + 1, s.y);
-    if (stateValid(right)) {
+    if (location_valid(right)) {
       neighbors.emplace_back(
           Neighbor<State, Action, int>(right, Action::Right, 1));
     }
@@ -142,7 +142,7 @@ class Environment {
   }
 
  private:
-  bool stateValid(const State& s) {
+  bool location_valid(const State& s) {
     return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
            obstacles.find(s) == obstacles.end();
   }

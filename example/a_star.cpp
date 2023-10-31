@@ -108,7 +108,7 @@ public:
         return current_location == goal;
     }
 
-    bool stateValid(const Location& s)
+    bool location_valid(const Location& s)
     {
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(s) == obstacles.end();
@@ -120,28 +120,28 @@ public:
 
         Location up(s.x, s.y + 1);
 
-        if (stateValid(up))
+        if (location_valid(up))
         {
             neighbors.emplace_back(Neighbor<Location, Action, int>(up, Action::Up, 1));
         }
 
         Location down(s.x, s.y - 1);
 
-        if (stateValid(down))
+        if (location_valid(down))
         {
             neighbors.emplace_back(Neighbor<Location, Action, int>(down, Action::Down, 1));
         }
 
         Location left(s.x - 1, s.y);
 
-        if (stateValid(left))
+        if (location_valid(left))
         {
             neighbors.emplace_back(Neighbor<Location, Action, int>(left, Action::Left, 1));
         }
 
         Location right(s.x + 1, s.y);
 
-        if (stateValid(right))
+        if (location_valid(right))
         {
             neighbors.emplace_back(Neighbor<Location, Action, int>(right, Action::Right, 1));
         }
@@ -232,7 +232,7 @@ int main(int argc, char* argv[])
 
     PlanResult<Location, Action, int> solution;
 
-    if (env.stateValid(start))
+    if (env.location_valid(start))
     {
         success = astar.search(start, solution);
     }

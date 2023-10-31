@@ -367,34 +367,34 @@ class Environment {
     neighbors.clear();
     {
       State n(s.time + 1, s.x, s.y);
-      if (stateValid(n) && transitionValid(s, n)) {
+      if (location_valid(n) && transitionValid(s, n)) {
         neighbors.emplace_back(
             Neighbor<State, Action, int>(n, Action::Wait, 1));
       }
     }
     {
       State n(s.time + 1, s.x - 1, s.y);
-      if (stateValid(n) && transitionValid(s, n)) {
+      if (location_valid(n) && transitionValid(s, n)) {
         neighbors.emplace_back(
             Neighbor<State, Action, int>(n, Action::Left, 1));
       }
     }
     {
       State n(s.time + 1, s.x + 1, s.y);
-      if (stateValid(n) && transitionValid(s, n)) {
+      if (location_valid(n) && transitionValid(s, n)) {
         neighbors.emplace_back(
             Neighbor<State, Action, int>(n, Action::Right, 1));
       }
     }
     {
       State n(s.time + 1, s.x, s.y + 1);
-      if (stateValid(n) && transitionValid(s, n)) {
+      if (location_valid(n) && transitionValid(s, n)) {
         neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Up, 1));
       }
     }
     {
       State n(s.time + 1, s.x, s.y - 1);
-      if (stateValid(n) && transitionValid(s, n)) {
+      if (location_valid(n) && transitionValid(s, n)) {
         neighbors.emplace_back(
             Neighbor<State, Action, int>(n, Action::Down, 1));
       }
@@ -503,7 +503,7 @@ class Environment {
     return solution[agentIdx].states.back().first;
   }
 
-  bool stateValid(const State& s) {
+  bool location_valid(const State& s) {
     assert(m_constraints);
     const auto& con = m_constraints->vertexConstraints;
     return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&

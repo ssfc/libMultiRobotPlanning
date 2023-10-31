@@ -270,7 +270,7 @@ class Environment {
     for (auto eit = es.first; eit != es.second; ++eit) {
       vertex_t v = boost::target(*eit, m_roadmap);
       State n(s.time + 1, v);
-      if (stateValid(n) && transitionValid(s.time, *eit)) {
+      if (location_valid(n) && transitionValid(s.time, *eit)) {
         neighbors.emplace_back(
             Neighbor<State, Action, int>(n, *eit, 1));
       }
@@ -279,7 +279,7 @@ class Environment {
     // // Wait action
     // {
     //   State n(s.time + 1, s.vertex);
-    //   if (stateValid(n)) {
+    //   if (location_valid(n)) {
     //     neighbors.emplace_back(
     //         Neighbor<State, Action, int>(n, edge_t(), 1));
     //   }
@@ -386,7 +386,7 @@ class Environment {
     return solution[agentIdx].states.back().first;
   }
 
-  bool stateValid(const State& s) {
+  bool location_valid(const State& s) {
     assert(m_constraints);
     const auto& con = m_constraints->vertexConstraints;
     return con.find(VertexConstraint(s.time, s.vertex)) == con.end();
