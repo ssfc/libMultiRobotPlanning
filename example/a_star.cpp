@@ -158,7 +158,7 @@ int main(int argc, char* argv[])
     int start_y;
     int goal_x;
     int goal_y;
-    
+
     string mapFile;
     string outputFile;
 
