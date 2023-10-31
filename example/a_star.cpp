@@ -85,14 +85,15 @@ class Environment
 private:
     int num_columns;
     int num_rows;
-    unordered_set<Location> m_obstacles;
+    unordered_set<Location> obstacles;
     Location goal;
 
 public:
-    Environment(size_t input_num_columns, size_t input_num_rows, unordered_set<Location> obstacles, Location input_goal)
+    Environment(size_t input_num_columns, size_t input_num_rows,
+                unordered_set<Location> input_obstacles, Location input_goal)
     : num_columns(input_num_columns),
       num_rows(input_num_rows),
-      m_obstacles(move(obstacles)),
+      obstacles(move(input_obstacles)),
       goal(std::move(input_goal))  // NOLINT
     {}
 
@@ -147,7 +148,7 @@ public:
     bool stateValid(const Location& s)
     {
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               m_obstacles.find(s) == m_obstacles.end();
+               obstacles.find(s) == obstacles.end();
     }
 };
 

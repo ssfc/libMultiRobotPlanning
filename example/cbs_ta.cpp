@@ -258,7 +258,7 @@ class Environment {
               size_t maxTaskAssignments)
       : num_columns(dimx),
         num_rows(dimy),
-        m_obstacles(obstacles),
+        obstacles(obstacles),
         m_agentIdx(0),
         m_goal(nullptr),
         m_constraints(nullptr),
@@ -484,7 +484,7 @@ class Environment {
     assert(m_constraints);
     const auto& con = m_constraints->vertexConstraints;
     return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-           m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end() &&
+           obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
            con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
   }
 
@@ -498,7 +498,7 @@ class Environment {
  private:
   int num_columns;
   int num_rows;
-  std::unordered_set<Location> m_obstacles;
+  std::unordered_set<Location> obstacles;
   size_t m_agentIdx;
   const Location* m_goal;
   const Constraints* m_constraints;

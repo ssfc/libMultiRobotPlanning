@@ -73,7 +73,7 @@ class Environment {
               State goal)
       : num_columns(dimx),
         num_rows(dimy),
-        m_obstacles(std::move(obstacles)),
+        obstacles(std::move(obstacles)),
         m_goal(std::move(goal))  // NOLINT
   {}
 
@@ -127,13 +127,13 @@ class Environment {
  public:
   bool stateValid(const State& s) {
     return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-           m_obstacles.find(s) == m_obstacles.end();
+           obstacles.find(s) == obstacles.end();
   }
 
  private:
   int num_columns;
   int num_rows;
-  std::unordered_set<State> m_obstacles;
+  std::unordered_set<State> obstacles;
   State m_goal;
 };
 
