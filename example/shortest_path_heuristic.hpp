@@ -11,7 +11,7 @@ class ShortestPathHeuristic {
  public:
   ShortestPathHeuristic(size_t dimx, size_t dimy,
                         const std::unordered_set<Location>& obstacles)
-      : m_shortestDistance(nullptr), m_dimx(dimx), m_dimy(dimy) {
+      : m_shortestDistance(nullptr), num_columns(dimx), m_dimy(dimy) {
     searchGraph_t searchGraph;
 
     // add vertices
@@ -62,11 +62,11 @@ class ShortestPathHeuristic {
   }
 
  private:
-  size_t locToVert(const Location& l) const { return l.x + m_dimx * l.y; }
+  size_t locToVert(const Location& l) const { return l.x + num_columns * l.y; }
 
   Location idxToLoc(size_t idx) {
-    int x = idx % m_dimx;
-    int y = idx / m_dimx;
+    int x = idx % num_columns;
+    int y = idx / num_columns;
     return Location(x, y);
   }
 
@@ -94,20 +94,20 @@ class ShortestPathHeuristic {
   class VertexDotWriter {
    public:
     explicit VertexDotWriter(const searchGraph_t& graph, size_t dimx)
-        : m_graph(graph), m_dimx(dimx) {}
+        : m_graph(graph), num_columns(dimx) {}
 
     void operator()(std::ostream& out, const vertex_t& v) const {
       static const float DX = 100;
       static const float DY = 100;
       out << "[label=\"";
-      int x = v % m_dimx;
-      int y = v / m_dimx;
+      int x = v % num_columns;
+      int y = v / num_columns;
       out << "\" pos=\"" << x * DX << "," << y * DY << "!\"]";
     }
 
    private:
     const searchGraph_t& m_graph;
-    size_t m_dimx;
+    size_t num_columns;
   };
 
   class EdgeDotWriter {
@@ -124,7 +124,7 @@ class ShortestPathHeuristic {
 
  private:
   void writeDotFile(const searchGraph_t& graph, const std::string& fileName) {
-    VertexDotWriter vw(graph, m_dimx);
+    VertexDotWriter vw(graph, num_columns);
     EdgeDotWriter ew(graph);
     std::ofstream dotFile(fileName);
     boost::write_graphviz(dotFile, graph, vw, ew);
@@ -132,6 +132,6 @@ class ShortestPathHeuristic {
 
  private:
   distanceMatrix_t* m_shortestDistance;
-  size_t m_dimx;
+  size_t num_columns;
   size_t m_dimy;
 };

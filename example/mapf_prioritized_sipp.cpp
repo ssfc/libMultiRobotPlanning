@@ -80,7 +80,7 @@ class Environment {
  public:
   Environment(size_t dimx, size_t dimy, std::unordered_set<State> obstacles,
               State goal)
-      : m_dimx(dimx),
+      : num_columns(dimx),
         m_dimy(dimy),
         m_obstacles(std::move(obstacles)),
         m_goal(goal) {}
@@ -143,12 +143,12 @@ class Environment {
 
  private:
   bool stateValid(const State& s) {
-    return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
+    return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < m_dimy &&
            m_obstacles.find(s) == m_obstacles.end();
   }
 
  private:
-  int m_dimx;
+  int num_columns;
   int m_dimy;
   std::unordered_set<State> m_obstacles;
   State m_goal;

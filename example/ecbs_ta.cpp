@@ -256,7 +256,7 @@ class Environment {
               const std::vector<State>& startStates,
               const std::vector<std::unordered_set<Location> >& goals,
               size_t maxTaskAssignments)
-      : m_dimx(dimx),
+      : num_columns(dimx),
         m_dimy(dimy),
         m_obstacles(obstacles),
         m_agentIdx(0),
@@ -554,7 +554,7 @@ class Environment {
   bool stateValid(const State& s) {
     assert(m_constraints);
     const auto& con = m_constraints->vertexConstraints;
-    return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
+    return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < m_dimy &&
            m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end() &&
            con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
   }
@@ -567,7 +567,7 @@ class Environment {
   }
 
  private:
-  int m_dimx;
+  int num_columns;
   int m_dimy;
   std::unordered_set<Location> m_obstacles;
   size_t m_agentIdx;

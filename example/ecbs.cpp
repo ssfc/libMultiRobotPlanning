@@ -248,7 +248,7 @@ class Environment {
  public:
   Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
               std::vector<Location> goals, bool disappearAtGoal = false)
-      : m_dimx(dimx),
+      : num_columns(dimx),
         m_dimy(dimy),
         m_obstacles(std::move(obstacles)),
         m_goals(std::move(goals)),
@@ -506,7 +506,7 @@ class Environment {
   bool stateValid(const State& s) {
     assert(m_constraints);
     const auto& con = m_constraints->vertexConstraints;
-    return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
+    return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < m_dimy &&
            m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end() &&
            con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
   }
@@ -519,7 +519,7 @@ class Environment {
   }
 
  private:
-  int m_dimx;
+  int num_columns;
   int m_dimy;
   std::unordered_set<Location> m_obstacles;
   std::vector<Location> m_goals;

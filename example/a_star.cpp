@@ -83,14 +83,14 @@ ostream& operator<<(ostream& os, const Action& a)
 class Environment
 {
 private:
-    int m_dimx;
+    int num_columns;
     int m_dimy;
     unordered_set<Location> m_obstacles;
     Location goal;
 
 public:
     Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles, Location goal)
-    : m_dimx(dimx),
+    : num_columns(dimx),
       m_dimy(dimy),
       m_obstacles(move(obstacles)),
       goal(std::move(goal))  // NOLINT
@@ -146,7 +146,7 @@ public:
 
     bool stateValid(const Location& s)
     {
-        return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
+        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < m_dimy &&
                m_obstacles.find(s) == m_obstacles.end();
     }
 };

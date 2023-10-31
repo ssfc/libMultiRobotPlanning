@@ -304,7 +304,7 @@ namespace std
 class Environment
 {
 private:
-    int m_dimx;
+    int num_columns;
     int m_dimy;
     unordered_set<Location> m_obstacles;
     vector<Location> m_goals;
@@ -318,7 +318,7 @@ private:
 public:
     Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles,
               vector<Location> goals, bool disappearAtGoal = false)
-      : m_dimx(dimx),
+      : num_columns(dimx),
         m_dimy(dimy),
         m_obstacles(move(obstacles)),
         m_goals(move(goals)),
@@ -351,9 +351,9 @@ public:
 
     int admissible_heuristic(const State& s)
     {
-        // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + m_dimx *
+        // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + num_columns *
         // s.y] << endl;
-        // return m_heuristic[m_agentIdx][s.x + m_dimx * s.y];
+        // return m_heuristic[m_agentIdx][s.x + num_columns * s.y];
         return abs(s.x - m_goals[m_agentIdx].x) +
                abs(s.y - m_goals[m_agentIdx].y);
     }
@@ -550,7 +550,7 @@ public:
         assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
 
-        return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
+        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < m_dimy &&
                m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end() &&
                con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
     }
