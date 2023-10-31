@@ -303,6 +303,18 @@ namespace std
 ///
 class Environment
 {
+private:
+    int m_dimx;
+    int m_dimy;
+    unordered_set<Location> m_obstacles;
+    vector<Location> m_goals;
+    // vector< vector<int> > m_heuristic;
+    size_t m_agentIdx;
+    const Constraints* m_constraints;
+    int m_lastGoalConstraint;
+    int m_highLevelExpanded;
+    int m_lowLevelExpanded;
+    bool m_disappearAtGoal;
 public:
     Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles,
               vector<Location> goals, bool disappearAtGoal = false)
@@ -509,7 +521,6 @@ public:
         return m_lowLevelExpanded;
     }
 
-    private:
     State getState(size_t agentIdx,
                  const vector<PlanResult<State, Action, int> >& solution,
                  size_t t)
@@ -552,19 +563,6 @@ public:
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
                con.end();
     }
-
-    private:
-    int m_dimx;
-    int m_dimy;
-    unordered_set<Location> m_obstacles;
-    vector<Location> m_goals;
-    // vector< vector<int> > m_heuristic;
-    size_t m_agentIdx;
-    const Constraints* m_constraints;
-    int m_lastGoalConstraint;
-    int m_highLevelExpanded;
-    int m_lowLevelExpanded;
-    bool m_disappearAtGoal;
 };
 
 int main(int argc, char* argv[])
