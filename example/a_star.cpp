@@ -159,16 +159,16 @@ int main(int argc, char* argv[])
     int goal_x;
     int goal_y;
 
-    string mapFile;
-    string outputFile;
+    string map_file;
+    string output_file;
 
     desc.add_options()("help", "produce help message")
     ("startX", po::value<int>(&start_x)->required(), "start position x-component")
     ("startY", po::value<int>(&start_y)->required(), "start position y-component")
     ("goalX", po::value<int>(&goal_x)->required(), "goal position x-component")
     ("goalY", po::value<int>(&goal_y)->required(), "goal position y-component")
-    ("map,m", po::value<string>(&mapFile)->required(), "input map (txt)")
-    ("output,o", po::value<string>(&outputFile)->required(), "output file (YAML)");
+    ("map,m", po::value<string>(&map_file)->required(), "input map (txt)")
+    ("output,o", po::value<string>(&output_file)->required(), "output file (YAML)");
 
     try
     {
@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
 
     unordered_set<Location> obstacles;
 
-    ifstream map(mapFile);
+    ifstream map(map_file);
     int dim_x = 0;
     int y = 0;
 
@@ -236,7 +236,7 @@ int main(int argc, char* argv[])
         success = astar.search(start, solution);
     }
 
-    ofstream out(outputFile);
+    ofstream out(output_file);
     if (success)
     {
         cout << "Planning successful! Total cost: " << solution.cost << endl;
