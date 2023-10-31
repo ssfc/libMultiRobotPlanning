@@ -102,9 +102,9 @@ public:
         + abs(current_location.y - m_goal.y);
     }
 
-    bool is_solution(const Location& s)
+    bool is_solution(const Location& current_location)
     {
-        return s == m_goal;
+        return current_location == m_goal;
     }
 
     void getNeighbors(const Location& s, vector<Neighbor<Location, Action, int> >& neighbors)
