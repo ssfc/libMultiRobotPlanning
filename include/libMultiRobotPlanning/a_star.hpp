@@ -37,7 +37,7 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
   - `Cost admissible_heuristic(const Location& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
-  - `bool isSolution(const Location& s)`\n
+  - `bool is_solution(const Location& s)`\n
     Return true if the given state is a goal state.
 
   - `void getNeighbors(const Location& s, std::vector<Neighbor<Location, Action,
@@ -87,7 +87,7 @@ purposes.
                 Node current = openSet.top();
                 m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
-                if (m_env.isSolution(current.state))
+                if (m_env.is_solution(current.state))
                 {
                     solution.states.clear();
                     solution.actions.clear();

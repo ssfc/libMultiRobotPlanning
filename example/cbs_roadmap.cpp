@@ -248,7 +248,7 @@ class Environment {
     return 0;
   }
 
-  bool isSolution(const State& s) {
+  bool is_solution(const State& s) {
     return s.vertex == m_goals[m_agentIdx] &&
            s.time > m_lastGoalConstraint;
   }

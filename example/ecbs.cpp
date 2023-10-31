@@ -352,7 +352,7 @@ class Environment {
     return numConflicts;
   }
 
-  bool isSolution(const State& s) {
+  bool is_solution(const State& s) {
     return s.x == m_goals[m_agentIdx].x && s.y == m_goals[m_agentIdx].y &&
            s.time > m_lastGoalConstraint;
   }

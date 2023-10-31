@@ -93,7 +93,7 @@ class Environment {
     return gScoreS2 - gScoreS1;
   }
 
-  bool isSolution(const State& s) { return s == m_goal; }
+  bool is_solution(const State& s) { return s == m_goal; }
 
   void getNeighbors(const State& s,
                     std::vector<Neighbor<State, Action, int> >& neighbors) {

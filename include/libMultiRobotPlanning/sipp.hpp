@@ -46,7 +46,7 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
   - `Cost admissible_heuristic(const State& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
-  - `bool isSolution(const State& s)`\n
+  - `bool is_solution(const State& s)`\n
     Return true if the given state is a goal state.
 
   - `void getNeighbors(const State& s, std::vector<Neighbor<State, Action,
@@ -177,13 +177,13 @@ class SIPP {
 
     bool mightHaveSolution(const State& goal) {
       const auto& si = safeIntervals(m_env.getLocation(goal));
-      return m_env.isSolution(goal) &&
+      return m_env.is_solution(goal) &&
         !si.empty() &&
         si.back().end == std::numeric_limits<Cost>::max();
     }
 
-    bool isSolution(const SIPPState& s) {
-      return m_env.isSolution(s.state) &&
+    bool is_solution(const SIPPState& s) {
+      return m_env.is_solution(s.state) &&
              safeIntervals(m_env.getLocation(s.state)).at(s.interval).end ==
                  std::numeric_limits<Cost>::max();
     }

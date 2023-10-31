@@ -310,7 +310,7 @@ class Environment {
     }
   }
 
-  bool isSolution(const State& s) {
+  bool is_solution(const State& s) {
     bool atGoal = true;
     if (m_goal != nullptr) {
       atGoal = s.x == m_goal->x && s.y == m_goal->y;

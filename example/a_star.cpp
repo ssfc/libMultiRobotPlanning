@@ -102,7 +102,7 @@ public:
         + abs(current_location.y - m_goal.y);
     }
 
-    bool isSolution(const Location& s)
+    bool is_solution(const Location& s)
     {
         return s == m_goal;
     }

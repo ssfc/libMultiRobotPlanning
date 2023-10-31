@@ -72,7 +72,7 @@ solution)`\n
     Potentially inadmissible focal heuristic, e.g. count all conflicts between
 the agents for a given solution
 
-  - `bool isSolution(const State& s)`\n
+  - `bool is_solution(const State& s)`\n
     Return true if the given state is a goal state for the current agent.
 
   - `void getNeighbors(const State& s, std::vector<Neighbor<State, Action, int>
@@ -388,7 +388,7 @@ class ECBS {
                                             m_solution);
     }
 
-    bool isSolution(const State& s) { return m_env.isSolution(s); }
+    bool is_solution(const State& s) { return m_env.is_solution(s); }
 
     void getNeighbors(const State& s,
                       std::vector<Neighbor<State, Action, Cost> >& neighbors) {

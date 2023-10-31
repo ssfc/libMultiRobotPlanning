@@ -89,7 +89,7 @@ class Environment {
     return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
   }
 
-  bool isSolution(const State& s) { return s == m_goal; }
+  bool is_solution(const State& s) { return s == m_goal; }
 
   State getLocation(const State& s) { return s; }
 

@@ -49,7 +49,7 @@ constraints
   - `Cost admissible_heuristic(const State& s)`\n
     Admissible heuristic. Needs to take current context into account.
 
-  - `bool isSolution(const State& s)`\n
+  - `bool is_solution(const State& s)`\n
     Return true if the given state is a goal state for the current agent.
 
   - `void getNeighbors(const State& s, std::vector<Neighbor<State, Action, int>
@@ -140,9 +140,9 @@ statistical purposes.
                 return m_env.admissible_heuristic(s);
             }
 
-            bool isSolution(const State& s)
+            bool is_solution(const State& s)
             {
-                return m_env.isSolution(s);
+                return m_env.is_solution(s);
             }
 
             void getNeighbors(const State& s,

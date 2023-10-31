@@ -58,7 +58,7 @@ gScoreS1, Cost gScoreS2)`\n
     This function computes a (potentially inadmissible) heuristic for the given
 state transition.
 
-  - `bool isSolution(const State& s)`\n
+  - `bool is_solution(const State& s)`\n
     Return true if the given state is a goal state.
 
   - `void getNeighbors(const State& s, std::vector<Neighbor<State, Action,
@@ -192,7 +192,7 @@ class AStarEpsilon {
       Node current = *currentHandle;
       m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
-      if (m_env.isSolution(current.state)) {
+      if (m_env.is_solution(current.state)) {
         solution.states.clear();
         solution.actions.clear();
         auto iter = cameFrom.find(current.state);
