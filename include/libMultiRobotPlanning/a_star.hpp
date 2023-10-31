@@ -110,11 +110,11 @@ purposes.
             boost::heap::mutable_<true>> openSet_t;
             typedef typename openSet_t::handle_type fibHeapHandle_t;
         #endif
-            
+
         Environment& m_env;
 
     public:
-        AStar(Environment& environment) : m_env(environment) {}
+        AStar(Environment& input_environment) : m_env(input_environment) {}
 
         bool search(const Location& startState,
                   PlanResult<Location, Action, Cost>& solution, Cost initialCost = 0)
