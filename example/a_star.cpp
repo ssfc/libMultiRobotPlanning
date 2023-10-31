@@ -86,25 +86,25 @@ private:
     int m_dimx;
     int m_dimy;
     unordered_set<Location> m_obstacles;
-    Location m_goal;
+    Location goal;
 
 public:
     Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles, Location goal)
     : m_dimx(dimx),
       m_dimy(dimy),
       m_obstacles(move(obstacles)),
-      m_goal(std::move(goal))  // NOLINT
+      goal(std::move(goal))  // NOLINT
     {}
 
     int admissible_heuristic(const Location& current_location)
     {
-        return abs(current_location.x - m_goal.x)
-        + abs(current_location.y - m_goal.y);
+        return abs(current_location.x - goal.x)
+        + abs(current_location.y - goal.y);
     }
 
     bool is_solution(const Location& current_location)
     {
-        return current_location == m_goal;
+        return current_location == goal;
     }
 
     void getNeighbors(const Location& s, vector<Neighbor<Location, Action, int> >& neighbors)
