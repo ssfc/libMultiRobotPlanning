@@ -154,7 +154,11 @@ int main(int argc, char* argv[])
     // Declare the supported options.
     po::options_description desc("Allowed options");
 
-    int start_x, start_y, goal_x, goal_y;
+    int start_x;
+    int start_y;
+    int goal_x;
+    int goal_y;
+    
     string mapFile;
     string outputFile;
 
