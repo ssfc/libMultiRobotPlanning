@@ -11,26 +11,26 @@ using libMultiRobotPlanning::AStar;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
-class State
+class Location
 {
 public:
     int x;
     int y;
 
 public:
-    State(int x, int y) : x(x), y(y) {}
+    Location(int x, int y) : x(x), y(y) {}
 
-    State(const State&) = default;
-    State(State&&) = default;
-    State& operator=(const State&) = default;
-    State& operator=(State&&) = default;
+    Location(const Location&) = default;
+    Location(Location&&) = default;
+    Location& operator=(const Location&) = default;
+    Location& operator=(Location&&) = default;
 
-    bool operator==(const State& other) const
+    bool operator==(const Location& other) const
     {
         return tie(x, y) == tie(other.x, other.y);
     }
 
-    friend ostream& operator<<(ostream& os, const State& s)
+    friend ostream& operator<<(ostream& os, const Location& s)
     {
         return os << "(" << s.x << "," << s.y << ")";
     }
@@ -39,9 +39,9 @@ public:
 namespace std
 {
     template <>
-    struct hash<State>
+    struct hash<Location>
     {
-        size_t operator()(const State& s) const
+        size_t operator()(const Location& s) const
         {
             size_t seed = 0;
             boost::hash_combine(seed, s.x);
@@ -86,65 +86,65 @@ class Environment
 private:
     int m_dimx;
     int m_dimy;
-    unordered_set<State> m_obstacles;
-    State m_goal;
+    unordered_set<Location> m_obstacles;
+    Location m_goal;
 
 public:
-    Environment(size_t dimx, size_t dimy, unordered_set<State> obstacles, State goal)
+    Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles, Location goal)
     : m_dimx(dimx),
       m_dimy(dimy),
       m_obstacles(move(obstacles)),
       m_goal(std::move(goal))  // NOLINT
     {}
 
-    int admissibleHeuristic(const State& s)
+    int admissibleHeuristic(const Location& s)
     {
         return abs(s.x - m_goal.x) + abs(s.y - m_goal.y);
     }
 
-    bool isSolution(const State& s)
+    bool isSolution(const Location& s)
     {
         return s == m_goal;
     }
 
-    void getNeighbors(const State& s, vector<Neighbor<State, Action, int> >& neighbors)
+    void getNeighbors(const Location& s, vector<Neighbor<Location, Action, int> >& neighbors)
     {
         neighbors.clear();
 
-        State up(s.x, s.y + 1);
+        Location up(s.x, s.y + 1);
 
         if (stateValid(up))
         {
-            neighbors.emplace_back(Neighbor<State, Action, int>(up, Action::Up, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(up, Action::Up, 1));
         }
 
-        State down(s.x, s.y - 1);
+        Location down(s.x, s.y - 1);
 
         if (stateValid(down))
         {
-            neighbors.emplace_back(Neighbor<State, Action, int>(down, Action::Down, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(down, Action::Down, 1));
         }
 
-        State left(s.x - 1, s.y);
+        Location left(s.x - 1, s.y);
 
         if (stateValid(left))
         {
-            neighbors.emplace_back(Neighbor<State, Action, int>(left, Action::Left, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(left, Action::Left, 1));
         }
 
-        State right(s.x + 1, s.y);
+        Location right(s.x + 1, s.y);
 
         if (stateValid(right))
         {
-            neighbors.emplace_back(Neighbor<State, Action, int>(right, Action::Right, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(right, Action::Right, 1));
         }
     }
 
-    void onExpandNode(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
+    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
-    void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
+    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
-    bool stateValid(const State& s)
+    bool stateValid(const Location& s)
     {
         return s.x >= 0 && s.x < m_dimx && s.y >= 0 && s.y < m_dimy &&
                m_obstacles.find(s) == m_obstacles.end();
@@ -190,7 +190,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    unordered_set<State> obstacles;
+    unordered_set<Location> obstacles;
 
     ifstream map(mapFile);
     int dim_x = 0;
@@ -205,7 +205,7 @@ int main(int argc, char* argv[])
         {
             if (c == '@')  // @ 代表障碍物, . 代表空间。
             {
-                obstacles.insert(State(x, y));
+                obstacles.insert(Location(x, y));
             }
 
             ++x; // x是列
@@ -222,13 +222,13 @@ int main(int argc, char* argv[])
 
     bool success = false;
 
-    State goal(goalX, goalY);
-    State start(startX, startY);
+    Location goal(goalX, goalY);
+    Location start(startX, startY);
     Environment env(dim_x, y - 1, obstacles, goal);
 
-    AStar<State, Action, int, Environment> astar(env);
+    AStar<Location, Action, int, Environment> astar(env);
 
-    PlanResult<State, Action, int> solution;
+    PlanResult<Location, Action, int> solution;
 
     if (env.stateValid(start))
     {

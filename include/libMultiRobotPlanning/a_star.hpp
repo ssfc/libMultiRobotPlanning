@@ -29,41 +29,41 @@ needsto be admissible.
 This class can either use a fibonacci heap, or a d-ary heap. The latter is the
 default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
 
-\tparam State Custom state for the search. Needs to be copy'able
+\tparam Location Custom state for the search. Needs to be copy'able
 \tparam Action Custom action for the search. Needs to be copy'able
 \tparam Cost Custom Cost type (integer or floating point types)
 \tparam Environment This class needs to provide the custom A* logic. In
     particular, it needs to support the following functions:
-  - `Cost admissibleHeuristic(const State& s)`\n
+  - `Cost admissibleHeuristic(const Location& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
-  - `bool isSolution(const State& s)`\n
+  - `bool isSolution(const Location& s)`\n
     Return true if the given state is a goal state.
 
-  - `void getNeighbors(const State& s, std::vector<Neighbor<State, Action,
+  - `void getNeighbors(const Location& s, std::vector<Neighbor<Location, Action,
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
-  - `void onExpandNode(const State& s, int fScore, int gScore)`\n
+  - `void onExpandNode(const Location& s, int fScore, int gScore)`\n
     This function is called on every expansion and can be used for statistical
 purposes.
 
-  - `void onDiscover(const State& s, int fScore, int gScore)`\n
+  - `void onDiscover(const Location& s, int fScore, int gScore)`\n
     This function is called on every node discovery and can be used for
    statistical purposes.
 
     \tparam StateHasher A class to convert a state to a hash value. Default:
-   std::hash<State>
+   std::hash<Location>
 */
-    template <typename State, typename Action, typename Cost, typename Environment,
-              typename StateHasher = std::hash<State> >
+    template <typename Location, typename Action, typename Cost, typename Environment,
+              typename StateHasher = std::hash<Location> >
     class AStar
     {
     public:
         AStar(Environment& environment) : m_env(environment) {}
 
-        bool search(const State& startState,
-                  PlanResult<State, Action, Cost>& solution, Cost initialCost = 0)
+        bool search(const Location& startState,
+                  PlanResult<Location, Action, Cost>& solution, Cost initialCost = 0)
         {
             solution.states.clear();
             solution.states.push_back(std::make_pair<>(startState, 0));
@@ -71,15 +71,15 @@ purposes.
             solution.cost = 0;
 
             openSet_t openSet;
-            std::unordered_map<State, fibHeapHandle_t, StateHasher> stateToHeap;
-            std::unordered_set<State, StateHasher> closedSet;
-            std::unordered_map<State, std::tuple<State,Action,Cost,Cost>,StateHasher> cameFrom;
+            std::unordered_map<Location, fibHeapHandle_t, StateHasher> stateToHeap;
+            std::unordered_set<Location, StateHasher> closedSet;
+            std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,StateHasher> cameFrom;
 
             auto handle = openSet.push(Node(startState, m_env.admissibleHeuristic(startState), initialCost));
             stateToHeap.insert(std::make_pair<>(startState, handle));
             (*handle).handle = handle;
 
-            std::vector<Neighbor<State, Action, Cost> > neighbors;
+            std::vector<Neighbor<Location, Action, Cost> > neighbors;
             neighbors.reserve(10);
 
             while (!openSet.empty())
@@ -117,7 +117,7 @@ purposes.
                 // traverse neighbors
                 neighbors.clear();
                 m_env.getNeighbors(current.state, neighbors);
-                for (const Neighbor<State, Action, Cost>& neighbor : neighbors)
+                for (const Neighbor<Location, Action, Cost>& neighbor : neighbors)
                 {
                     if (closedSet.find(neighbor.state) == closedSet.end())
                     {
@@ -157,7 +157,7 @@ purposes.
 
                         // Best path for this node so far
                         // TODO: this is not the best way to update "cameFrom", but otherwise
-                        // default c'tors of State and Action are required
+                        // default c'tors of Location and Action are required
                         cameFrom.erase(neighbor.state);
                         cameFrom.insert(std::make_pair<>(
                           neighbor.state,
@@ -173,7 +173,7 @@ purposes.
     private:
         struct Node
         {
-            State state;
+            Location state;
             Cost fScore;
             Cost gScore;
 
@@ -184,7 +184,7 @@ purposes.
             boost::heap::mutable_<true>>::handle_type handle;
             #endif
 
-            Node(const State& state, Cost fScore, Cost gScore)
+            Node(const Location& state, Cost fScore, Cost gScore)
                 : state(state), fScore(fScore), gScore(gScore) {}
 
             bool operator<(const Node& other) const
