@@ -108,6 +108,12 @@ public:
         return current_location == goal;
     }
 
+    bool stateValid(const Location& s)
+    {
+        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
+               obstacles.find(s) == obstacles.end();
+    }
+
     void get_neighbors(const Location& s, vector<Neighbor<Location, Action, int> >& neighbors)
     {
         neighbors.clear();
@@ -145,11 +151,6 @@ public:
 
     void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
-    bool stateValid(const Location& s)
-    {
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(s) == obstacles.end();
-    }
 };
 
 int main(int argc, char* argv[])
