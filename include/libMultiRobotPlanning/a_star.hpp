@@ -111,10 +111,10 @@ purposes.
             typedef typename openSet_t::handle_type fibHeapHandle_t;
         #endif
 
-        Environment& m_env;
+        Environment& environment;
 
     public:
-        AStar(Environment& input_environment) : m_env(input_environment) {}
+        AStar(Environment& input_environment) : environment(input_environment) {}
 
         bool search(const Location& startState,
                   PlanResult<Location, Action, Cost>& solution, Cost initialCost = 0)
@@ -129,7 +129,7 @@ purposes.
             std::unordered_set<Location, StateHasher> closedSet;
             std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,StateHasher> cameFrom;
 
-            auto handle = openSet.push(Node(startState, m_env.admissible_heuristic(startState), initialCost));
+            auto handle = openSet.push(Node(startState, environment.admissible_heuristic(startState), initialCost));
             stateToHeap.insert(std::make_pair<>(startState, handle));
             (*handle).handle = handle;
 
@@ -140,7 +140,7 @@ purposes.
             {
                 Node current = openSet.top();
 
-                if (m_env.is_solution(current.state))
+                if (environment.is_solution(current.state))
                 {
                     solution.states.clear();
                     solution.actions.clear();
@@ -169,7 +169,7 @@ purposes.
 
                 // traverse neighbors
                 neighbors.clear();
-                m_env.get_neighbors(current.state, neighbors);
+                environment.get_neighbors(current.state, neighbors);
                 for (const Neighbor<Location, Action, Cost>& neighbor : neighbors)
                 {
                     if (closedSet.find(neighbor.state) == closedSet.end())
@@ -178,7 +178,7 @@ purposes.
                         auto iter = stateToHeap.find(neighbor.state);
                         if (iter == stateToHeap.end())
                         {  // Discover a new node
-                            Cost fScore = tentative_gScore + m_env.admissible_heuristic(neighbor.state);
+                            Cost fScore = tentative_gScore + environment.admissible_heuristic(neighbor.state);
                             auto handle =
                                 openSet.push(Node(neighbor.state, fScore, tentative_gScore));
                             (*handle).handle = handle;
