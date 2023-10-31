@@ -89,11 +89,11 @@ private:
     Location goal;
 
 public:
-    Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles, Location goal)
-    : num_columns(dimx),
-      num_rows(dimy),
+    Environment(size_t input_num_columns, size_t input_num_rows, unordered_set<Location> obstacles, Location input_goal)
+    : num_columns(input_num_columns),
+      num_rows(input_num_rows),
       m_obstacles(move(obstacles)),
-      goal(std::move(goal))  // NOLINT
+      goal(std::move(input_goal))  // NOLINT
     {}
 
     int admissible_heuristic(const Location& current_location)
