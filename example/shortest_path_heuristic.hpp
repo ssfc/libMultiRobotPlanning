@@ -11,7 +11,7 @@ class ShortestPathHeuristic {
  public:
   ShortestPathHeuristic(size_t dimx, size_t dimy,
                         const std::unordered_set<Location>& obstacles)
-      : m_shortestDistance(nullptr), num_columns(dimx), m_dimy(dimy) {
+      : m_shortestDistance(nullptr), num_columns(dimx), num_rows(dimy) {
     searchGraph_t searchGraph;
 
     // add vertices
@@ -133,5 +133,5 @@ class ShortestPathHeuristic {
  private:
   distanceMatrix_t* m_shortestDistance;
   size_t num_columns;
-  size_t m_dimy;
+  size_t num_rows;
 };

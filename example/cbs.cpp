@@ -305,7 +305,7 @@ class Environment
 {
 private:
     int num_columns;
-    int m_dimy;
+    int num_rows;
     unordered_set<Location> m_obstacles;
     vector<Location> m_goals;
     // vector< vector<int> > m_heuristic;
@@ -319,7 +319,7 @@ public:
     Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles,
               vector<Location> goals, bool disappearAtGoal = false)
       : num_columns(dimx),
-        m_dimy(dimy),
+        num_rows(dimy),
         m_obstacles(move(obstacles)),
         m_goals(move(goals)),
         m_agentIdx(0),
@@ -550,7 +550,7 @@ public:
         assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
 
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < m_dimy &&
+        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                m_obstacles.find(Location(s.x, s.y)) == m_obstacles.end() &&
                con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
     }
