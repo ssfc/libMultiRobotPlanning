@@ -34,7 +34,7 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
 \tparam Cost Custom Cost type (integer or floating point types)
 \tparam Environment This class needs to provide the custom A* logic. In
     particular, it needs to support the following functions:
-  - `Cost admissibleHeuristic(const Location& s)`\n
+  - `Cost admissible_heuristic(const Location& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
   - `bool isSolution(const Location& s)`\n
@@ -75,7 +75,7 @@ purposes.
             std::unordered_set<Location, StateHasher> closedSet;
             std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,StateHasher> cameFrom;
 
-            auto handle = openSet.push(Node(startState, m_env.admissibleHeuristic(startState), initialCost));
+            auto handle = openSet.push(Node(startState, m_env.admissible_heuristic(startState), initialCost));
             stateToHeap.insert(std::make_pair<>(startState, handle));
             (*handle).handle = handle;
 
@@ -125,8 +125,7 @@ purposes.
                         auto iter = stateToHeap.find(neighbor.state);
                         if (iter == stateToHeap.end())
                         {  // Discover a new node
-                            Cost fScore =
-                                tentative_gScore + m_env.admissibleHeuristic(neighbor.state);
+                            Cost fScore = tentative_gScore + m_env.admissible_heuristic(neighbor.state);
                             auto handle =
                                 openSet.push(Node(neighbor.state, fScore, tentative_gScore));
                             (*handle).handle = handle;

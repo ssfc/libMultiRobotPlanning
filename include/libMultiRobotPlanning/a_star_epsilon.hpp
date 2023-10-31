@@ -46,7 +46,7 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
 \tparam Cost Custom Cost type (integer or floating point types)
 \tparam Environment This class needs to provide the custom logic. In
     particular, it needs to support the following functions:
-  - `Cost admissibleHeuristic(const State& s)`\n
+  - `Cost admissible_heuristic(const State& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
   - `Cost focalStateHeuristic(const State& s, Cost gScore)`\n
@@ -100,7 +100,7 @@ class AStarEpsilon {
         cameFrom;
 
     auto handle = openSet.push(
-        Node(startState, m_env.admissibleHeuristic(startState), 0, 0));
+        Node(startState, m_env.admissible_heuristic(startState), 0, 0));
     stateToHeap.insert(std::make_pair<>(startState, handle));
     (*handle).handle = handle;
 
@@ -227,7 +227,7 @@ class AStarEpsilon {
           if (iter == stateToHeap.end()) {  // Discover a new node
             // std::cout << "  this is a new node" << std::endl;
             Cost fScore =
-                tentative_gScore + m_env.admissibleHeuristic(neighbor.state);
+                tentative_gScore + m_env.admissible_heuristic(neighbor.state);
             Cost focalHeuristic =
                 current.focalHeuristic +
                 m_env.focalStateHeuristic(neighbor.state, tentative_gScore) +

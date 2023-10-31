@@ -302,7 +302,7 @@ class Environment {
     // std::endl;
   }
 
-  int admissibleHeuristic(const State& s) {
+  int admissible_heuristic(const State& s) {
     if (m_goal != nullptr) {
       return m_heuristic.getValue(Location(s.x, s.y), *m_goal);
     } else {

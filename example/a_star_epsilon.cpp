@@ -77,7 +77,7 @@ class Environment {
         m_goal(std::move(goal))  // NOLINT
   {}
 
-  int admissibleHeuristic(const State& s) {
+  int admissible_heuristic(const State& s) {
     return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
   }
 

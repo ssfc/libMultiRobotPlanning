@@ -85,7 +85,7 @@ class Environment {
         m_obstacles(std::move(obstacles)),
         m_goal(goal) {}
 
-  float admissibleHeuristic(const State& s) {
+  float admissible_heuristic(const State& s) {
     return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
   }
 

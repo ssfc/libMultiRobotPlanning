@@ -276,7 +276,7 @@ class Environment {
     }
   }
 
-  int admissibleHeuristic(const State& s) {
+  int admissible_heuristic(const State& s) {
     return std::abs(s.x - m_goals[m_agentIdx].x) +
            std::abs(s.y - m_goals[m_agentIdx].y);
   }

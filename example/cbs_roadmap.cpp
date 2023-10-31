@@ -243,7 +243,7 @@ class Environment {
     }
   }
 
-  int admissibleHeuristic(const State& s) {
+  int admissible_heuristic(const State& s) {
     // TODO: we should actually compute this using A*
     return 0;
   }

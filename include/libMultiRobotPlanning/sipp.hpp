@@ -43,7 +43,7 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
 \tparam Cost Custom Cost type (integer or floating point types)
 \tparam Environment This class needs to provide the custom A* logic. In
     particular, it needs to support the following functions:
-  - `Cost admissibleHeuristic(const State& s)`\n
+  - `Cost admissible_heuristic(const State& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
   - `bool isSolution(const State& s)`\n
@@ -171,8 +171,8 @@ class SIPP {
   struct SIPPEnvironment {
     SIPPEnvironment(Environment& env) : m_env(env) {}
 
-    Cost admissibleHeuristic(const SIPPState& s) {
-      return m_env.admissibleHeuristic(s.state);
+    Cost admissible_heuristic(const SIPPState& s) {
+      return m_env.admissible_heuristic(s.state);
     }
 
     bool mightHaveSolution(const State& goal) {

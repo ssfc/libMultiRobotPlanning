@@ -50,7 +50,7 @@ it needs to support the following functions:
     Set the current context to a particular agent with the given set of
 constraints
 
-  - `Cost admissibleHeuristic(const State& s)`\n
+  - `Cost admissible_heuristic(const State& s)`\n
     Admissible heuristic. Needs to take current context into account.
 
   - `bool isSolution(const State& s)`\n
@@ -270,8 +270,8 @@ class CBSTA {
       m_env.setLowLevelContext(agentIdx, &constraints, task);
     }
 
-    Cost admissibleHeuristic(const State& s) {
-      return m_env.admissibleHeuristic(s);
+    Cost admissible_heuristic(const State& s) {
+      return m_env.admissible_heuristic(s);
     }
 
     bool isSolution(const State& s) { return m_env.isSolution(s); }

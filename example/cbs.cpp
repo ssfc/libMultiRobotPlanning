@@ -337,7 +337,7 @@ public:
         }
     }
 
-    int admissibleHeuristic(const State& s)
+    int admissible_heuristic(const State& s)
     {
         // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + m_dimx *
         // s.y] << endl;

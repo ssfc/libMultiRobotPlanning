@@ -19,7 +19,6 @@ public:
 
 public:
     Location(int x, int y) : x(x), y(y) {}
-
     Location(const Location&) = default;
     Location(Location&&) = default;
     Location& operator=(const Location&) = default;
@@ -97,7 +96,7 @@ public:
       m_goal(std::move(goal))  // NOLINT
     {}
 
-    int admissibleHeuristic(const Location& s)
+    int admissible_heuristic(const Location& s)
     {
         return abs(s.x - m_goal.x) + abs(s.y - m_goal.y);
     }
