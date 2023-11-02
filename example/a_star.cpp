@@ -173,7 +173,10 @@ int main(int argc, char* argv[])
     try
     {
         po::variables_map vm;
+        // 将命令行参数解析成键-值对，然后存储在之前声明的vm变量中。
+        // argc是命令行参数的数量，argv是包含实际参数值的字符串数组，desc是一个用于描述程序可接受的命令行参数的配置对象。
         po::store(po::parse_command_line(argc, argv, desc), vm);
+        // 通知boost::program_options库，让它更新相关的变量，以便程序可以使用这些参数的值。
         po::notify(vm);
 
         if (vm.count("help") != 0u)
