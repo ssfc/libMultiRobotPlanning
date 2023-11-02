@@ -19,10 +19,6 @@ public:
 
 public:
     Location(int x, int y) : x(x), y(y) {}
-    Location(const Location&) = default;
-    Location(Location&&) = default;
-    Location& operator=(const Location&) = default;
-    Location& operator=(Location&&) = default;
 
     bool operator==(const Location& other) const
     {
@@ -200,6 +196,7 @@ int main(int argc, char* argv[])
     int dim_x = 0;
     int y = 0;
 
+    // 记录长宽，用unordered_set存储障碍物位置
     while (map.good())
     {
         string line;
