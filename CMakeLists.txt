@@ -82,9 +82,7 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 # Creates compile database used by clang-tidy.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include_directories(
-  include
-)
+include_directories(include)
 
 # Examples
 

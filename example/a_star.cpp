@@ -31,21 +31,22 @@ public:
     }
 };
 
+// 为了使用Location进行map, 吾人的程序里也有。
 namespace std
 {
     template <>
     struct hash<Location>
     {
-        size_t operator()(const Location& s) const
+        size_t operator()(const Location& location) const
         {
             size_t seed = 0;
-            boost::hash_combine(seed, s.x);
-            boost::hash_combine(seed, s.y);
+            boost::hash_combine(seed, location.x);
+            boost::hash_combine(seed, location.y);
 
             return seed;
         }
     };
-}  // namespace std
+}
 
 enum class Action
 {
