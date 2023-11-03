@@ -122,7 +122,7 @@ purposes.
 
             openSet_t open_set;
             std::unordered_map<Location, fibHeapHandle_t, StateHasher> stateToHeap;
-            std::unordered_set<Location, StateHasher> closedSet;
+            std::unordered_set<Location, StateHasher> closed_set;
             std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,StateHasher> cameFrom;
 
             auto handle = open_set.push(Node(startState, environment.admissible_heuristic(startState), initialCost));
@@ -161,14 +161,14 @@ purposes.
 
                 open_set.pop();
                 stateToHeap.erase(current.state);
-                closedSet.insert(current.state);
+                closed_set.insert(current.state);
 
                 // traverse neighbors
                 neighbors.clear();
                 environment.get_neighbors(current.state, neighbors);
                 for (const Neighbor<Location, Action, Cost>& neighbor : neighbors)
                 {
-                    if (closedSet.find(neighbor.state) == closedSet.end())
+                    if (closed_set.find(neighbor.state) == closed_set.end())
                     {
                         Cost tentative_gScore = current.gScore + neighbor.cost;
                         auto iter = stateToHeap.find(neighbor.state);
