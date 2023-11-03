@@ -104,8 +104,8 @@ purposes.
         // 定义openSet_t和fibHeapHandle_t
         using openSet_t = boost::heap::fibonacci_heap<Node>;
         using fibHeapHandle_t = typename openSet_t::handle_type;
-        // typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>> openSet_t;
-        // typedef typename openSet_t::handle_type fibHeapHandle_t;
+        // using openSet_t = boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+        // using fibHeapHandle_t = typename openSet_t::handle_type;
 
         Environment& environment;
 
