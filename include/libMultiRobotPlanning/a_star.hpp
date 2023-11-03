@@ -61,7 +61,7 @@ purposes.
         {
         public:
             Location state;
-            Cost fScore;
+            Cost f_score;
             Cost gScore;
 
             // 定义 handle
@@ -71,7 +71,7 @@ purposes.
         public:
             Node(const Location& input_state, Cost input_fScore, Cost input_gScore)
                     : state(input_state),
-                    fScore(input_fScore),
+                    f_score(input_fScore),
                     gScore(input_gScore)
                     {}
 
@@ -82,9 +82,9 @@ purposes.
                 // 2. highest gScore
 
                 // Our heap is a maximum heap, so we invert the comperator function here
-                if (fScore != other.fScore)
+                if (f_score != other.f_score)
                 {
-                    return fScore > other.fScore;
+                    return f_score > other.f_score;
                 }
                 else
                 {
@@ -94,7 +94,7 @@ purposes.
 
             friend std::ostream& operator<<(std::ostream& os, const Node& node)
             {
-                os << "state: " << node.state << " fScore: " << node.fScore
+                os << "state: " << node.state << " f_score: " << node.f_score
                    << " gScore: " << node.gScore;
 
                 return os;
@@ -154,7 +154,7 @@ purposes.
                     std::reverse(solution.states.begin(), solution.states.end());
                     std::reverse(solution.actions.begin(), solution.actions.end());
                     solution.cost = current.gScore;
-                    solution.fmin = current.fScore;
+                    solution.fmin = current.f_score;
 
                     return true;
                 }
@@ -174,8 +174,8 @@ purposes.
                         auto iter = stateToHeap.find(neighbor.state);
                         if (iter == stateToHeap.end())
                         {  // Discover a new node
-                            Cost fScore = tentative_gScore + environment.admissible_heuristic(neighbor.state);
-                            auto handle = open_set.push(Node(neighbor.state, fScore, tentative_gScore));
+                            Cost f_score = tentative_gScore + environment.admissible_heuristic(neighbor.state);
+                            auto handle = open_set.push(Node(neighbor.state, f_score, tentative_gScore));
                             (*handle).handle = handle;
                             stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
                             // std::cout << "  this is a new node " << f_score << "," <<
@@ -195,7 +195,7 @@ purposes.
                             // update f and gScore
                             Cost delta = (*handle).gScore - tentative_gScore;
                             (*handle).gScore = tentative_gScore;
-                            (*handle).fScore -= delta;
+                            (*handle).f_score -= delta;
                             open_set.increase(handle);
                         }
 
