@@ -18,9 +18,7 @@ using libMultiRobotPlanning::PlanResult;
 
 
 // roadmap data structures
-typedef boost::adjacency_list_traits<boost::vecS, boost::vecS,
-                                     boost::directedS>
-    roadmapTraits_t;
+typedef boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::directedS> roadmapTraits_t;
 typedef roadmapTraits_t::vertex_descriptor vertex_t;
 typedef roadmapTraits_t::edge_descriptor edge_t;
 
