@@ -63,12 +63,9 @@ purposes.
             Cost fScore;
             Cost gScore;
 
-        #ifdef USE_FIBONACCI_HEAP
+            // 定义 handle
             typename boost::heap::fibonacci_heap<Node>::handle_type handle;
-        #else
-            typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
-            boost::heap::mutable_<true>>::handle_type handle;
-        #endif
+            // typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
             Node(const Location& state, Cost fScore, Cost gScore)
                     : state(state), fScore(fScore), gScore(gScore) {}
@@ -99,14 +96,11 @@ purposes.
             }
         };
 
-        #ifdef USE_FIBONACCI_HEAP
-            typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
-            typedef typename openSet_t::handle_type fibHeapHandle_t;
-        #else
-            typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
-            boost::heap::mutable_<true>> openSet_t;
-            typedef typename openSet_t::handle_type fibHeapHandle_t;
-        #endif
+        // 定义openSet_t和fibHeapHandle_t
+        typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
+        typedef typename openSet_t::handle_type fibHeapHandle_t;
+        // typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>> openSet_t;
+        // typedef typename openSet_t::handle_type fibHeapHandle_t;
 
         Environment& environment;
 
