@@ -228,14 +228,12 @@ int main(int argc, char* argv[])
     Location test_start(start_x, start_y);
     Location test_goal(goal_x, goal_y);
     Environment test_environment(dim_x, y - 1, obstacles, test_goal);
-
-    AStar<Location, Action, int, Environment> astar(test_environment);
-
+    AStar<Location, Action, int, Environment> test_astar(test_environment);
     PlanResult<Location, Action, int> solution;
 
     if (test_environment.location_valid(test_start))
     {
-        success = astar.search(test_start, solution);
+        success = test_astar.search(test_start, solution);
     }
 
     ofstream out(output_file);
