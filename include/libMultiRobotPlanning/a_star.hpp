@@ -94,7 +94,7 @@ purposes.
 
             friend std::ostream& operator<<(std::ostream& os, const Node& node)
             {
-                os << "state: " << node.state << " f_score: " << node.f_score
+                os << "location: " << node.state << " f_score: " << node.f_score
                    << " g_score: " << node.g_score;
 
                 return os;
