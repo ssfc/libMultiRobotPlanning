@@ -121,12 +121,12 @@ purposes.
             solution.cost = 0;
 
             openSet_t open_set;
-            std::unordered_map<Location, fibHeapHandle_t, StateHasher> stateToHeap;
+            std::unordered_map<Location, fibHeapHandle_t, StateHasher> location_to_heap;
             std::unordered_set<Location, StateHasher> closed_set;
             std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,StateHasher> came_from;
 
             auto handle = open_set.push(Node(startState, environment.admissible_heuristic(startState), initialCost));
-            stateToHeap.insert(std::make_pair<>(startState, handle));
+            location_to_heap.insert(std::make_pair<>(startState, handle));
             (*handle).handle = handle;
 
             std::vector<Neighbor<Location, Action, Cost> > neighbors;
@@ -160,7 +160,7 @@ purposes.
                 }
 
                 open_set.pop();
-                stateToHeap.erase(current.state);
+                location_to_heap.erase(current.state);
                 closed_set.insert(current.state);
 
                 // traverse neighbors
@@ -171,13 +171,13 @@ purposes.
                     if (closed_set.find(neighbor.state) == closed_set.end())
                     {
                         Cost tentative_gScore = current.gScore + neighbor.cost;
-                        auto iter = stateToHeap.find(neighbor.state);
-                        if (iter == stateToHeap.end())
+                        auto iter = location_to_heap.find(neighbor.state);
+                        if (iter == location_to_heap.end())
                         {  // Discover a new node
                             Cost f_score = tentative_gScore + environment.admissible_heuristic(neighbor.state);
                             auto handle = open_set.push(Node(neighbor.state, f_score, tentative_gScore));
                             (*handle).handle = handle;
-                            stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
+                            location_to_heap.insert(std::make_pair<>(neighbor.state, handle));
                             // std::cout << "  this is a new node " << f_score << "," <<
                             // tentative_gScore << std::endl;
                         }
