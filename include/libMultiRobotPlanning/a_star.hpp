@@ -26,7 +26,7 @@ needsto be admissible.
 This class can either use a fibonacci heap, or a d-ary heap. The latter is the
 default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
 
-\tparam Location Custom state for the search. Needs to be copy'able
+\tparam Location Custom location for the search. Needs to be copy'able
 \tparam Action Custom action for the search. Needs to be copy'able
 \tparam Cost Custom Cost type (integer or floating point types)
 \tparam Environment This class needs to provide the custom A* logic. In
@@ -35,11 +35,11 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
     This function can return 0 if no suitable heuristic is available.
 
   - `bool is_solution(const Location& s)`\n
-    Return true if the given state is a goal state.
+    Return true if the given location is a goal location.
 
   - `void get_neighbors(const Location& s, std::vector<Neighbor<Location, Action,
    int> >& neighbors)`\n
-    Fill the list of neighboring state for the given state s.
+    Fill the list of neighboring location for the given location s.
 
   - `void onExpandNode(const Location& s, int f_score, int g_score)`\n
     This function is called on every expansion and can be used for statistical
@@ -49,7 +49,7 @@ purposes.
     This function is called on every node discovery and can be used for
    statistical purposes.
 
-    \tparam StateHasher A class to convert a state to a hash value. Default:
+    \tparam StateHasher A class to convert a location to a hash value. Default:
    std::hash<Location>
 */
     template <typename Location, typename Action, typename Cost, typename Environment,
