@@ -120,21 +120,21 @@ purposes.
             solution.actions.clear();
             solution.cost = 0;
 
-            openSet_t openSet;
+            openSet_t open_set;
             std::unordered_map<Location, fibHeapHandle_t, StateHasher> stateToHeap;
             std::unordered_set<Location, StateHasher> closedSet;
             std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,StateHasher> cameFrom;
 
-            auto handle = openSet.push(Node(startState, environment.admissible_heuristic(startState), initialCost));
+            auto handle = open_set.push(Node(startState, environment.admissible_heuristic(startState), initialCost));
             stateToHeap.insert(std::make_pair<>(startState, handle));
             (*handle).handle = handle;
 
             std::vector<Neighbor<Location, Action, Cost> > neighbors;
             neighbors.reserve(10);
 
-            while (!openSet.empty())
+            while (!open_set.empty())
             {
-                Node current = openSet.top();
+                Node current = open_set.top();
 
                 if (environment.is_solution(current.state))
                 {
@@ -159,7 +159,7 @@ purposes.
                     return true;
                 }
 
-                openSet.pop();
+                open_set.pop();
                 stateToHeap.erase(current.state);
                 closedSet.insert(current.state);
 
@@ -175,8 +175,7 @@ purposes.
                         if (iter == stateToHeap.end())
                         {  // Discover a new node
                             Cost fScore = tentative_gScore + environment.admissible_heuristic(neighbor.state);
-                            auto handle =
-                                openSet.push(Node(neighbor.state, fScore, tentative_gScore));
+                            auto handle = open_set.push(Node(neighbor.state, fScore, tentative_gScore));
                             (*handle).handle = handle;
                             stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
                             // std::cout << "  this is a new node " << fScore << "," <<
@@ -197,15 +196,14 @@ purposes.
                             Cost delta = (*handle).gScore - tentative_gScore;
                             (*handle).gScore = tentative_gScore;
                             (*handle).fScore -= delta;
-                            openSet.increase(handle);
+                            open_set.increase(handle);
                         }
 
                         // Best path for this node so far
                         // TODO: this is not the best way to update "cameFrom", but otherwise
                         // default c'tors of Location and Action are required
                         cameFrom.erase(neighbor.state);
-                        cameFrom.insert(std::make_pair<>(
-                          neighbor.state,
+                        cameFrom.insert(std::make_pair<>(neighbor.state,
                           std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
                                             tentative_gScore)));
                     }
