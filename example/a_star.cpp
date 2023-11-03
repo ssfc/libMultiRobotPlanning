@@ -111,32 +111,32 @@ public:
                obstacles.find(s) == obstacles.end();
     }
 
-    void get_neighbors(const Location& s, vector<Neighbor<Location, Action, int> >& neighbors)
+    void get_neighbors(const Location& location, vector<Neighbor<Location, Action, int> >& neighbors)
     {
         neighbors.clear();
 
-        Location up(s.x, s.y + 1);
+        Location up(location.x, location.y + 1);
 
         if (location_valid(up))
         {
             neighbors.emplace_back(Neighbor<Location, Action, int>(up, Action::Up, 1));
         }
 
-        Location down(s.x, s.y - 1);
+        Location down(location.x, location.y - 1);
 
         if (location_valid(down))
         {
             neighbors.emplace_back(Neighbor<Location, Action, int>(down, Action::Down, 1));
         }
 
-        Location left(s.x - 1, s.y);
+        Location left(location.x - 1, location.y);
 
         if (location_valid(left))
         {
             neighbors.emplace_back(Neighbor<Location, Action, int>(left, Action::Left, 1));
         }
 
-        Location right(s.x + 1, s.y);
+        Location right(location.x + 1, location.y);
 
         if (location_valid(right))
         {
