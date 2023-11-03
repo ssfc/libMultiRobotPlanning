@@ -60,7 +60,7 @@ purposes.
         class Node
         {
         public:
-            Location state;
+            Location location;
             Cost f_score;
             Cost g_score;
 
@@ -70,7 +70,7 @@ purposes.
 
         public:
             Node(const Location& input_state, Cost input_fScore, Cost input_gScore)
-                    : state(input_state),
+                    : location(input_state),
                     f_score(input_fScore),
                     g_score(input_gScore)
                     {}
@@ -94,7 +94,7 @@ purposes.
 
             friend std::ostream& operator<<(std::ostream& os, const Node& node)
             {
-                os << "location: " << node.state << " f_score: " << node.f_score
+                os << "location: " << node.location << " f_score: " << node.f_score
                    << " g_score: " << node.g_score;
 
                 return os;
@@ -136,11 +136,11 @@ purposes.
             {
                 Node current = open_set.top();
 
-                if (environment.is_solution(current.state))
+                if (environment.is_solution(current.location))
                 {
                     solution.states.clear();
                     solution.actions.clear();
-                    auto iter = came_from.find(current.state);
+                    auto iter = came_from.find(current.location);
                     while (iter != came_from.end())
                     {
                         solution.states.push_back(
@@ -160,12 +160,12 @@ purposes.
                 }
 
                 open_set.pop();
-                location_to_heap.erase(current.state);
-                closed_set.insert(current.state);
+                location_to_heap.erase(current.location);
+                closed_set.insert(current.location);
 
                 // traverse neighbors
                 neighbors.clear();
-                environment.get_neighbors(current.state, neighbors);
+                environment.get_neighbors(current.location, neighbors);
                 for (const Neighbor<Location, Action, Cost>& neighbor : neighbors)
                 {
                     if (closed_set.find(neighbor.state) == closed_set.end())
@@ -204,7 +204,7 @@ purposes.
                         // default c'tors of Location and Action are required
                         came_from.erase(neighbor.state);
                         came_from.insert(std::make_pair<>(neighbor.state,
-                          std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
+                          std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
                                             tentative_gScore)));
                     }
                 }
