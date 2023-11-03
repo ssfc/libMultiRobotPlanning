@@ -225,17 +225,17 @@ int main(int argc, char* argv[])
 
     bool success = false;
 
-    Location goal(goal_x, goal_y);
-    Location start(start_x, start_y);
-    Environment env(dim_x, y - 1, obstacles, goal);
+    Location test_start(start_x, start_y);
+    Location test_goal(goal_x, goal_y);
+    Environment test_environment(dim_x, y - 1, obstacles, test_goal);
 
-    AStar<Location, Action, int, Environment> astar(env);
+    AStar<Location, Action, int, Environment> astar(test_environment);
 
     PlanResult<Location, Action, int> solution;
 
-    if (env.location_valid(start))
+    if (test_environment.location_valid(test_start))
     {
-        success = astar.search(start, solution);
+        success = astar.search(test_start, solution);
     }
 
     ofstream out(output_file);
