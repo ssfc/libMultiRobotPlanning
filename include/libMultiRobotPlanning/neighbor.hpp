@@ -21,8 +21,8 @@ namespace libMultiRobotPlanning
         //! cost to get to the neighboring state
         Cost cost;
 
-        Neighbor(const State& input_state, const Action& input_action, Cost input_cost)
-          : state(input_state),
+        Neighbor(const State& input_location, const Action& input_action, Cost input_cost)
+          : state(input_location),
           action(input_action),
           cost(input_cost)
           {}
