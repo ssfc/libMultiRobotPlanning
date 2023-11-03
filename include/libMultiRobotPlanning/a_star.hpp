@@ -57,6 +57,8 @@ purposes.
     class AStar
     {
     private:
+        Environment& environment;
+
         class Node
         {
         public:
@@ -106,8 +108,6 @@ purposes.
         using fibHeapHandle_t = typename openSet_t::handle_type;
         // using openSet_t = boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>>;
         // using fibHeapHandle_t = typename openSet_t::handle_type;
-
-        Environment& environment;
 
     public:
         AStar(Environment& input_environment) : environment(input_environment) {}
