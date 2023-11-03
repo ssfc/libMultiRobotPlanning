@@ -41,11 +41,11 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
-  - `void onExpandNode(const Location& s, int f_score, int gScore)`\n
+  - `void onExpandNode(const Location& s, int f_score, int g_score)`\n
     This function is called on every expansion and can be used for statistical
 purposes.
 
-  - `void onDiscover(const Location& s, int f_score, int gScore)`\n
+  - `void onDiscover(const Location& s, int f_score, int g_score)`\n
     This function is called on every node discovery and can be used for
    statistical purposes.
 
@@ -62,7 +62,7 @@ purposes.
         public:
             Location state;
             Cost f_score;
-            Cost gScore;
+            Cost g_score;
 
             // 定义 handle
             typename boost::heap::fibonacci_heap<Node>::handle_type handle;
@@ -72,14 +72,14 @@ purposes.
             Node(const Location& input_state, Cost input_fScore, Cost input_gScore)
                     : state(input_state),
                     f_score(input_fScore),
-                    gScore(input_gScore)
+                    g_score(input_gScore)
                     {}
 
             bool operator<(const Node& other) const
             {
                 // Sort order
                 // 1. lowest f_score
-                // 2. highest gScore
+                // 2. highest g_score
 
                 // Our heap is a maximum heap, so we invert the comperator function here
                 if (f_score != other.f_score)
@@ -88,14 +88,14 @@ purposes.
                 }
                 else
                 {
-                    return gScore < other.gScore;
+                    return g_score < other.g_score;
                 }
             }
 
             friend std::ostream& operator<<(std::ostream& os, const Node& node)
             {
                 os << "state: " << node.state << " f_score: " << node.f_score
-                   << " gScore: " << node.gScore;
+                   << " g_score: " << node.g_score;
 
                 return os;
             }
@@ -153,7 +153,7 @@ purposes.
                     solution.states.push_back(std::make_pair<>(startState, initialCost));
                     std::reverse(solution.states.begin(), solution.states.end());
                     std::reverse(solution.actions.begin(), solution.actions.end());
-                    solution.cost = current.gScore;
+                    solution.cost = current.g_score;
                     solution.fmin = current.f_score;
 
                     return true;
@@ -170,7 +170,7 @@ purposes.
                 {
                     if (closed_set.find(neighbor.state) == closed_set.end())
                     {
-                        Cost tentative_gScore = current.gScore + neighbor.cost;
+                        Cost tentative_gScore = current.g_score + neighbor.cost;
                         auto iter = location_to_heap.find(neighbor.state);
                         if (iter == location_to_heap.end())
                         {  // Discover a new node
@@ -185,16 +185,16 @@ purposes.
                         {
                             auto handle = iter->second;
                             // std::cout << "  this is an old node: " << tentative_gScore << ","
-                            // << (*handle).gScore << std::endl;
+                            // << (*handle).g_score << std::endl;
                             // We found this node before with a better path
-                            if (tentative_gScore >= (*handle).gScore)
+                            if (tentative_gScore >= (*handle).g_score)
                             {
                                 continue;
                             }
 
-                            // update f and gScore
-                            Cost delta = (*handle).gScore - tentative_gScore;
-                            (*handle).gScore = tentative_gScore;
+                            // update f and g_score
+                            Cost delta = (*handle).g_score - tentative_gScore;
+                            (*handle).g_score = tentative_gScore;
                             (*handle).f_score -= delta;
                             open_set.increase(handle);
                         }
