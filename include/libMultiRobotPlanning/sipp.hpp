@@ -201,7 +201,7 @@ class SIPP {
         Cost end_t =
             safeIntervals(m_env.getLocation(s.state)).at(s.interval).end;
 
-        const auto& sis = safeIntervals(m_env.getLocation(m.state));
+        const auto& sis = safeIntervals(m_env.getLocation(m.location));
         for (size_t i = 0; i < sis.size(); ++i) {
           const interval& si = sis[i];
           // std::cout << "  i " << i << ": " << si.start << "," << si.end <<
@@ -210,12 +210,12 @@ class SIPP {
             continue;
           }
           int t;
-          if (m_env.isCommandValid(s.state, m.state, m.action, m_lastGScore,
+          if (m_env.isCommandValid(s.state, m.location, m.action, m_lastGScore,
                                    end_t, si.start, si.end, t)) {
             // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
             // << m_lastGScore << std::endl;
             neighbors.emplace_back(Neighbor<SIPPState, SIPPAction, Cost>(
-                SIPPState(m.state, i), SIPPAction(m.action, m.cost),
+                SIPPState(m.location, i), SIPPAction(m.action, m.cost),
                 t - m_lastGScore));
           }
         }

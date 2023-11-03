@@ -221,28 +221,28 @@ class AStarEpsilon {
       neighbors.clear();
       m_env.get_neighbors(current.state, neighbors);
       for (const Neighbor<State, Action, Cost>& neighbor : neighbors) {
-        if (closedSet.find(neighbor.state) == closedSet.end()) {
+        if (closedSet.find(neighbor.location) == closedSet.end()) {
           Cost tentative_gScore = current.gScore + neighbor.cost;
-          auto iter = stateToHeap.find(neighbor.state);
+          auto iter = stateToHeap.find(neighbor.location);
           if (iter == stateToHeap.end()) {  // Discover a new node
             // std::cout << "  this is a new node" << std::endl;
             Cost fScore =
-                tentative_gScore + m_env.admissible_heuristic(neighbor.state);
+                tentative_gScore + m_env.admissible_heuristic(neighbor.location);
             Cost focalHeuristic =
                 current.focalHeuristic +
-                m_env.focalStateHeuristic(neighbor.state, tentative_gScore) +
-                m_env.focalTransitionHeuristic(current.state, neighbor.state,
+                m_env.focalStateHeuristic(neighbor.location, tentative_gScore) +
+                m_env.focalTransitionHeuristic(current.state, neighbor.location,
                                                current.gScore,
                                                tentative_gScore);
             auto handle = openSet.push(
-                Node(neighbor.state, fScore, tentative_gScore, focalHeuristic));
+                Node(neighbor.location, fScore, tentative_gScore, focalHeuristic));
             (*handle).handle = handle;
             if (fScore <= bestFScore * m_w) {
               // std::cout << "focalAdd: " << *handle << std::endl;
               focalSet.push(handle);
             }
-            stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
-            m_env.onDiscover(neighbor.state, fScore, tentative_gScore);
+            stateToHeap.insert(std::make_pair<>(neighbor.location, handle));
+            m_env.onDiscover(neighbor.location, fScore, tentative_gScore);
             // std::cout << "  this is a new node " << fScore << "," <<
             // tentative_gScore << std::endl;
           } else {
@@ -260,7 +260,7 @@ class AStarEpsilon {
             (*handle).gScore = tentative_gScore;
             (*handle).fScore -= delta;
             openSet.increase(handle);
-            m_env.onDiscover(neighbor.state, (*handle).fScore,
+            m_env.onDiscover(neighbor.location, (*handle).fScore,
                              (*handle).gScore);
             if ((*handle).fScore <= bestFScore * m_w &&
                 last_fScore > bestFScore * m_w) {
@@ -272,9 +272,9 @@ class AStarEpsilon {
           // Best path for this node so far
           // TODO: this is not the best way to update "cameFrom", but otherwise
           // default c'tors of State and Action are required
-          cameFrom.erase(neighbor.state);
+          cameFrom.erase(neighbor.location);
           cameFrom.insert(std::make_pair<>(
-              neighbor.state,
+              neighbor.location,
               std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
                                 tentative_gScore)));
         }

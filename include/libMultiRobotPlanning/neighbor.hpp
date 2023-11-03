@@ -15,14 +15,14 @@ namespace libMultiRobotPlanning
     struct Neighbor
     {
         //! neighboring location
-        Location state;
+        Location location;
         //! action to get to the neighboring location
         Action action;
         //! cost to get to the neighboring location
         Cost cost;
 
         Neighbor(const Location& input_location, const Action& input_action, Cost input_cost)
-          : state(input_location),
+          : location(input_location),
           action(input_action),
           cost(input_cost)
           {}

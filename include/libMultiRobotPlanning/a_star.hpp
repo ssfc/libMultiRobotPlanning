@@ -168,16 +168,16 @@ purposes.
                 environment.get_neighbors(current.location, neighbors);
                 for (const Neighbor<Location, Action, Cost>& neighbor : neighbors)
                 {
-                    if (closed_set.find(neighbor.state) == closed_set.end())
+                    if (closed_set.find(neighbor.location) == closed_set.end())
                     {
                         Cost tentative_gScore = current.g_score + neighbor.cost;
-                        auto iter = location_to_heap.find(neighbor.state);
+                        auto iter = location_to_heap.find(neighbor.location);
                         if (iter == location_to_heap.end())
                         {  // Discover a new node
-                            Cost f_score = tentative_gScore + environment.admissible_heuristic(neighbor.state);
-                            auto handle = open_set.push(Node(neighbor.state, f_score, tentative_gScore));
+                            Cost f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
+                            auto handle = open_set.push(Node(neighbor.location, f_score, tentative_gScore));
                             (*handle).handle = handle;
-                            location_to_heap.insert(std::make_pair<>(neighbor.state, handle));
+                            location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
                             // std::cout << "  this is a new node " << f_score << "," <<
                             // tentative_gScore << std::endl;
                         }
@@ -202,8 +202,8 @@ purposes.
                         // Best path for this node so far
                         // TODO: this is not the best way to update "came_from", but otherwise
                         // default c'tors of Location and Action are required
-                        came_from.erase(neighbor.state);
-                        came_from.insert(std::make_pair<>(neighbor.state,
+                        came_from.erase(neighbor.location);
+                        came_from.insert(std::make_pair<>(neighbor.location,
                           std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
                                             tentative_gScore)));
                     }
