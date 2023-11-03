@@ -41,11 +41,11 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
-  - `void onExpandNode(const Location& s, int fScore, int gScore)`\n
+  - `void onExpandNode(const Location& s, int f_score, int gScore)`\n
     This function is called on every expansion and can be used for statistical
 purposes.
 
-  - `void onDiscover(const Location& s, int fScore, int gScore)`\n
+  - `void onDiscover(const Location& s, int f_score, int gScore)`\n
     This function is called on every node discovery and can be used for
    statistical purposes.
 
@@ -78,7 +78,7 @@ purposes.
             bool operator<(const Node& other) const
             {
                 // Sort order
-                // 1. lowest fScore
+                // 1. lowest f_score
                 // 2. highest gScore
 
                 // Our heap is a maximum heap, so we invert the comperator function here
@@ -178,7 +178,7 @@ purposes.
                             auto handle = open_set.push(Node(neighbor.state, fScore, tentative_gScore));
                             (*handle).handle = handle;
                             stateToHeap.insert(std::make_pair<>(neighbor.state, handle));
-                            // std::cout << "  this is a new node " << fScore << "," <<
+                            // std::cout << "  this is a new node " << f_score << "," <<
                             // tentative_gScore << std::endl;
                         }
                         else
