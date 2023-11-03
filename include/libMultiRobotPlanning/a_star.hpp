@@ -57,7 +57,7 @@ purposes.
     class AStar
     {
     private:
-        Environment& environment; // include map size, obstacle position, agent goal. 
+        Environment& environment; // include map size, obstacle position, agent goal.
 
         class Node
         {
