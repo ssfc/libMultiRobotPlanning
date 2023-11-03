@@ -57,8 +57,9 @@ purposes.
     class AStar
     {
     private:
-        struct Node
+        class Node
         {
+        public:
             Location state;
             Cost fScore;
             Cost gScore;
@@ -67,6 +68,7 @@ purposes.
             typename boost::heap::fibonacci_heap<Node>::handle_type handle;
             // typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
+        public:
             Node(const Location& state, Cost fScore, Cost gScore)
                     : state(state), fScore(fScore), gScore(gScore) {}
 
