@@ -420,7 +420,7 @@ public:
         int max_t = 0;
         for (const auto& sol : solution)
         {
-            max_t = max<int>(max_t, sol.states.size() - 1);
+            max_t = max<int>(max_t, sol.locations.size() - 1);
         }
 
         for (int t = 0; t <= max_t; ++t)
@@ -527,12 +527,12 @@ public:
     {
         assert(agentIdx < solution.size());
 
-        if (t < solution[agentIdx].states.size())
+        if (t < solution[agentIdx].locations.size())
         {
-          return solution[agentIdx].states[t].first;
+          return solution[agentIdx].locations[t].first;
         }
 
-        assert(!solution[agentIdx].states.empty());
+        assert(!solution[agentIdx].locations.empty());
 
         if (m_disappearAtGoal)
         {
@@ -542,7 +542,7 @@ public:
           return State(-1, -1 * (agentIdx + 1), -1);
         }
 
-        return solution[agentIdx].states.back().first;
+        return solution[agentIdx].locations.back().first;
     }
 
     bool location_valid(const State& s)
@@ -623,13 +623,13 @@ int main(int argc, char* argv[])
         goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }
 
-    // sanity check: no identical start states
+    // sanity check: no identical start locations
     unordered_set<State> startStatesSet;
     for (const auto& s : startStates)
     {
         if (startStatesSet.find(s) != startStatesSet.end())
         {
-            cout << "Identical start states detected -> no solution!" << endl;
+            cout << "Identical start locations detected -> no solution!" << endl;
 
             return 0;
         }
@@ -679,15 +679,15 @@ int main(int argc, char* argv[])
         {
             // cout << "Solution for: " << a << endl;
             // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-            //   cout << solution[a].states[i].second << ": " <<
-            //   solution[a].states[i].first << "->" << solution[a].actions[i].first
+            //   cout << solution[a].locations[i].second << ": " <<
+            //   solution[a].locations[i].first << "->" << solution[a].actions[i].first
             //   << "(cost: " << solution[a].actions[i].second << ")" << endl;
             // }
-            // cout << solution[a].states.back().second << ": " <<
-            // solution[a].states.back().first << endl;
+            // cout << solution[a].locations.back().second << ": " <<
+            // solution[a].locations.back().first << endl;
 
             fout << "  agent" << a << ":" << endl;
-            for (const auto& state : solution[a].states)
+            for (const auto& state : solution[a].locations)
             {
                 fout << "    - x: " << state.first.x << endl
                     << "      y: " << state.first.y << endl
@@ -695,7 +695,7 @@ int main(int argc, char* argv[])
             }
 
             cerr << "agent " << a << ": ";
-            for (const auto& state : solution[a].states)
+            for (const auto& state : solution[a].locations)
             {
                 cerr << "(" << state.first.x << "," << state.first.y << "),";
             }

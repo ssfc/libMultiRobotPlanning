@@ -243,21 +243,21 @@ int main(int argc, char* argv[])
         cout << "Planning successful! Total cost: " << solution.cost << endl;
         for (size_t i = 0; i < solution.actions.size(); ++i)
         {
-            cout << solution.states[i].second << ": " << solution.states[i].first
+            cout << solution.locations[i].second << ": " << solution.locations[i].first
             << "->" << solution.actions[i].first
             << "(cost: " << solution.actions[i].second << ")" << endl;
         }
 
-        cout << solution.states.back().second << ": "
-        << solution.states.back().first << endl;
+        cout << solution.locations.back().second << ": "
+        << solution.locations.back().first << endl;
 
         out << "schedule:" << endl;
         out << "  agent1:" << endl;
 
-        for (size_t i = 0; i < solution.states.size(); ++i)
+        for (size_t i = 0; i < solution.locations.size(); ++i)
         {
-            out << "    - x: " << solution.states[i].first.x << endl
-              << "      y: " << solution.states[i].first.y << endl
+            out << "    - x: " << solution.locations[i].first.x << endl
+              << "      y: " << solution.locations[i].first.y << endl
               << "      t: " << i << endl;
         }
     }

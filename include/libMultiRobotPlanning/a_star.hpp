@@ -115,8 +115,8 @@ purposes.
         bool search(const Location& startState,
                   PlanResult<Location, Action, Cost>& solution, Cost initialCost = 0)
         {
-            solution.states.clear();
-            solution.states.push_back(std::make_pair<>(startState, 0));
+            solution.locations.clear();
+            solution.locations.push_back(std::make_pair<>(startState, 0));
             solution.actions.clear();
             solution.cost = 0;
 
@@ -138,20 +138,20 @@ purposes.
 
                 if (environment.is_solution(current.location))
                 {
-                    solution.states.clear();
+                    solution.locations.clear();
                     solution.actions.clear();
                     auto iter = came_from.find(current.location);
                     while (iter != came_from.end())
                     {
-                        solution.states.push_back(
+                        solution.locations.push_back(
                           std::make_pair<>(iter->first, std::get<3>(iter->second)));
                         solution.actions.push_back(std::make_pair<>(
                           std::get<1>(iter->second), std::get<2>(iter->second)));
                         iter = came_from.find(std::get<0>(iter->second));
                     }
 
-                    solution.states.push_back(std::make_pair<>(startState, initialCost));
-                    std::reverse(solution.states.begin(), solution.states.end());
+                    solution.locations.push_back(std::make_pair<>(startState, initialCost));
+                    std::reverse(solution.locations.begin(), solution.locations.end());
                     std::reverse(solution.actions.begin(), solution.actions.end());
                     solution.cost = current.g_score;
                     solution.fmin = current.f_score;

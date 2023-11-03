@@ -371,7 +371,7 @@ class Environment {
       Conflict& result) {
     int max_t = 0;
     for (const auto& sol : solution) {
-      max_t = std::max<int>(max_t, sol.states.size());
+      max_t = std::max<int>(max_t, sol.locations.size());
     }
 
     for (int t = 0; t < max_t; ++t) {
@@ -473,11 +473,11 @@ class Environment {
                  const std::vector<PlanResult<State, Action, int> >& solution,
                  size_t t) {
     assert(agentIdx < solution.size());
-    if (t < solution[agentIdx].states.size()) {
-      return solution[agentIdx].states[t].first;
+    if (t < solution[agentIdx].locations.size()) {
+      return solution[agentIdx].locations[t].first;
     }
-    assert(!solution[agentIdx].states.empty());
-    return solution[agentIdx].states.back().first;
+    assert(!solution[agentIdx].locations.empty());
+    return solution[agentIdx].locations.back().first;
   }
 
   bool location_valid(const State& s) {
@@ -567,11 +567,11 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  // sanity check: no identical start states
+  // sanity check: no identical start locations
   std::unordered_set<State> startStatesSet;
   for (const auto& s : startStates) {
     if (startStatesSet.find(s) != startStatesSet.end()) {
-      std::cout << "Identical start states detected -> no solution!" << std::endl;
+      std::cout << "Identical start locations detected -> no solution!" << std::endl;
       return 0;
     }
     startStatesSet.insert(s);
@@ -608,15 +608,15 @@ int main(int argc, char* argv[]) {
     for (size_t a = 0; a < solution.size(); ++a) {
       // std::cout << "Solution for: " << a << std::endl;
       // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-      //   std::cout << solution[a].states[i].second << ": " <<
-      //   solution[a].states[i].first << "->" << solution[a].actions[i].first
+      //   std::cout << solution[a].locations[i].second << ": " <<
+      //   solution[a].locations[i].first << "->" << solution[a].actions[i].first
       //   << "(cost: " << solution[a].actions[i].second << ")" << std::endl;
       // }
-      // std::cout << solution[a].states.back().second << ": " <<
-      // solution[a].states.back().first << std::endl;
+      // std::cout << solution[a].locations.back().second << ": " <<
+      // solution[a].locations.back().first << std::endl;
 
       out << "  agent" << a << ":" << std::endl;
-      for (const auto& state : solution[a].states) {
+      for (const auto& state : solution[a].locations) {
         out << "    - x: " << state.first.x << std::endl
             << "      y: " << state.first.y << std::endl
             << "      t: " << state.second << std::endl;

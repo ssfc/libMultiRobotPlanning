@@ -289,7 +289,7 @@ class Environment {
       Conflict& result) {
     size_t max_t = 0;
     for (const auto& sol : solution) {
-      max_t = std::max<size_t>(max_t, sol.states.size() - 1);
+      max_t = std::max<size_t>(max_t, sol.locations.size() - 1);
     }
 
     for (size_t t = 0; t <= max_t; ++t) {
@@ -371,17 +371,17 @@ class Environment {
                  const std::vector<PlanResult<State, Action, int> >& solution,
                  size_t t) {
     assert(agentIdx < solution.size());
-    if (t < solution[agentIdx].states.size()) {
-      return solution[agentIdx].states[t].first;
+    if (t < solution[agentIdx].locations.size()) {
+      return solution[agentIdx].locations[t].first;
     }
-    assert(!solution[agentIdx].states.empty());
+    assert(!solution[agentIdx].locations.empty());
     if (m_disappearAtGoal) {
       // This is a trick to avoid changing the rest of the code significantly
       // After an agent disappeared, put it at a unique but invalid position
       // This will cause all calls to equalExceptTime(.) to return false.
       return State(-1, -1-agentIdx);
     }
-    return solution[agentIdx].states.back().first;
+    return solution[agentIdx].locations.back().first;
   }
 
   bool location_valid(const State& s) {
@@ -547,15 +547,15 @@ int main(int argc, char* argv[]) {
     for (size_t a = 0; a < solution.size(); ++a) {
       // std::cout << "Solution for: " << a << std::endl;
       // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-      //   std::cout << solution[a].states[i].second << ": " <<
-      //   solution[a].states[i].first << "->" << solution[a].actions[i].first
+      //   std::cout << solution[a].locations[i].second << ": " <<
+      //   solution[a].locations[i].first << "->" << solution[a].actions[i].first
       //   << "(cost: " << solution[a].actions[i].second << ")" << std::endl;
       // }
-      // std::cout << solution[a].states.back().second << ": " <<
-      // solution[a].states.back().first << std::endl;
+      // std::cout << solution[a].locations.back().second << ": " <<
+      // solution[a].locations.back().first << std::endl;
 
       out << "  agent" << a << ":" << std::endl;
-      for (const auto& state : solution[a].states) {
+      for (const auto& state : solution[a].locations) {
         out << "    - v: " << roadmap[state.first.vertex].name << std::endl
             << "      t: " << state.second << std::endl;
       }

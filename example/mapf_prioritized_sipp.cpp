@@ -234,32 +234,32 @@ int main(int argc, char* argv[]) {
                 << std::endl;
 
       // update collision intervals
-      auto lastState = solution.states[0];
-      for (size_t i = 1; i < solution.states.size(); ++i) {
-        if (solution.states[i].first != lastState.first) {
+      auto lastState = solution.locations[0];
+      for (size_t i = 1; i < solution.locations.size(); ++i) {
+        if (solution.locations[i].first != lastState.first) {
           allCollisionIntervals[lastState.first].push_back(
-            sipp_t::interval(lastState.second, solution.states[i].second - 1));
-          lastState = solution.states[i];
+            sipp_t::interval(lastState.second, solution.locations[i].second - 1));
+          lastState = solution.locations[i];
         }
       }
-      allCollisionIntervals[solution.states.back().first].push_back(
-            sipp_t::interval(solution.states.back().second, std::numeric_limits<int>::max()));
+      allCollisionIntervals[solution.locations.back().first].push_back(
+            sipp_t::interval(solution.locations.back().second, std::numeric_limits<int>::max()));
       // update statistics
       cost += solution.cost;
 
       // print solution
       for (size_t i = 0; i < solution.actions.size(); ++i) {
-        std::cout << solution.states[i].second << ": " << solution.states[i].first
+        std::cout << solution.locations[i].second << ": " << solution.locations[i].first
                   << "->" << solution.actions[i].first
                   << "(cost: " << solution.actions[i].second << ")" << std::endl;
       }
-      std::cout << solution.states.back().second << ": "
-                << solution.states.back().first << std::endl;
+      std::cout << solution.locations.back().second << ": "
+                << solution.locations.back().first << std::endl;
 
-      for (size_t i = 0; i < solution.states.size(); ++i) {
-        out << "    - x: " << solution.states[i].first.x << std::endl
-            << "      y: " << solution.states[i].first.y << std::endl
-            << "      t: " << solution.states[i].second << std::endl;
+      for (size_t i = 0; i < solution.locations.size(); ++i) {
+        out << "    - x: " << solution.locations[i].first.x << std::endl
+            << "      y: " << solution.locations[i].first.y << std::endl
+            << "      t: " << solution.locations[i].second << std::endl;
       }
     } else {
       std::cout << "Planning NOT successful!" << std::endl;

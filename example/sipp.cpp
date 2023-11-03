@@ -213,20 +213,20 @@ int main(int argc, char* argv[]) {
     std::cout << "Planning successful! Total cost: " << solution.cost
               << std::endl;
     for (size_t i = 0; i < solution.actions.size(); ++i) {
-      std::cout << solution.states[i].second << ": " << solution.states[i].first
+      std::cout << solution.locations[i].second << ": " << solution.locations[i].first
                 << "->" << solution.actions[i].first
                 << "(cost: " << solution.actions[i].second << ")" << std::endl;
     }
-    std::cout << solution.states.back().second << ": "
-              << solution.states.back().first << std::endl;
+    std::cout << solution.locations.back().second << ": "
+              << solution.locations.back().first << std::endl;
 
     std::ofstream out(outputFile);
     out << "schedule:" << std::endl;
     out << "  agent1:" << std::endl;
-    for (size_t i = 0; i < solution.states.size(); ++i) {
-      out << "    - x: " << solution.states[i].first.x << std::endl
-          << "      y: " << solution.states[i].first.y << std::endl
-          << "      t: " << solution.states[i].second << std::endl;
+    for (size_t i = 0; i < solution.locations.size(); ++i) {
+      out << "    - x: " << solution.locations[i].first.x << std::endl
+          << "      y: " << solution.locations[i].first.y << std::endl
+          << "      t: " << solution.locations[i].second << std::endl;
     }
   } else {
     std::cout << "Planning NOT successful!" << std::endl;

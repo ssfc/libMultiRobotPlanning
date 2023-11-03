@@ -8,7 +8,7 @@ namespace libMultiRobotPlanning
 /*! \brief Represents the path for an agent
 
     This class is used to store the result of a planner for a single agent.
-    It has both the ordered list of states that need to be traversed as well as
+    It has both the ordered list of locations that need to be traversed as well as
    the ordered
     list of actions together with their respective costs
 
@@ -19,8 +19,8 @@ namespace libMultiRobotPlanning
     template <typename State, typename Action, typename Cost>
     struct PlanResult
     {
-        //! states and their gScore
-        std::vector<std::pair<State, Cost> > states;
+        //! locations and their gScore
+        std::vector<std::pair<State, Cost> > locations;
         //! actions and their cost
         std::vector<std::pair<Action, Cost> > actions;
         //! actual cost of the result
