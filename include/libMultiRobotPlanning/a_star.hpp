@@ -58,50 +58,7 @@ purposes.
     {
     private:
         Environment& environment; // include map size, obstacle position, agent goal.
-
-        class Node
-        {
-        public:
-            Location location;
-            Cost f_score;
-            Cost g_score;
-
-            // 定义 handle
-            typename boost::heap::fibonacci_heap<Node>::handle_type handle;
-            // typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
-
-        public:
-            Node(const Location& input_state, Cost input_fScore, Cost input_gScore)
-                    : location(input_state),
-                    f_score(input_fScore),
-                    g_score(input_gScore)
-                    {}
-
-            bool operator<(const Node& other) const
-            {
-                // Sort order
-                // 1. lowest f_score
-                // 2. highest g_score
-
-                // Our heap is a maximum heap, so we invert the comperator function here
-                if (f_score != other.f_score)
-                {
-                    return f_score > other.f_score;
-                }
-                else
-                {
-                    return g_score < other.g_score;
-                }
-            }
-
-            friend std::ostream& operator<<(std::ostream& os, const Node& node)
-            {
-                os << "location: " << node.location << " f_score: " << node.f_score
-                   << " g_score: " << node.g_score;
-
-                return os;
-            }
-        };
+        class Node;
 
         // 定义openSet_t和fibHeapHandle_t
         using openSet_t = boost::heap::fibonacci_heap<Node>;
@@ -212,6 +169,53 @@ purposes.
 
             return false;
         }
+    };
+
+    template <typename Location, typename Action, typename Cost, typename Environment,
+            typename StateHasher>
+    class AStar<Location, Action, Cost, Environment, StateHasher>::Node
+    {
+    public:
+        Location location;
+        Cost f_score;
+        Cost g_score;
+
+        // 定义 handle
+        typename boost::heap::fibonacci_heap<Node>::handle_type handle;
+        // typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+
+    public:
+        Node(const Location& input_state, Cost input_fScore, Cost input_gScore)
+                : location(input_state),
+                  f_score(input_fScore),
+                  g_score(input_gScore)
+        {}
+
+        bool operator<(const Node& other) const
+        {
+            // Sort order
+            // 1. lowest f_score
+            // 2. highest g_score
+
+            // Our heap is a maximum heap, so we invert the comperator function here
+            if (f_score != other.f_score)
+            {
+                return f_score > other.f_score;
+            }
+            else
+            {
+                return g_score < other.g_score;
+            }
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const Node& node)
+        {
+            os << "location: " << node.location << " f_score: " << node.f_score
+               << " g_score: " << node.g_score;
+
+            return os;
+        }
+
     };
 
 }  // namespace libMultiRobotPlanning
