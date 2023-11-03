@@ -49,11 +49,11 @@ purposes.
     This function is called on every node discovery and can be used for
    statistical purposes.
 
-    \tparam StateHasher A class to convert a location to a hash value. Default:
+    \tparam LocationHasher A class to convert a location to a hash value. Default:
    std::hash<Location>
 */
     template <typename Location, typename Action, typename Cost, typename Environment,
-              typename StateHasher = std::hash<Location> >
+              typename LocationHasher = std::hash<Location> >
     class AStar
     {
     private:
@@ -121,9 +121,9 @@ purposes.
             solution.cost = 0;
 
             openSet_t open_set;
-            std::unordered_map<Location, fibHeapHandle_t, StateHasher> location_to_heap;
-            std::unordered_set<Location, StateHasher> closed_set;
-            std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,StateHasher> came_from;
+            std::unordered_map<Location, fibHeapHandle_t, LocationHasher> location_to_heap;
+            std::unordered_set<Location, LocationHasher> closed_set;
+            std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,LocationHasher> came_from;
 
             auto handle = open_set.push(Node(startState, environment.admissible_heuristic(startState), initialCost));
             location_to_heap.insert(std::make_pair<>(startState, handle));

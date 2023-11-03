@@ -73,11 +73,11 @@ purposes.
     This function is called on every node discovery and can be used for
    statistical purposes.
 
-    \tparam StateHasher A class to convert a state to a hash value. Default:
+    \tparam LocationHasher A class to convert a state to a hash value. Default:
    std::hash<State>
 */
 template <typename State, typename Action, typename Cost, typename Environment,
-          typename StateHasher = std::hash<State> >
+          typename LocationHasher = std::hash<State> >
 class AStarEpsilon {
  public:
   AStarEpsilon(Environment& environment, float w)
@@ -93,10 +93,10 @@ class AStarEpsilon {
     openSet_t openSet;
     focalSet_t
         focalSet;  // subset of open nodes that are within suboptimality bound
-    std::unordered_map<State, fibHeapHandle_t, StateHasher> stateToHeap;
-    std::unordered_set<State, StateHasher> closedSet;
+    std::unordered_map<State, fibHeapHandle_t, LocationHasher> stateToHeap;
+    std::unordered_set<State, LocationHasher> closedSet;
     std::unordered_map<State, std::tuple<State, Action, Cost, Cost>,
-                       StateHasher>
+                       LocationHasher>
         cameFrom;
 
     auto handle = openSet.push(
