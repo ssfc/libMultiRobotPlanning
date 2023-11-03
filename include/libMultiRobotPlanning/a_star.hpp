@@ -69,8 +69,11 @@ purposes.
             // typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
         public:
-            Node(const Location& state, Cost fScore, Cost gScore)
-                    : state(state), fScore(fScore), gScore(gScore) {}
+            Node(const Location& input_state, Cost input_fScore, Cost input_gScore)
+                    : state(input_state),
+                    fScore(input_fScore),
+                    gScore(input_gScore)
+                    {}
 
             bool operator<(const Node& other) const
             {
