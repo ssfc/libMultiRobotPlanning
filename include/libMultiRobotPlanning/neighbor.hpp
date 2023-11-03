@@ -2,23 +2,23 @@
 
 namespace libMultiRobotPlanning
 {
-    /*! \brief Represents state transations
+    /*! \brief Represents location transations
 
-        This class represents a transition from a start state applying an action
+        This class represents a transition from a start location applying an action
        with the given cost.
 
-        \tparam Location Custom state for the search. Needs to be copy'able
+        \tparam Location Custom location for the search. Needs to be copy'able
         \tparam Action Custom action for the search. Needs to be copy'able
         \tparam Cost Custom Cost type (integer or floating point types)
     */
     template <typename Location, typename Action, typename Cost>
     struct Neighbor
     {
-        //! neighboring state
+        //! neighboring location
         Location state;
-        //! action to get to the neighboring state
+        //! action to get to the neighboring location
         Action action;
-        //! cost to get to the neighboring state
+        //! cost to get to the neighboring location
         Cost cost;
 
         Neighbor(const Location& input_location, const Action& input_action, Cost input_cost)
