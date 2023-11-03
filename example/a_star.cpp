@@ -25,9 +25,9 @@ public:
         return tie(x, y) == tie(other.x, other.y);
     }
 
-    friend ostream& operator<<(ostream& os, const Location& s)
+    friend ostream& operator<<(ostream& os, const Location& location)
     {
-        return os << "(" << s.x << "," << s.y << ")";
+        return os << "(" << location.x << "," << location.y << ")";
     }
 };
 
@@ -56,9 +56,9 @@ enum class Action
     Right,
 };
 
-ostream& operator<<(ostream& os, const Action& a)
+ostream& operator<<(ostream& os, const Action& action)
 {
-    switch (a)
+    switch (action)
     {
     case Action::Up:
         os << "Up";
