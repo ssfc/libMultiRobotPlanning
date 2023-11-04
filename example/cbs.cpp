@@ -17,6 +17,10 @@ using libMultiRobotPlanning::PlanResult;
 // Location Custom state for the search
 struct State
 {
+    int time;
+    int x;
+    int y;
+    
     State(int time, int x, int y) : time(time), x(x), y(y) {}
 
     bool operator==(const State& other) const
@@ -26,7 +30,11 @@ struct State
         && y == other.y;
     }
 
-    bool equalExceptTime(const State& s) const { return x == s.x && y == s.y; }
+    bool equalExceptTime(const State& other) const
+    {
+        return x == other.x
+        && y == other.y;
+    }
 
     friend ostream& operator<<(ostream& os, const State& s)
     {
@@ -34,10 +42,6 @@ struct State
       // return os << "(" << s.x << "," << s.y << ")";
 
     }
-
-    int time;
-    int x;
-    int y;
 };
 
 namespace std
