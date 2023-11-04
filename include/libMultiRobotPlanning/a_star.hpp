@@ -64,9 +64,9 @@ purposes.
         Environment& environment; // include map size, obstacle position, agent goal.
         // 定义openSet_t和fibHeapHandle_t
         using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
-        using heapHandle_t = typename OpenSet::handle_type;
+        using HeapHandle = typename OpenSet::handle_type;
         // using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
-        // using heapHandle_t = typename OpenSet::handle_type;
+        // using HeapHandle = typename OpenSet::handle_type;
 
     public:
         // member funcs
@@ -81,7 +81,7 @@ purposes.
             solution.cost = 0;
 
             OpenSet open_set;
-            std::unordered_map<Location, heapHandle_t, LocationHasher> location_to_heap;
+            std::unordered_map<Location, HeapHandle, LocationHasher> location_to_heap;
             std::unordered_set<Location, LocationHasher> closed_set;
             std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,LocationHasher> came_from;
 
