@@ -57,9 +57,11 @@ purposes.
     class AStar
     {
     private:
-        Environment& environment; // include map size, obstacle position, agent goal.
+        // inner class.
         class AStarNode;
 
+        // member vars
+        Environment& environment; // include map size, obstacle position, agent goal.
         // 定义openSet_t和fibHeapHandle_t
         using openSet_t = boost::heap::fibonacci_heap<AStarNode>;
         using fibHeapHandle_t = typename openSet_t::handle_type;
@@ -67,6 +69,7 @@ purposes.
         // using fibHeapHandle_t = typename openSet_t::handle_type;
 
     public:
+        // member funcs
         AStar(Environment& input_environment) : environment(input_environment) {}
 
         bool search(const Location& startState, PlanResult<Location, Action, Cost>& solution,
