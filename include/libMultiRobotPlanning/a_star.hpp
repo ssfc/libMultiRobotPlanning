@@ -69,11 +69,11 @@ purposes.
     public:
         AStar(Environment& input_environment) : environment(input_environment) {}
 
-        bool search(const Location& startState,
-                  PlanResult<Location, Action, Cost>& solution, Cost initialCost = 0)
+        bool search(const Location& startState, PlanResult<Location, Action, Cost>& solution,
+                    Cost initialCost = 0)
         {
             solution.locations.clear();
-            solution.locations.push_back(std::make_pair<>(startState, 0));
+            solution.locations.emplace_back(std::make_pair<>(startState, 0));
             solution.actions.clear();
             solution.cost = 0;
 
@@ -100,14 +100,14 @@ purposes.
                     auto iter = came_from.find(current.location);
                     while (iter != came_from.end())
                     {
-                        solution.locations.push_back(
+                        solution.locations.emplace_back(
                           std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                        solution.actions.push_back(std::make_pair<>(
+                        solution.actions.emplace_back(std::make_pair<>(
                           std::get<1>(iter->second), std::get<2>(iter->second)));
                         iter = came_from.find(std::get<0>(iter->second));
                     }
 
-                    solution.locations.push_back(std::make_pair<>(startState, initialCost));
+                    solution.locations.emplace_back(std::make_pair<>(startState, initialCost));
                     std::reverse(solution.locations.begin(), solution.locations.end());
                     std::reverse(solution.actions.begin(), solution.actions.end());
                     solution.cost = current.g_score;

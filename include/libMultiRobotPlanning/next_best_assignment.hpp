@@ -40,7 +40,7 @@ class NextBestAssignment {
     m_cost[std::make_pair<>(agent, task)] = cost;
     if (m_agentsSet.find(agent) == m_agentsSet.end()) {
       m_agentsSet.insert(agent);
-      m_agentsVec.push_back(agent);
+      m_agentsVec.emplace_back(agent);
     }
     // m_tasksSet.insert(task);
   }

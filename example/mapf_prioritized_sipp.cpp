@@ -237,12 +237,12 @@ int main(int argc, char* argv[]) {
       auto lastState = solution.locations[0];
       for (size_t i = 1; i < solution.locations.size(); ++i) {
         if (solution.locations[i].first != lastState.first) {
-          allCollisionIntervals[lastState.first].push_back(
+          allCollisionIntervals[lastState.first].emplace_back(
             sipp_t::interval(lastState.second, solution.locations[i].second - 1));
           lastState = solution.locations[i];
         }
       }
-      allCollisionIntervals[solution.locations.back().first].push_back(
+      allCollisionIntervals[solution.locations.back().first].emplace_back(
             sipp_t::interval(solution.locations.back().second, std::numeric_limits<int>::max()));
       // update statistics
       cost += solution.cost;

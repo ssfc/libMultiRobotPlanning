@@ -480,10 +480,10 @@ int main(int argc, char* argv[]) {
       roadmap[v2].name = v2str;
     }
     auto e1 = boost::add_edge(v1, v2, roadmap);
-    edgeVec.push_back(e1.first);
+    edgeVec.emplace_back(e1.first);
     if (config["roadmap"]["undirected"].as<bool>()) {
       auto e2 = boost::add_edge(v2, v1, roadmap);
-      edgeVec.push_back(e2.first);
+      edgeVec.emplace_back(e2.first);
       roadmap[e1.first].conflictingEdges.insert(e2.first);
       roadmap[e2.first].conflictingEdges.insert(e1.first);
     }
@@ -492,7 +492,7 @@ int main(int argc, char* argv[]) {
   if (config["roadmap"]["allow_wait_actions"].as<bool>()) {
     for (const auto& v : vertexMap) {
       auto e = boost::add_edge(v.second, v.second, roadmap);
-      edgeVec.push_back(e.first);
+      edgeVec.emplace_back(e.first);
     }
   }
 
@@ -515,7 +515,7 @@ int main(int argc, char* argv[]) {
     const auto start = node["start"].as<std::string>();
     const auto goal = node["goal"].as<std::string>();
     startStates.emplace_back(State(0, vertexMap[start]));
-    goalVertices.push_back(vertexMap[goal]);
+    goalVertices.emplace_back(vertexMap[goal]);
   }
 
   Environment mapf(roadmap, goalVertices, disappearAtGoal);

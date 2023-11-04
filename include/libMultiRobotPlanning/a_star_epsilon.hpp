@@ -86,7 +86,7 @@ class AStarEpsilon {
   bool search(const State& startState,
               PlanResult<State, Action, Cost>& solution) {
     solution.locations.clear();
-    solution.locations.push_back(std::make_pair<>(startState, 0));
+    solution.locations.emplace_back(std::make_pair<>(startState, 0));
     solution.actions.clear();
     solution.cost = 0;
 
@@ -197,13 +197,13 @@ class AStarEpsilon {
         solution.actions.clear();
         auto iter = cameFrom.find(current.state);
         while (iter != cameFrom.end()) {
-          solution.locations.push_back(
+          solution.locations.emplace_back(
               std::make_pair<>(iter->first, std::get<3>(iter->second)));
-          solution.actions.push_back(std::make_pair<>(
+          solution.actions.emplace_back(std::make_pair<>(
               std::get<1>(iter->second), std::get<2>(iter->second)));
           iter = cameFrom.find(std::get<0>(iter->second));
         }
-        solution.locations.push_back(std::make_pair<>(startState, 0));
+        solution.locations.emplace_back(std::make_pair<>(startState, 0));
         std::reverse(solution.locations.begin(), solution.locations.end());
         std::reverse(solution.actions.begin(), solution.actions.end());
         solution.cost = current.gScore;

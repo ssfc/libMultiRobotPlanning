@@ -106,27 +106,27 @@ class SIPP {
       Cost waitTime =
           astarsolution.actions[i].second - astarsolution.actions[i].first.time;
       if (waitTime == 0) {
-        solution.locations.push_back(
+        solution.locations.emplace_back(
             std::make_pair<>(astarsolution.locations[i].first.state,
                              astarsolution.locations[i].second));
-        solution.actions.push_back(
+        solution.actions.emplace_back(
             std::make_pair<>(astarsolution.actions[i].first.action,
                              astarsolution.actions[i].second));
       } else {
         // additional wait action before
-        solution.locations.push_back(
+        solution.locations.emplace_back(
             std::make_pair<>(astarsolution.locations[i].first.state,
                              astarsolution.locations[i].second));
-        solution.actions.push_back(std::make_pair<>(waitAction, waitTime));
-        solution.locations.push_back(
+        solution.actions.emplace_back(std::make_pair<>(waitAction, waitTime));
+        solution.locations.emplace_back(
             std::make_pair<>(astarsolution.locations[i].first.state,
                              astarsolution.locations[i].second + waitTime));
-        solution.actions.push_back(
+        solution.actions.emplace_back(
             std::make_pair<>(astarsolution.actions[i].first.action,
                              astarsolution.actions[i].first.time));
       }
     }
-    solution.locations.push_back(
+    solution.locations.emplace_back(
         std::make_pair<>(astarsolution.locations.back().first.state,
                          astarsolution.locations.back().second));
 
@@ -262,7 +262,7 @@ class SIPP {
           // std::cout << start << "," << interval.start << std::endl;
           // assert(start + 1 < interval.start - 1);
           if (start <= interval.start - 1) {
-            m_safeIntervals[location].push_back({start, interval.start - 1});
+            m_safeIntervals[location].emplace_back({start, interval.start - 1});
           }
           // }
           start = interval.end + 1;
@@ -270,7 +270,7 @@ class SIPP {
         }
         if (lastEnd < std::numeric_limits<int>::max()) {
           // assert(start < std::numeric_limits<int>::max());
-          m_safeIntervals[location].push_back(
+          m_safeIntervals[location].emplace_back(
               {start, std::numeric_limits<int>::max()});
         }
       }
