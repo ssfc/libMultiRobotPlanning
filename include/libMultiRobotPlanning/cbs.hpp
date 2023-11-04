@@ -145,8 +145,7 @@ statistical purposes.
                 return m_env.is_solution(s);
             }
 
-            void get_neighbors(const State& s,
-                              std::vector<Neighbor<State, Action, Cost> >& neighbors)
+            void get_neighbors(const State& s, std::vector<Neighbor<State, Action, Cost> >& neighbors)
             {
                 m_env.get_neighbors(s, neighbors);
             }
