@@ -18,7 +18,7 @@ namespace libMultiRobotPlanning
         Location location;
         //! action to get to the neighboring location
         Action action;
-        //! cost to get to the neighboring location
+        //! cost to get to the neighboring location, usually 1
         Cost cost;
 
         Neighbor(const Location& input_location, const Action& input_action, Cost input_cost)
