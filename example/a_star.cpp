@@ -227,7 +227,7 @@ int main(int argc, char* argv[])
     // dim_x的最大值是地图文件中最长的一行的字符数。
     cout << dim_x << " " << y << endl;
 
-    bool success = false;
+    bool is_success = false;
 
     Location test_start(start_x, start_y); // 构造、重载相等、重载输出
     Location test_goal(goal_x, goal_y); // 构造、重载相等、重载输出
@@ -237,11 +237,11 @@ int main(int argc, char* argv[])
 
     if (test_environment.location_valid(test_start))
     {
-        success = test_astar.a_star_search(test_start, solution);
+        is_success = test_astar.a_star_search(test_start, solution);
     }
 
     ofstream out(output_file);
-    if (success)
+    if (is_success)
     {
         cout << "Planning successful! Total cost: " << solution.cost << endl;
         for (size_t i = 0; i < solution.actions.size(); ++i)
