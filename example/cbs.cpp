@@ -385,10 +385,10 @@ public:
         neighbors.clear();
 
         {
-            State n(time_location.time + 1, time_location.x, time_location.y);
-            if (location_valid(n) && transition_valid(time_location, n))
+            State wait_neighbor(time_location.time + 1, time_location.x, time_location.y);
+            if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
             {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Wait, 1));
+                neighbors.emplace_back(Neighbor<State, Action, int>(wait_neighbor, Action::Wait, 1));
             }
         }
 
