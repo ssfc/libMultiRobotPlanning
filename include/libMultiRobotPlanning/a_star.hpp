@@ -57,7 +57,7 @@ purposes.
     class AStar
     {
     private:
-        // inner class.
+        // inner class declaration.
         class AStarNode;
 
         // member vars
@@ -174,6 +174,7 @@ purposes.
         }
     };
 
+    // inner class definition
     template <typename Location, typename Action, typename Cost, typename Environment,
             typename StateHasher>
     class AStar<Location, Action, Cost, Environment, StateHasher>::AStarNode
