@@ -83,14 +83,16 @@ private:
     int num_columns;
     int num_rows;
     unordered_set<Location> obstacles;
+    Location start;
     Location goal;
 
 public:
     Environment(size_t input_num_columns, size_t input_num_rows,
-                unordered_set<Location> input_obstacles, Location input_goal)
+                unordered_set<Location> input_obstacles, Location input_start, Location input_goal)
     : num_columns(input_num_columns),
       num_rows(input_num_rows),
       obstacles(move(input_obstacles)),
+      start(std::move(input_start)),
       goal(std::move(input_goal))  // NOLINT
     {}
 
@@ -231,7 +233,7 @@ int main(int argc, char* argv[])
 
     Location test_start(start_x, start_y); // 构造、重载相等、重载输出
     Location test_goal(goal_x, goal_y); // 构造、重载相等、重载输出
-    Environment test_environment(dim_x, y - 1, obstacles, test_goal);
+    Environment test_environment(dim_x, y - 1, obstacles, test_start, test_goal);
     AStar<Location, Action, int, Environment> test_astar(test_environment); // 模板类实例化
     PlanResult<Location, Action, int> solution;
 
