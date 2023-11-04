@@ -19,9 +19,11 @@ struct State
 {
     State(int time, int x, int y) : time(time), x(x), y(y) {}
 
-    bool operator==(const State& s) const
+    bool operator==(const State& other) const
     {
-        return time == s.time && x == s.x && y == s.y;
+        return time == other.time
+        && x == other.x
+        && y == other.y;
     }
 
     bool equalExceptTime(const State& s) const { return x == s.x && y == s.y; }
