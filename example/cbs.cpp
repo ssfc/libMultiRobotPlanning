@@ -375,7 +375,7 @@ public:
 
         {
             State n(s.time + 1, s.x, s.y);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Wait, 1));
             }
@@ -383,7 +383,7 @@ public:
 
         {
             State n(s.time + 1, s.x - 1, s.y);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Left, 1));
             }
@@ -391,7 +391,7 @@ public:
 
         {
             State n(s.time + 1, s.x + 1, s.y);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Right, 1));
             }
@@ -399,7 +399,7 @@ public:
 
         {
             State n(s.time + 1, s.x, s.y + 1);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Up, 1));
             }
@@ -407,7 +407,7 @@ public:
 
         {
             State n(s.time + 1, s.x, s.y - 1);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Down, 1));
             }
@@ -554,13 +554,12 @@ public:
                con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
     }
 
-    bool transitionValid(const State& s1, const State& s2)
+    bool transition_valid(const State& s1, const State& s2)
     {
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
 
-        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
-               con.end();
+        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
 };
 
