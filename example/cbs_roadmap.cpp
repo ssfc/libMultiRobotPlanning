@@ -22,20 +22,24 @@ typedef boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::directedS>
 typedef roadmapTraits_t::vertex_descriptor vertex_t;
 typedef roadmapTraits_t::edge_descriptor edge_t;
 
-namespace std {
-template <>
-struct hash<edge_t> {
-  size_t operator()(const edge_t& e) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, e.m_source);
-    boost::hash_combine(seed, e.m_target);
-    return seed;
-  }
-};
+namespace std
+{
+    template <>
+    struct hash<edge_t>
+    {
+        size_t operator()(const edge_t& e) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, e.m_source);
+            boost::hash_combine(seed, e.m_target);
+            return seed;
+        }
+    };
 }  // namespace std
 
-struct Vertex {
-  std::string name;
+struct Vertex
+{
+    std::string name;
 };
 
 struct Edge {
