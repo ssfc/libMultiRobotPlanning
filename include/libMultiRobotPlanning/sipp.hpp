@@ -314,7 +314,7 @@ class SIPP {
 
  private:
   SIPPEnvironment m_env;
-  AStar<SIPPState, SIPPAction, Cost, SIPPEnvironment, SIPPStateHasher> m_astar;
+  AStar<SIPPState, SIPPAction, SIPPEnvironment, SIPPStateHasher> m_astar;
 };
 
 }  // namespace libMultiRobotPlanning

@@ -164,7 +164,7 @@ statistical purposes.
         };
 
         Environment& environment;
-        typedef AStar<State, Action, Cost, LowLevelEnvironment> LowLevelSearch_t;
+        typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
     public:
         CBS(Environment& environment) : environment(environment) {}
 

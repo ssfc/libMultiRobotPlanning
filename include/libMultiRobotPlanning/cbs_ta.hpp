@@ -299,7 +299,7 @@ class CBSTA {
 
  private:
   Environment& m_env;
-  typedef AStar<State, Action, Cost, LowLevelEnvironment> LowLevelSearch_t;
+  typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
 };
 
 }  // namespace libMultiRobotPlanning
