@@ -675,7 +675,7 @@ int main(int argc, char* argv[])
         fout << "makespan: " << makespan << endl;
 
         fout << "runtime: " << timer.elapsedSeconds() << endl;
-        cerr << "runtime: " << timer.elapsedSeconds() << endl;
+        cerr << "runtime: " << timer.elapsedSeconds() * 1000 << "ms" << endl;
 
         fout << "highLevelExpanded: " << mapf.highLevelExpanded() << endl;
         cerr << "highLevelExpanded: " << mapf.highLevelExpanded() << endl;
