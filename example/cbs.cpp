@@ -640,7 +640,7 @@ int main(int argc, char* argv[])
     vector<PlanResult<State, Action, int> > solution;
 
     Timer timer;
-    bool success = cbs.search(startStates, solution);
+    bool success = cbs.high_level_search(startStates, solution);
     timer.stop();
 
     if (success)

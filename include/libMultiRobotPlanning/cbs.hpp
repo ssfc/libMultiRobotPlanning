@@ -168,7 +168,7 @@ statistical purposes.
     public:
         CBS(Environment& environment) : environment(environment) {}
 
-        bool search(const std::vector<State>& initialStates,
+        bool high_level_search(const std::vector<State>& initialStates,
                   std::vector<PlanResult<State, Action, Cost> >& solution)
         {
             HighLevelNode start;
