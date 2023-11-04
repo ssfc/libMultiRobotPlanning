@@ -72,11 +72,11 @@ purposes.
         // member funcs
         AStar(Environment& input_environment) : environment(input_environment) {}
 
-        bool a_star_search(const Location& startState, PlanResult<Location, Action, Cost>& solution,
+        bool a_star_search(const Location& start_location, PlanResult<Location, Action, Cost>& solution,
                     Cost initialCost = 0)
         {
             solution.locations.clear();
-            solution.locations.emplace_back(std::make_pair<>(startState, 0));
+            solution.locations.emplace_back(std::make_pair<>(start_location, 0));
             solution.actions.clear();
             solution.cost = 0;
 
@@ -85,8 +85,9 @@ purposes.
             std::unordered_set<Location, LocationHasher> closed_set;
             std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,LocationHasher> came_from;
 
-            auto handle = open_set.push(AStarNode(startState, environment.admissible_heuristic(startState), initialCost));
-            location_to_heap.insert(std::make_pair<>(startState, handle));
+            auto handle = open_set.push(AStarNode(start_location,
+                                  environment.admissible_heuristic(start_location), initialCost));
+            location_to_heap.insert(std::make_pair<>(start_location, handle));
             (*handle).handle = handle;
 
             std::vector<Neighbor<Location, Action, Cost> > neighbors;
@@ -110,7 +111,8 @@ purposes.
                         iter = came_from.find(std::get<0>(iter->second));
                     }
 
-                    solution.locations.emplace_back(std::make_pair<>(startState, initialCost));
+                    solution.locations.emplace_back(std::make_pair<>
+                            (start_location, initialCost));
                     std::reverse(solution.locations.begin(), solution.locations.end());
                     std::reverse(solution.actions.begin(), solution.actions.end());
                     solution.cost = current.g_score;
