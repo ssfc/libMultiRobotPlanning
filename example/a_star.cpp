@@ -11,7 +11,7 @@ using libMultiRobotPlanning::AStar;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
-class Location
+class Location  // 模板类Location实例化
 {
 public:
     int x;
@@ -48,7 +48,7 @@ namespace std
     };
 }
 
-enum class Action
+enum class Action // 模板类Action实例化
 {
     Up,
     Down,
