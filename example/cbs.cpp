@@ -14,7 +14,7 @@ using libMultiRobotPlanning::CBS;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
-// State Custom state for the search
+// Location Custom state for the search
 struct State
 {
     State(int time, int x, int y) : time(time), x(x), y(y) {}
