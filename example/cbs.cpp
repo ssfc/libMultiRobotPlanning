@@ -371,8 +371,9 @@ public:
 
     bool is_solution(const State& s)
     {
-        return s.x == m_goals[m_agentIdx].x && s.y == m_goals[m_agentIdx].y &&
-               s.time > m_lastGoalConstraint;
+        return s.x == m_goals[m_agentIdx].x
+        && s.y == m_goals[m_agentIdx].y
+        && s.time > m_lastGoalConstraint;
     }
 
     void get_neighbors(const State& time_location, vector<Neighbor<State, Action, int> >& neighbors)
@@ -407,7 +408,7 @@ public:
         {
             neighbors.emplace_back(Neighbor<State, Action, int>(north_neighbor, Action::Up, 1));
         }
-        
+
         State south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
