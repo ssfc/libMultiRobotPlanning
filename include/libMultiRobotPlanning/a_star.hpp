@@ -186,7 +186,7 @@ purposes.
         Cost f_score;
         Cost g_score;
 
-        // 定义 handle
+        // 定义 handle: 就是上面那个HeapHandle
         typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
         // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
