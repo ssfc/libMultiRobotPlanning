@@ -77,7 +77,7 @@ ostream& operator<<(ostream& os, const Action& action)
     return os;
 }
 
-class Environment
+class Environment // 模板类Environment实例化
 {
 private:
     int num_columns;
@@ -94,17 +94,20 @@ public:
       goal(std::move(input_goal))  // NOLINT
     {}
 
+    // 估算h_score
     int admissible_heuristic(const Location& current_location)
     {
         return abs(current_location.x - goal.x)
         + abs(current_location.y - goal.y);
     }
 
+    // whether agent reach goal or not.
     bool is_solution(const Location& current_location)
     {
         return current_location == goal;
     }
 
+    // whether location valid or not
     bool location_valid(const Location& location)
     {
         return location.x >= 0 && location.x < num_columns
@@ -112,6 +115,7 @@ public:
         && obstacles.find(location) == obstacles.end();
     }
 
+    // get neighbor of current location
     void get_neighbors(const Location& location, vector<Neighbor<Location, Action, int> >& neighbors)
     {
         neighbors.clear();
