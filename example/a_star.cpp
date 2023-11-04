@@ -127,25 +127,25 @@ public:
             neighbors.emplace_back(Neighbor<Location, Action, int>(north, Action::Up, 1));
         }
 
-        Location down(location.x, location.y - 1);
+        Location south(location.x, location.y - 1);
 
-        if (location_valid(down))
+        if (location_valid(south))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(down, Action::Down, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(south, Action::Down, 1));
         }
 
-        Location left(location.x - 1, location.y);
+        Location west(location.x - 1, location.y);
 
-        if (location_valid(left))
+        if (location_valid(west))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(left, Action::Left, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(west, Action::Left, 1));
         }
 
-        Location right(location.x + 1, location.y);
+        Location east(location.x + 1, location.y);
 
-        if (location_valid(right))
+        if (location_valid(east))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(right, Action::Right, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(east, Action::Right, 1));
         }
     }
 };
