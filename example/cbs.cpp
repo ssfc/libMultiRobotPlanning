@@ -375,7 +375,7 @@ public:
                s.time > m_lastGoalConstraint;
     }
 
-    void get_neighbors(const State& s, vector<Neighbor<State, Action, int> >& neighbors)
+    void get_neighbors(const State& time_location, vector<Neighbor<State, Action, int> >& neighbors)
     {
         // cout << "#VC " << constraints.vertexConstraints.size() << endl;
         // for(const auto& vc : constraints.vertexConstraints) {
@@ -385,40 +385,40 @@ public:
         neighbors.clear();
 
         {
-            State n(s.time + 1, s.x, s.y);
-            if (location_valid(n) && transition_valid(s, n))
+            State n(time_location.time + 1, time_location.x, time_location.y);
+            if (location_valid(n) && transition_valid(time_location, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Wait, 1));
             }
         }
 
         {
-            State n(s.time + 1, s.x - 1, s.y);
-            if (location_valid(n) && transition_valid(s, n))
+            State n(time_location.time + 1, time_location.x - 1, time_location.y);
+            if (location_valid(n) && transition_valid(time_location, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Left, 1));
             }
         }
 
         {
-            State n(s.time + 1, s.x + 1, s.y);
-            if (location_valid(n) && transition_valid(s, n))
+            State n(time_location.time + 1, time_location.x + 1, time_location.y);
+            if (location_valid(n) && transition_valid(time_location, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Right, 1));
             }
         }
 
         {
-            State n(s.time + 1, s.x, s.y + 1);
-            if (location_valid(n) && transition_valid(s, n))
+            State n(time_location.time + 1, time_location.x, time_location.y + 1);
+            if (location_valid(n) && transition_valid(time_location, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Up, 1));
             }
         }
 
         {
-            State n(s.time + 1, s.x, s.y - 1);
-            if (location_valid(n) && transition_valid(s, n))
+            State n(time_location.time + 1, time_location.x, time_location.y - 1);
+            if (location_valid(n) && transition_valid(time_location, n))
             {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Down, 1));
             }
