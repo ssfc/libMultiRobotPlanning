@@ -121,15 +121,15 @@ public:
     int y2;
 
 public:
-    friend ostream& operator<<(ostream& os, const Conflict& c)
+    friend ostream& operator<<(ostream& os, const Conflict& conflict)
     {
-        switch (c.type)
+        switch (conflict.type)
         {
           case Vertex:
-            return os << c.time << ": Vertex(" << c.x1 << "," << c.y1 << ")";
+            return os << conflict.time << ": Vertex(" << conflict.x1 << "," << conflict.y1 << ")";
           case Edge:
-            return os << c.time << ": Edge(" << c.x1 << "," << c.y1 << "," << c.x2
-                      << "," << c.y2 << ")";
+            return os << conflict.time << ": Edge(" << conflict.x1 << "," << conflict.y1 << ","
+            << conflict.x2 << "," << conflict.y2 << ")";
         }
 
         return os;
