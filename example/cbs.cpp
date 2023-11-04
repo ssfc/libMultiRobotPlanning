@@ -393,34 +393,34 @@ public:
         }
 
         {
-            State n(time_location.time + 1, time_location.x - 1, time_location.y);
-            if (location_valid(n) && transition_valid(time_location, n))
+            State west_neighbor(time_location.time + 1, time_location.x - 1, time_location.y);
+            if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
             {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Left, 1));
+                neighbors.emplace_back(Neighbor<State, Action, int>(west_neighbor, Action::Left, 1));
             }
         }
 
         {
-            State n(time_location.time + 1, time_location.x + 1, time_location.y);
-            if (location_valid(n) && transition_valid(time_location, n))
+            State east_neighbor(time_location.time + 1, time_location.x + 1, time_location.y);
+            if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
             {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Right, 1));
+                neighbors.emplace_back(Neighbor<State, Action, int>(east_neighbor, Action::Right, 1));
             }
         }
 
         {
-            State n(time_location.time + 1, time_location.x, time_location.y + 1);
-            if (location_valid(n) && transition_valid(time_location, n))
+            State north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
+            if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
             {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Up, 1));
+                neighbors.emplace_back(Neighbor<State, Action, int>(north_neighbor, Action::Up, 1));
             }
         }
 
         {
-            State n(time_location.time + 1, time_location.x, time_location.y - 1);
-            if (location_valid(n) && transition_valid(time_location, n))
+            State south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);
+            if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
             {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Down, 1));
+                neighbors.emplace_back(Neighbor<State, Action, int>(south_neighbor, Action::Down, 1));
             }
         }
     }
