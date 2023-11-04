@@ -120,32 +120,32 @@ public:
     {
         neighbors.clear();
 
-        Location north(location.x, location.y + 1);
+        Location north_neighbor(location.x, location.y + 1);
 
-        if (location_valid(north))
+        if (location_valid(north_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(north, Action::Up, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(north_neighbor, Action::Up, 1));
         }
 
-        Location south(location.x, location.y - 1);
+        Location south_neighbor(location.x, location.y - 1);
 
-        if (location_valid(south))
+        if (location_valid(south_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(south, Action::Down, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(south_neighbor, Action::Down, 1));
         }
 
-        Location west(location.x - 1, location.y);
+        Location west_neighbor(location.x - 1, location.y);
 
-        if (location_valid(west))
+        if (location_valid(west_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(west, Action::Left, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(west_neighbor, Action::Left, 1));
         }
 
-        Location east(location.x + 1, location.y);
+        Location east_neighbor(location.x + 1, location.y);
 
-        if (location_valid(east))
+        if (location_valid(east_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(east, Action::Right, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(east_neighbor, Action::Right, 1));
         }
     }
 };
