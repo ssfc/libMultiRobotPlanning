@@ -120,11 +120,11 @@ public:
     {
         neighbors.clear();
 
-        Location up(location.x, location.y + 1);
+        Location north(location.x, location.y + 1);
 
-        if (location_valid(up))
+        if (location_valid(north))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(up, Action::Up, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(north, Action::Up, 1));
         }
 
         Location down(location.x, location.y - 1);
