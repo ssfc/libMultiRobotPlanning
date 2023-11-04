@@ -187,7 +187,7 @@ statistical purposes.
                 // } else {
                 LowLevelEnvironment llenv(m_env, i, start.constraints[i]);
                 LowLevelSearch_t lowLevel(llenv);
-                bool success = lowLevel.search(initialStates[i], start.solution[i]);
+                bool success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
 
                 if (!success)
                 {
@@ -246,7 +246,7 @@ statistical purposes.
 
                     LowLevelEnvironment llenv(m_env, i, newNode.constraints[i]);
                     LowLevelSearch_t lowLevel(llenv);
-                    bool success = lowLevel.search(initialStates[i], newNode.solution[i]);
+                    bool success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
 
                     newNode.cost += newNode.solution[i].cost;
 

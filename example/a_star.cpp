@@ -233,7 +233,7 @@ int main(int argc, char* argv[])
 
     if (test_environment.location_valid(test_start))
     {
-        success = test_astar.search(test_start, solution);
+        success = test_astar.a_star_search(test_start, solution);
     }
 
     ofstream out(output_file);

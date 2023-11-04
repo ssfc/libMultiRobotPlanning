@@ -72,7 +72,7 @@ purposes.
         // member funcs
         AStar(Environment& input_environment) : environment(input_environment) {}
 
-        bool search(const Location& startState, PlanResult<Location, Action, Cost>& solution,
+        bool a_star_search(const Location& startState, PlanResult<Location, Action, Cost>& solution,
                     Cost initialCost = 0)
         {
             solution.locations.clear();

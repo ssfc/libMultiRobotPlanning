@@ -99,7 +99,7 @@ class SIPP {
     if (!m_env.findSafeInterval(startState, startTime, interval)) {
       return false;
     }
-    bool success = m_astar.search(SIPPState(startState, interval), astarsolution, startTime);
+    bool success = m_astar.a_star_search(SIPPState(startState, interval), astarsolution, startTime);
     solution.cost = astarsolution.cost - startTime;
     solution.fmin = astarsolution.fmin;
     for (size_t i = 0; i < astarsolution.actions.size(); ++i) {

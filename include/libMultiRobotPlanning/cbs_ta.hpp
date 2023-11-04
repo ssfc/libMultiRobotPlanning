@@ -106,7 +106,7 @@ class CBSTA {
         LowLevelEnvironment llenv(m_env, i, start.constraints[i],
                                   start.task(i));
         LowLevelSearch_t lowLevel(llenv);
-        success = lowLevel.search(initialStates[i], start.solution[i]);
+        success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
       }
       if (!success) {
         return false;
@@ -155,7 +155,7 @@ class CBSTA {
           for (size_t i = 0; i < numAgents; ++i) {
             LowLevelEnvironment llenv(m_env, i, n.constraints[i], n.task(i));
             LowLevelSearch_t lowLevel(llenv);
-            bool success = lowLevel.search(initialStates[i], n.solution[i]);
+            bool success = lowLevel.a_star_search(initialStates[i], n.solution[i]);
             if (!success) {
               allSuccessful = false;
               break;
@@ -196,7 +196,7 @@ class CBSTA {
         LowLevelEnvironment llenv(m_env, i, newNode.constraints[i],
                                   newNode.task(i));
         LowLevelSearch_t lowLevel(llenv);
-        bool success = lowLevel.search(initialStates[i], newNode.solution[i]);
+        bool success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
 
         newNode.cost += newNode.solution[i].cost;
 
