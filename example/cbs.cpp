@@ -23,7 +23,9 @@ public:
     int y;
 
 public:
-    State(int time, int x, int y) : time(time), x(x), y(y) {}
+    State(int time, int x, int y) :
+    time(time), x(x), y(y)
+    {}
 
     bool operator==(const State& other) const
     {
@@ -99,8 +101,9 @@ ostream& operator<<(ostream& os, const Action& this_action)
 
 // Conflict Custom conflict description.
 // A conflict needs to be able to be transformed into a constraint.
-struct Conflict
+class Conflict
 {
+public:
     enum Type
     {
         Vertex,
@@ -117,6 +120,7 @@ struct Conflict
     int x2;
     int y2;
 
+public:
     friend ostream& operator<<(ostream& os, const Conflict& c)
     {
         switch (c.type)
