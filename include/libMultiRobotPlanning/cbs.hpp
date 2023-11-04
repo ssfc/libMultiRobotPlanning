@@ -121,52 +121,52 @@ statistical purposes.
         class LowLevelEnvironment
         {
         private:
-            Environment& m_env;
+            Environment& environment;
             // size_t m_agentIdx;
             // const Constraints& m_constraints;
 
         public:
             LowLevelEnvironment(Environment& env, size_t agentIdx,
                                 const Constraints& constraints)
-                    : m_env(env)
+                    : environment(env)
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
             {
-                m_env.setLowLevelContext(agentIdx, &constraints);
+                environment.setLowLevelContext(agentIdx, &constraints);
             }
 
             Cost admissible_heuristic(const State& s)
             {
-                return m_env.admissible_heuristic(s);
+                return environment.admissible_heuristic(s);
             }
 
             bool is_solution(const State& s)
             {
-                return m_env.is_solution(s);
+                return environment.is_solution(s);
             }
 
             void get_neighbors(const State& s, std::vector<Neighbor<State, Action, Cost> >& neighbors)
             {
-                m_env.get_neighbors(s, neighbors);
+                environment.get_neighbors(s, neighbors);
             }
 
             void onExpandNode(const State& s, Cost fScore, Cost gScore)
             {
                 // std::cout << "LL expand: " << s << std::endl;
-                m_env.onExpandLowLevelNode(s, fScore, gScore);
+                environment.onExpandLowLevelNode(s, fScore, gScore);
             }
 
             void onDiscover(const State& /*s*/, Cost /*fScore*/, Cost /*gScore*/)
             {
                 // std::cout << "LL discover: " << s << std::endl;
-                // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
+                // environment.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
             }
         };
 
-        Environment& m_env;
+        Environment& environment;
         typedef AStar<State, Action, Cost, LowLevelEnvironment> LowLevelSearch_t;
     public:
-        CBS(Environment& environment) : m_env(environment) {}
+        CBS(Environment& environment) : environment(environment) {}
 
         bool search(const std::vector<State>& initialStates,
                   std::vector<PlanResult<State, Action, Cost> >& solution)
@@ -184,7 +184,7 @@ statistical purposes.
                 //   start.solution[i] = solution[i];
                 //   std::cout << "use existing solution for agent: " << i << std::endl;
                 // } else {
-                LowLevelEnvironment llenv(m_env, i, start.constraints[i]);
+                LowLevelEnvironment llenv(environment, i, start.constraints[i]);
                 LowLevelSearch_t lowLevel(llenv);
                 bool success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
 
@@ -207,13 +207,13 @@ statistical purposes.
             while (!open.empty())
             {
                 HighLevelNode P = open.top();
-                m_env.onExpandHighLevelNode(P.cost);
+                environment.onExpandHighLevelNode(P.cost);
                 // std::cout << "expand: " << P << std::endl;
 
                 open.pop();
 
                 Conflict conflict;
-                if (!m_env.getFirstConflict(P.solution, conflict))
+                if (!environment.getFirstConflict(P.solution, conflict))
                 {
                     std::cout << "done; cost: " << P.cost << std::endl;
                     solution = P.solution;
@@ -226,7 +226,7 @@ statistical purposes.
                 // conflict.type << std::endl;
 
                 std::map<size_t, Constraints> constraints;
-                m_env.createConstraintsFromConflict(conflict, constraints);
+                environment.createConstraintsFromConflict(conflict, constraints);
                 for (const auto& c : constraints)
                 {
                     // std::cout << "Add HL node for " << c.first << std::endl;
@@ -243,7 +243,7 @@ statistical purposes.
 
                     newNode.cost -= newNode.solution[i].cost;
 
-                    LowLevelEnvironment llenv(m_env, i, newNode.constraints[i]);
+                    LowLevelEnvironment llenv(environment, i, newNode.constraints[i]);
                     LowLevelSearch_t lowLevel(llenv);
                     bool success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
 
