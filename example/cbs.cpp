@@ -15,12 +15,14 @@ using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
 // Location Custom state for the search
-struct State
+class State
 {
+public:
     int time;
     int x;
     int y;
-    
+
+public:
     State(int time, int x, int y) : time(time), x(x), y(y) {}
 
     bool operator==(const State& other) const
@@ -40,7 +42,6 @@ struct State
     {
         return os << s.time << ": (" << s.x << "," << s.y << ")";
       // return os << "(" << s.x << "," << s.y << ")";
-
     }
 };
 
