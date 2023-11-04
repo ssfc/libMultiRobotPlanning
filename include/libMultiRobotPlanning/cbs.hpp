@@ -33,7 +33,7 @@ The underlying A* can either use a fibonacci heap, or a d-ary heap.
 The latter is the default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap
 instead.
 
-\tparam State Custom state for the search. Needs to be copy'able
+\tparam Location Custom state for the search. Needs to be copy'able
 \tparam Action Custom action for the search. Needs to be copy'able
 \tparam Cost Custom Cost type (integer or floating point types)
 \tparam Conflict Custom conflict description. A conflict needs to be able to be
@@ -46,18 +46,18 @@ it needs to support the following functions:
     Set the current context to a particular agent with the given set of
 constraints
 
-  - `Cost admissible_heuristic(const State& s)`\n
+  - `Cost admissible_heuristic(const Location& s)`\n
     Admissible heuristic. Needs to take current context into account.
 
-  - `bool is_solution(const State& s)`\n
+  - `bool is_solution(const Location& s)`\n
     Return true if the given state is a goal state for the current agent.
 
-  - `void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int>
+  - `void get_neighbors(const Location& s, std::vector<Neighbor<Location, Action, int>
 >& neighbors)`\n
     Fill the list of neighboring state for the given state s and the current
 agent.
 
-  - `bool getFirstConflict(const std::vector<PlanResult<State, Action, int> >&
+  - `bool getFirstConflict(const std::vector<PlanResult<Location, Action, int> >&
 solution, Conflict& result)`\n
     Finds the first conflict for the given solution for each agent. Return true
 if a conflict was found and false otherwise.
@@ -70,7 +70,7 @@ std::map<size_t, Constraints>& constraints)`\n
     This function is called on every high-level expansion and can be used for
 statistical purposes.
 
-  - `void onExpandLowLevelNode(const State& s, Cost fScore, Cost gScore)`\n
+  - `void onExpandLowLevelNode(const Location& s, Cost fScore, Cost gScore)`\n
     This function is called on every low-level expansion and can be used for
 statistical purposes.
 */
