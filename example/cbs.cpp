@@ -421,7 +421,7 @@ public:
         int max_t = 0;
         for (const auto& sol : solution)
         {
-            max_t = max<int>(max_t, sol.locations.size() - 1);
+            max_t = max<int>(max_t, sol.path.size() - 1);
         }
 
         for (int t = 0; t <= max_t; ++t)
@@ -528,12 +528,12 @@ public:
     {
         assert(agentIdx < solution.size());
 
-        if (t < solution[agentIdx].locations.size())
+        if (t < solution[agentIdx].path.size())
         {
-          return solution[agentIdx].locations[t].first;
+          return solution[agentIdx].path[t].first;
         }
 
-        assert(!solution[agentIdx].locations.empty());
+        assert(!solution[agentIdx].path.empty());
 
         if (m_disappearAtGoal)
         {
@@ -543,7 +543,7 @@ public:
           return State(-1, -1 * (agentIdx + 1), -1);
         }
 
-        return solution[agentIdx].locations.back().first;
+        return solution[agentIdx].path.back().first;
     }
 
     bool location_valid(const State& s)
@@ -679,15 +679,15 @@ int main(int argc, char* argv[])
         {
             // cout << "Solution for: " << a << endl;
             // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-            //   cout << solution[a].locations[i].second << ": " <<
-            //   solution[a].locations[i].first << "->" << solution[a].actions[i].first
+            //   cout << solution[a].path[i].second << ": " <<
+            //   solution[a].path[i].first << "->" << solution[a].actions[i].first
             //   << "(cost: " << solution[a].actions[i].second << ")" << endl;
             // }
-            // cout << solution[a].locations.back().second << ": " <<
-            // solution[a].locations.back().first << endl;
+            // cout << solution[a].path.back().second << ": " <<
+            // solution[a].path.back().first << endl;
 
             fout << "  agent" << a << ":" << endl;
-            for (const auto& state : solution[a].locations)
+            for (const auto& state : solution[a].path)
             {
                 fout << "    - x: " << state.first.x << endl
                     << "      y: " << state.first.y << endl
@@ -695,7 +695,7 @@ int main(int argc, char* argv[])
             }
 
             cerr << "agent " << a << ": ";
-            for (const auto& state : solution[a].locations)
+            for (const auto& state : solution[a].path)
             {
                 cerr << "(" << state.first.x << "," << state.first.y << "),";
             }

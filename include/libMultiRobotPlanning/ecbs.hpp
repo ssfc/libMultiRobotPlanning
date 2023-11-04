@@ -116,10 +116,10 @@ class ECBS {
     start.id = 0;
 
     for (size_t i = 0; i < initialStates.size(); ++i) {
-      if (i < solution.size() && solution[i].locations.size() > 1) {
-        std::cout << initialStates[i] << " " << solution[i].locations.front().first
+      if (i < solution.size() && solution[i].path.size() > 1) {
+        std::cout << initialStates[i] << " " << solution[i].path.front().first
                   << std::endl;
-        assert(initialStates[i] == solution[i].locations.front().first);
+        assert(initialStates[i] == solution[i].path.front().first);
         start.solution[i] = solution[i];
         std::cout << "use existing solution for agent: " << i << std::endl;
       } else {
@@ -330,8 +330,8 @@ class ECBS {
       for (size_t i = 0; i < c.solution.size(); ++i) {
         os << "Agent: " << i << std::endl;
         os << " States:" << std::endl;
-        for (size_t t = 0; t < c.solution[i].locations.size(); ++t) {
-          os << "  " << c.solution[i].locations[t].first << std::endl;
+        for (size_t t = 0; t < c.solution[i].path.size(); ++t) {
+          os << "  " << c.solution[i].path[t].first << std::endl;
         }
         os << " Constraints:" << std::endl;
         os << c.constraints[i];

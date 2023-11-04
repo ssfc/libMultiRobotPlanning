@@ -104,9 +104,9 @@ statistical purposes.
                     os << "Agent: " << i << std::endl;
                     os << " States:" << std::endl;
 
-                    for (size_t t = 0; t < c.solution[i].locations.size(); ++t)
+                    for (size_t t = 0; t < c.solution[i].path.size(); ++t)
                     {
-                        os << "  " << c.solution[i].locations[t].first << std::endl;
+                        os << "  " << c.solution[i].path[t].first << std::endl;
                     }
 
                     os << " Constraints:" << std::endl;
@@ -180,7 +180,7 @@ statistical purposes.
             for (size_t i = 0; i < initialStates.size(); ++i)
             {
                 // if (   i < solution.size()
-                //     && solution[i].locations.size() > 1) {
+                //     && solution[i].path.size() > 1) {
                 //   start.solution[i] = solution[i];
                 //   std::cout << "use existing solution for agent: " << i << std::endl;
                 // } else {

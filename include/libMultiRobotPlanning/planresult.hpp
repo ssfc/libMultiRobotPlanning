@@ -20,7 +20,7 @@ namespace libMultiRobotPlanning
     struct PlanResult
     {
         // path constructing locations and their g_score
-        std::vector<std::pair<State, Cost> > locations;
+        std::vector<std::pair<State, Cost> > path;
         //! actions and their cost
         std::vector<std::pair<Action, Cost> > actions;
         //! actual cost of the result

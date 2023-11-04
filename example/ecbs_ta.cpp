@@ -316,7 +316,7 @@ class Environment {
       const std::vector<PlanResult<State, Action, int> >& solution) {
     int numConflicts = 0;
     for (size_t i = 0; i < solution.size(); ++i) {
-      if (i != m_agentIdx && solution[i].locations.size() > 0) {
+      if (i != m_agentIdx && solution[i].path.size() > 0) {
         State state2 = getState(i, solution, s.time);
         if (s.equalExceptTime(state2)) {
           ++numConflicts;
@@ -332,7 +332,7 @@ class Environment {
       const std::vector<PlanResult<State, Action, int> >& solution) {
     int numConflicts = 0;
     for (size_t i = 0; i < solution.size(); ++i) {
-      if (i != m_agentIdx && solution[i].locations.size() > 0) {
+      if (i != m_agentIdx && solution[i].path.size() > 0) {
         State s2a = getState(i, solution, s1a.time);
         State s2b = getState(i, solution, s1b.time);
         if (s1a.equalExceptTime(s2b) && s1b.equalExceptTime(s2a)) {
@@ -350,7 +350,7 @@ class Environment {
 
     int max_t = 0;
     for (size_t i = 0; i < solution.size(); ++i) {
-      max_t = std::max<int>(max_t, solution[i].locations.size() - 1);
+      max_t = std::max<int>(max_t, solution[i].path.size() - 1);
     }
 
     for (int t = 0; t < max_t; ++t) {
@@ -442,7 +442,7 @@ class Environment {
       Conflict& result) {
     int max_t = 0;
     for (const auto& sol : solution) {
-      max_t = std::max<int>(max_t, sol.locations.size());
+      max_t = std::max<int>(max_t, sol.path.size());
     }
 
     for (int t = 0; t < max_t; ++t) {
@@ -544,11 +544,11 @@ class Environment {
                  const std::vector<PlanResult<State, Action, int> >& solution,
                  size_t t) {
     assert(agentIdx < solution.size());
-    if (t < solution[agentIdx].locations.size()) {
-      return solution[agentIdx].locations[t].first;
+    if (t < solution[agentIdx].path.size()) {
+      return solution[agentIdx].path[t].first;
     }
-    assert(!solution[agentIdx].locations.empty());
-    return solution[agentIdx].locations.back().first;
+    assert(!solution[agentIdx].path.empty());
+    return solution[agentIdx].path.back().first;
   }
 
   bool location_valid(const State& s) {
@@ -683,15 +683,15 @@ int main(int argc, char* argv[]) {
     for (size_t a = 0; a < solution.size(); ++a) {
       // std::cout << "Solution for: " << a << std::endl;
       // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-      //   std::cout << solution[a].locations[i].second << ": " <<
-      //   solution[a].locations[i].first << "->" << solution[a].actions[i].first
+      //   std::cout << solution[a].path[i].second << ": " <<
+      //   solution[a].path[i].first << "->" << solution[a].actions[i].first
       //   << "(cost: " << solution[a].actions[i].second << ")" << std::endl;
       // }
-      // std::cout << solution[a].locations.back().second << ": " <<
-      // solution[a].locations.back().first << std::endl;
+      // std::cout << solution[a].path.back().second << ": " <<
+      // solution[a].path.back().first << std::endl;
 
       out << "  agent" << a << ":" << std::endl;
-      for (const auto& state : solution[a].locations) {
+      for (const auto& state : solution[a].path) {
         out << "    - x: " << state.first.x << std::endl
             << "      y: " << state.first.y << std::endl
             << "      t: " << state.second << std::endl;

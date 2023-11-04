@@ -85,8 +85,8 @@ class AStarEpsilon {
 
   bool search(const State& startState,
               PlanResult<State, Action, Cost>& solution) {
-    solution.locations.clear();
-    solution.locations.emplace_back(std::make_pair<>(startState, 0));
+    solution.path.clear();
+    solution.path.emplace_back(std::make_pair<>(startState, 0));
     solution.actions.clear();
     solution.cost = 0;
 
@@ -193,18 +193,18 @@ class AStarEpsilon {
       m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
       if (m_env.is_solution(current.state)) {
-        solution.locations.clear();
+        solution.path.clear();
         solution.actions.clear();
         auto iter = cameFrom.find(current.state);
         while (iter != cameFrom.end()) {
-          solution.locations.emplace_back(
+          solution.path.emplace_back(
               std::make_pair<>(iter->first, std::get<3>(iter->second)));
           solution.actions.emplace_back(std::make_pair<>(
               std::get<1>(iter->second), std::get<2>(iter->second)));
           iter = cameFrom.find(std::get<0>(iter->second));
         }
-        solution.locations.emplace_back(std::make_pair<>(startState, 0));
-        std::reverse(solution.locations.begin(), solution.locations.end());
+        solution.path.emplace_back(std::make_pair<>(startState, 0));
+        std::reverse(solution.path.begin(), solution.path.end());
         std::reverse(solution.actions.begin(), solution.actions.end());
         solution.cost = current.gScore;
         solution.fmin = openSet.top().fScore;
