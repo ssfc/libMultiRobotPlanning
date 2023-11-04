@@ -262,7 +262,7 @@ class SIPP {
           // std::cout << start << "," << interval.start << std::endl;
           // assert(start + 1 < interval.start - 1);
           if (start <= interval.start - 1) {
-            m_safeIntervals[location].emplace_back({start, interval.start - 1});
+            m_safeIntervals[location].push_back({start, interval.start - 1});
           }
           // }
           start = interval.end + 1;
@@ -270,7 +270,7 @@ class SIPP {
         }
         if (lastEnd < std::numeric_limits<int>::max()) {
           // assert(start < std::numeric_limits<int>::max());
-          m_safeIntervals[location].emplace_back(
+          m_safeIntervals[location].push_back(
               {start, std::numeric_limits<int>::max()});
         }
       }

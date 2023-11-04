@@ -58,12 +58,12 @@ purposes.
     {
     private:
         Environment& environment; // include map size, obstacle position, agent goal.
-        class Node;
+        class AStarNode;
 
         // 定义openSet_t和fibHeapHandle_t
-        using openSet_t = boost::heap::fibonacci_heap<Node>;
+        using openSet_t = boost::heap::fibonacci_heap<AStarNode>;
         using fibHeapHandle_t = typename openSet_t::handle_type;
-        // using openSet_t = boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+        // using openSet_t = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
         // using fibHeapHandle_t = typename openSet_t::handle_type;
 
     public:
@@ -82,7 +82,7 @@ purposes.
             std::unordered_set<Location, LocationHasher> closed_set;
             std::unordered_map<Location, std::tuple<Location,Action,Cost,Cost>,LocationHasher> came_from;
 
-            auto handle = open_set.push(Node(startState, environment.admissible_heuristic(startState), initialCost));
+            auto handle = open_set.push(AStarNode(startState, environment.admissible_heuristic(startState), initialCost));
             location_to_heap.insert(std::make_pair<>(startState, handle));
             (*handle).handle = handle;
 
@@ -91,7 +91,7 @@ purposes.
 
             while (!open_set.empty())
             {
-                Node current = open_set.top();
+                AStarNode current = open_set.top();
 
                 if (environment.is_solution(current.location))
                 {
@@ -132,7 +132,7 @@ purposes.
                         if (iter == location_to_heap.end())
                         {  // Discover a new node
                             Cost f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
-                            auto handle = open_set.push(Node(neighbor.location, f_score, tentative_gScore));
+                            auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
                             (*handle).handle = handle;
                             location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
                             // std::cout << "  this is a new node " << f_score << "," <<
@@ -173,7 +173,7 @@ purposes.
 
     template <typename Location, typename Action, typename Cost, typename Environment,
             typename StateHasher>
-    class AStar<Location, Action, Cost, Environment, StateHasher>::Node
+    class AStar<Location, Action, Cost, Environment, StateHasher>::AStarNode
     {
     public:
         Location location;
@@ -181,17 +181,17 @@ purposes.
         Cost g_score;
 
         // 定义 handle
-        typename boost::heap::fibonacci_heap<Node>::handle_type handle;
-        // typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+        typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
+        // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
     public:
-        Node(const Location& input_state, Cost input_fScore, Cost input_gScore)
+        AStarNode(const Location& input_state, Cost input_fScore, Cost input_gScore)
                 : location(input_state),
                   f_score(input_fScore),
                   g_score(input_gScore)
         {}
 
-        bool operator<(const Node& other) const
+        bool operator<(const AStarNode& other) const
         {
             // Sort order
             // 1. lowest f_score
@@ -208,7 +208,7 @@ purposes.
             }
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const Node& node)
+        friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
         {
             os << "location: " << node.location << " f_score: " << node.f_score
                << " g_score: " << node.g_score;
