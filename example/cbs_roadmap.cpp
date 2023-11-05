@@ -85,7 +85,7 @@ namespace std
             size_t seed = 0;
             boost::hash_combine(seed, s.time);
             boost::hash_combine(seed, s.vertex);
-            
+
             return seed;
         }
     };
@@ -94,30 +94,35 @@ namespace std
 ///
 typedef edge_t Action; // index to the specified edge
 
-struct Conflict {
-  enum Type {
-    Vertex,
-    Edge,
-  };
+struct Conflict
+{
+    enum Type
+    {
+        Vertex,
+        Edge,
+    };
 
-  int time;
-  size_t agent1;
-  size_t agent2;
-  Type type;
+    int time;
+    size_t agent1;
+    size_t agent2;
+    Type type;
 
-  vertex_t vertex; // for Type == Vertex
-  edge_t edge1;
-  edge_t edge2;
+    vertex_t vertex; // for Type == Vertex
+    edge_t edge1;
+    edge_t edge2;
 
-  friend std::ostream& operator<<(std::ostream& os, const Conflict& c) {
-    switch (c.type) {
-      case Vertex:
-        return os << c.time << ": Vertex(" << c.vertex << ")";
-      case Edge:
-        return os << c.time << ": Edge(" << c.edge1 << "," << c.edge2 << ")";
+    friend std::ostream& operator<<(std::ostream& os, const Conflict& c)
+    {
+        switch (c.type)
+        {
+        case Vertex:
+            return os << c.time << ": Vertex(" << c.vertex << ")";
+        case Edge:
+            return os << c.time << ": Edge(" << c.edge1 << "," << c.edge2 << ")";
+        }
+
+        return os;
     }
-    return os;
-  }
 };
 
 struct VertexConstraint {
