@@ -24,6 +24,11 @@ public:
         return std::tie(x, y) == std::tie(other.x, other.y);
     }
 
+    bool operator<(const Location& other) const
+    {
+        return tie(x, y) < tie(other.x, other.y);
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const Location& location)
     {
         return os << "(" << location.x << "," << location.y << ")";
