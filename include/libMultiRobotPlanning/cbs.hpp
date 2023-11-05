@@ -155,7 +155,7 @@ statistical purposes.
                 // std::cout << "LL expand: " << s << std::endl;
                 environment.onExpandLowLevelNode(s, fScore, gScore);
             }
-            
+
         };
 
         Environment& environment;
