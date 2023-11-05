@@ -523,7 +523,7 @@ int main(int argc, char* argv[]) {
   }
 
   Environment mapf(roadmap, goalVertices, disappearAtGoal);
-  CBS<State, Action, int, Conflict, Constraints, Environment> cbs(mapf);
+  CBS<State, Action, Conflict, Constraints, Environment> cbs(mapf);
   std::vector<PlanResult<State, Action, int> > solution;
 
   Timer timer;

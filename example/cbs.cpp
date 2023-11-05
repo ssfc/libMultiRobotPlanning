@@ -641,7 +641,7 @@ int main(int argc, char* argv[])
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
-    CBS<State, Action, int, Conflict, Constraints, Environment> cbs(mapf);
+    CBS<State, Action, Conflict, Constraints, Environment> cbs(mapf);
     vector<PlanResult<State, Action, int> > solution;
 
     Timer timer;

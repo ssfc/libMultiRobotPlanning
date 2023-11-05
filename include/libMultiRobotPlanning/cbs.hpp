@@ -74,16 +74,16 @@ statistical purposes.
     This function is called on every low-level expansion and can be used for
 statistical purposes.
 */
-    template <typename State, typename Action, typename Cost, typename Conflict,
+    template <typename State, typename Action, typename Conflict,
               typename Constraints, typename Environment>
     class CBS
     {
     private:
         struct HighLevelNode
         {
-            std::vector<PlanResult<State, Action, Cost> > solution;
+            std::vector<PlanResult<State, Action, int> > solution;
             std::vector<Constraints> constraints;
-            Cost cost;
+            int cost;
             int id;
             typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
             boost::heap::mutable_<true> >::handle_type handle;
@@ -135,7 +135,7 @@ statistical purposes.
                 environment.setLowLevelContext(agentIdx, &constraints);
             }
 
-            Cost admissible_heuristic(const State& s)
+            int admissible_heuristic(const State& s)
             {
                 return environment.admissible_heuristic(s);
             }
@@ -145,18 +145,18 @@ statistical purposes.
                 return environment.is_solution(s);
             }
 
-            void get_neighbors(const State& s, std::vector<Neighbor<State, Action, Cost> >& neighbors)
+            void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
             {
                 environment.get_neighbors(s, neighbors);
             }
 
-            void onExpandNode(const State& s, Cost fScore, Cost gScore)
+            void onExpandNode(const State& s, int fScore, int gScore)
             {
                 // std::cout << "LL expand: " << s << std::endl;
                 environment.onExpandLowLevelNode(s, fScore, gScore);
             }
 
-            void onDiscover(const State& /*s*/, Cost /*fScore*/, Cost /*gScore*/)
+            void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/)
             {
                 // std::cout << "LL discover: " << s << std::endl;
                 // environment.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
@@ -169,7 +169,7 @@ statistical purposes.
         CBS(Environment& environment) : environment(environment) {}
 
         bool high_level_search(const std::vector<State>& initialStates,
-                  std::vector<PlanResult<State, Action, Cost> >& solution)
+                  std::vector<PlanResult<State, Action, int> >& solution)
         {
             HighLevelNode start;
             start.solution.resize(initialStates.size());
