@@ -78,8 +78,9 @@ template <typename State, typename Action, typename Conflict,
 class CBS
 {
 private:
-    struct HighLevelNode
+    class HighLevelNode
     {
+    public:
         std::vector<PlanResult<State, Action, int> > solution;
         std::vector<Constraints> constraints;
         int cost;
@@ -87,6 +88,7 @@ private:
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
         boost::heap::mutable_<true> >::handle_type handle;
 
+    public:
         bool operator<(const HighLevelNode& n) const
         {
             // if (cost != n.cost)
