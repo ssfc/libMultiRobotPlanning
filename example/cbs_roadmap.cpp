@@ -47,11 +47,13 @@ struct Edge
 
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex, Edge> roadmap_t;
 
-struct State
+class State
 {
+public:
     int time;
     vertex_t vertex;
 
+public:
     State(int time, vertex_t vertex)
     : time(time), vertex(vertex)
     {}
