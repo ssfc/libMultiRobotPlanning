@@ -492,44 +492,49 @@ private:
     {
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
-        
+
         return con.find(EdgeConstraint(time, edge)) == con.end();
     }
 };
 
-int main(int argc, char* argv[]) {
-  namespace po = boost::program_options;
-  // Declare the supported options.
-  po::options_description desc("Allowed options");
-  std::string inputFile;
-  std::string outputFile;
-  bool disappearAtGoal;
-  desc.add_options()("help", "produce help message")(
-      "input,i", po::value<std::string>(&inputFile)->required(),
-      "input file (YAML)")("output,o",
-                           po::value<std::string>(&outputFile)->required(),
-                           "output file (YAML)")(
-      "disappear-at-goal", po::bool_switch(&disappearAtGoal), "make agents to disappear at goal rather than staying there");
+int main(int argc, char* argv[])
+{
+    namespace po = boost::program_options;
+    // Declare the supported options.
+    po::options_description desc("Allowed options");
+    std::string inputFile;
+    std::string outputFile;
+    bool disappearAtGoal;
+    desc.add_options()("help", "produce help message")(
+      "input,i", po::value<std::string>(&inputFile)->required(), "input file (YAML)")
+      ("output,o", po::value<std::string>(&outputFile)->required(), "output file (YAML)")
+      ("disappear-at-goal", po::bool_switch(&disappearAtGoal), "make agents to disappear at goal rather than staying there");
 
-  try {
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
+    try
+    {
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
 
-    if (vm.count("help") != 0u) {
-      std::cout << desc << "\n";
-      return 0;
+        if (vm.count("help") != 0u)
+        {
+            std::cout << desc << "\n";
+
+            return 0;
+        }
     }
-  } catch (po::error& e) {
-    std::cerr << e.what() << std::endl << std::endl;
-    std::cerr << desc << std::endl;
-    return 1;
-  }
+    catch (po::error& e)
+    {
+        std::cerr << e.what() << std::endl << std::endl;
+        std::cerr << desc << std::endl;
+        
+        return 1;
+    }
 
-  YAML::Node config = YAML::LoadFile(inputFile);
+    YAML::Node config = YAML::LoadFile(inputFile);
 
-  // some sanity checks
-  if (config["roadmap"]["conflicts"]) {
+    // some sanity checks
+    if (config["roadmap"]["conflicts"]) {
     if (config["roadmap"]["undirected"].as<bool>()) {
       throw std::runtime_error("If conflicts are specified, the roadmap cannot be undirected!");
     }
@@ -539,14 +544,14 @@ int main(int argc, char* argv[]) {
     if (config["roadmap"]["conflicts"].size() != config["roadmap"]["edges"].size()) {
       throw std::runtime_error("If conflicts are specified, the cardinality of conflicts and edges must match!");
     }
-  }
+    }
 
-  // read roadmap
-  roadmap_t roadmap;
-  std::unordered_map<std::string, vertex_t> vertexMap;
+    // read roadmap
+    roadmap_t roadmap;
+    std::unordered_map<std::string, vertex_t> vertexMap;
 
-  std::vector<edge_t> edgeVec;
-  for (const auto& edge : config["roadmap"]["edges"]) {
+    std::vector<edge_t> edgeVec;
+    for (const auto& edge : config["roadmap"]["edges"]) {
     // find or insert vertex1
     auto v1str = edge[0].as<std::string>();
     vertex_t v1;
@@ -577,16 +582,16 @@ int main(int argc, char* argv[]) {
       roadmap[e1.first].conflictingEdges.insert(e2.first);
       roadmap[e2.first].conflictingEdges.insert(e1.first);
     }
-  }
+    }
 
-  if (config["roadmap"]["allow_wait_actions"].as<bool>()) {
+    if (config["roadmap"]["allow_wait_actions"].as<bool>()) {
     for (const auto& v : vertexMap) {
       auto e = boost::add_edge(v.second, v.second, roadmap);
       edgeVec.emplace_back(e.first);
     }
-  }
+    }
 
-  if (config["roadmap"]["conflicts"]) {
+    if (config["roadmap"]["conflicts"]) {
     size_t i = 0;
     for (const auto& conflicts : config["roadmap"]["conflicts"]) {
       for (const auto& conflict : conflicts) {
@@ -595,28 +600,28 @@ int main(int argc, char* argv[]) {
       }
       ++i;
     }
-  }
+    }
 
-  // read agents
-  std::vector<vertex_t> goalVertices;
-  std::vector<State> startStates;
+    // read agents
+    std::vector<vertex_t> goalVertices;
+    std::vector<State> startStates;
 
-  for (const auto& node : config["agents"]) {
+    for (const auto& node : config["agents"]) {
     const auto start = node["start"].as<std::string>();
     const auto goal = node["goal"].as<std::string>();
     startStates.emplace_back(State(0, vertexMap[start]));
     goalVertices.emplace_back(vertexMap[goal]);
-  }
+    }
 
-  Environment mapf(roadmap, goalVertices, disappearAtGoal);
-  CBS<State, Action, Conflict, Constraints, Environment> cbs(mapf);
-  std::vector<PlanResult<State, Action, int> > solution;
+    Environment mapf(roadmap, goalVertices, disappearAtGoal);
+    CBS<State, Action, Conflict, Constraints, Environment> cbs(mapf);
+    std::vector<PlanResult<State, Action, int> > solution;
 
-  Timer timer;
-  bool success = cbs.high_level_search(startStates, solution);
-  timer.stop();
+    Timer timer;
+    bool success = cbs.high_level_search(startStates, solution);
+    timer.stop();
 
-  if (success) {
+    if (success) {
     std::cout << "Planning successful! " << std::endl;
     int cost = 0;
     int makespan = 0;
@@ -650,12 +655,12 @@ int main(int argc, char* argv[]) {
             << "      t: " << state.second << std::endl;
       }
     }
-  } else {
+    } else {
     std::cout << "Planning NOT successful!" << std::endl;
     std::ofstream out(outputFile);
     out << "statistics:" << std::endl;
     out << "  success: " << false << std::endl;
-  }
+    }
 
-  return 0;
+    return 0;
 }
