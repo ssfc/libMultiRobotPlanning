@@ -7,7 +7,6 @@
 #include <libMultiRobotPlanning/a_star.hpp>
 
 using namespace std;
-using libMultiRobotPlanning::AStar;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
