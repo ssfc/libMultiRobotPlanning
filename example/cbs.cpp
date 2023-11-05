@@ -179,15 +179,18 @@ namespace std
     };
 }
 
-struct EdgeConstraint
+class EdgeConstraint
 {
-    EdgeConstraint(int time, int x1, int y1, int x2, int y2)
-      : time(time), x1(x1), y1(y1), x2(x2), y2(y2) {}
+public:
     int time;
     int x1;
     int y1;
     int x2;
     int y2;
+
+public:
+    EdgeConstraint(int time, int x1, int y1, int x2, int y2)
+      : time(time), x1(x1), y1(y1), x2(x2), y2(y2) {}
 
     bool operator<(const EdgeConstraint& other) const
     {
