@@ -282,14 +282,14 @@ public:
 public:
     Location(int x, int y) : x(x), y(y) {}
 
-    bool operator<(const Location& other) const
-    {
-        return tie(x, y) < tie(other.x, other.y);
-    }
-
     bool operator==(const Location& other) const
     {
         return tie(x, y) == tie(other.x, other.y);
+    }
+
+    bool operator<(const Location& other) const
+    {
+        return tie(x, y) < tie(other.x, other.y);
     }
 
     friend ostream& operator<<(ostream& os, const Location& c)
