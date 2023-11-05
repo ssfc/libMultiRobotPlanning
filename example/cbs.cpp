@@ -14,7 +14,7 @@ using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
 // Location Custom state for the search
-class State
+class TimeLocation
 {
 public:
     int time;
@@ -22,24 +22,24 @@ public:
     int y;
 
 public:
-    State(int time, int x, int y) :
+    TimeLocation(int time, int x, int y) :
     time(time), x(x), y(y)
     {}
 
-    bool operator==(const State& other) const
+    bool operator==(const TimeLocation& other) const
     {
         return time == other.time
         && x == other.x
         && y == other.y;
     }
 
-    bool equalExceptTime(const State& other) const
+    bool equalExceptTime(const TimeLocation& other) const
     {
         return x == other.x
         && y == other.y;
     }
 
-    friend ostream& operator<<(ostream& os, const State& s)
+    friend ostream& operator<<(ostream& os, const TimeLocation& s)
     {
         return os << s.time << ": (" << s.x << "," << s.y << ")";
       // return os << "(" << s.x << "," << s.y << ")";
@@ -49,9 +49,9 @@ public:
 namespace std
 {
     template <>
-    struct hash<State>
+    struct hash<TimeLocation>
     {
-        size_t operator()(const State& s) const
+        size_t operator()(const TimeLocation& s) const
         {
             size_t seed = 0;
             boost::hash_combine(seed, s.time);
@@ -322,7 +322,7 @@ public:
         }
     }
 
-    int admissible_heuristic(const State& s)
+    int admissible_heuristic(const TimeLocation& s)
     {
         // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + num_columns *
         // s.y] << endl;
@@ -331,14 +331,14 @@ public:
                abs(s.y - m_goals[m_agentIdx].y);
     }
 
-    bool is_solution(const State& s)
+    bool is_solution(const TimeLocation& s)
     {
         return s.x == m_goals[m_agentIdx].x
         && s.y == m_goals[m_agentIdx].y
         && s.time > m_lastGoalConstraint;
     }
 
-    void get_neighbors(const State& time_location, vector<Neighbor<State, Action, int> >& neighbors)
+    void get_neighbors(const TimeLocation& time_location, vector<Neighbor<TimeLocation, Action, int> >& neighbors)
     {
         // cout << "#VC " << constraints.vertexConstraints.size() << endl;
         // for(const auto& vc : constraints.vertexConstraints) {
@@ -347,38 +347,38 @@ public:
         // }
         neighbors.clear();
 
-        State wait_neighbor(time_location.time + 1, time_location.x, time_location.y);
+        TimeLocation wait_neighbor(time_location.time + 1, time_location.x, time_location.y);
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
-            neighbors.emplace_back(Neighbor<State, Action, int>(wait_neighbor, Action::Wait, 1));
+            neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(wait_neighbor, Action::Wait, 1));
         }
 
-        State west_neighbor(time_location.time + 1, time_location.x - 1, time_location.y);
+        TimeLocation west_neighbor(time_location.time + 1, time_location.x - 1, time_location.y);
         if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
-            neighbors.emplace_back(Neighbor<State, Action, int>(west_neighbor, Action::Left, 1));
+            neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(west_neighbor, Action::Left, 1));
         }
 
-        State east_neighbor(time_location.time + 1, time_location.x + 1, time_location.y);
+        TimeLocation east_neighbor(time_location.time + 1, time_location.x + 1, time_location.y);
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
-            neighbors.emplace_back(Neighbor<State, Action, int>(east_neighbor, Action::Right, 1));
+            neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(east_neighbor, Action::Right, 1));
         }
 
-        State north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
+        TimeLocation north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
-            neighbors.emplace_back(Neighbor<State, Action, int>(north_neighbor, Action::Up, 1));
+            neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(north_neighbor, Action::Up, 1));
         }
 
-        State south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);
+        TimeLocation south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
-            neighbors.emplace_back(Neighbor<State, Action, int>(south_neighbor, Action::Down, 1));
+            neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(south_neighbor, Action::Down, 1));
         }
     }
 
-    bool getFirstConflict(const vector<PlanResult<State, Action, int> >& solution, Conflict& result)
+    bool getFirstConflict(const vector<PlanResult<TimeLocation, Action, int> >& solution, Conflict& result)
     {
         int max_t = 0;
         for (const auto& sol : solution)
@@ -391,10 +391,10 @@ public:
             // check drive-drive vertex collisions
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                State state1 = getState(i, solution, t);
+                TimeLocation state1 = getState(i, solution, t);
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    State state2 = getState(j, solution, t);
+                    TimeLocation state2 = getState(j, solution, t);
                     if (state1.equalExceptTime(state2))
                     {
                         result.time = t;
@@ -414,13 +414,13 @@ public:
             // drive-drive edge (swap)
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                State state1a = getState(i, solution, t);
-                State state1b = getState(i, solution, t + 1);
+                TimeLocation state1a = getState(i, solution, t);
+                TimeLocation state1b = getState(i, solution, t + 1);
 
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    State state2a = getState(j, solution, t);
-                    State state2b = getState(j, solution, t + 1);
+                    TimeLocation state2a = getState(j, solution, t);
+                    TimeLocation state2b = getState(j, solution, t + 1);
                     if (state1a.equalExceptTime(state2b) && state1b.equalExceptTime(state2a))
                     {
                         result.time = t;
@@ -469,7 +469,7 @@ public:
         m_highLevelExpanded++;
     }
 
-    void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/, int /*gScore*/)
+    void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
     {
         m_lowLevelExpanded++;
     }
@@ -484,8 +484,8 @@ public:
         return m_lowLevelExpanded;
     }
 
-    State getState(size_t agentIdx,
-                 const vector<PlanResult<State, Action, int> >& solution,
+    TimeLocation getState(size_t agentIdx,
+                 const vector<PlanResult<TimeLocation, Action, int> >& solution,
                  size_t t)
     {
         assert(agentIdx < solution.size());
@@ -502,13 +502,13 @@ public:
           // This is a trick to avoid changing the rest of the code significantly
           // After an agent disappeared, put it at a unique but invalid position
           // This will cause all calls to equalExceptTime(.) to return false.
-          return State(-1, -1 * (agentIdx + 1), -1);
+          return TimeLocation(-1, -1 * (agentIdx + 1), -1);
         }
 
         return solution[agentIdx].path.back().first;
     }
 
-    bool location_valid(const State& s)
+    bool location_valid(const TimeLocation& s)
     {
         assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
@@ -518,7 +518,7 @@ public:
                con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
     }
 
-    bool transition_valid(const State& s1, const State& s2)
+    bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
     {
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
@@ -565,7 +565,7 @@ int main(int argc, char* argv[])
 
     unordered_set<Location> obstacles;
     vector<Location> goals;
-    vector<State> startStates;
+    vector<TimeLocation> startStates;
 
     const auto& dim = config["map"]["dimensions"];
     int dimx = dim[0].as<int>();
@@ -580,13 +580,13 @@ int main(int argc, char* argv[])
     {
         const auto& start = node["start"];
         const auto& goal = node["goal"];
-        startStates.emplace_back(State(0, start[0].as<int>(), start[1].as<int>()));
+        startStates.emplace_back(TimeLocation(0, start[0].as<int>(), start[1].as<int>()));
         // cout << "s: " << startStates.back() << endl;
         goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }
 
     // sanity check: no identical start locations
-    unordered_set<State> startStatesSet;
+    unordered_set<TimeLocation> startStatesSet;
     for (const auto& s : startStates)
     {
         if (startStatesSet.find(s) != startStatesSet.end())
@@ -600,8 +600,8 @@ int main(int argc, char* argv[])
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
-    CBS<State, Action, Conflict, Constraints, Environment> cbs(mapf);
-    vector<PlanResult<State, Action, int> > solution;
+    CBS<TimeLocation, Action, Conflict, Constraints, Environment> cbs(mapf);
+    vector<PlanResult<TimeLocation, Action, int> > solution;
 
     Timer timer;
     bool success = cbs.high_level_search(startStates, solution);
