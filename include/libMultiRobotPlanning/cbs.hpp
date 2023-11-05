@@ -155,12 +155,7 @@ statistical purposes.
                 // std::cout << "LL expand: " << s << std::endl;
                 environment.onExpandLowLevelNode(s, fScore, gScore);
             }
-
-            void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/)
-            {
-                // std::cout << "LL discover: " << s << std::endl;
-                // environment.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
-            }
+            
         };
 
         Environment& environment;
