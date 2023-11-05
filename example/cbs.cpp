@@ -230,11 +230,13 @@ namespace std
     };
 }
 
-struct Constraints
+class Constraints
 {
+public:
     unordered_set<VertexConstraint> vertexConstraints;
     unordered_set<EdgeConstraint> edgeConstraints;
 
+public:
     void add(const Constraints& other)
     {
         vertexConstraints.insert(other.vertexConstraints.begin(),
@@ -296,6 +298,7 @@ private:
     int m_highLevelExpanded;
     int m_lowLevelExpanded;
     bool m_disappearAtGoal;
+
 public:
     Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles,
               vector<Location> goals, bool disappearAtGoal = false)
