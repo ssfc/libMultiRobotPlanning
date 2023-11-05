@@ -125,22 +125,29 @@ struct Conflict
     }
 };
 
-struct VertexConstraint {
-  VertexConstraint(int time, vertex_t vertex) : time(time), vertex(vertex) {}
-  int time;
-  vertex_t vertex;
+struct VertexConstraint
+{
+    int time;
+    vertex_t vertex;
 
-  bool operator<(const VertexConstraint& other) const {
-    return std::tie(time, vertex) < std::tie(other.time, other.vertex);
-  }
+    VertexConstraint(int time, vertex_t vertex)
+    : time(time), vertex(vertex)
+    {}
 
-  bool operator==(const VertexConstraint& other) const {
-    return std::tie(time, vertex) == std::tie(other.time, other.vertex);
-  }
+    bool operator<(const VertexConstraint& other) const
+    {
+        return std::tie(time, vertex) < std::tie(other.time, other.vertex);
+    }
 
-  friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& c) {
-    return os << "VC(" << c.time << "," << c.vertex << ")";
-  }
+    bool operator==(const VertexConstraint& other) const
+    {
+        return std::tie(time, vertex) == std::tie(other.time, other.vertex);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& c)
+    {
+        return os << "VC(" << c.time << "," << c.vertex << ")";
+    }
 };
 
 namespace std {
