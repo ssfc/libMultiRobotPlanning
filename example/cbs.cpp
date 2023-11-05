@@ -135,21 +135,26 @@ public:
     }
 };
 
-struct VertexConstraint
+class VertexConstraint
 {
-    VertexConstraint(int time, int x, int y) : time(time), x(x), y(y) {}
+public:
     int time;
     int x;
     int y;
 
-    bool operator<(const VertexConstraint& other) const
-    {
-        return tie(time, x, y) < tie(other.time, other.x, other.y);
-    }
+public:
+    VertexConstraint(int time, int x, int y)
+    : time(time), x(x), y(y)
+    {}
 
     bool operator==(const VertexConstraint& other) const
     {
         return tie(time, x, y) == tie(other.time, other.x, other.y);
+    }
+
+    bool operator<(const VertexConstraint& other) const
+    {
+        return tie(time, x, y) < tie(other.time, other.x, other.y);
     }
 
     friend ostream& operator<<(ostream& os, const VertexConstraint& c)
