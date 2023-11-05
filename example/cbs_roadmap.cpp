@@ -40,30 +40,36 @@ struct Vertex
     std::string name;
 };
 
-struct Edge {
-  std::unordered_set<edge_t> conflictingEdges;
+struct Edge
+{
+    std::unordered_set<edge_t> conflictingEdges;
 };
 
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
-                              Vertex, Edge>
-    roadmap_t;
+typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex, Edge> roadmap_t;
 
-struct State {
-  State(int time, vertex_t vertex) : time(time), vertex(vertex) {}
+struct State
+{
+    State(int time, vertex_t vertex)
+    : time(time), vertex(vertex)
+    {}
 
-  bool operator==(const State& s) const {
-    return time == s.time && vertex == s.vertex;
-  }
+    bool operator==(const State& s) const
+    {
+        return time == s.time && vertex == s.vertex;
+    }
 
-  bool equalExceptTime(const State& s) const { return vertex == s.vertex; }
+    bool equalExceptTime(const State& s) const
+    {
+        return vertex == s.vertex;
+    }
 
-  friend std::ostream& operator<<(std::ostream& os, const State& s) {
+    friend std::ostream& operator<<(std::ostream& os, const State& s) {
     return os << s.time << ": (" << s.vertex << ")";
     // return os << "(" << s.x << "," << s.y << ")";
-  }
+    }
 
-  int time;
-  vertex_t vertex;
+    int time;
+    vertex_t vertex;
 };
 
 namespace std {
