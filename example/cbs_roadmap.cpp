@@ -150,85 +150,111 @@ struct VertexConstraint
     }
 };
 
-namespace std {
-template <>
-struct hash<VertexConstraint> {
-  size_t operator()(const VertexConstraint& s) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, s.time);
-    boost::hash_combine(seed, s.vertex);
-    return seed;
-  }
-};
+namespace std
+{
+    template <>
+    struct hash<VertexConstraint>
+    {
+        size_t operator()(const VertexConstraint& s) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.vertex);
+
+            return seed;
+        }
+    };
 }  // namespace std
 
-struct EdgeConstraint {
-  EdgeConstraint(int time, edge_t edge)
-      : time(time), edge(edge) {}
-  int time;
-  edge_t edge;
+struct EdgeConstraint
+{
+    int time;
+    edge_t edge;
 
-  bool operator<(const EdgeConstraint& other) const {
-    return std::tie(time, edge) <
-           std::tie(other.time, other.edge);
-  }
+    EdgeConstraint(int time, edge_t edge)
+      : time(time), edge(edge)
+      {}
 
-  bool operator==(const EdgeConstraint& other) const {
-    return std::tie(time, edge) ==
-           std::tie(other.time, other.edge);
-  }
+    bool operator<(const EdgeConstraint& other) const
+    {
+        return std::tie(time, edge) < std::tie(other.time, other.edge);
+    }
 
-  friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& c) {
-    return os << "EC(" << c.time << "," << c.edge << ")";
-  }
+    bool operator==(const EdgeConstraint& other) const
+    {
+        return std::tie(time, edge) == std::tie(other.time, other.edge);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& c)
+    {
+        return os << "EC(" << c.time << "," << c.edge << ")";
+    }
 };
 
-namespace std {
-template <>
-struct hash<EdgeConstraint> {
-  size_t operator()(const EdgeConstraint& s) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, s.time);
-    boost::hash_combine(seed, s.edge);
-    return seed;
-  }
-};
+namespace std
+{
+    template <>
+    struct hash<EdgeConstraint>
+    {
+        size_t operator()(const EdgeConstraint& s) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.edge);
+
+            return seed;
+        }
+    };
 }  // namespace std
 
-struct Constraints {
-  std::unordered_set<VertexConstraint> vertexConstraints;
-  std::unordered_set<EdgeConstraint> edgeConstraints;
+struct Constraints
+{
+    std::unordered_set<VertexConstraint> vertexConstraints;
+    std::unordered_set<EdgeConstraint> edgeConstraints;
 
-  void add(const Constraints& other) {
-    vertexConstraints.insert(other.vertexConstraints.begin(),
-                             other.vertexConstraints.end());
-    edgeConstraints.insert(other.edgeConstraints.begin(),
-                           other.edgeConstraints.end());
-  }
+    void add(const Constraints& other)
+    {
+        vertexConstraints.insert(other.vertexConstraints.begin(),
+                                 other.vertexConstraints.end());
+        edgeConstraints.insert(other.edgeConstraints.begin(),
+                               other.edgeConstraints.end());
+    }
 
-  bool overlap(const Constraints& other) const {
-    for (const auto& vc : vertexConstraints) {
-      if (other.vertexConstraints.count(vc) > 0) {
-        return true;
-      }
-    }
-    for (const auto& ec : edgeConstraints) {
-      if (other.edgeConstraints.count(ec) > 0) {
-        return true;
-      }
-    }
-    return false;
-  }
+    bool overlap(const Constraints& other) const
+    {
+        for (const auto& vc : vertexConstraints)
+        {
+            if (other.vertexConstraints.count(vc) > 0)
+            {
+                return true;
+            }
+        }
 
-  friend std::ostream& operator<<(std::ostream& os, const Constraints& c) {
-    for (const auto& vc : c.vertexConstraints) {
-      os << vc << std::endl;
+        for (const auto& ec : edgeConstraints)
+        {
+            if (other.edgeConstraints.count(ec) > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
-    for (const auto& ec : c.edgeConstraints) {
-      os << ec << std::endl;
+
+    friend std::ostream& operator<<(std::ostream& os, const Constraints& c)
+    {
+        for (const auto& vc : c.vertexConstraints)
+        {
+            os << vc << std::endl;
+        }
+
+        for (const auto& ec : c.edgeConstraints)
+        {
+            os << ec << std::endl;
+        }
+
+        return os;
     }
-    return os;
-  }
 };
 
 ///
