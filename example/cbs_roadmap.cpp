@@ -12,10 +12,8 @@
 #include <libMultiRobotPlanning/cbs.hpp>
 #include "timer.hpp"
 
-using libMultiRobotPlanning::CBS;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
-
 
 // roadmap data structures
 typedef boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::directedS> roadmapTraits_t;

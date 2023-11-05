@@ -4,7 +4,6 @@
 
 #include "a_star.hpp"
 
-namespace libMultiRobotPlanning {
 
 /*!
   \example cbs.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
@@ -74,191 +73,190 @@ statistical purposes.
     This function is called on every low-level expansion and can be used for
 statistical purposes.
 */
-    template <typename State, typename Action, typename Conflict,
-              typename Constraints, typename Environment>
-    class CBS
+template <typename State, typename Action, typename Conflict,
+          typename Constraints, typename Environment>
+class CBS
+{
+private:
+    struct HighLevelNode
     {
-    private:
-        struct HighLevelNode
+        std::vector<PlanResult<State, Action, int> > solution;
+        std::vector<Constraints> constraints;
+        int cost;
+        int id;
+        typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+        boost::heap::mutable_<true> >::handle_type handle;
+
+        bool operator<(const HighLevelNode& n) const
         {
-            std::vector<PlanResult<State, Action, int> > solution;
-            std::vector<Constraints> constraints;
-            int cost;
-            int id;
-            typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-            boost::heap::mutable_<true> >::handle_type handle;
+            // if (cost != n.cost)
 
-            bool operator<(const HighLevelNode& n) const
-            {
-                // if (cost != n.cost)
-
-                return cost > n.cost;
-                // return id > n.id;
-            }
-
-            friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
-            {
-                os << "id: " << c.id << " cost: " << c.cost << std::endl;
-                for (size_t i = 0; i < c.solution.size(); ++i)
-                {
-                    os << "Agent: " << i << std::endl;
-                    os << " States:" << std::endl;
-
-                    for (size_t t = 0; t < c.solution[i].path.size(); ++t)
-                    {
-                        os << "  " << c.solution[i].path[t].first << std::endl;
-                    }
-
-                    os << " Constraints:" << std::endl;
-                    os << c.constraints[i];
-                    os << " cost: " << c.solution[i].cost << std::endl;
-                }
-
-                return os;
-            }
-        };
-
-        class LowLevelEnvironment
-        {
-        private:
-            Environment& environment;
-            // size_t m_agentIdx;
-            // const Constraints& m_constraints;
-
-        public:
-            LowLevelEnvironment(Environment& env, size_t agentIdx,
-                                const Constraints& constraints)
-                    : environment(env)
-            // , m_agentIdx(agentIdx)
-            // , m_constraints(constraints)
-            {
-                environment.setLowLevelContext(agentIdx, &constraints);
-            }
-
-            int admissible_heuristic(const State& s)
-            {
-                return environment.admissible_heuristic(s);
-            }
-
-            bool is_solution(const State& s)
-            {
-                return environment.is_solution(s);
-            }
-
-            void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
-            {
-                environment.get_neighbors(s, neighbors);
-            }
-
-            void onExpandNode(const State& s, int fScore, int gScore)
-            {
-                // std::cout << "LL expand: " << s << std::endl;
-                environment.onExpandLowLevelNode(s, fScore, gScore);
-            }
-
-        };
-
-        Environment& environment;
-        typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
-    public:
-        CBS(Environment& environment) : environment(environment) {}
-
-        bool high_level_search(const std::vector<State>& initialStates,
-                  std::vector<PlanResult<State, Action, int> >& solution)
-        {
-            HighLevelNode start;
-            start.solution.resize(initialStates.size());
-            start.constraints.resize(initialStates.size());
-            start.cost = 0;
-            start.id = 0;
-
-            for (size_t i = 0; i < initialStates.size(); ++i)
-            {
-                // if (   i < solution.size()
-                //     && solution[i].path.size() > 1) {
-                //   start.solution[i] = solution[i];
-                //   std::cout << "use existing solution for agent: " << i << std::endl;
-                // } else {
-                LowLevelEnvironment llenv(environment, i, start.constraints[i]);
-                LowLevelSearch_t lowLevel(llenv);
-                bool success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
-
-                if (!success)
-                {
-                    return false;
-                }
-                // }
-                start.cost += start.solution[i].cost;
-            }
-
-            // std::priority_queue<HighLevelNode> open;
-            typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-                                             boost::heap::mutable_<true> > open;
-            auto handle = open.push(start);
-            (*handle).handle = handle;
-
-            solution.clear();
-            int id = 1;
-            while (!open.empty())
-            {
-                HighLevelNode P = open.top();
-                environment.onExpandHighLevelNode(P.cost);
-                // std::cout << "expand: " << P << std::endl;
-
-                open.pop();
-
-                Conflict conflict;
-                if (!environment.getFirstConflict(P.solution, conflict))
-                {
-                    std::cout << "done; cost: " << P.cost << std::endl;
-                    solution = P.solution;
-                    return true;
-                }
-
-                // create additional nodes to resolve conflict
-                // std::cout << "Found conflict: " << conflict << std::endl;
-                // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
-                // conflict.type << std::endl;
-
-                std::map<size_t, Constraints> constraints;
-                environment.createConstraintsFromConflict(conflict, constraints);
-                for (const auto& c : constraints)
-                {
-                    // std::cout << "Add HL node for " << c.first << std::endl;
-                    size_t i = c.first;
-                    // std::cout << "create child with id " << id << std::endl;
-                    HighLevelNode newNode = P;
-                    newNode.id = id;
-                    // (optional) check that this constraint was not included already
-                    // std::cout << newNode.constraints[i] << std::endl;
-                    // std::cout << c.second << std::endl;
-                    assert(!newNode.constraints[i].overlap(c.second));
-
-                    newNode.constraints[i].add(c.second);
-
-                    newNode.cost -= newNode.solution[i].cost;
-
-                    LowLevelEnvironment llenv(environment, i, newNode.constraints[i]);
-                    LowLevelSearch_t lowLevel(llenv);
-                    bool success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
-
-                    newNode.cost += newNode.solution[i].cost;
-
-                    if (success)
-                    {
-                        // std::cout << "  success. cost: " << newNode.cost << std::endl;
-                        auto handle = open.push(newNode);
-                        (*handle).handle = handle;
-                    }
-
-                    ++id;
-                }
-            }
-
-            return false;
+            return cost > n.cost;
+            // return id > n.id;
         }
 
+        friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
+        {
+            os << "id: " << c.id << " cost: " << c.cost << std::endl;
+            for (size_t i = 0; i < c.solution.size(); ++i)
+            {
+                os << "Agent: " << i << std::endl;
+                os << " States:" << std::endl;
+
+                for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+                {
+                    os << "  " << c.solution[i].path[t].first << std::endl;
+                }
+
+                os << " Constraints:" << std::endl;
+                os << c.constraints[i];
+                os << " cost: " << c.solution[i].cost << std::endl;
+            }
+
+            return os;
+        }
+    };
+
+    class LowLevelEnvironment
+    {
+    private:
+        Environment& environment;
+        // size_t m_agentIdx;
+        // const Constraints& m_constraints;
+
+    public:
+        LowLevelEnvironment(Environment& env, size_t agentIdx,
+                            const Constraints& constraints)
+                : environment(env)
+        // , m_agentIdx(agentIdx)
+        // , m_constraints(constraints)
+        {
+            environment.setLowLevelContext(agentIdx, &constraints);
+        }
+
+        int admissible_heuristic(const State& s)
+        {
+            return environment.admissible_heuristic(s);
+        }
+
+        bool is_solution(const State& s)
+        {
+            return environment.is_solution(s);
+        }
+
+        void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
+        {
+            environment.get_neighbors(s, neighbors);
+        }
+
+        void onExpandNode(const State& s, int fScore, int gScore)
+        {
+            // std::cout << "LL expand: " << s << std::endl;
+            environment.onExpandLowLevelNode(s, fScore, gScore);
+        }
 
     };
 
-}  // namespace libMultiRobotPlanning
+    Environment& environment;
+    typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
+public:
+    CBS(Environment& environment) : environment(environment) {}
+
+    bool high_level_search(const std::vector<State>& initialStates,
+              std::vector<PlanResult<State, Action, int> >& solution)
+    {
+        HighLevelNode start;
+        start.solution.resize(initialStates.size());
+        start.constraints.resize(initialStates.size());
+        start.cost = 0;
+        start.id = 0;
+
+        for (size_t i = 0; i < initialStates.size(); ++i)
+        {
+            // if (   i < solution.size()
+            //     && solution[i].path.size() > 1) {
+            //   start.solution[i] = solution[i];
+            //   std::cout << "use existing solution for agent: " << i << std::endl;
+            // } else {
+            LowLevelEnvironment llenv(environment, i, start.constraints[i]);
+            LowLevelSearch_t lowLevel(llenv);
+            bool success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
+
+            if (!success)
+            {
+                return false;
+            }
+            // }
+            start.cost += start.solution[i].cost;
+        }
+
+        // std::priority_queue<HighLevelNode> open;
+        typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+                                         boost::heap::mutable_<true> > open;
+        auto handle = open.push(start);
+        (*handle).handle = handle;
+
+        solution.clear();
+        int id = 1;
+        while (!open.empty())
+        {
+            HighLevelNode P = open.top();
+            environment.onExpandHighLevelNode(P.cost);
+            // std::cout << "expand: " << P << std::endl;
+
+            open.pop();
+
+            Conflict conflict;
+            if (!environment.getFirstConflict(P.solution, conflict))
+            {
+                std::cout << "done; cost: " << P.cost << std::endl;
+                solution = P.solution;
+                return true;
+            }
+
+            // create additional nodes to resolve conflict
+            // std::cout << "Found conflict: " << conflict << std::endl;
+            // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
+            // conflict.type << std::endl;
+
+            std::map<size_t, Constraints> constraints;
+            environment.createConstraintsFromConflict(conflict, constraints);
+            for (const auto& c : constraints)
+            {
+                // std::cout << "Add HL node for " << c.first << std::endl;
+                size_t i = c.first;
+                // std::cout << "create child with id " << id << std::endl;
+                HighLevelNode newNode = P;
+                newNode.id = id;
+                // (optional) check that this constraint was not included already
+                // std::cout << newNode.constraints[i] << std::endl;
+                // std::cout << c.second << std::endl;
+                assert(!newNode.constraints[i].overlap(c.second));
+
+                newNode.constraints[i].add(c.second);
+
+                newNode.cost -= newNode.solution[i].cost;
+
+                LowLevelEnvironment llenv(environment, i, newNode.constraints[i]);
+                LowLevelSearch_t lowLevel(llenv);
+                bool success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
+
+                newNode.cost += newNode.solution[i].cost;
+
+                if (success)
+                {
+                    // std::cout << "  success. cost: " << newNode.cost << std::endl;
+                    auto handle = open.push(newNode);
+                    (*handle).handle = handle;
+                }
+
+                ++id;
+            }
+        }
+
+        return false;
+    }
+
+
+};
+

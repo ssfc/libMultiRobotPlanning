@@ -10,7 +10,6 @@
 #include "timer.hpp"
 
 using namespace std;
-using libMultiRobotPlanning::CBS;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
