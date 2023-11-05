@@ -527,23 +527,27 @@ int main(int argc, char* argv[])
     {
         std::cerr << e.what() << std::endl << std::endl;
         std::cerr << desc << std::endl;
-        
+
         return 1;
     }
 
     YAML::Node config = YAML::LoadFile(inputFile);
 
     // some sanity checks
-    if (config["roadmap"]["conflicts"]) {
-    if (config["roadmap"]["undirected"].as<bool>()) {
-      throw std::runtime_error("If conflicts are specified, the roadmap cannot be undirected!");
-    }
-    if (config["roadmap"]["allow_wait_actions"].as<bool>()) {
-      throw std::runtime_error("If conflicts are specified, the wait actions must be already encoded in the edge set!");
-    }
-    if (config["roadmap"]["conflicts"].size() != config["roadmap"]["edges"].size()) {
-      throw std::runtime_error("If conflicts are specified, the cardinality of conflicts and edges must match!");
-    }
+    if (config["roadmap"]["conflicts"])
+    {
+        if (config["roadmap"]["undirected"].as<bool>())
+        {
+            throw std::runtime_error("If conflicts are specified, the roadmap cannot be undirected!");
+        }
+        if (config["roadmap"]["allow_wait_actions"].as<bool>())
+        {
+            throw std::runtime_error("If conflicts are specified, the wait actions must be already encoded in the edge set!");
+        }
+        if (config["roadmap"]["conflicts"].size() != config["roadmap"]["edges"].size())
+        {
+            throw std::runtime_error("If conflicts are specified, the cardinality of conflicts and edges must match!");
+        }
     }
 
     // read roadmap
@@ -551,66 +555,84 @@ int main(int argc, char* argv[])
     std::unordered_map<std::string, vertex_t> vertexMap;
 
     std::vector<edge_t> edgeVec;
-    for (const auto& edge : config["roadmap"]["edges"]) {
-    // find or insert vertex1
-    auto v1str = edge[0].as<std::string>();
-    vertex_t v1;
-    const auto iter1 = vertexMap.find(v1str);
-    if (iter1 != vertexMap.end()) {
-      v1 = iter1->second;
-    } else {
-      v1 = boost::add_vertex(roadmap);
-      vertexMap.insert(std::make_pair(v1str, v1));
-      roadmap[v1].name = v1str;
-    }
-    // find or insert vertex2
-    auto v2str = edge[1].as<std::string>();
-    vertex_t v2;
-    const auto iter2 = vertexMap.find(v2str);
-    if (iter2 != vertexMap.end()) {
-      v2 = iter2->second;
-    } else {
-      v2 = boost::add_vertex(roadmap);
-      vertexMap.insert(std::make_pair(v2str, v2));
-      roadmap[v2].name = v2str;
-    }
-    auto e1 = boost::add_edge(v1, v2, roadmap);
-    edgeVec.emplace_back(e1.first);
-    if (config["roadmap"]["undirected"].as<bool>()) {
-      auto e2 = boost::add_edge(v2, v1, roadmap);
-      edgeVec.emplace_back(e2.first);
-      roadmap[e1.first].conflictingEdges.insert(e2.first);
-      roadmap[e2.first].conflictingEdges.insert(e1.first);
-    }
+    for (const auto& edge : config["roadmap"]["edges"])
+    {
+        // find or insert vertex1
+        auto v1str = edge[0].as<std::string>();
+        vertex_t v1;
+        const auto iter1 = vertexMap.find(v1str);
+        if (iter1 != vertexMap.end())
+        {
+            v1 = iter1->second;
+        }
+        else
+        {
+            v1 = boost::add_vertex(roadmap);
+            vertexMap.insert(std::make_pair(v1str, v1));
+            roadmap[v1].name = v1str;
+        }
+
+        // find or insert vertex2
+        auto v2str = edge[1].as<std::string>();
+        vertex_t v2;
+        const auto iter2 = vertexMap.find(v2str);
+        if (iter2 != vertexMap.end())
+        {
+            v2 = iter2->second;
+        }
+        else
+        {
+            v2 = boost::add_vertex(roadmap);
+            vertexMap.insert(std::make_pair(v2str, v2));
+            roadmap[v2].name = v2str;
+        }
+
+        auto e1 = boost::add_edge(v1, v2, roadmap);
+        edgeVec.emplace_back(e1.first);
+
+        if (config["roadmap"]["undirected"].as<bool>())
+        {
+            auto e2 = boost::add_edge(v2, v1, roadmap);
+            edgeVec.emplace_back(e2.first);
+            roadmap[e1.first].conflictingEdges.insert(e2.first);
+            roadmap[e2.first].conflictingEdges.insert(e1.first);
+        }
     }
 
-    if (config["roadmap"]["allow_wait_actions"].as<bool>()) {
-    for (const auto& v : vertexMap) {
-      auto e = boost::add_edge(v.second, v.second, roadmap);
-      edgeVec.emplace_back(e.first);
-    }
+    if (config["roadmap"]["allow_wait_actions"].as<bool>())
+    {
+        for (const auto& v : vertexMap)
+        {
+            auto e = boost::add_edge(v.second, v.second, roadmap);
+            edgeVec.emplace_back(e.first);
+        }
     }
 
-    if (config["roadmap"]["conflicts"]) {
-    size_t i = 0;
-    for (const auto& conflicts : config["roadmap"]["conflicts"]) {
-      for (const auto& conflict : conflicts) {
-        size_t j = conflict.as<size_t>();
-        roadmap[edgeVec[i]].conflictingEdges.insert(edgeVec[j]);
-      }
-      ++i;
-    }
+    if (config["roadmap"]["conflicts"])
+    {
+        size_t i = 0;
+        for (const auto& conflicts : config["roadmap"]["conflicts"])
+        {
+            for (const auto& conflict : conflicts)
+            {
+                size_t j = conflict.as<size_t>();
+                roadmap[edgeVec[i]].conflictingEdges.insert(edgeVec[j]);
+            }
+
+            ++i;
+        }
     }
 
     // read agents
     std::vector<vertex_t> goalVertices;
     std::vector<State> startStates;
 
-    for (const auto& node : config["agents"]) {
-    const auto start = node["start"].as<std::string>();
-    const auto goal = node["goal"].as<std::string>();
-    startStates.emplace_back(State(0, vertexMap[start]));
-    goalVertices.emplace_back(vertexMap[goal]);
+    for (const auto& node : config["agents"])
+    {
+        const auto start = node["start"].as<std::string>();
+        const auto goal = node["goal"].as<std::string>();
+        startStates.emplace_back(State(0, vertexMap[start]));
+        goalVertices.emplace_back(vertexMap[goal]);
     }
 
     Environment mapf(roadmap, goalVertices, disappearAtGoal);
