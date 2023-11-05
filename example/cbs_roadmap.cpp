@@ -75,16 +75,20 @@ public:
     }
 };
 
-namespace std {
-template <>
-struct hash<State> {
-  size_t operator()(const State& s) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, s.time);
-    boost::hash_combine(seed, s.vertex);
-    return seed;
-  }
-};
+namespace std
+{
+    template <>
+    struct hash<State>
+    {
+        size_t operator()(const State& s) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.vertex);
+            
+            return seed;
+        }
+    };
 }  // namespace std
 
 ///
