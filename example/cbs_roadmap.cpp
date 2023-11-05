@@ -49,6 +49,9 @@ typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex
 
 struct State
 {
+    int time;
+    vertex_t vertex;
+
     State(int time, vertex_t vertex)
     : time(time), vertex(vertex)
     {}
@@ -63,13 +66,11 @@ struct State
         return vertex == s.vertex;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const State& s) {
-    return os << s.time << ": (" << s.vertex << ")";
-    // return os << "(" << s.x << "," << s.y << ")";
+    friend std::ostream& operator<<(std::ostream& os, const State& s)
+    {
+        return os << s.time << ": (" << s.vertex << ")";
+        // return os << "(" << s.x << "," << s.y << ")";
     }
-
-    int time;
-    vertex_t vertex;
 };
 
 namespace std {
