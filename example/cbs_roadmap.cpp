@@ -643,45 +643,51 @@ int main(int argc, char* argv[])
     bool success = cbs.high_level_search(startStates, solution);
     timer.stop();
 
-    if (success) {
-    std::cout << "Planning successful! " << std::endl;
-    int cost = 0;
-    int makespan = 0;
-    for (const auto& s : solution) {
-      cost += s.cost;
-      makespan = std::max<int>(makespan, s.cost);
-    }
+    if (success)
+    {
+        std::cout << "Planning successful! " << std::endl;
+        int cost = 0;
+        int makespan = 0;
+        for (const auto& s : solution)
+        {
+            cost += s.cost;
+            makespan = std::max<int>(makespan, s.cost);
+        }
 
-    std::ofstream out(outputFile);
-    out << "statistics:" << std::endl;
-    out << "  success: " << true << std::endl;
-    out << "  cost: " << cost << std::endl;
-    out << "  makespan: " << makespan << std::endl;
-    out << "  runtime: " << timer.elapsedSeconds() << std::endl;
-    out << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
-    out << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
-    out << "schedule:" << std::endl;
-    for (size_t a = 0; a < solution.size(); ++a) {
-      // std::cout << "Solution for: " << a << std::endl;
-      // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-      //   std::cout << solution[a].path[i].second << ": " <<
-      //   solution[a].path[i].first << "->" << solution[a].actions[i].first
-      //   << "(cost: " << solution[a].actions[i].second << ")" << std::endl;
-      // }
-      // std::cout << solution[a].path.back().second << ": " <<
-      // solution[a].path.back().first << std::endl;
+        std::ofstream out(outputFile);
+        out << "statistics:" << std::endl;
+        out << "  success: " << true << std::endl;
+        out << "  cost: " << cost << std::endl;
+        out << "  makespan: " << makespan << std::endl;
+        out << "  runtime: " << timer.elapsedSeconds() << std::endl;
+        out << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
+        out << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
+        out << "schedule:" << std::endl;
+        for (size_t a = 0; a < solution.size(); ++a)
+        {
+            // std::cout << "Solution for: " << a << std::endl;
+            // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
+            //   std::cout << solution[a].path[i].second << ": " <<
+            //   solution[a].path[i].first << "->" << solution[a].actions[i].first
+            //   << "(cost: " << solution[a].actions[i].second << ")" << std::endl;
+            // }
+            // std::cout << solution[a].path.back().second << ": " <<
+            // solution[a].path.back().first << std::endl;
 
-      out << "  agent" << a << ":" << std::endl;
-      for (const auto& state : solution[a].path) {
-        out << "    - v: " << roadmap[state.first.vertex].name << std::endl
-            << "      t: " << state.second << std::endl;
-      }
+            out << "  agent" << a << ":" << std::endl;
+            for (const auto& state : solution[a].path)
+            {
+                out << "    - v: " << roadmap[state.first.vertex].name << std::endl
+                    << "      t: " << state.second << std::endl;
+            }
+        }
     }
-    } else {
-    std::cout << "Planning NOT successful!" << std::endl;
-    std::ofstream out(outputFile);
-    out << "statistics:" << std::endl;
-    out << "  success: " << false << std::endl;
+    else
+    {
+        std::cout << "Planning NOT successful!" << std::endl;
+        std::ofstream out(outputFile);
+        out << "statistics:" << std::endl;
+        out << "  success: " << false << std::endl;
     }
 
     return 0;
