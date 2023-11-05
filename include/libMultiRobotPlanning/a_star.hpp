@@ -9,6 +9,7 @@
 
 #include "neighbor.hpp"
 #include "planresult.hpp"
+#include "util.hpp"
 
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
