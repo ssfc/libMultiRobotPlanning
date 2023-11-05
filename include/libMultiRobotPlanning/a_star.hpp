@@ -2,6 +2,8 @@
 
 #include <boost/heap/fibonacci_heap.hpp>
 #include <boost/heap/d_ary_heap.hpp>
+#include <fstream>
+#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -10,6 +12,7 @@
 
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
+
 
 /*!
   \example a_star.cpp Simple example using a 2D grid world and

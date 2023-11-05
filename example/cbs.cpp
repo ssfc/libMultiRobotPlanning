@@ -275,9 +275,12 @@ struct Constraints
 
 struct Location
 {
-    Location(int x, int y) : x(x), y(y) {}
+public:
     int x;
     int y;
+
+public:
+    Location(int x, int y) : x(x), y(y) {}
 
     bool operator<(const Location& other) const
     {

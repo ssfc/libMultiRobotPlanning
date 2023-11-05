@@ -21,10 +21,10 @@ public:
 
     bool operator==(const Location& other) const
     {
-        return tie(x, y) == tie(other.x, other.y);
+        return std::tie(x, y) == std::tie(other.x, other.y);
     }
 
-    friend ostream& operator<<(ostream& os, const Location& location)
+    friend std::ostream& operator<<(std::ostream& os, const Location& location)
     {
         return os << "(" << location.x << "," << location.y << ")";
     }
