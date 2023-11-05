@@ -258,9 +258,21 @@ struct Constraints
 };
 
 ///
-class Environment {
- public:
-  Environment(const roadmap_t& roadmap,
+class Environment
+{
+private:
+    const roadmap_t& m_roadmap;
+    std::vector<vertex_t> m_goals;
+    size_t m_agentIdx;
+    const Constraints* m_constraints;
+    int m_lastGoalConstraint;
+    int m_highLevelExpanded;
+    int m_lowLevelExpanded;
+    bool m_disappearAtGoal;
+    int m_timeLimit;
+    
+public:
+    Environment(const roadmap_t& roadmap,
               const std::vector<vertex_t>& goals, bool disappearAtGoal = false)
       : m_roadmap(roadmap),
         m_goals(std::move(goals)),
@@ -270,19 +282,19 @@ class Environment {
         m_highLevelExpanded(0),
         m_lowLevelExpanded(0),
         m_disappearAtGoal(disappearAtGoal)
-  {
+    {
     auto V = boost::num_vertices(m_roadmap);
     // Upper bound on the makespan, see
     // Jingjin Yu, Daniela Rus:
     // Pebble Motion on Graphs with Rotations: Efficient Feasibility Tests and Planning Algorithms. WAFR 2014: 729-746
     // NOTE: that the constant factor is not known
     m_timeLimit = pow(V, 3);
-  }
+    }
 
-  Environment(const Environment&) = delete;
-  Environment& operator=(const Environment&) = delete;
+    Environment(const Environment&) = delete;
+    Environment& operator=(const Environment&) = delete;
 
-  void setLowLevelContext(size_t agentIdx, const Constraints* constraints) {
+    void setLowLevelContext(size_t agentIdx, const Constraints* constraints) {
     assert(constraints);  // NOLINT
     m_agentIdx = agentIdx;
     m_constraints = constraints;
@@ -292,19 +304,19 @@ class Environment {
         m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
       }
     }
-  }
+    }
 
-  int admissible_heuristic(const State& s) {
+    int admissible_heuristic(const State& s) {
     // TODO: we should actually compute this using A*
     return 0;
-  }
+    }
 
-  bool is_solution(const State& s) {
+    bool is_solution(const State& s) {
     return s.vertex == m_goals[m_agentIdx] &&
            s.time > m_lastGoalConstraint;
-  }
+    }
 
-  void get_neighbors(const State& s,
+    void get_neighbors(const State& s,
                     std::vector<Neighbor<State, Action, int> >& neighbors) {
     // std::cout << "#VC " << constraints.vertexConstraints.size() << std::endl;
     // for(const auto& vc : constraints.vertexConstraints) {
@@ -335,9 +347,9 @@ class Environment {
     //         Neighbor<State, Action, int>(n, edge_t(), 1));
     //   }
     // }
-  }
+    }
 
-  bool getFirstConflict(
+    bool getFirstConflict(
       const std::vector<PlanResult<State, Action, int> >& solution,
       Conflict& result) {
     size_t max_t = 0;
@@ -386,9 +398,9 @@ class Environment {
     }
 
     return false;
-  }
+    }
 
-  void createConstraintsFromConflict(
+    void createConstraintsFromConflict(
       const Conflict& conflict, std::map<size_t, Constraints>& constraints) {
     if (conflict.type == Conflict::Vertex) {
       Constraints c1;
@@ -406,21 +418,21 @@ class Environment {
           conflict.time, conflict.edge2));
       constraints[conflict.agent2] = c2;
     }
-  }
+    }
 
-  void onExpandHighLevelNode(int /*cost*/) { m_highLevelExpanded++; }
+    void onExpandHighLevelNode(int /*cost*/) { m_highLevelExpanded++; }
 
-  void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/,
+    void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/,
                             int /*gScore*/) {
     m_lowLevelExpanded++;
-  }
+    }
 
-  int highLevelExpanded() { return m_highLevelExpanded; }
+    int highLevelExpanded() { return m_highLevelExpanded; }
 
-  int lowLevelExpanded() const { return m_lowLevelExpanded; }
+    int lowLevelExpanded() const { return m_lowLevelExpanded; }
 
- private:
-  State getState(size_t agentIdx,
+    private:
+    State getState(size_t agentIdx,
                  const std::vector<PlanResult<State, Action, int> >& solution,
                  size_t t) {
     assert(agentIdx < solution.size());
@@ -435,29 +447,19 @@ class Environment {
       return State(-1, -1-agentIdx);
     }
     return solution[agentIdx].path.back().first;
-  }
+    }
 
-  bool location_valid(const State& s) {
+    bool location_valid(const State& s) {
     assert(m_constraints);
     const auto& con = m_constraints->vertexConstraints;
     return con.find(VertexConstraint(s.time, s.vertex)) == con.end();
-  }
+    }
 
-  bool transitionValid(int time, edge_t edge) {
+    bool transitionValid(int time, edge_t edge) {
     assert(m_constraints);
     const auto& con = m_constraints->edgeConstraints;
     return con.find(EdgeConstraint(time, edge)) == con.end();
-  }
-private:
-  const roadmap_t& m_roadmap;
-  std::vector<vertex_t> m_goals;
-  size_t m_agentIdx;
-  const Constraints* m_constraints;
-  int m_lastGoalConstraint;
-  int m_highLevelExpanded;
-  int m_lowLevelExpanded;
-  bool m_disappearAtGoal;
-  int m_timeLimit;
+    }
 };
 
 int main(int argc, char* argv[]) {
