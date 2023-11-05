@@ -406,7 +406,7 @@ public:
                                 result.type = Conflict::Edge;
                                 result.edge1 = e1;
                                 result.edge2 = e2;
-                                
+
                                 return true;
                             }
                         }
@@ -418,65 +418,82 @@ public:
         return false;
     }
 
-    void createConstraintsFromConflict(
-      const Conflict& conflict, std::map<size_t, Constraints>& constraints) {
-    if (conflict.type == Conflict::Vertex) {
-      Constraints c1;
-      c1.vertexConstraints.emplace(
-          VertexConstraint(conflict.time, conflict.vertex));
-      constraints[conflict.agent1] = c1;
-      constraints[conflict.agent2] = c1;
-    } else if (conflict.type == Conflict::Edge) {
-      Constraints c1;
-      c1.edgeConstraints.emplace(EdgeConstraint(
-          conflict.time, conflict.edge1));
-      constraints[conflict.agent1] = c1;
-      Constraints c2;
-      c2.edgeConstraints.emplace(EdgeConstraint(
-          conflict.time, conflict.edge2));
-      constraints[conflict.agent2] = c2;
-    }
-    }
+    void createConstraintsFromConflict(const Conflict& conflict, std::map<size_t, Constraints>& constraints)
+    {
+        if (conflict.type == Conflict::Vertex)
+        {
+            Constraints c1;
+            c1.vertexConstraints.emplace(VertexConstraint(conflict.time, conflict.vertex));
+            constraints[conflict.agent1] = c1;
+            constraints[conflict.agent2] = c1;
+        }
+        else if (conflict.type == Conflict::Edge)
+        {
+            Constraints c1;
+            c1.edgeConstraints.emplace(EdgeConstraint(conflict.time, conflict.edge1));
+            constraints[conflict.agent1] = c1;
 
-    void onExpandHighLevelNode(int /*cost*/) { m_highLevelExpanded++; }
-
-    void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/,
-                            int /*gScore*/) {
-    m_lowLevelExpanded++;
+            Constraints c2;
+            c2.edgeConstraints.emplace(EdgeConstraint(conflict.time, conflict.edge2));
+            constraints[conflict.agent2] = c2;
+        }
     }
 
-    int highLevelExpanded() { return m_highLevelExpanded; }
-
-    int lowLevelExpanded() const { return m_lowLevelExpanded; }
-
-    private:
-    State getState(size_t agentIdx,
-                 const std::vector<PlanResult<State, Action, int> >& solution,
-                 size_t t) {
-    assert(agentIdx < solution.size());
-    if (t < solution[agentIdx].path.size()) {
-      return solution[agentIdx].path[t].first;
-    }
-    assert(!solution[agentIdx].path.empty());
-    if (m_disappearAtGoal) {
-      // This is a trick to avoid changing the rest of the code significantly
-      // After an agent disappeared, put it at a unique but invalid position
-      // This will cause all calls to equalExceptTime(.) to return false.
-      return State(-1, -1-agentIdx);
-    }
-    return solution[agentIdx].path.back().first;
+    void onExpandHighLevelNode(int /*cost*/)
+    {
+        m_highLevelExpanded++;
     }
 
-    bool location_valid(const State& s) {
-    assert(m_constraints);
-    const auto& con = m_constraints->vertexConstraints;
-    return con.find(VertexConstraint(s.time, s.vertex)) == con.end();
+    void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
+        m_lowLevelExpanded++;
     }
 
-    bool transitionValid(int time, edge_t edge) {
-    assert(m_constraints);
-    const auto& con = m_constraints->edgeConstraints;
-    return con.find(EdgeConstraint(time, edge)) == con.end();
+    int highLevelExpanded()
+    {
+        return m_highLevelExpanded;
+    }
+
+    int lowLevelExpanded() const
+    {
+        return m_lowLevelExpanded;
+    }
+
+private:
+    State getState(size_t agentIdx, const std::vector<PlanResult<State, Action, int> >& solution, size_t t)
+    {
+        assert(agentIdx < solution.size());
+        if (t < solution[agentIdx].path.size())
+        {
+            return solution[agentIdx].path[t].first;
+        }
+
+        assert(!solution[agentIdx].path.empty());
+        if (m_disappearAtGoal)
+        {
+            // This is a trick to avoid changing the rest of the code significantly
+            // After an agent disappeared, put it at a unique but invalid position
+            // This will cause all calls to equalExceptTime(.) to return false.
+            return State(-1, -1-agentIdx);
+        }
+
+        return solution[agentIdx].path.back().first;
+    }
+
+    bool location_valid(const State& s)
+    {
+        assert(m_constraints);
+        const auto& con = m_constraints->vertexConstraints;
+
+        return con.find(VertexConstraint(s.time, s.vertex)) == con.end();
+    }
+
+    bool transitionValid(int time, edge_t edge)
+    {
+        assert(m_constraints);
+        const auto& con = m_constraints->edgeConstraints;
+        
+        return con.find(EdgeConstraint(time, edge)) == con.end();
     }
 };
 
