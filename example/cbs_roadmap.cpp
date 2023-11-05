@@ -385,28 +385,33 @@ public:
                     }
                 }
             }
-            
+
             // edge/edge
-            for (size_t i = 0; i < solution.size(); ++i) {
-            for (size_t j = i + 1; j < solution.size(); ++j) {
-              if (t < solution[i].actions.size() &&
-                  t < solution[j].actions.size()) {
-                auto e1 = solution[i].actions[t].first;
-                auto e2 = solution[j].actions[t].first;
-                if (e1.m_eproperty) {
-                  const auto& ce = m_roadmap[e1].conflictingEdges;
-                  if (ce.find(e2) != ce.end()) {
-                    result.time = t;
-                    result.agent1 = i;
-                    result.agent2 = j;
-                    result.type = Conflict::Edge;
-                    result.edge1 = e1;
-                    result.edge2 = e2;
-                    return true;
-                  }
+            for (size_t i = 0; i < solution.size(); ++i)
+            {
+                for (size_t j = i + 1; j < solution.size(); ++j)
+                {
+                    if (t < solution[i].actions.size() && t < solution[j].actions.size())
+                    {
+                        auto e1 = solution[i].actions[t].first;
+                        auto e2 = solution[j].actions[t].first;
+                        if (e1.m_eproperty)
+                        {
+                            const auto& ce = m_roadmap[e1].conflictingEdges;
+                            if (ce.find(e2) != ce.end())
+                            {
+                                result.time = t;
+                                result.agent1 = i;
+                                result.agent2 = j;
+                                result.type = Conflict::Edge;
+                                result.edge1 = e1;
+                                result.edge2 = e2;
+                                
+                                return true;
+                            }
+                        }
+                    }
                 }
-              }
-            }
             }
         }
 
