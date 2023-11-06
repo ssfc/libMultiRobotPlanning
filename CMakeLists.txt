@@ -90,42 +90,23 @@ include_directories(include)
 # Examples
 
 ## a_star
-add_executable(a_star
-  example/a_star.cpp
-)
-target_link_libraries(a_star
-  ${Boost_LIBRARIES}
-)
+add_executable(a_star example/a_star.cpp)
+target_link_libraries(a_star ${Boost_LIBRARIES})
 
-add_executable(a_star_isolated
-        example/a_star_isolated.cpp)
-target_link_libraries(a_star_isolated
-        ${Boost_LIBRARIES})
+add_executable(a_star_isolated example/a_star_isolated.cpp)
+target_link_libraries(a_star_isolated ${Boost_LIBRARIES})
 
 ## a_star_epsilon
-add_executable(a_star_epsilon
-  example/a_star_epsilon.cpp
-)
-target_link_libraries(a_star_epsilon
-  ${Boost_LIBRARIES}
-)
+add_executable(a_star_epsilon example/a_star_epsilon.cpp)
+target_link_libraries(a_star_epsilon ${Boost_LIBRARIES})
 
 ## assignment
-add_executable(assignment
-  example/assignment.cpp
-)
-target_link_libraries(assignment
-  ${Boost_LIBRARIES}
-)
+add_executable(assignment example/assignment.cpp)
+target_link_libraries(assignment ${Boost_LIBRARIES})
 
 ## cbs_roadmap
-add_executable(cbs_roadmap
-  example/cbs_roadmap.cpp
-)
-target_link_libraries(cbs_roadmap
-  ${Boost_LIBRARIES}
-  yaml-cpp
-)
+add_executable(cbs_roadmap example/cbs_roadmap.cpp)
+target_link_libraries(cbs_roadmap ${Boost_LIBRARIES} yaml-cpp)
 
 ## cbs
 add_executable(cbs
