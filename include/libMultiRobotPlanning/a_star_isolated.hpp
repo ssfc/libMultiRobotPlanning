@@ -68,7 +68,7 @@ purposes.
     \tparam LocationHasher A class to convert a location to a hash value. Default:
    std::hash<Location>
 */
-template <typename Environment, typename LocationHasher = std::hash<Location> >
+template <typename Environment>
 class AStar
 {
 private:
@@ -96,9 +96,9 @@ public:
         solution.cost = 0;
 
         OpenSet open_set;
-        std::unordered_map<Location, HeapHandle, LocationHasher> location_to_heap;
-        std::unordered_set<Location, LocationHasher> closed_set;
-        std::unordered_map<Location, std::tuple<Location,Action,int,int>,LocationHasher> came_from;
+        std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heap;
+        std::unordered_set<Location, std::hash<Location>> closed_set;
+        std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
                                               environment.admissible_heuristic(start_location), initialCost));
@@ -196,8 +196,8 @@ public:
 };
 
 // inner class definition
-template <typename Environment, typename StateHasher>
-class AStar<Environment, StateHasher>::AStarNode
+template <typename Environment>
+class AStar<Environment>::AStarNode
 {
 public:
     Location location;
