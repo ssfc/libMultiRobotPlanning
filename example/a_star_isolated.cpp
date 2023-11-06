@@ -120,7 +120,7 @@ int main(int argc, char* argv[])
     Location test_start(start_x, start_y); // 构造、重载相等、重载输出
     Location test_goal(goal_x, goal_y); // 构造、重载相等、重载输出
     Environment test_environment(dim_x, y - 1, obstacles, test_start, test_goal);
-    AStar<Environment> test_astar(test_environment); // 模板类实例化
+    AStar test_astar(test_environment); // 模板类实例化
     PlanResult<Location, Action, int> solution;
 
     if (test_environment.location_valid(test_start))
