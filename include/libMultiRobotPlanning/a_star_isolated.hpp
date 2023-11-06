@@ -11,6 +11,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 #include "neighbor.hpp"
 #include "planresult.hpp"
@@ -25,6 +26,85 @@ enum class Action // 模板类Action实例化
     Down,
     Left,
     Right,
+};
+
+class Environment // 模板类Environment实例化
+{
+private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    Location start;
+    Location goal;
+
+public:
+    Environment(size_t input_num_columns, size_t input_num_rows,
+                std::unordered_set<Location> input_obstacles, Location input_start, Location input_goal)
+            : num_columns(input_num_columns),
+              num_rows(input_num_rows),
+              obstacles(std::move(input_obstacles)),
+              start(std::move(input_start)),
+              goal(std::move(input_goal))  // NOLINT
+    {}
+
+    // 估算h_score
+    int admissible_heuristic(const Location& current_location)
+    {
+        return abs(current_location.x - goal.x)
+               + abs(current_location.y - goal.y);
+    }
+
+    // whether agent reach goal or not.
+    bool is_solution(const Location& current_location)
+    {
+        return current_location == goal;
+    }
+
+    // whether location valid or not
+    bool location_valid(const Location& location)
+    {
+        return location.x >= 0 && location.x < num_columns
+               && location.y >= 0 && location.y < num_rows
+               && obstacles.find(location) == obstacles.end();
+    }
+
+    // get neighbor of current location
+    void get_neighbors(const Location& location, std::vector<Neighbor<Location, Action, int> >& neighbors)
+    {
+        neighbors.clear();
+
+        Location north_neighbor(location.x, location.y + 1);
+
+        if (location_valid(north_neighbor))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(north_neighbor, Action::Up, 1));
+        }
+
+        Location south_neighbor(location.x, location.y - 1);
+
+        if (location_valid(south_neighbor))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(south_neighbor, Action::Down, 1));
+        }
+
+        Location west_neighbor(location.x - 1, location.y);
+
+        if (location_valid(west_neighbor))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(west_neighbor, Action::Left, 1));
+        }
+
+        Location east_neighbor(location.x + 1, location.y);
+
+        if (location_valid(east_neighbor))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(east_neighbor, Action::Right, 1));
+        }
+    }
+
+    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
+
+    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 };
 
 /*!
