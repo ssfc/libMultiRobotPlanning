@@ -125,11 +125,13 @@ struct Conflict
     }
 };
 
-struct VertexConstraint
+class VertexConstraint
 {
+public:
     int time;
     vertex_t vertex;
 
+public:
     VertexConstraint(int time, vertex_t vertex)
     : time(time), vertex(vertex)
     {}
