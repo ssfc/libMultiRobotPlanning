@@ -15,16 +15,6 @@ using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
 
-
-
-enum class Action // 模板类Action实例化
-{
-    Up,
-    Down,
-    Left,
-    Right,
-};
-
 ostream& operator<<(ostream& os, const Action& action)
 {
     switch (action)

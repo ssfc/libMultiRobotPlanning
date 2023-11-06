@@ -19,6 +19,14 @@
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
+enum class Action // 模板类Action实例化
+{
+    Up,
+    Down,
+    Left,
+    Right,
+};
+
 /*!
   \example a_star.cpp Simple example using a 2D grid world and
   up/down/left/right
