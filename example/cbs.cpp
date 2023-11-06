@@ -615,10 +615,10 @@ int main(int argc, char* argv[])
     vector<PlanResult<TimeLocation, Action, int> > solution;
 
     Timer timer;
-    bool success = cbs.high_level_search(startStates, solution);
+    bool is_success = cbs.high_level_search(startStates, solution);
     timer.stop();
 
-    if (success)
+    if (is_success)
     {
         cout << "Planning successful! " << endl;
         // cout << "hello" << endl;
