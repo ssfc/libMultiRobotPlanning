@@ -117,6 +117,8 @@ public:
     }
 
     void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
+
+    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 };
 
 int main(int argc, char* argv[])
