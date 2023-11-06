@@ -35,7 +35,7 @@ namespace std
     };
 }  // namespace std
 
-struct Vertex
+struct VertexName
 {
     std::string name;
 };
@@ -45,7 +45,7 @@ struct Edge
     std::unordered_set<edge_t> conflictingEdges;
 };
 
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex, Edge> roadmap_t;
+typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VertexName, Edge> roadmap_t;
 
 class State
 {
