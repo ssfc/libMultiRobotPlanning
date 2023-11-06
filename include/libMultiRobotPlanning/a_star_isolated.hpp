@@ -76,7 +76,7 @@ private:
     class AStarNode;
 
     // member vars
-    Environment& environment; // include map size, obstacle position, agent goal.
+    Environment environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -85,7 +85,7 @@ private:
 
 public:
     // member funcs
-    AStar(Environment& input_environment) : environment(input_environment) {}
+    AStar(Environment input_environment) : environment(input_environment) {}
 
     bool a_star_search(const Location& start_location, PlanResult<Location, Action, int>& solution,
                        int initialCost = 0)
