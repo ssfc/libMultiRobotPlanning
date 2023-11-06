@@ -626,8 +626,8 @@ int main(int argc, char* argv[])
         int makespan = 0;
         for (const auto& s : solution)
         {
-          cost += s.cost;
-          makespan = max<int>(makespan, s.cost);
+            cost += s.cost;
+            makespan = max<int>(makespan, s.cost);
         }
 
         ofstream fout(outputFile);
