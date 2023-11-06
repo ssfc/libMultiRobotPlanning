@@ -98,7 +98,7 @@ struct Conflict
 {
     enum Type
     {
-        Vertex,
+        VertexConflict,
         Edge,
     };
 
@@ -107,7 +107,7 @@ struct Conflict
     size_t agent2;
     Type type;
 
-    vertex_t vertex; // for Type == Vertex
+    vertex_t vertex; // for Type == VertexConflict
     edge_t edge1;
     edge_t edge2;
 
@@ -115,8 +115,8 @@ struct Conflict
     {
         switch (conflict.type)
         {
-        case Vertex:
-            return os << conflict.time << ": Vertex(" << conflict.vertex << ")";
+        case VertexConflict:
+            return os << conflict.time << ": VertexConflict(" << conflict.vertex << ")";
         case Edge:
             return os << conflict.time << ": Edge(" << conflict.edge1 << "," << conflict.edge2 << ")";
         }
@@ -378,7 +378,7 @@ public:
                         result.time = t;
                         result.agent1 = i;
                         result.agent2 = j;
-                        result.type = Conflict::Vertex;
+                        result.type = Conflict::VertexConflict;
                         result.vertex = state1.vertex;
 
                         return true;
@@ -420,7 +420,7 @@ public:
 
     void createConstraintsFromConflict(const Conflict& conflict, std::map<size_t, Constraints>& constraints)
     {
-        if (conflict.type == Conflict::Vertex)
+        if (conflict.type == Conflict::VertexConflict)
         {
             Constraints c1;
             c1.vertexConstraints.emplace(VertexConstraint(conflict.time, conflict.vertex));
