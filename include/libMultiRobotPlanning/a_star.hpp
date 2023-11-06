@@ -99,6 +99,7 @@ public:
         while (!open_set.empty())
         {
             AStarNode current = open_set.top();
+            environment.onExpandNode(current.location, current.f_score, current.g_score);
 
             if (environment.is_solution(current.location))
             {

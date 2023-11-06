@@ -115,6 +115,8 @@ public:
             neighbors.emplace_back(Neighbor<Location, Action, int>(east_neighbor, Action::Right, 1));
         }
     }
+
+    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 };
 
 int main(int argc, char* argv[])
