@@ -60,7 +60,7 @@ purposes.
     \tparam LocationHasher A class to convert a location to a hash value. Default:
    std::hash<Location>
 */
-template <typename Location, typename Action, typename Environment,
+template <typename Action, typename Environment,
         typename LocationHasher = std::hash<Location> >
 class AStar
 {
@@ -189,9 +189,9 @@ public:
 };
 
 // inner class definition
-template <typename Location, typename Action, typename Environment,
+template <typename Action, typename Environment,
         typename StateHasher>
-class AStar<Location, Action, Environment, StateHasher>::AStarNode
+class AStar<Action, Environment, StateHasher>::AStarNode
 {
 public:
     Location location;
