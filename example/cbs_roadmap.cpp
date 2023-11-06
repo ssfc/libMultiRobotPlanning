@@ -111,14 +111,14 @@ struct Conflict
     edge_t edge1;
     edge_t edge2;
 
-    friend std::ostream& operator<<(std::ostream& os, const Conflict& c)
+    friend std::ostream& operator<<(std::ostream& os, const Conflict& conflict)
     {
-        switch (c.type)
+        switch (conflict.type)
         {
         case Vertex:
-            return os << c.time << ": Vertex(" << c.vertex << ")";
+            return os << conflict.time << ": Vertex(" << conflict.vertex << ")";
         case Edge:
-            return os << c.time << ": Edge(" << c.edge1 << "," << c.edge2 << ")";
+            return os << conflict.time << ": Edge(" << conflict.edge1 << "," << conflict.edge2 << ")";
         }
 
         return os;
