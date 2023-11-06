@@ -133,13 +133,6 @@ public:
               goal(std::move(input_goal))
     {}
 
-    // 估算h_score
-    int admissible_heuristic(const Location& current_location)
-    {
-        return abs(current_location.x - goal.x)
-               + abs(current_location.y - goal.y);
-    }
-
     // whether agent reach goal or not.
     bool is_solution(const Location& current_location)
     {
@@ -222,6 +215,12 @@ public:
             goal(std::move(input_goal))
     {}
 
+    int admissible_heuristic(const Location& current_location)
+    {
+        return abs(current_location.x - goal.x)
+               + abs(current_location.y - goal.y);
+    }
+
     bool a_star_search(const Location& start_location, PlanResult<Location, Action, int>& solution,
                        int initialCost = 0)
     {
@@ -236,7 +235,7 @@ public:
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
-  environment.admissible_heuristic(start_location), initialCost));
+  admissible_heuristic(start_location), initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
@@ -287,7 +286,7 @@ public:
                     auto iter = location_to_heap.find(neighbor.location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
+                        int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
                         auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
