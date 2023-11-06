@@ -109,64 +109,29 @@ add_executable(cbs_roadmap example/cbs_roadmap.cpp)
 target_link_libraries(cbs_roadmap ${Boost_LIBRARIES} yaml-cpp)
 
 ## cbs
-add_executable(cbs
-  example/cbs.cpp
-)
-target_link_libraries(cbs
-  ${Boost_LIBRARIES}
-  yaml-cpp
-)
+add_executable(cbs example/cbs.cpp)
+target_link_libraries(cbs ${Boost_LIBRARIES} yaml-cpp)
 
 ## cbs_ta
-add_executable(cbs_ta
-  example/cbs_ta.cpp
-)
-target_link_libraries(cbs_ta
-  ${Boost_LIBRARIES}
-  yaml-cpp
-)
+add_executable(cbs_ta example/cbs_ta.cpp)
+target_link_libraries(cbs_ta ${Boost_LIBRARIES} yaml-cpp)
 
 ## ecbs
-add_executable(ecbs
-  example/ecbs.cpp
-)
-target_link_libraries(ecbs
-  ${Boost_LIBRARIES}
-  yaml-cpp
-)
+add_executable(ecbs example/ecbs.cpp)
+target_link_libraries(ecbs ${Boost_LIBRARIES} yaml-cpp)
 
 ## ecbs_ta
-add_executable(ecbs_ta
-  example/ecbs_ta.cpp
-)
-target_link_libraries(ecbs_ta
-  ${Boost_LIBRARIES}
-  yaml-cpp
-)
+add_executable(ecbs_ta example/ecbs_ta.cpp)
+target_link_libraries(ecbs_ta ${Boost_LIBRARIES} yaml-cpp)
 
 ## next_best_assignment
-add_executable(next_best_assignment
-  example/next_best_assignment.cpp
-)
-target_link_libraries(next_best_assignment
-  ${Boost_LIBRARIES}
-  yaml-cpp
-)
+add_executable(next_best_assignment example/next_best_assignment.cpp)
+target_link_libraries(next_best_assignment ${Boost_LIBRARIES} yaml-cpp)
 
 ## sipp
-add_executable(sipp
-  example/sipp.cpp
-)
-target_link_libraries(sipp
-  ${Boost_LIBRARIES}
-  yaml-cpp
-)
+add_executable(sipp example/sipp.cpp)
+target_link_libraries(sipp ${Boost_LIBRARIES} yaml-cpp)
 
 ## mapf_prioritized_sipp
-add_executable(mapf_prioritized_sipp
-  example/mapf_prioritized_sipp.cpp
-)
-target_link_libraries(mapf_prioritized_sipp
-  ${Boost_LIBRARIES}
-  yaml-cpp
-)
+add_executable(mapf_prioritized_sipp example/mapf_prioritized_sipp.cpp)
+target_link_libraries(mapf_prioritized_sipp ${Boost_LIBRARIES} yaml-cpp)
