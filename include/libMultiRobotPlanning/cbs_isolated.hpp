@@ -205,6 +205,59 @@ namespace std
     };
 }
 
+
+class Constraints
+{
+public:
+    std::unordered_set<VertexConstraint> vertexConstraints;
+    std::unordered_set<EdgeConstraint> edgeConstraints;
+
+public:
+    void add(const Constraints& other)
+    {
+        vertexConstraints.insert(other.vertexConstraints.begin(),
+                                 other.vertexConstraints.end());
+        edgeConstraints.insert(other.edgeConstraints.begin(),
+                               other.edgeConstraints.end());
+    }
+
+    bool overlap(const Constraints& other) const
+    {
+        for (const auto& vc : vertexConstraints)
+        {
+            if (other.vertexConstraints.count(vc) > 0)
+            {
+                return true;
+            }
+        }
+
+        for (const auto& ec : edgeConstraints)
+        {
+            if (other.edgeConstraints.count(ec) > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Constraints& c)
+    {
+        for (const auto& vc : c.vertexConstraints)
+        {
+            os << vc << std::endl;
+        }
+
+        for (const auto& ec : c.edgeConstraints)
+        {
+            os << ec << std::endl;
+        }
+
+        return os;
+    }
+};
+
 /*!
   \example cbs.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
   problem in a 2D grid world with up/down/left/right actions
