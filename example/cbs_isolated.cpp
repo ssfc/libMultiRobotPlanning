@@ -296,11 +296,11 @@ public:
                abs(time_location.y - goals[agent_index].y);
     }
 
-    bool is_solution(const TimeLocation& s)
+    bool is_solution(const TimeLocation& time_location)
     {
-        return s.x == goals[agent_index].x
-               && s.y == goals[agent_index].y
-               && s.time > m_lastGoalConstraint;
+        return time_location.x == goals[agent_index].x
+               && time_location.y == goals[agent_index].y
+               && time_location.time > m_lastGoalConstraint;
     }
 
     void get_neighbors(const TimeLocation& time_location, vector<Neighbor<TimeLocation, Action, int> >& neighbors)
