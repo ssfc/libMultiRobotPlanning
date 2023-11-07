@@ -78,7 +78,7 @@ statistical purposes.
     This function is called on every low-level expansion and can be used for
 statistical purposes.
 */
-template <typename State, typename Action, typename Conflict,
+template <typename TimeLocation, typename Action, typename Conflict,
         typename Constraints, typename Environment>
 class CBS
 {
@@ -86,7 +86,7 @@ private:
     class HighLevelNode
     {
     public:
-        std::vector<PlanResult<State, Action, int> > solution;
+        std::vector<PlanResult<TimeLocation, Action, int> > solution;
         std::vector<Constraints> constraints;
         int cost;
         int id;
@@ -141,28 +141,28 @@ private:
             environment.setLowLevelContext(agentIdx, &constraints);
         }
 
-        int admissible_heuristic(const State& s)
+        int admissible_heuristic(const TimeLocation& s)
         {
             return environment.admissible_heuristic(s);
         }
 
-        bool is_solution(const State& s)
+        bool is_solution(const TimeLocation& s)
         {
             return environment.is_solution(s);
         }
 
-        void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
+        void get_neighbors(const TimeLocation& s, std::vector<Neighbor<TimeLocation, Action, int> >& neighbors)
         {
             environment.get_neighbors(s, neighbors);
         }
 
-        void onExpandNode(const State& s, int fScore, int gScore)
+        void onExpandNode(const TimeLocation& s, int fScore, int gScore)
         {
             // std::cout << "LL expand: " << s << std::endl;
             environment.onExpandLowLevelNode(s, fScore, gScore);
         }
 
-        void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {
+        void onDiscover(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/) {
             // std::cout << "LL discover: " << s << std::endl;
             // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
         }
@@ -170,12 +170,12 @@ private:
     };
 
     Environment& environment;
-    typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
+    typedef AStar<TimeLocation, Action, LowLevelEnvironment> LowLevelSearch_t;
 public:
     CBS(Environment& environment) : environment(environment) {}
 
-    bool high_level_search(const std::vector<State>& initialStates,
-                           std::vector<PlanResult<State, Action, int> >& solution)
+    bool high_level_search(const std::vector<TimeLocation>& initialStates,
+                           std::vector<PlanResult<TimeLocation, Action, int> >& solution)
     {
         HighLevelNode start;
         start.solution.resize(initialStates.size());
