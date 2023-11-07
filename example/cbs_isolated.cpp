@@ -252,7 +252,7 @@ private:
     int last_goal_constraint;
     int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
-    bool m_disappearAtGoal;
+    bool disappear_at_goal;
 
 public:
     Environment(size_t input_dimx, size_t input_dimy, unordered_set<Location> input_obstacles,
@@ -266,7 +266,7 @@ public:
               last_goal_constraint(-1),
               num_expanded_high_level_nodes(0),
               num_expanded_low_level_nodes(0),
-              m_disappearAtGoal(input_disappearAtGoal)
+              disappear_at_goal(input_disappearAtGoal)
     {}
 
     Environment(const Environment&) = delete;
@@ -464,7 +464,7 @@ public:
 
         assert(!solution[agentIdx].path.empty());
 
-        if (m_disappearAtGoal)
+        if (disappear_at_goal)
         {
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
