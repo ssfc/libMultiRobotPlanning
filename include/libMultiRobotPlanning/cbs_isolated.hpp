@@ -10,6 +10,57 @@
 #include "a_star.hpp"
 
 
+// Location Custom state for the search
+class TimeLocation
+{
+public:
+    int time;
+    int x;
+    int y;
+
+public:
+    TimeLocation(int time, int x, int y) :
+            time(time), x(x), y(y)
+    {}
+
+    bool operator==(const TimeLocation& other) const
+    {
+        return time == other.time
+               && x == other.x
+               && y == other.y;
+    }
+
+    bool equalExceptTime(const TimeLocation& other) const
+    {
+        return x == other.x
+               && y == other.y;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const TimeLocation& s)
+    {
+        return os << s.time << ": (" << s.x << "," << s.y << ")";
+        // return os << "(" << s.x << "," << s.y << ")";
+    }
+};
+
+namespace std
+{
+    template <>
+    struct hash<TimeLocation>
+    {
+        size_t operator()(const TimeLocation& s) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.x);
+            boost::hash_combine(seed, s.y);
+
+            return seed;
+        }
+    };
+}
+
+
 /*!
   \example cbs.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
   problem in a 2D grid world with up/down/left/right actions
@@ -39,7 +90,6 @@ instead.
 
 \tparam Location Custom state for the search. Needs to be copy'able
 \tparam Action Custom action for the search. Needs to be copy'able
-\tparam Cost Custom Cost type (integer or floating point types)
 \tparam Conflict Custom conflict description. A conflict needs to be able to be
 transformed into a constraint.
 \tparam Constraints Custom constraint description. The Environment needs to be
