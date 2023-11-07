@@ -99,12 +99,6 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
    int> >& neighbors)`\n
     Fill the list of neighboring location for the given location s.
 
-  - `void onDiscover(const Location& s, int f_score, int g_score)`\n
-    This function is called on every node discovery and can be used for
-   statistical purposes.
-
-    \tparam LocationHasher A class to convert a location to a hash value. Default:
-   std::hash<Location>
 */
 
 class Environment // 模板类Environment实例化
