@@ -99,10 +99,6 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
    int> >& neighbors)`\n
     Fill the list of neighboring location for the given location s.
 
-  - `void onExpandNode(const Location& s, int f_score, int g_score)`\n
-    This function is called on every expansion and can be used for statistical
-purposes.
-
   - `void onDiscover(const Location& s, int f_score, int g_score)`\n
     This function is called on every node discovery and can be used for
    statistical purposes.
@@ -172,8 +168,6 @@ public:
         }
     }
 
-    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
-
     void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 };
 
@@ -218,6 +212,9 @@ public:
         return current_location == goal;
     }
 
+    // This function is called on every expansion and can be used for statistical purposes.
+    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
+
     bool a_star_search(const Location& start_location, PlanResult<Location, Action, int>& solution,
                        int initialCost = 0)
     {
@@ -242,7 +239,7 @@ public:
         while (!open_set.empty())
         {
             AStarNode current = open_set.top();
-            environment.onExpandNode(current.location, current.f_score, current.g_score);
+            onExpandNode(current.location, current.f_score, current.g_score);
 
             if (is_solution(current.location))
             {
