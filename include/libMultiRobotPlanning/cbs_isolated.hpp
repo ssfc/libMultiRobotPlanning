@@ -188,7 +188,7 @@ private:
         // , m_agentIdx(agentIdx)
         // , m_constraints(constraints)
         {
-            environment.setLowLevelContext(agentIdx, &constraints);
+            environment.setLowLevelContext(agentIdx, constraints);
         }
 
         int admissible_heuristic(const TimeLocation& s)

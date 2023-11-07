@@ -248,7 +248,7 @@ private:
     vector<Location> goals;
     // vector< vector<int> > m_heuristic;
     size_t agent_index;
-    const Constraints* m_constraints;
+    Constraints m_constraints;
     int m_lastGoalConstraint;
     int m_highLevelExpanded;
     int m_lowLevelExpanded;
@@ -262,7 +262,7 @@ public:
               obstacles(move(input_obstacles)),
               goals(move(input_goals)),
               agent_index(0),
-              m_constraints(nullptr),
+              // m_constraints(nullptr),
               m_lastGoalConstraint(-1),
               m_highLevelExpanded(0),
               m_lowLevelExpanded(0),
@@ -272,13 +272,13 @@ public:
     Environment(const Environment&) = delete;
     Environment& operator=(const Environment&) = delete;
 
-    void setLowLevelContext(size_t agentIdx, const Constraints* input_constraints)
+    void setLowLevelContext(size_t agentIdx, Constraints input_constraints)
     {
-        assert(input_constraints);  // NOLINT
+        // assert(input_constraints);  // NOLINT
         agent_index = agentIdx;
         m_constraints = input_constraints;
         m_lastGoalConstraint = -1;
-        for (const auto& vc : input_constraints->vertexConstraints)
+        for (const auto& vc : input_constraints.vertexConstraints)
         {
             if (vc.x == goals[agent_index].x && vc.y == goals[agent_index].y)
             {
@@ -477,8 +477,8 @@ public:
 
     bool location_valid(const TimeLocation& s)
     {
-        assert(m_constraints);
-        const auto& con = m_constraints->vertexConstraints;
+        // assert(m_constraints);
+        const auto& con = m_constraints.vertexConstraints;
 
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
@@ -487,8 +487,8 @@ public:
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
     {
-        assert(m_constraints);
-        const auto& con = m_constraints->edgeConstraints;
+        // assert(m_constraints);
+        const auto& con = m_constraints.edgeConstraints;
 
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
