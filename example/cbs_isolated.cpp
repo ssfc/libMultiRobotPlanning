@@ -501,11 +501,11 @@ int main(int argc, char* argv[])
     po::options_description desc("Allowed options");
     string inputFile;
     string outputFile;
-    bool disappearAtGoal;
+    bool is_disappear_at_goal;
     desc.add_options()("help", "produce help message")
             ("input,i", po::value<string>(&inputFile)->required(), "input file (YAML)")
             ("output,o", po::value<string>(&outputFile)->required(), "output file (YAML)")
-            ("disappear-at-goal", po::bool_switch(&disappearAtGoal), "make agents to disappear at goal rather than staying there");
+            ("disappear-at-goal", po::bool_switch(&is_disappear_at_goal), "make agents to disappear at goal rather than staying there");
 
     try
     {
@@ -566,7 +566,7 @@ int main(int argc, char* argv[])
         startStatesSet.insert(s);
     }
 
-    Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
+    Environment mapf(dimx, dimy, obstacles, goals, is_disappear_at_goal);
     CBS<Action, Conflict, Constraints, Environment> cbs(mapf);
     vector<PlanResult<TimeLocation, Action, int> > solution;
 
