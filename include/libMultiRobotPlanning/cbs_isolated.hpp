@@ -582,7 +582,6 @@ statistical purposes.
     This function is called on every low-level expansion and can be used for
 statistical purposes.
 */
-template <typename Environment>
 class CBS
 {
 private:
