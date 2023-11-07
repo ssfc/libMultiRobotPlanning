@@ -287,13 +287,13 @@ public:
         }
     }
 
-    int admissible_heuristic(const TimeLocation& s)
+    int admissible_heuristic(const TimeLocation& time_location)
     {
         // cout << "H: " <<  s << " " << m_heuristic[agent_index][s.x + num_columns *
         // s.y] << endl;
         // return m_heuristic[agent_index][s.x + num_columns * s.y];
-        return abs(s.x - goals[agent_index].x) +
-               abs(s.y - goals[agent_index].y);
+        return abs(time_location.x - goals[agent_index].x) +
+               abs(time_location.y - goals[agent_index].y);
     }
 
     bool is_solution(const TimeLocation& s)
