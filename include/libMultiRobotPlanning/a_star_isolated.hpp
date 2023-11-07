@@ -97,31 +97,10 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
 
 */
 
-class Environment // 模板类Environment实例化
-{
-private:
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    Location start;
-    Location goal;
-
-public:
-    Environment(size_t input_num_columns, size_t input_num_rows,
-                std::unordered_set<Location> input_obstacles, Location input_start, Location input_goal)
-            : num_columns(input_num_columns),
-              num_rows(input_num_rows),
-              obstacles(std::move(input_obstacles)),
-              start(std::move(input_start)),
-              goal(std::move(input_goal))
-    {}
-};
-
 class AStar
 {
 private:
     // member vars
-    Environment environment; // include map size, obstacle position, agent goal.
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
@@ -136,10 +115,9 @@ private:
 
 public:
     // member funcs
-    AStar(Environment input_environment, size_t input_num_columns, size_t input_num_rows,
+    AStar(size_t input_num_columns, size_t input_num_rows,
           std::unordered_set<Location> input_obstacles, Location input_start, Location input_goal)
-          : environment(input_environment),
-            num_columns(input_num_columns),
+          : num_columns(input_num_columns),
             num_rows(input_num_rows),
             obstacles(std::move(input_obstacles)),
             start(std::move(input_start)),
