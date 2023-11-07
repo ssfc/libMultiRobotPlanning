@@ -372,7 +372,7 @@ int main(int argc, char* argv[])
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, is_disappear_at_goal);
-    CBS<Constraints, Environment> cbs(mapf);
+    CBS<Environment> cbs(mapf);
     vector<PlanResult<TimeLocation, Action, int> > solution;
 
     Timer timer;
