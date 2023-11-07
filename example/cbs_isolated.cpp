@@ -247,7 +247,7 @@ private:
     unordered_set<Location> obstacles;
     vector<Location> goals;
     // vector< vector<int> > m_heuristic;
-    size_t m_agentIdx;
+    size_t agent_index;
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
     int m_highLevelExpanded;
@@ -261,7 +261,7 @@ public:
               num_rows(input_dimy),
               obstacles(move(input_obstacles)),
               goals(move(input_goals)),
-              m_agentIdx(0),
+              agent_index(0),
               m_constraints(nullptr),
               m_lastGoalConstraint(-1),
               m_highLevelExpanded(0),
@@ -275,12 +275,12 @@ public:
     void setLowLevelContext(size_t agentIdx, const Constraints* constraints)
     {
         assert(constraints);  // NOLINT
-        m_agentIdx = agentIdx;
+        agent_index = agentIdx;
         m_constraints = constraints;
         m_lastGoalConstraint = -1;
         for (const auto& vc : constraints->vertexConstraints)
         {
-            if (vc.x == goals[m_agentIdx].x && vc.y == goals[m_agentIdx].y)
+            if (vc.x == goals[agent_index].x && vc.y == goals[agent_index].y)
             {
                 m_lastGoalConstraint = max(m_lastGoalConstraint, vc.time);
             }
@@ -289,17 +289,17 @@ public:
 
     int admissible_heuristic(const TimeLocation& s)
     {
-        // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + num_columns *
+        // cout << "H: " <<  s << " " << m_heuristic[agent_index][s.x + num_columns *
         // s.y] << endl;
-        // return m_heuristic[m_agentIdx][s.x + num_columns * s.y];
-        return abs(s.x - goals[m_agentIdx].x) +
-               abs(s.y - goals[m_agentIdx].y);
+        // return m_heuristic[agent_index][s.x + num_columns * s.y];
+        return abs(s.x - goals[agent_index].x) +
+               abs(s.y - goals[agent_index].y);
     }
 
     bool is_solution(const TimeLocation& s)
     {
-        return s.x == goals[m_agentIdx].x
-               && s.y == goals[m_agentIdx].y
+        return s.x == goals[agent_index].x
+               && s.y == goals[agent_index].y
                && s.time > m_lastGoalConstraint;
     }
 
