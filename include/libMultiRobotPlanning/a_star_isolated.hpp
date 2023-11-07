@@ -168,6 +168,7 @@ public:
         }
     }
 
+    // This function is called on every node discovery and can be used for statistical purposes.
     void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 };
 
