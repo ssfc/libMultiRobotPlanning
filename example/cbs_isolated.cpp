@@ -255,18 +255,18 @@ private:
     bool m_disappearAtGoal;
 
 public:
-    Environment(size_t dimx, size_t dimy, unordered_set<Location> obstacles,
-                vector<Location> input_goals, bool disappearAtGoal = false)
-            : num_columns(dimx),
-              num_rows(dimy),
-              obstacles(move(obstacles)),
+    Environment(size_t input_dimx, size_t input_dimy, unordered_set<Location> input_obstacles,
+                vector<Location> input_goals, bool input_disappearAtGoal = false)
+            : num_columns(input_dimx),
+              num_rows(input_dimy),
+              obstacles(move(input_obstacles)),
               m_goals(move(input_goals)),
               m_agentIdx(0),
               m_constraints(nullptr),
               m_lastGoalConstraint(-1),
               m_highLevelExpanded(0),
               m_lowLevelExpanded(0),
-              m_disappearAtGoal(disappearAtGoal)
+              m_disappearAtGoal(input_disappearAtGoal)
     {}
 
     Environment(const Environment&) = delete;
