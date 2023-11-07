@@ -303,7 +303,8 @@ public:
                && time_location.time > m_lastGoalConstraint;
     }
 
-    void get_neighbors(const TimeLocation& time_location, vector<Neighbor<TimeLocation, Action, int> >& neighbors)
+    void get_neighbors(const TimeLocation& time_location,
+                       vector<Neighbor<TimeLocation, Action, int> >& neighbors)
     {
         // cout << "#VC " << constraints.vertexConstraints.size() << endl;
         // for(const auto& vc : constraints.vertexConstraints) {
@@ -343,7 +344,8 @@ public:
         }
     }
 
-    bool getFirstConflict(const vector<PlanResult<TimeLocation, Action, int> >& solution, Conflict& result)
+    bool getFirstConflict(const vector<PlanResult<TimeLocation, Action, int> >& solution,
+                          Conflict& result)
     {
         int max_t = 0;
         for (const auto& sol : solution)
