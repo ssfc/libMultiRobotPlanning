@@ -71,6 +71,43 @@ enum class Action
     Wait,
 };
 
+// Conflict Custom conflict description.
+// A conflict needs to be able to be transformed into a constraint.
+class Conflict
+{
+public:
+    enum Type
+    {
+        Vertex,
+        Edge,
+    };
+
+    int time;
+    size_t agent1;
+    size_t agent2;
+    Type type;
+
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+
+public:
+    friend std::ostream& operator<<(std::ostream& os, const Conflict& conflict)
+    {
+        switch (conflict.type)
+        {
+            case Vertex:
+                return os << conflict.time << ": Vertex(" << conflict.x1 << "," << conflict.y1 << ")";
+            case Edge:
+                return os << conflict.time << ": Edge(" << conflict.x1 << "," << conflict.y1 << ","
+                          << conflict.x2 << "," << conflict.y2 << ")";
+        }
+
+        return os;
+    }
+};
+
 /*!
   \example cbs.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
   problem in a 2D grid world with up/down/left/right actions
@@ -138,7 +175,7 @@ statistical purposes.
     This function is called on every low-level expansion and can be used for
 statistical purposes.
 */
-template <typename Conflict, typename Constraints, typename Environment>
+template <typename Constraints, typename Environment>
 class CBS
 {
 private:

@@ -42,42 +42,6 @@ ostream& operator<<(ostream& os, const Action& this_action)
     return os;
 }
 
-// Conflict Custom conflict description.
-// A conflict needs to be able to be transformed into a constraint.
-class Conflict
-{
-public:
-    enum Type
-    {
-        Vertex,
-        Edge,
-    };
-
-    int time;
-    size_t agent1;
-    size_t agent2;
-    Type type;
-
-    int x1;
-    int y1;
-    int x2;
-    int y2;
-
-public:
-    friend ostream& operator<<(ostream& os, const Conflict& conflict)
-    {
-        switch (conflict.type)
-        {
-            case Vertex:
-                return os << conflict.time << ": Vertex(" << conflict.x1 << "," << conflict.y1 << ")";
-            case Edge:
-                return os << conflict.time << ": Edge(" << conflict.x1 << "," << conflict.y1 << ","
-                          << conflict.x2 << "," << conflict.y2 << ")";
-        }
-
-        return os;
-    }
-};
 
 class VertexConstraint
 {
@@ -556,7 +520,7 @@ int main(int argc, char* argv[])
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, is_disappear_at_goal);
-    CBS<Conflict, Constraints, Environment> cbs(mapf);
+    CBS<Constraints, Environment> cbs(mapf);
     vector<PlanResult<TimeLocation, Action, int> > solution;
 
     Timer timer;
