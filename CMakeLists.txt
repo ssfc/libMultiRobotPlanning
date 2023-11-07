@@ -53,6 +53,7 @@ set(ALL_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star_epsilon.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/assignment.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs_isolated.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs_ta.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/ecbs.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/ecbs_ta.cpp
@@ -94,6 +95,7 @@ include_directories(include)
 add_executable(a_star example/a_star.cpp)
 target_link_libraries(a_star ${Boost_LIBRARIES})
 
+## a_star_isolated
 add_executable(a_star_isolated example/a_star_isolated.cpp)
 target_link_libraries(a_star_isolated ${Boost_LIBRARIES})
 
@@ -112,6 +114,10 @@ target_link_libraries(cbs_roadmap ${Boost_LIBRARIES} yaml-cpp)
 ## cbs
 add_executable(cbs example/cbs.cpp)
 target_link_libraries(cbs ${Boost_LIBRARIES} yaml-cpp)
+
+## cbs_isolated
+add_executable(cbs_isolated example/cbs_isolated.cpp)
+target_link_libraries(cbs_isolated ${Boost_LIBRARIES} yaml-cpp)
 
 ## cbs_ta
 add_executable(cbs_ta example/cbs_ta.cpp)
