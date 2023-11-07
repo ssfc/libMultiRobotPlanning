@@ -245,7 +245,7 @@ private:
     int num_columns;
     int num_rows;
     unordered_set<Location> obstacles;
-    vector<Location> m_goals;
+    vector<Location> goals;
     // vector< vector<int> > m_heuristic;
     size_t m_agentIdx;
     const Constraints* m_constraints;
@@ -260,7 +260,7 @@ public:
             : num_columns(input_dimx),
               num_rows(input_dimy),
               obstacles(move(input_obstacles)),
-              m_goals(move(input_goals)),
+              goals(move(input_goals)),
               m_agentIdx(0),
               m_constraints(nullptr),
               m_lastGoalConstraint(-1),
@@ -280,7 +280,7 @@ public:
         m_lastGoalConstraint = -1;
         for (const auto& vc : constraints->vertexConstraints)
         {
-            if (vc.x == m_goals[m_agentIdx].x && vc.y == m_goals[m_agentIdx].y)
+            if (vc.x == goals[m_agentIdx].x && vc.y == goals[m_agentIdx].y)
             {
                 m_lastGoalConstraint = max(m_lastGoalConstraint, vc.time);
             }
@@ -292,14 +292,14 @@ public:
         // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + num_columns *
         // s.y] << endl;
         // return m_heuristic[m_agentIdx][s.x + num_columns * s.y];
-        return abs(s.x - m_goals[m_agentIdx].x) +
-               abs(s.y - m_goals[m_agentIdx].y);
+        return abs(s.x - goals[m_agentIdx].x) +
+               abs(s.y - goals[m_agentIdx].y);
     }
 
     bool is_solution(const TimeLocation& s)
     {
-        return s.x == m_goals[m_agentIdx].x
-               && s.y == m_goals[m_agentIdx].y
+        return s.x == goals[m_agentIdx].x
+               && s.y == goals[m_agentIdx].y
                && s.time > m_lastGoalConstraint;
     }
 
