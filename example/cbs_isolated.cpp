@@ -248,7 +248,7 @@ private:
     vector<Location> goals;
     // vector< vector<int> > m_heuristic;
     size_t agent_index;
-    Constraints m_constraints;
+    Constraints constraints;
     int last_goal_constraint;
     int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
@@ -262,7 +262,7 @@ public:
               obstacles(move(input_obstacles)),
               goals(move(input_goals)),
               agent_index(0),
-              // m_constraints(nullptr),
+              // constraints(nullptr),
               last_goal_constraint(-1),
               num_expanded_high_level_nodes(0),
               num_expanded_low_level_nodes(0),
@@ -276,7 +276,7 @@ public:
     {
         // assert(input_constraints);  // NOLINT
         agent_index = agentIdx;
-        m_constraints = input_constraints;
+        constraints = input_constraints;
         last_goal_constraint = -1;
         for (const auto& vc : input_constraints.vertexConstraints)
         {
@@ -477,8 +477,8 @@ public:
 
     bool location_valid(const TimeLocation& s)
     {
-        // assert(m_constraints);
-        const auto& con = m_constraints.vertexConstraints;
+        // assert(constraints);
+        const auto& con = constraints.vertexConstraints;
 
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
@@ -487,8 +487,8 @@ public:
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
     {
-        // assert(m_constraints);
-        const auto& con = m_constraints.edgeConstraints;
+        // assert(constraints);
+        const auto& con = constraints.edgeConstraints;
 
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
