@@ -95,9 +95,6 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
   - `Cost admissible_heuristic(const Location& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
-  - `bool is_solution(const Location& s)`\n
-    Return true if the given location is a goal location.
-
   - `void get_neighbors(const Location& s, std::vector<Neighbor<Location, Action,
    int> >& neighbors)`\n
     Fill the list of neighboring location for the given location s.
@@ -132,12 +129,6 @@ public:
               start(std::move(input_start)),
               goal(std::move(input_goal))
     {}
-
-    // whether agent reach goal or not.
-    bool is_solution(const Location& current_location)
-    {
-        return current_location == goal;
-    }
 
     // whether location valid or not
     bool location_valid(const Location& location)
@@ -221,6 +212,12 @@ public:
                + abs(current_location.y - goal.y);
     }
 
+    // whether agent reach goal or not.
+    bool is_solution(const Location& current_location)
+    {
+        return current_location == goal;
+    }
+
     bool a_star_search(const Location& start_location, PlanResult<Location, Action, int>& solution,
                        int initialCost = 0)
     {
@@ -247,7 +244,7 @@ public:
             AStarNode current = open_set.top();
             environment.onExpandNode(current.location, current.f_score, current.g_score);
 
-            if (environment.is_solution(current.location))
+            if (is_solution(current.location))
             {
                 solution.path.clear();
                 solution.actions.clear();
