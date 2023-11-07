@@ -128,7 +128,7 @@ statistical purposes.
     This function is called on every low-level expansion and can be used for
 statistical purposes.
 */
-template <typename TimeLocation, typename Action, typename Conflict,
+template <typename Action, typename Conflict,
         typename Constraints, typename Environment>
 class CBS
 {
