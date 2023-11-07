@@ -272,13 +272,13 @@ public:
     Environment(const Environment&) = delete;
     Environment& operator=(const Environment&) = delete;
 
-    void setLowLevelContext(size_t agentIdx, const Constraints* constraints)
+    void setLowLevelContext(size_t agentIdx, const Constraints* input_constraints)
     {
-        assert(constraints);  // NOLINT
+        assert(input_constraints);  // NOLINT
         agent_index = agentIdx;
-        m_constraints = constraints;
+        m_constraints = input_constraints;
         m_lastGoalConstraint = -1;
-        for (const auto& vc : constraints->vertexConstraints)
+        for (const auto& vc : input_constraints->vertexConstraints)
         {
             if (vc.x == goals[agent_index].x && vc.y == goals[agent_index].y)
             {
