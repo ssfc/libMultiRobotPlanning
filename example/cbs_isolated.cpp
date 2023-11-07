@@ -249,7 +249,7 @@ private:
     // vector< vector<int> > m_heuristic;
     size_t agent_index;
     Constraints m_constraints;
-    int m_lastGoalConstraint;
+    int last_goal_constraint;
     int m_highLevelExpanded;
     int m_lowLevelExpanded;
     bool m_disappearAtGoal;
@@ -263,7 +263,7 @@ public:
               goals(move(input_goals)),
               agent_index(0),
               // m_constraints(nullptr),
-              m_lastGoalConstraint(-1),
+              last_goal_constraint(-1),
               m_highLevelExpanded(0),
               m_lowLevelExpanded(0),
               m_disappearAtGoal(input_disappearAtGoal)
@@ -277,12 +277,12 @@ public:
         // assert(input_constraints);  // NOLINT
         agent_index = agentIdx;
         m_constraints = input_constraints;
-        m_lastGoalConstraint = -1;
+        last_goal_constraint = -1;
         for (const auto& vc : input_constraints.vertexConstraints)
         {
             if (vc.x == goals[agent_index].x && vc.y == goals[agent_index].y)
             {
-                m_lastGoalConstraint = max(m_lastGoalConstraint, vc.time);
+                last_goal_constraint = max(last_goal_constraint, vc.time);
             }
         }
     }
@@ -300,7 +300,7 @@ public:
     {
         return time_location.x == goals[agent_index].x
                && time_location.y == goals[agent_index].y
-               && time_location.time > m_lastGoalConstraint;
+               && time_location.time > last_goal_constraint;
     }
 
     void get_neighbors(const TimeLocation& time_location,
