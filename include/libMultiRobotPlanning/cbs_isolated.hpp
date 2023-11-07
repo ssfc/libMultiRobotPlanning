@@ -138,8 +138,7 @@ statistical purposes.
     This function is called on every low-level expansion and can be used for
 statistical purposes.
 */
-template <typename Conflict,
-        typename Constraints, typename Environment>
+template <typename Conflict, typename Constraints, typename Environment>
 class CBS
 {
 private:
