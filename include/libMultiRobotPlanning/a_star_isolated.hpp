@@ -86,15 +86,6 @@ needsto be admissible.
 
 This class can either use a fibonacci heap, or a d-ary heap. The latter is the
 default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
-
-\tparam Location Custom location for the search. Needs to be copy'able
-\tparam Action Custom action for the search. Needs to be copy'able
-\tparam Cost Custom Cost type (integer or floating point types)
-\tparam Environment This class needs to provide the custom A* logic. In
-    particular, it needs to support the following functions:
-  - `Cost admissible_heuristic(const Location& s)`\n
-    This function can return 0 if no suitable heuristic is available.
-
 */
 
 class AStar
@@ -124,6 +115,7 @@ public:
             goal(std::move(input_goal))
     {}
 
+    // This function can return 0 if no suitable heuristic is available.
     int admissible_heuristic(const Location& current_location)
     {
         return abs(current_location.x - goal.x)
