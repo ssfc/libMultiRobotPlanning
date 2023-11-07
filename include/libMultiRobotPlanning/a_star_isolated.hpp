@@ -167,9 +167,6 @@ public:
             neighbors.emplace_back(Neighbor<Location, Action, int>(east_neighbor, Action::Right, 1));
         }
     }
-
-    // This function is called on every node discovery and can be used for statistical purposes.
-    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 };
 
 class AStar
@@ -215,6 +212,9 @@ public:
 
     // This function is called on every expansion and can be used for statistical purposes.
     void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
+
+    // This function is called on every node discovery and can be used for statistical purposes.
+    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
     bool a_star_search(const Location& start_location, PlanResult<Location, Action, int>& solution,
                        int initialCost = 0)
@@ -285,7 +285,7 @@ public:
                         auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
-                        environment.onDiscover(neighbor.location, f_score, tentative_gScore);
+                        onDiscover(neighbor.location, f_score, tentative_gScore);
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -305,8 +305,7 @@ public:
                         (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
-                        environment.onDiscover(neighbor.location, (*handle).f_score,
-                                               (*handle).g_score);
+                        onDiscover(neighbor.location, (*handle).f_score, (*handle).g_score);
                     }
 
                     // Best path for this node so far
