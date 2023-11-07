@@ -95,10 +95,6 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
   - `Cost admissible_heuristic(const Location& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
-  - `void get_neighbors(const Location& s, std::vector<Neighbor<Location, Action,
-   int> >& neighbors)`\n
-    Fill the list of neighboring location for the given location s.
-
 */
 
 class Environment // 模板类Environment实例化
@@ -119,48 +115,6 @@ public:
               start(std::move(input_start)),
               goal(std::move(input_goal))
     {}
-
-    // whether location valid or not
-    bool location_valid(const Location& location)
-    {
-        return location.x >= 0 && location.x < num_columns
-               && location.y >= 0 && location.y < num_rows
-               && obstacles.find(location) == obstacles.end();
-    }
-
-    // get neighbor of current location
-    void get_neighbors(const Location& location, std::vector<Neighbor<Location, Action, int> >& neighbors)
-    {
-        neighbors.clear();
-
-        Location north_neighbor(location.x, location.y + 1);
-
-        if (location_valid(north_neighbor))
-        {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(north_neighbor, Action::Up, 1));
-        }
-
-        Location south_neighbor(location.x, location.y - 1);
-
-        if (location_valid(south_neighbor))
-        {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(south_neighbor, Action::Down, 1));
-        }
-
-        Location west_neighbor(location.x - 1, location.y);
-
-        if (location_valid(west_neighbor))
-        {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(west_neighbor, Action::Left, 1));
-        }
-
-        Location east_neighbor(location.x + 1, location.y);
-
-        if (location_valid(east_neighbor))
-        {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(east_neighbor, Action::Right, 1));
-        }
-    }
 };
 
 class AStar
@@ -202,6 +156,48 @@ public:
     bool is_solution(const Location& current_location)
     {
         return current_location == goal;
+    }
+
+    // whether location valid or not
+    bool location_valid(const Location& location)
+    {
+        return location.x >= 0 && location.x < num_columns
+               && location.y >= 0 && location.y < num_rows
+               && obstacles.find(location) == obstacles.end();
+    }
+
+    // get neighbor of current location
+    void get_neighbors(const Location& location, std::vector<Neighbor<Location, Action, int> >& neighbors)
+    {
+        neighbors.clear();
+
+        Location north_neighbor(location.x, location.y + 1);
+
+        if (location_valid(north_neighbor))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(north_neighbor, Action::Up, 1));
+        }
+
+        Location south_neighbor(location.x, location.y - 1);
+
+        if (location_valid(south_neighbor))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(south_neighbor, Action::Down, 1));
+        }
+
+        Location west_neighbor(location.x - 1, location.y);
+
+        if (location_valid(west_neighbor))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(west_neighbor, Action::Left, 1));
+        }
+
+        Location east_neighbor(location.x + 1, location.y);
+
+        if (location_valid(east_neighbor))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(east_neighbor, Action::Right, 1));
+        }
     }
 
     // This function is called on every expansion and can be used for statistical purposes.
@@ -266,7 +262,7 @@ public:
 
             // traverse neighbors
             neighbors.clear();
-            environment.get_neighbors(current.location, neighbors);
+            get_neighbors(current.location, neighbors);
             for (const Neighbor<Location, Action, int>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())

@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
     AStar test_astar(test_environment, dim_x, y - 1, obstacles, test_start, test_goal); // 模板类实例化
     PlanResult<Location, Action, int> solution;
 
-    if (test_environment.location_valid(test_start))
+    if (test_astar.location_valid(test_start))
     {
         is_success = test_astar.a_star_search(test_start, solution);
     }
