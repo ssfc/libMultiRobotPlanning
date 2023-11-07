@@ -408,26 +408,26 @@ public:
         return false;
     }
 
-    void createConstraintsFromConflict(const Conflict& conflict, map<size_t, Constraints>& constraints)
+    void createConstraintsFromConflict(const Conflict& conflict, map<size_t, Constraints>& input_constraints)
     {
         if (conflict.type == Conflict::Vertex)
         {
             Constraints c1;
             c1.vertexConstraints.emplace(
                     VertexConstraint(conflict.time, conflict.x1, conflict.y1));
-            constraints[conflict.agent1] = c1;
-            constraints[conflict.agent2] = c1;
+            input_constraints[conflict.agent1] = c1;
+            input_constraints[conflict.agent2] = c1;
         }
         else if (conflict.type == Conflict::Edge)
         {
             Constraints c1;
             c1.edgeConstraints.emplace(EdgeConstraint(
                     conflict.time, conflict.x1, conflict.y1, conflict.x2, conflict.y2));
-            constraints[conflict.agent1] = c1;
+            input_constraints[conflict.agent1] = c1;
             Constraints c2;
             c2.edgeConstraints.emplace(EdgeConstraint(
                     conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
-            constraints[conflict.agent2] = c2;
+            input_constraints[conflict.agent2] = c2;
         }
     }
 
