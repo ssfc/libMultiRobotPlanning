@@ -60,6 +60,16 @@ namespace std
     };
 }
 
+// Action Custom action for the search.
+// 枚举类
+enum class Action
+{
+    Up,
+    Down,
+    Left,
+    Right,
+    Wait,
+};
 
 /*!
   \example cbs.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
@@ -128,7 +138,7 @@ statistical purposes.
     This function is called on every low-level expansion and can be used for
 statistical purposes.
 */
-template <typename Action, typename Conflict,
+template <typename Conflict,
         typename Constraints, typename Environment>
 class CBS
 {

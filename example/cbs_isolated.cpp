@@ -18,17 +18,6 @@ using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
 
-// Action Custom action for the search.
-// 枚举类
-enum class Action
-{
-    Up,
-    Down,
-    Left,
-    Right,
-    Wait,
-};
-
 ostream& operator<<(ostream& os, const Action& this_action)
 {
     switch (this_action)
@@ -567,7 +556,7 @@ int main(int argc, char* argv[])
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, is_disappear_at_goal);
-    CBS<Action, Conflict, Constraints, Environment> cbs(mapf);
+    CBS<Conflict, Constraints, Environment> cbs(mapf);
     vector<PlanResult<TimeLocation, Action, int> > solution;
 
     Timer timer;
