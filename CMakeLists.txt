@@ -36,6 +36,7 @@ add_custom_target(clang-tidy
 set(ALL_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/a_star.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/a_star_isolated.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/low_level.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/a_star_epsilon.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/assignment.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/cbs.hpp
@@ -50,6 +51,7 @@ set(ALL_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/util.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star_isolated.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/example/low_level.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star_epsilon.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/assignment.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs.cpp
@@ -98,6 +100,10 @@ target_link_libraries(a_star ${Boost_LIBRARIES})
 ## a_star_isolated
 add_executable(a_star_isolated example/a_star_isolated.cpp)
 target_link_libraries(a_star_isolated ${Boost_LIBRARIES})
+
+## low_level
+add_executable(low_level example/low_level.cpp)
+target_link_libraries(low_level ${Boost_LIBRARIES})
 
 ## a_star_epsilon
 add_executable(a_star_epsilon example/a_star_epsilon.cpp)
