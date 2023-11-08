@@ -922,8 +922,8 @@ public:
             //   start.solution[i] = solution[i];
             //   std::cout << "use existing solution for agent: " << i << std::endl;
             // } else {
-            LowLevelEnvironment llenv(environment, i, start.constraints[i]);
-            LowLevel lowLevel(llenv);
+            LowLevelEnvironment low_level_environment(environment, i, start.constraints[i]);
+            LowLevel lowLevel(low_level_environment);
             bool is_success = lowLevel.low_level_search(initialStates[i], start.solution[i]);
 
             if (!is_success)
@@ -981,8 +981,8 @@ public:
 
                 newNode.cost -= newNode.solution[i].cost;
 
-                LowLevelEnvironment llenv(environment, i, newNode.constraints[i]);
-                LowLevel lowLevel(llenv);
+                LowLevelEnvironment low_level_environment(environment, i, newNode.constraints[i]);
+                LowLevel lowLevel(low_level_environment);
                 bool is_success = lowLevel.low_level_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
