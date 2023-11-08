@@ -625,8 +625,8 @@ public:
 
 };
 
-template <typename Location, typename Action, typename Environment,
-        typename LocationHasher = std::hash<Location> >
+template <typename TimeLocation, typename Action, typename Environment,
+        typename LocationHasher = std::hash<TimeLocation> >
 class AStar
 {
 private:
@@ -645,7 +645,7 @@ public:
     // member funcs
     AStar(Environment& input_environment) : environment(input_environment) {}
 
-    bool a_star_search(const Location& start_location, PlanResult<Location, Action, int>& solution,
+    bool a_star_search(const TimeLocation& start_location, PlanResult<TimeLocation, Action, int>& solution,
                        int initialCost = 0)
     {
         solution.path.clear();
@@ -654,16 +654,16 @@ public:
         solution.cost = 0;
 
         OpenSet open_set;
-        std::unordered_map<Location, HeapHandle, LocationHasher> location_to_heap;
-        std::unordered_set<Location, LocationHasher> closed_set;
-        std::unordered_map<Location, std::tuple<Location,Action,int,int>,LocationHasher> came_from;
+        std::unordered_map<TimeLocation, HeapHandle, LocationHasher> location_to_heap;
+        std::unordered_set<TimeLocation, LocationHasher> closed_set;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,LocationHasher> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
                                               environment.admissible_heuristic(start_location), initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Neighbor<Location, Action, int> > neighbors;
+        std::vector<Neighbor<TimeLocation, Action, int> > neighbors;
         neighbors.reserve(10);
 
         while (!open_set.empty())
@@ -702,7 +702,7 @@ public:
             // traverse neighbors
             neighbors.clear();
             environment.get_neighbors(current.location, neighbors);
-            for (const Neighbor<Location, Action, int>& neighbor : neighbors)
+            for (const Neighbor<TimeLocation, Action, int>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
@@ -740,7 +740,7 @@ public:
 
                     // Best path for this node so far
                     // TODO: this is not the best way to update "came_from", but otherwise
-                    // default c'tors of Location and Action are required
+                    // default c'tors of TimeLocation and Action are required
                     came_from.erase(neighbor.location);
                     came_from.insert(std::make_pair<>(neighbor.location,
                                                       std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
@@ -754,12 +754,12 @@ public:
 };
 
 // inner class definition
-template <typename Location, typename Action, typename Environment,
+template <typename TimeLocation, typename Action, typename Environment,
         typename StateHasher>
-class AStar<Location, Action, Environment, StateHasher>::AStarNode
+class AStar<TimeLocation, Action, Environment, StateHasher>::AStarNode
 {
 public:
-    Location location;
+    TimeLocation location;
     int f_score;
     int g_score;
 
@@ -768,7 +768,7 @@ public:
     // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
 public:
-    AStarNode(const Location& input_state, int input_fScore, int input_gScore)
+    AStarNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
             : location(input_state),
               f_score(input_fScore),
               g_score(input_gScore)
