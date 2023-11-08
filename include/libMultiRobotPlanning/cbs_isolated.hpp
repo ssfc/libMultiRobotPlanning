@@ -9,7 +9,7 @@
 #include <vector>
 #include <boost/functional/hash.hpp>
 
-#include "a_star.hpp"
+#include "low_level.hpp"
 
 
 // Location Custom state for the search
