@@ -620,6 +620,7 @@ public:
         environment.num_expanded_low_level_nodes++;
     }
 
+    // This function is called on every low-level expansion and can be used for statistical purposes.
     void onExpandNode(const TimeLocation& s, int fScore, int gScore)
     {
         // std::cout << "LL expand: " << s << std::endl;
@@ -871,9 +872,7 @@ std::map<size_t, Constraints>& constraints)`\n
     This function is called on every high-level expansion and can be used for
 statistical purposes.
 
-  - `void onExpandLowLevelNode(const Location& s, Cost fScore, Cost gScore)`\n
-    This function is called on every low-level expansion and can be used for
-statistical purposes.
+
 */
 class CBS
 {
