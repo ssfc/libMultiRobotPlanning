@@ -672,6 +672,7 @@ statistical purposes.
 class CBS
 {
 private:
+    Environment& environment;
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
@@ -684,12 +685,21 @@ private:
     int num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
-
-    Environment& environment;
     typedef AStar<TimeLocation, Action, LowLevelEnvironment> LowLevelSearch_t;
 public:
-    CBS(Environment& environment)
-    : environment(environment)
+    CBS(Environment& environment, size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
+        std::vector<Location> input_goals, bool input_disappearAtGoal = false)
+    : environment(environment),
+      num_columns(input_dimx),
+      num_rows(input_dimy),
+      obstacles(std::move(input_obstacles)),
+      goals(std::move(input_goals)),
+      agent_index(0),
+            // constraints(nullptr),
+      last_goal_constraint(-1),
+      num_expanded_high_level_nodes(0),
+      num_expanded_low_level_nodes(0),
+      disappear_at_goal(input_disappearAtGoal)
     {}
 
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
