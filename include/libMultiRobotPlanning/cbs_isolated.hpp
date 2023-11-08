@@ -624,7 +624,7 @@ public:
 
 
 // inner class definition
-class AStarNode
+class LowLevelListNode
 {
 public:
     TimeLocation location;
@@ -632,17 +632,17 @@ public:
     int g_score;
 
     // 定义 handle: 就是上面那个HeapHandle
-    typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
-    // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+    typename boost::heap::fibonacci_heap<LowLevelListNode>::handle_type handle;
+    // typename boost::heap::d_ary_heap<LowLevelListNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
 public:
-    AStarNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
+    LowLevelListNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
             : location(input_state),
               f_score(input_fScore),
               g_score(input_gScore)
     {}
 
-    bool operator<(const AStarNode& other) const
+    bool operator<(const LowLevelListNode& other) const
     {
         // Sort order
         // 1. lowest f_score
@@ -659,7 +659,7 @@ public:
         }
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
+    friend std::ostream& operator<<(std::ostream& os, const LowLevelListNode& node)
     {
         os << "location: " << node.location << " f_score: " << node.f_score
            << " g_score: " << node.g_score;
@@ -676,9 +676,9 @@ private:
     // member vars
     LowLevelEnvironment& environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
-    using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
+    using OpenSet = boost::heap::fibonacci_heap<LowLevelListNode>;
     using HeapHandle = typename OpenSet::handle_type;
-    // using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+    // using OpenSet = boost::heap::d_ary_heap<LowLevelListNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
@@ -704,7 +704,7 @@ public:
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
-        auto handle = open_set.push(AStarNode(start_location,
+        auto handle = open_set.push(LowLevelListNode(start_location,
                                               environment.admissible_heuristic(start_location), initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
@@ -714,7 +714,7 @@ public:
 
         while (!open_set.empty())
         {
-            AStarNode current = open_set.top();
+            LowLevelListNode current = open_set.top();
             environment.onExpandNode(current.location, current.f_score, current.g_score);
 
             if (environment.is_solution(current.location))
@@ -757,7 +757,7 @@ public:
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
                         int f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
-                        auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
+                        auto handle = open_set.push(LowLevelListNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
                         onDiscover(neighbor.location, f_score, tentative_gScore);
