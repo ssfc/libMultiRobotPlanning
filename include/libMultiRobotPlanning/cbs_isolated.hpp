@@ -700,7 +700,7 @@ public:
         // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
     }
 
-    bool a_star_search(const TimeLocation& start_location, PlanResult<TimeLocation, Action, int>& solution,
+    bool low_level_search(const TimeLocation& start_location, PlanResult<TimeLocation, Action, int>& solution,
                        int initialCost = 0)
     {
         solution.path.clear();
@@ -924,7 +924,7 @@ public:
             // } else {
             LowLevelEnvironment llenv(environment, i, start.constraints[i]);
             LowLevel lowLevel(llenv);
-            bool is_success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
+            bool is_success = lowLevel.low_level_search(initialStates[i], start.solution[i]);
 
             if (!is_success)
             {
@@ -983,7 +983,7 @@ public:
 
                 LowLevelEnvironment llenv(environment, i, newNode.constraints[i]);
                 LowLevel lowLevel(llenv);
-                bool is_success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
+                bool is_success = lowLevel.low_level_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
 
