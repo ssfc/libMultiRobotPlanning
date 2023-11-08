@@ -259,6 +259,47 @@ public:
     }
 };
 
+class HighLevelNode
+{
+public:
+    std::vector<PlanResult<TimeLocation, Action, int> > solution;
+    std::vector<Constraints> constraints;
+    int cost;
+    int id;
+    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+    boost::heap::mutable_<true> >::handle_type handle;
+
+public:
+    bool operator<(const HighLevelNode& n) const
+    {
+        // if (cost != n.cost)
+
+        return cost > n.cost;
+        // return id > n.id;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
+    {
+        os << "id: " << c.id << " cost: " << c.cost << std::endl;
+        for (size_t i = 0; i < c.solution.size(); ++i)
+        {
+            os << "Agent: " << i << std::endl;
+            os << " States:" << std::endl;
+
+            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+            {
+                os << "  " << c.solution[i].path[t].first << std::endl;
+            }
+
+            os << " Constraints:" << std::endl;
+            os << c.constraints[i];
+            os << " cost: " << c.solution[i].cost << std::endl;
+        }
+
+        return os;
+    }
+};
+
 
 class Environment
 {
@@ -585,46 +626,17 @@ statistical purposes.
 class CBS
 {
 private:
-    class HighLevelNode
-    {
-    public:
-        std::vector<PlanResult<TimeLocation, Action, int> > solution;
-        std::vector<Constraints> constraints;
-        int cost;
-        int id;
-        typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-        boost::heap::mutable_<true> >::handle_type handle;
-
-    public:
-        bool operator<(const HighLevelNode& n) const
-        {
-            // if (cost != n.cost)
-
-            return cost > n.cost;
-            // return id > n.id;
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
-        {
-            os << "id: " << c.id << " cost: " << c.cost << std::endl;
-            for (size_t i = 0; i < c.solution.size(); ++i)
-            {
-                os << "Agent: " << i << std::endl;
-                os << " States:" << std::endl;
-
-                for (size_t t = 0; t < c.solution[i].path.size(); ++t)
-                {
-                    os << "  " << c.solution[i].path[t].first << std::endl;
-                }
-
-                os << " Constraints:" << std::endl;
-                os << c.constraints[i];
-                os << " cost: " << c.solution[i].cost << std::endl;
-            }
-
-            return os;
-        }
-    };
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    std::vector<Location> goals;
+    // vector< vector<int> > m_heuristic;
+    size_t agent_index;
+    Constraints constraints;
+    int last_goal_constraint;
+    int num_expanded_high_level_nodes;
+    int num_expanded_low_level_nodes;
+    bool disappear_at_goal;
 
     class LowLevelEnvironment
     {
