@@ -688,7 +688,9 @@ private:
     Environment& environment;
     typedef AStar<TimeLocation, Action, LowLevelEnvironment> LowLevelSearch_t;
 public:
-    CBS(Environment& environment) : environment(environment) {}
+    CBS(Environment& environment)
+    : environment(environment)
+    {}
 
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
                            std::vector<PlanResult<TimeLocation, Action, int> >& solution)
