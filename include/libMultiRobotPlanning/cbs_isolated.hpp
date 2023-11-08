@@ -525,11 +525,11 @@ public:
     boost::heap::mutable_<true> >::handle_type handle;
 
 public:
-    bool operator<(const HighLevelNode& n) const
+    bool operator<(const HighLevelNode& other) const
     {
         // if (cost != n.cost)
 
-        return cost > n.cost;
+        return cost > other.cost;
         // return id > n.id;
     }
 
