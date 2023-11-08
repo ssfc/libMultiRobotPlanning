@@ -620,15 +620,6 @@ public:
         environment.num_expanded_low_level_nodes++;
     }
 
-    // This function is called on every low-level expansion and can be used for statistical purposes.
-    void onExpandNode(const TimeLocation& s, int fScore, int gScore)
-    {
-        // std::cout << "LL expand: " << s << std::endl;
-        onExpandLowLevelNode(s, fScore, gScore);
-    }
-
-
-
 };
 
 
@@ -724,7 +715,7 @@ public:
         while (!open_set.empty())
         {
             LowLevelListNode current = open_set.top();
-            environment.onExpandNode(current.location, current.f_score, current.g_score);
+            environment.onExpandLowLevelNode(current.location, current.f_score, current.g_score);
 
             if (environment.is_solution(current.location))
             {
