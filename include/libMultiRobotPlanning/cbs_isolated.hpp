@@ -720,9 +720,9 @@ public:
             // } else {
             LowLevelEnvironment llenv(environment, i, start.constraints[i]);
             LowLevelSearch_t lowLevel(llenv);
-            bool success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
+            bool is_success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
 
-            if (!success)
+            if (!is_success)
             {
                 return false;
             }
@@ -779,13 +779,13 @@ public:
 
                 LowLevelEnvironment llenv(environment, i, newNode.constraints[i]);
                 LowLevelSearch_t lowLevel(llenv);
-                bool success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
+                bool is_success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
 
-                if (success)
+                if (is_success)
                 {
-                    // std::cout << "  success. cost: " << newNode.cost << std::endl;
+                    // std::cout << "  is_success. cost: " << newNode.cost << std::endl;
                     auto handle = open.push(newNode);
                     (*handle).handle = handle;
                 }
