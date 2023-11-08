@@ -451,7 +451,7 @@ public:
         }
     }
 
-    void onExpandHighLevelNode(int /*cost*/)
+    void expand_high_level_node(int /*cost*/)
     {
         num_expanded_high_level_nodes++;
     }
@@ -661,7 +661,7 @@ if a conflict was found and false otherwise.
 std::map<size_t, Constraints>& constraints)`\n
     Create a list of constraints for the given conflict.
 
-  - `void onExpandHighLevelNode(Cost cost)`\n
+  - `void expand_high_level_node(Cost cost)`\n
     This function is called on every high-level expansion and can be used for
 statistical purposes.
 
@@ -741,7 +741,7 @@ public:
         while (!open.empty())
         {
             HighLevelNode P = open.top();
-            environment.onExpandHighLevelNode(P.cost);
+            environment.expand_high_level_node(P.cost);
             // std::cout << "expand: " << P << std::endl;
 
             open.pop();
