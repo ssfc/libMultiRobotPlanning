@@ -673,7 +673,7 @@ public:
 };
 
 
-class AStar
+class LowLevel
 {
 private:
     // member vars
@@ -686,7 +686,7 @@ private:
 
 public:
     // member funcs
-    AStar(LowLevelEnvironment& input_environment) : environment(input_environment) {}
+    LowLevel(LowLevelEnvironment& input_environment) : environment(input_environment) {}
 
     bool a_star_search(const TimeLocation& start_location, PlanResult<TimeLocation, Action, int>& solution,
                        int initialCost = 0)
@@ -914,7 +914,7 @@ public:
             //   std::cout << "use existing solution for agent: " << i << std::endl;
             // } else {
             LowLevelEnvironment llenv(environment, i, start.constraints[i]);
-            AStar lowLevel(llenv);
+            LowLevel lowLevel(llenv);
             bool is_success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
 
             if (!is_success)
@@ -973,7 +973,7 @@ public:
                 newNode.cost -= newNode.solution[i].cost;
 
                 LowLevelEnvironment llenv(environment, i, newNode.constraints[i]);
-                AStar lowLevel(llenv);
+                LowLevel lowLevel(llenv);
                 bool is_success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
