@@ -625,7 +625,7 @@ public:
 
 };
 
-template <typename TimeLocation, typename Action, typename Environment,
+template <typename Action, typename Environment,
         typename LocationHasher = std::hash<TimeLocation> >
 class AStar
 {
@@ -754,9 +754,9 @@ public:
 };
 
 // inner class definition
-template <typename TimeLocation, typename Action, typename Environment,
+template <typename Action, typename Environment,
         typename StateHasher>
-class AStar<TimeLocation, Action, Environment, StateHasher>::AStarNode
+class AStar<Action, Environment, StateHasher>::AStarNode
 {
 public:
     TimeLocation location;
@@ -884,7 +884,7 @@ private:
     int num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
-    typedef AStar<TimeLocation, Action, LowLevelEnvironment> LowLevelSearch_t;
+    typedef AStar<Action, LowLevelEnvironment> LowLevelSearch_t;
 public:
     CBS(Environment& environment, size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
         std::vector<Location> input_goals, bool input_disappearAtGoal = false)
