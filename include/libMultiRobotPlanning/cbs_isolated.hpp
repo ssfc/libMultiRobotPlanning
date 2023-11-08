@@ -574,9 +574,9 @@ private:
     bool disappear_at_goal;
 
 public:
-    LowLevelEnvironment(Environment& env, size_t agentIdx,
+    LowLevelEnvironment(Environment& input_environment, size_t agentIdx,
                         const Constraints& constraints)
-            : environment(env),
+            : environment(input_environment),
             agent_index(agentIdx),
             constraints(constraints)
     {
