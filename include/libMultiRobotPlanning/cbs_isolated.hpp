@@ -259,48 +259,6 @@ public:
     }
 };
 
-class HighLevelNode
-{
-public:
-    std::vector<PlanResult<TimeLocation, Action, int> > solution;
-    std::vector<Constraints> constraints;
-    int cost;
-    int id;
-    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-    boost::heap::mutable_<true> >::handle_type handle;
-
-public:
-    bool operator<(const HighLevelNode& n) const
-    {
-        // if (cost != n.cost)
-
-        return cost > n.cost;
-        // return id > n.id;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
-    {
-        os << "id: " << c.id << " cost: " << c.cost << std::endl;
-        for (size_t i = 0; i < c.solution.size(); ++i)
-        {
-            os << "Agent: " << i << std::endl;
-            os << " States:" << std::endl;
-
-            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
-            {
-                os << "  " << c.solution[i].path[t].first << std::endl;
-            }
-
-            os << " Constraints:" << std::endl;
-            os << c.constraints[i];
-            os << " cost: " << c.solution[i].cost << std::endl;
-        }
-
-        return os;
-    }
-};
-
-
 class Environment
 {
 private:
@@ -556,6 +514,94 @@ public:
     }
 };
 
+class HighLevelNode
+{
+public:
+    std::vector<PlanResult<TimeLocation, Action, int> > solution;
+    std::vector<Constraints> constraints;
+    int cost;
+    int id;
+    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+    boost::heap::mutable_<true> >::handle_type handle;
+
+public:
+    bool operator<(const HighLevelNode& n) const
+    {
+        // if (cost != n.cost)
+
+        return cost > n.cost;
+        // return id > n.id;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
+    {
+        os << "id: " << c.id << " cost: " << c.cost << std::endl;
+        for (size_t i = 0; i < c.solution.size(); ++i)
+        {
+            os << "Agent: " << i << std::endl;
+            os << " States:" << std::endl;
+
+            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+            {
+                os << "  " << c.solution[i].path[t].first << std::endl;
+            }
+
+            os << " Constraints:" << std::endl;
+            os << c.constraints[i];
+            os << " cost: " << c.solution[i].cost << std::endl;
+        }
+
+        return os;
+    }
+};
+
+class LowLevelEnvironment
+{
+private:
+    Environment& environment;
+    // size_t m_agentIdx;
+    // const Constraints& m_constraints;
+
+public:
+    LowLevelEnvironment(Environment& env, size_t agentIdx,
+                        const Constraints& constraints)
+            : environment(env)
+    // , m_agentIdx(agentIdx)
+    // , m_constraints(constraints)
+    {
+        environment.setLowLevelContext(agentIdx, constraints);
+    }
+
+    int admissible_heuristic(const TimeLocation& s)
+    {
+        return environment.admissible_heuristic(s);
+    }
+
+    bool is_solution(const TimeLocation& s)
+    {
+        return environment.is_solution(s);
+    }
+
+    void get_neighbors(const TimeLocation& s, std::vector<Neighbor<TimeLocation, Action, int> >& neighbors)
+    {
+        environment.get_neighbors(s, neighbors);
+    }
+
+    void onExpandNode(const TimeLocation& s, int fScore, int gScore)
+    {
+        // std::cout << "LL expand: " << s << std::endl;
+        environment.onExpandLowLevelNode(s, fScore, gScore);
+    }
+
+    void onDiscover(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/) {
+        // std::cout << "LL discover: " << s << std::endl;
+        // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
+    }
+
+};
+
+
+
 /*!
   \example cbs.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
   problem in a 2D grid world with up/down/left/right actions
@@ -638,50 +684,6 @@ private:
     int num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
-    class LowLevelEnvironment
-    {
-    private:
-        Environment& environment;
-        // size_t m_agentIdx;
-        // const Constraints& m_constraints;
-
-    public:
-        LowLevelEnvironment(Environment& env, size_t agentIdx,
-                            const Constraints& constraints)
-                : environment(env)
-        // , m_agentIdx(agentIdx)
-        // , m_constraints(constraints)
-        {
-            environment.setLowLevelContext(agentIdx, constraints);
-        }
-
-        int admissible_heuristic(const TimeLocation& s)
-        {
-            return environment.admissible_heuristic(s);
-        }
-
-        bool is_solution(const TimeLocation& s)
-        {
-            return environment.is_solution(s);
-        }
-
-        void get_neighbors(const TimeLocation& s, std::vector<Neighbor<TimeLocation, Action, int> >& neighbors)
-        {
-            environment.get_neighbors(s, neighbors);
-        }
-
-        void onExpandNode(const TimeLocation& s, int fScore, int gScore)
-        {
-            // std::cout << "LL expand: " << s << std::endl;
-            environment.onExpandLowLevelNode(s, fScore, gScore);
-        }
-
-        void onDiscover(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/) {
-            // std::cout << "LL discover: " << s << std::endl;
-            // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
-        }
-
-    };
 
     Environment& environment;
     typedef AStar<TimeLocation, Action, LowLevelEnvironment> LowLevelSearch_t;
