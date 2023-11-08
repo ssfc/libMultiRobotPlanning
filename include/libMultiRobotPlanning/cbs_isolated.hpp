@@ -625,13 +625,57 @@ public:
 
 };
 
-template <typename LowLevelEnvironment>
+
+// inner class definition
+class AStarNode
+{
+public:
+    TimeLocation location;
+    int f_score;
+    int g_score;
+
+    // 定义 handle: 就是上面那个HeapHandle
+    typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
+    // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+
+public:
+    AStarNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
+            : location(input_state),
+              f_score(input_fScore),
+              g_score(input_gScore)
+    {}
+
+    bool operator<(const AStarNode& other) const
+    {
+        // Sort order
+        // 1. lowest f_score
+        // 2. highest g_score
+
+        // Our heap is a maximum heap, so we invert the comperator function here
+        if (f_score != other.f_score)
+        {
+            return f_score > other.f_score;
+        }
+        else
+        {
+            return g_score < other.g_score;
+        }
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
+    {
+        os << "location: " << node.location << " f_score: " << node.f_score
+           << " g_score: " << node.g_score;
+
+        return os;
+    }
+
+};
+
+
 class AStar
 {
 private:
-    // inner class declaration.
-    class AStarNode;
-
     // member vars
     LowLevelEnvironment& environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
@@ -752,52 +796,7 @@ public:
     }
 };
 
-// inner class definition
-template <typename LowLevelEnvironment>
-class AStar<LowLevelEnvironment>::AStarNode
-{
-public:
-    TimeLocation location;
-    int f_score;
-    int g_score;
 
-    // 定义 handle: 就是上面那个HeapHandle
-    typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
-    // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
-
-public:
-    AStarNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
-            : location(input_state),
-              f_score(input_fScore),
-              g_score(input_gScore)
-    {}
-
-    bool operator<(const AStarNode& other) const
-    {
-        // Sort order
-        // 1. lowest f_score
-        // 2. highest g_score
-
-        // Our heap is a maximum heap, so we invert the comperator function here
-        if (f_score != other.f_score)
-        {
-            return f_score > other.f_score;
-        }
-        else
-        {
-            return g_score < other.g_score;
-        }
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
-    {
-        os << "location: " << node.location << " f_score: " << node.f_score
-           << " g_score: " << node.g_score;
-
-        return os;
-    }
-
-};
 
 /*!
   \example cbs.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
@@ -882,7 +881,7 @@ private:
     int num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
-    typedef AStar<LowLevelEnvironment> LowLevelSearch_t; // 是一个实例化的AStar类
+    // typedef AStar<LowLevelEnvironment> LowLevelSearch_t; // 是一个实例化的AStar类
 public:
     CBS(Environment& environment, size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
         std::vector<Location> input_goals, bool input_disappearAtGoal = false)
@@ -916,7 +915,7 @@ public:
             //   std::cout << "use existing solution for agent: " << i << std::endl;
             // } else {
             LowLevelEnvironment llenv(environment, i, start.constraints[i]);
-            LowLevelSearch_t lowLevel(llenv);
+            AStar lowLevel(llenv);
             bool is_success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
 
             if (!is_success)
@@ -975,7 +974,7 @@ public:
                 newNode.cost -= newNode.solution[i].cost;
 
                 LowLevelEnvironment llenv(environment, i, newNode.constraints[i]);
-                LowLevelSearch_t lowLevel(llenv);
+                AStar lowLevel(llenv);
                 bool is_success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
