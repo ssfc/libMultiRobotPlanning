@@ -653,9 +653,9 @@ public:
         solution.cost = 0;
 
         OpenSet open_set;
-        std::unordered_map<TimeLocation, HeapHandle, LocationHasher> location_to_heap;
-        std::unordered_set<TimeLocation, LocationHasher> closed_set;
-        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,LocationHasher> came_from;
+        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
                                               environment.admissible_heuristic(start_location), initialCost));
