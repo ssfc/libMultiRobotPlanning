@@ -470,11 +470,6 @@ public:
         num_expanded_high_level_nodes++;
     }
 
-    void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
-    {
-        num_expanded_low_level_nodes++;
-    }
-
     int highLevelExpanded()
     {
         return num_expanded_high_level_nodes;
@@ -620,10 +615,15 @@ public:
         environment.get_neighbors(s, neighbors);
     }
 
+    void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
+        environment.num_expanded_low_level_nodes++;
+    }
+
     void onExpandNode(const TimeLocation& s, int fScore, int gScore)
     {
         // std::cout << "LL expand: " << s << std::endl;
-        environment.onExpandLowLevelNode(s, fScore, gScore);
+        onExpandLowLevelNode(s, fScore, gScore);
     }
 
 
