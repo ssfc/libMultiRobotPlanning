@@ -5,9 +5,23 @@
 #ifndef LIBMULTIROBOTPLANNING_CBS_ISOLATED_HPP
 #define LIBMULTIROBOTPLANNING_CBS_ISOLATED_HPP
 
+#include <fstream>
+#include <iostream>
+#include <unordered_map>
+#include <unordered_set>
 #include <map>
 #include <vector>
+
 #include <boost/functional/hash.hpp>
+#include <boost/heap/fibonacci_heap.hpp>
+#include <boost/heap/d_ary_heap.hpp>
+
+#include "neighbor.hpp"
+#include "planresult.hpp"
+#include "util.hpp"
+
+using libMultiRobotPlanning::Neighbor;
+using libMultiRobotPlanning::PlanResult;
 
 #include "low_level.hpp"
 
