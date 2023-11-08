@@ -576,9 +576,9 @@ private:
 public:
     LowLevelEnvironment(Environment& env, size_t agentIdx,
                         const Constraints& constraints)
-            : environment(env)
-    // , m_agentIdx(agentIdx)
-    // , m_constraints(constraints)
+            : environment(env),
+            agent_index(agentIdx),
+            constraints(constraints)
     {
         environment.setLowLevelContext(agentIdx, constraints);
     }
