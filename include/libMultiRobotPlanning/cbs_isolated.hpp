@@ -881,7 +881,6 @@ private:
     int num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
-    // typedef AStar<LowLevelEnvironment> LowLevelSearch_t; // 是一个实例化的AStar类
 public:
     CBS(Environment& environment, size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
         std::vector<Location> input_goals, bool input_disappearAtGoal = false)
