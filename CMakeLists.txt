@@ -51,7 +51,6 @@ set(ALL_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/util.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star_isolated.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/low_level.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star_epsilon.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/assignment.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs.cpp
