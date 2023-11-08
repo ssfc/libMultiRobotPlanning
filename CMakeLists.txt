@@ -101,9 +101,6 @@ target_link_libraries(a_star ${Boost_LIBRARIES})
 add_executable(a_star_isolated example/a_star_isolated.cpp)
 target_link_libraries(a_star_isolated ${Boost_LIBRARIES})
 
-## low_level
-add_executable(low_level example/low_level.cpp)
-target_link_libraries(low_level ${Boost_LIBRARIES})
 
 ## a_star_epsilon
 add_executable(a_star_epsilon example/a_star_epsilon.cpp)
