@@ -275,7 +275,7 @@ public:
 
 class Environment
 {
-private:
+public:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
@@ -595,6 +595,14 @@ public:
             constraints(input_constraints)
     {
         environment.setLowLevelContext(agentIdx, constraints);
+        num_columns = environment.num_columns;
+        num_rows = environment.num_rows;
+        obstacles = environment.obstacles;
+        goals = environment.goals;
+        last_goal_constraint = environment.last_goal_constraint;
+        num_expanded_high_level_nodes = environment.num_expanded_high_level_nodes;
+        num_expanded_low_level_nodes = environment.num_expanded_low_level_nodes;
+        disappear_at_goal = environment.disappear_at_goal;
     }
 
     int admissible_heuristic(const TimeLocation& s)
