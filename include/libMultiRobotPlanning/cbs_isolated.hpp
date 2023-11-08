@@ -753,8 +753,8 @@ public:
 };
 
 // inner class definition
-template <typename Environment, typename StateHasher>
-class AStar<Environment, StateHasher>::AStarNode
+template <typename Environment, typename LocationHasher>
+class AStar<Environment, LocationHasher>::AStarNode
 {
 public:
     TimeLocation location;
