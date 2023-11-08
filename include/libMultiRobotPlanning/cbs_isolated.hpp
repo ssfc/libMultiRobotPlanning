@@ -625,8 +625,7 @@ public:
 
 };
 
-template <typename Environment,
-        typename LocationHasher = std::hash<TimeLocation> >
+template <typename Environment, typename LocationHasher = std::hash<TimeLocation> >
 class AStar
 {
 private:
@@ -754,8 +753,7 @@ public:
 };
 
 // inner class definition
-template <typename Environment,
-        typename StateHasher>
+template <typename Environment, typename StateHasher>
 class AStar<Environment, StateHasher>::AStarNode
 {
 public:
