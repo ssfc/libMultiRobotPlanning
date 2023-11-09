@@ -958,27 +958,27 @@ public:
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
                 // std::cout << "create child with id " << id << std::endl;
-                HighLevelNode newNode = best_node;
-                newNode.id = id;
+                HighLevelNode new_node = best_node;
+                new_node.id = id;
                 // (optional) check that this constraint was not included already
-                // std::cout << newNode.constraints[i] << std::endl;
+                // std::cout << new_node.constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
-                assert(!newNode.constraints[i].overlap(c.second));
+                assert(!new_node.constraints[i].overlap(c.second));
 
-                newNode.constraints[i].add(c.second);
+                new_node.constraints[i].add(c.second);
 
-                newNode.cost -= newNode.solution[i].cost;
+                new_node.cost -= new_node.solution[i].cost;
 
-                LowLevelEnvironment low_level_environment(environment, i, newNode.constraints[i]);
+                LowLevelEnvironment low_level_environment(environment, i, new_node.constraints[i]);
                 LowLevel low_level(low_level_environment);
-                bool is_success = low_level.low_level_search(initialStates[i], newNode.solution[i]);
+                bool is_success = low_level.low_level_search(initialStates[i], new_node.solution[i]);
 
-                newNode.cost += newNode.solution[i].cost;
+                new_node.cost += new_node.solution[i].cost;
 
                 if (is_success)
                 {
-                    // std::cout << "  is_success. cost: " << newNode.cost << std::endl;
-                    auto handle = open.push(newNode);
+                    // std::cout << "  is_success. cost: " << new_node.cost << std::endl;
+                    auto handle = open.push(new_node);
                     (*handle).handle = handle;
                 }
 
