@@ -958,8 +958,8 @@ public:
                 double elapsed_time = (clock() - start_time) / CLOCKS_PER_SEC;
                 std::cerr << "runtime: " << elapsed_time * 1000 << "ms" << std::endl;
 
-                fout << "highLevelExpanded: " << environment.highLevelExpanded() << std::endl;
-                std::cerr << "highLevelExpanded: " << environment.highLevelExpanded() << std::endl;
+                fout << "highLevelExpanded: " << environment.num_expanded_high_level_nodes << std::endl;
+                std::cerr << "highLevelExpanded: " << environment.num_expanded_high_level_nodes << std::endl;
 
                 fout << "lowLevelExpanded: " << environment.lowLevelExpanded() << std::endl;
                 std::cerr << "lowLevelExpanded: " << environment.lowLevelExpanded() << std::endl;
