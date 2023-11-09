@@ -469,7 +469,7 @@ public:
     }
 
     // This function is called on every high-level expansion and can be used for statistical purposes.
-    void expand_high_level_node(int /*cost*/)
+    void expand_high_level_node()
     {
         num_expanded_high_level_nodes++;
     }
@@ -925,7 +925,7 @@ public:
         while (!open.empty())
         {
             HighLevelNode P = open.top();
-            environment.expand_high_level_node(P.cost);
+            environment.expand_high_level_node();
             // std::cout << "expand: " << P << std::endl;
 
             open.pop();
