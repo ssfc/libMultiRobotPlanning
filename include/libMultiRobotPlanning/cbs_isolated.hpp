@@ -474,11 +474,6 @@ public:
         num_expanded_high_level_nodes++;
     }
 
-    int highLevelExpanded()
-    {
-        return num_expanded_high_level_nodes;
-    }
-
     int lowLevelExpanded() const
     {
         return num_expanded_low_level_nodes;
