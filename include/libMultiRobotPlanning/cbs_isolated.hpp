@@ -940,9 +940,6 @@ public:
                 std::cout << "done; cost: " << best_node.cost << std::endl;
                 solution = best_node.solution;
 
-                double elapsed_time = (clock() - start_time) / CLOCKS_PER_SEC;
-                std::cerr << "runtime: " << elapsed_time * 1000 << "ms" << std::endl;
-
                 int cost = 0;
                 int makespan = 0;
                 for (const auto& s : solution)
@@ -959,6 +956,8 @@ public:
 
                 fout << "makespan: " << makespan << std::endl;
 
+                double elapsed_time = (clock() - start_time) / CLOCKS_PER_SEC;
+                std::cerr << "runtime: " << elapsed_time * 1000 << "ms" << std::endl;
 
 
                 return true;
