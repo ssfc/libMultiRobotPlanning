@@ -943,6 +943,24 @@ public:
                 double elapsed_time = (clock() - start_time) / CLOCKS_PER_SEC;
                 std::cerr << "runtime: " << elapsed_time * 1000 << "ms" << std::endl;
 
+                int cost = 0;
+                int makespan = 0;
+                for (const auto& s : solution)
+                {
+                    cost += s.cost;
+                    makespan = std::max<int>(makespan, s.cost);
+                }
+
+                std::ofstream fout("output.yaml");
+                fout << "statistics:" << std::endl;
+
+                fout << "cost: " << cost << std::endl;
+                std::cerr << "cost: " << cost << std::endl;
+
+                fout << "makespan: " << makespan << std::endl;
+
+
+
                 return true;
             }
 
