@@ -379,6 +379,8 @@ public:
         }
     }
 
+    // Finds the first conflict for the given solution for each agent.
+    // Return true if a conflict was found and false otherwise.
     bool getFirstConflict(const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
                           Conflict& result)
     {
@@ -849,11 +851,6 @@ it needs to support the following functions:
 >& neighbors)`\n
     Fill the list of neighboring state for the given state s and the current
 agent.
-
-  - `bool getFirstConflict(const std::vector<PlanResult<Location, Action, int> >&
-solution, Conflict& result)`\n
-    Finds the first conflict for the given solution for each agent. Return true
-if a conflict was found and false otherwise.
 
   - `void createConstraintsFromConflict(const Conflict& conflict,
 std::map<size_t, Constraints>& constraints)`\n
