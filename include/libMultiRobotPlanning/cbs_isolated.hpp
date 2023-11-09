@@ -940,19 +940,17 @@ public:
                 std::cout << "done; cost: " << best_node.cost << std::endl;
                 solution = best_node.solution;
 
-                int cost = 0;
                 int makespan = 0;
                 for (const auto& s : solution)
                 {
-                    cost += s.cost;
                     makespan = std::max<int>(makespan, s.cost);
                 }
 
                 std::ofstream fout("output.yaml");
                 fout << "statistics:" << std::endl;
 
-                fout << "cost: " << cost << std::endl;
-                std::cerr << "cost: " << cost << std::endl;
+                fout << "cost: " << best_node.cost << std::endl;
+                std::cerr << "cost: " << best_node.cost << std::endl;
 
                 fout << "makespan: " << makespan << std::endl;
 
