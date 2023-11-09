@@ -854,7 +854,7 @@ it needs to support the following functions:
 agent.
 
 */
-class CBS
+class HighLevel
 {
 private:
     Environment& environment;
@@ -871,7 +871,7 @@ private:
     bool disappear_at_goal;
 
 public:
-    CBS(Environment& environment, size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
+    HighLevel(Environment& environment, size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
         std::vector<Location> input_goals, bool input_disappearAtGoal = false)
     : environment(environment),
       num_columns(input_dimx),
