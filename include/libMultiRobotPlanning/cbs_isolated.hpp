@@ -937,8 +937,9 @@ public:
             Conflict conflict;
             if (!environment.get_first_conflict(best_node.solution, conflict))
             {
-                std::cout << "done; cost: " << best_node.cost << std::endl;
                 solution = best_node.solution;
+
+                std::cout << "Planning successful! " << std::endl;
 
                 int makespan = 0;
                 for (const auto& s : solution)
