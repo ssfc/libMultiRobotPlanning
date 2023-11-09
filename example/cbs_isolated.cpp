@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
         cerr << "lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
 
         fout << "schedule:" << endl;
-        for (size_t a = 0; a < solution.size(); ++a)
+        for (size_t a = 0; a < solution.size(); a++)
         {
             // cout << "Solution for: " << a << endl;
             // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
