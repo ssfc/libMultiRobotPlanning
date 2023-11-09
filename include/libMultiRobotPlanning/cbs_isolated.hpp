@@ -474,10 +474,6 @@ public:
         num_expanded_high_level_nodes++;
     }
 
-    int lowLevelExpanded() const
-    {
-        return num_expanded_low_level_nodes;
-    }
 
     TimeLocation get_time_location(size_t agentIdx,
                           const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
