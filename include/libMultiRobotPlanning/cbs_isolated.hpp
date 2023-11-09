@@ -956,8 +956,8 @@ public:
                 fout << "highLevelExpanded: " << environment.num_expanded_high_level_nodes << std::endl;
                 std::cerr << "highLevelExpanded: " << environment.num_expanded_high_level_nodes << std::endl;
 
-                fout << "lowLevelExpanded: " << environment.lowLevelExpanded() << std::endl;
-                std::cerr << "lowLevelExpanded: " << environment.lowLevelExpanded() << std::endl;
+                fout << "lowLevelExpanded: " << environment.num_expanded_low_level_nodes << std::endl;
+                std::cerr << "lowLevelExpanded: " << environment.num_expanded_low_level_nodes << std::endl;
 
                 fout << "schedule:" << std::endl;
                 for (size_t i = 0; i < solution.size(); i++)
