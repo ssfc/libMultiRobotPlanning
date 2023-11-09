@@ -394,10 +394,10 @@ public:
             // check drive-drive vertex collisions
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1 = getState(i, solution, t);
+                TimeLocation state1 = get_time_location(i, solution, t);
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2 = getState(j, solution, t);
+                    TimeLocation state2 = get_time_location(j, solution, t);
                     if (state1.equal_except_time(state2))
                     {
                         result.time = t;
@@ -417,13 +417,13 @@ public:
             // drive-drive edge (swap)
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1a = getState(i, solution, t);
-                TimeLocation state1b = getState(i, solution, t + 1);
+                TimeLocation state1a = get_time_location(i, solution, t);
+                TimeLocation state1b = get_time_location(i, solution, t + 1);
 
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2a = getState(j, solution, t);
-                    TimeLocation state2b = getState(j, solution, t + 1);
+                    TimeLocation state2a = get_time_location(j, solution, t);
+                    TimeLocation state2b = get_time_location(j, solution, t + 1);
                     if (state1a.equal_except_time(state2b) && state1b.equal_except_time(state2a))
                     {
                         result.time = t;
@@ -483,7 +483,7 @@ public:
         return num_expanded_low_level_nodes;
     }
 
-    TimeLocation getState(size_t agentIdx,
+    TimeLocation get_time_location(size_t agentIdx,
                           const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
                           size_t t)
     {
