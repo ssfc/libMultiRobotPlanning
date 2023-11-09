@@ -468,6 +468,7 @@ public:
         }
     }
 
+    // This function is called on every high-level expansion and can be used for statistical purposes.
     void expand_high_level_node(int /*cost*/)
     {
         num_expanded_high_level_nodes++;
@@ -851,11 +852,6 @@ it needs to support the following functions:
 >& neighbors)`\n
     Fill the list of neighboring state for the given state s and the current
 agent.
-
-  - `void expand_high_level_node(Cost cost)`\n
-    This function is called on every high-level expansion and can be used for
-statistical purposes.
-
 
 */
 class CBS
