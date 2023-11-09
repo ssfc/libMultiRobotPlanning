@@ -590,6 +590,7 @@ public:
             constraints(input_constraints)
     {
         environment.setLowLevelContext(agentIdx, constraints);
+        
         num_columns = environment.num_columns;
         num_rows = environment.num_rows;
         obstacles = environment.obstacles;
