@@ -542,22 +542,22 @@ public:
         // return id > n.id;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
+    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& high_level_node)
     {
-        os << "id: " << c.id << " cost: " << c.cost << std::endl;
-        for (size_t i = 0; i < c.solution.size(); ++i)
+        os << "id: " << high_level_node.id << " cost: " << high_level_node.cost << std::endl;
+        for (size_t i = 0; i < high_level_node.solution.size(); ++i)
         {
             os << "Agent: " << i << std::endl;
             os << " States:" << std::endl;
 
-            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+            for (size_t t = 0; t < high_level_node.solution[i].path.size(); ++t)
             {
-                os << "  " << c.solution[i].path[t].first << std::endl;
+                os << "  " << high_level_node.solution[i].path[t].first << std::endl;
             }
 
             os << " Constraints:" << std::endl;
-            os << c.constraints[i];
-            os << " cost: " << c.solution[i].cost << std::endl;
+            os << high_level_node.constraints[i];
+            os << " cost: " << high_level_node.solution[i].cost << std::endl;
         }
 
         return os;
