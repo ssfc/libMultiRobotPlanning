@@ -46,10 +46,9 @@ public:
                && y == other.y;
     }
 
-    bool equalExceptTime(const TimeLocation& other) const
+    bool equal_except_time(const TimeLocation& other) const
     {
-        return x == other.x
-               && y == other.y;
+        return x == other.x && y == other.y;
     }
 
     friend std::ostream& operator<<(std::ostream& os, const TimeLocation& s)
@@ -399,7 +398,7 @@ public:
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
                     TimeLocation state2 = getState(j, solution, t);
-                    if (state1.equalExceptTime(state2))
+                    if (state1.equal_except_time(state2))
                     {
                         result.time = t;
                         result.agent1 = i;
@@ -425,7 +424,7 @@ public:
                 {
                     TimeLocation state2a = getState(j, solution, t);
                     TimeLocation state2b = getState(j, solution, t + 1);
-                    if (state1a.equalExceptTime(state2b) && state1b.equalExceptTime(state2a))
+                    if (state1a.equal_except_time(state2b) && state1b.equal_except_time(state2a))
                     {
                         result.time = t;
                         result.agent1 = i;
@@ -500,7 +499,7 @@ public:
         {
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
-            // This will cause all calls to equalExceptTime(.) to return false.
+            // This will cause all calls to equal_except_time(.) to return false.
             return TimeLocation(-1, -1 * (agentIdx + 1), -1);
         }
 
