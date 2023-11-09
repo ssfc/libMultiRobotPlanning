@@ -306,7 +306,8 @@ public:
     Environment(const Environment&) = delete;
     Environment& operator=(const Environment&) = delete;
 
-    void setLowLevelContext(size_t agentIdx, Constraints input_constraints)
+    // Set the current context to a particular agent with the given set of constraints
+    void set_low_Level_context(size_t agentIdx, Constraints input_constraints)
     {
         // assert(input_constraints);  // NOLINT
         agent_index = agentIdx;
@@ -589,7 +590,7 @@ public:
             agent_index(agentIdx),
             constraints(input_constraints)
     {
-        environment.setLowLevelContext(agentIdx, constraints);
+        environment.set_low_Level_context(agentIdx, constraints);
 
         num_columns = environment.num_columns;
         num_rows = environment.num_rows;
@@ -837,9 +838,6 @@ transformed into a constraint.
 able to search on the low-level while taking the constraints into account.
 \tparam Environment This class needs to provide the custom logic. In particular,
 it needs to support the following functions:
-  - `void setLowLevelContext(size_t agentIdx, const Constraints* constraints)`\n
-    Set the current context to a particular agent with the given set of
-constraints
 
   - `Cost admissible_heuristic(const Location& s)`\n
     Admissible heuristic. Needs to take current context into account.
