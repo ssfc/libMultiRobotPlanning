@@ -870,6 +870,9 @@ private:
     int num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
+    // debug var
+    double start_time;
+
 public:
     HighLevel(Environment& environment, size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
         std::vector<Location> input_goals, bool input_disappearAtGoal = false)
@@ -883,7 +886,8 @@ public:
       last_goal_constraint(-1),
       num_expanded_high_level_nodes(0),
       num_expanded_low_level_nodes(0),
-      disappear_at_goal(input_disappearAtGoal)
+      disappear_at_goal(input_disappearAtGoal),
+      start_time(clock())
     {}
 
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
@@ -935,6 +939,10 @@ public:
             {
                 std::cout << "done; cost: " << P.cost << std::endl;
                 solution = P.solution;
+
+                double elapsed_time = (clock() - start_time) / CLOCKS_PER_SEC;
+                std::cerr << "runtime: " << elapsed_time * 1000 << "ms" << std::endl;
+
                 return true;
             }
 
