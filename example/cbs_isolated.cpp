@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 
     unordered_set<Location> obstacles;
     vector<Location> goals;
-    vector<TimeLocation> startStates;
+    vector<TimeLocation> start_time_location;
 
     const auto& dim = config["map"]["dimensions"];
     int dimx = dim[0].as<int>();
@@ -99,14 +99,14 @@ int main(int argc, char* argv[])
     {
         const auto& start = node["start"];
         const auto& goal = node["goal"];
-        startStates.emplace_back(TimeLocation(0, start[0].as<int>(), start[1].as<int>()));
-        // cout << "s: " << startStates.back() << endl;
+        start_time_location.emplace_back(TimeLocation(0, start[0].as<int>(), start[1].as<int>()));
+        // cout << "s: " << start_time_location.back() << endl;
         goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }
 
     // sanity check: no identical start locations
     unordered_set<TimeLocation> startStatesSet;
-    for (const auto& s : startStates)
+    for (const auto& s : start_time_location)
     {
         if (startStatesSet.find(s) != startStatesSet.end())
         {
@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
     vector<PlanResult<TimeLocation, Action, int> > solution;
 
     Timer timer;
-    bool is_success = cbs.high_level_search(startStates, solution);
+    bool is_success = cbs.high_level_search(start_time_location, solution);
     timer.stop();
 
     if (is_success)
