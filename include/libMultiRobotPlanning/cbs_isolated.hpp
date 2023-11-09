@@ -444,6 +444,7 @@ public:
         return false;
     }
 
+    // Create a list of constraints for the given conflict.
     void createConstraintsFromConflict(const Conflict& conflict, std::map<size_t, Constraints>& input_constraints)
     {
         if (conflict.type == Conflict::Vertex)
@@ -850,10 +851,6 @@ it needs to support the following functions:
 >& neighbors)`\n
     Fill the list of neighboring state for the given state s and the current
 agent.
-
-  - `void createConstraintsFromConflict(const Conflict& conflict,
-std::map<size_t, Constraints>& constraints)`\n
-    Create a list of constraints for the given conflict.
 
   - `void expand_high_level_node(Cost cost)`\n
     This function is called on every high-level expansion and can be used for
