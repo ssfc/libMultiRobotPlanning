@@ -875,12 +875,6 @@ public:
       start_time(clock())
     {}
 
-    // This function is called on every high-level expansion and can be used for statistical purposes.
-    void expand_high_level_node()
-    {
-        num_expanded_high_level_nodes++;
-    }
-
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
                            std::vector<PlanResult<TimeLocation, Action, int> >& solution)
     {
@@ -920,7 +914,7 @@ public:
         while (!open.empty())
         {
             HighLevelNode best_node = open.top();
-            expand_high_level_node();
+            num_expanded_high_level_nodes++; // high-level node expanded
             // std::cout << "expand: " << best_node << std::endl;
 
             open.pop();
