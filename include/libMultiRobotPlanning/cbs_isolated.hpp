@@ -381,7 +381,7 @@ public:
 
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
-    bool getFirstConflict(const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
+    bool get_first_conflict(const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
                           Conflict& result)
     {
         int max_t = 0;
@@ -939,7 +939,7 @@ public:
             open.pop();
 
             Conflict conflict;
-            if (!environment.getFirstConflict(P.solution, conflict))
+            if (!environment.get_first_conflict(P.solution, conflict))
             {
                 std::cout << "done; cost: " << P.cost << std::endl;
                 solution = P.solution;
