@@ -256,14 +256,14 @@ public:
         return false;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Constraints& c)
+    friend std::ostream& operator<<(std::ostream& os, const Constraints& constraints)
     {
-        for (const auto& vc : c.vertexConstraints)
+        for (const auto& vc : constraints.vertexConstraints)
         {
             os << vc << std::endl;
         }
 
-        for (const auto& ec : c.edgeConstraints)
+        for (const auto& ec : constraints.edgeConstraints)
         {
             os << ec << std::endl;
         }
