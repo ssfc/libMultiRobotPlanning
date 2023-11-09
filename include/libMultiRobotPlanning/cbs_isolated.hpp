@@ -965,6 +965,33 @@ public:
                 fout << "lowLevelExpanded: " << environment.lowLevelExpanded() << std::endl;
                 std::cerr << "lowLevelExpanded: " << environment.lowLevelExpanded() << std::endl;
 
+                fout << "schedule:" << std::endl;
+                for (size_t i = 0; i < solution.size(); i++)
+                {
+                    // cout << "Solution for: " << i << endl;
+                    // for (size_t i = 0; i < solution[i].actions.size(); ++i) {
+                    //   cout << solution[i].path[i].second << ": " <<
+                    //   solution[i].path[i].first << "->" << solution[i].actions[i].first
+                    //   << "(cost: " << solution[i].actions[i].second << ")" << endl;
+                    // }
+                    // cout << solution[i].path.back().second << ": " <<
+                    // solution[i].path.back().first << endl;
+
+                    fout << "  agent" << i << ":" << std::endl;
+                    for (const auto& state : solution[i].path)
+                    {
+                        fout << "    - x: " << state.first.x << std::endl
+                             << "      y: " << state.first.y << std::endl
+                             << "      t: " << state.second << std::endl;
+                    }
+
+                    std::cerr << "agent " << i << ": ";
+                    for (const auto& state : solution[i].path)
+                    {
+                        std::cerr << "(" << state.first.x << "," << state.first.y << "),";
+                    }
+                    std::cerr << std::endl;
+                }
 
                 return true;
             }
