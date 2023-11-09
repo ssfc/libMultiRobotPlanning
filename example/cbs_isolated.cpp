@@ -156,27 +156,27 @@ int main(int argc, char* argv[])
         cerr << "lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
 
         fout << "schedule:" << endl;
-        for (size_t a = 0; a < solution.size(); a++)
+        for (size_t i = 0; i < solution.size(); i++)
         {
-            // cout << "Solution for: " << a << endl;
-            // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
-            //   cout << solution[a].path[i].second << ": " <<
-            //   solution[a].path[i].first << "->" << solution[a].actions[i].first
-            //   << "(cost: " << solution[a].actions[i].second << ")" << endl;
+            // cout << "Solution for: " << i << endl;
+            // for (size_t i = 0; i < solution[i].actions.size(); ++i) {
+            //   cout << solution[i].path[i].second << ": " <<
+            //   solution[i].path[i].first << "->" << solution[i].actions[i].first
+            //   << "(cost: " << solution[i].actions[i].second << ")" << endl;
             // }
-            // cout << solution[a].path.back().second << ": " <<
-            // solution[a].path.back().first << endl;
+            // cout << solution[i].path.back().second << ": " <<
+            // solution[i].path.back().first << endl;
 
-            fout << "  agent" << a << ":" << endl;
-            for (const auto& state : solution[a].path)
+            fout << "  agent" << i << ":" << endl;
+            for (const auto& state : solution[i].path)
             {
                 fout << "    - x: " << state.first.x << endl
                      << "      y: " << state.first.y << endl
                      << "      t: " << state.second << endl;
             }
 
-            cerr << "agent " << a << ": ";
-            for (const auto& state : solution[a].path)
+            cerr << "agent " << i << ": ";
+            for (const auto& state : solution[i].path)
             {
                 cerr << "(" << state.first.x << "," << state.first.y << "),";
             }
