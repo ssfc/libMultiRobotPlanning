@@ -706,7 +706,8 @@ public:
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
         auto handle = open_set.push(LowLevelListNode(start_location,
-                                              low_level_environment.admissible_heuristic(start_location), initialCost));
+          low_level_environment.admissible_heuristic(start_location),
+          initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
