@@ -283,7 +283,6 @@ public:
     size_t agent_index;
     Constraints constraints;
     int last_goal_constraint;
-    int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
@@ -297,7 +296,6 @@ public:
               agent_index(0),
             // constraints(nullptr),
               last_goal_constraint(-1),
-              num_expanded_high_level_nodes(0),
               num_expanded_low_level_nodes(0),
               disappear_at_goal(input_disappearAtGoal)
     {}
@@ -567,7 +565,6 @@ private:
     size_t agent_index;
     Constraints constraints;
     int last_goal_constraint;
-    int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
@@ -585,7 +582,6 @@ public:
         obstacles = environment.obstacles;
         goals = environment.goals;
         last_goal_constraint = environment.last_goal_constraint;
-        num_expanded_high_level_nodes = environment.num_expanded_high_level_nodes;
         num_expanded_low_level_nodes = environment.num_expanded_low_level_nodes;
         disappear_at_goal = environment.disappear_at_goal;
     }
