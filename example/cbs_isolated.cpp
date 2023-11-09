@@ -105,17 +105,17 @@ int main(int argc, char* argv[])
     }
 
     // sanity check: no identical start locations
-    unordered_set<TimeLocation> startStatesSet;
+    unordered_set<TimeLocation> start_time_location_set;
     for (const auto& s : start_time_location)
     {
-        if (startStatesSet.find(s) != startStatesSet.end())
+        if (start_time_location_set.find(s) != start_time_location_set.end())
         {
             cout << "Identical start locations detected -> no solution!" << endl;
 
             return 0;
         }
 
-        startStatesSet.insert(s);
+        start_time_location_set.insert(s);
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, is_disappear_at_goal);
