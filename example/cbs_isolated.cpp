@@ -11,7 +11,6 @@
 #include <yaml-cpp/yaml.h>
 
 #include <libMultiRobotPlanning/cbs_isolated.hpp>
-#include "timer.hpp"
 
 using namespace std;
 using libMultiRobotPlanning::Neighbor;
@@ -122,68 +121,8 @@ int main(int argc, char* argv[])
     HighLevel cbs(mapf, dimx, dimy, obstacles, goals, is_disappear_at_goal);
     vector<PlanResult<TimeLocation, Action, int> > solution;
 
-    Timer timer;
     bool is_success = cbs.high_level_search(start_time_location, solution);
-    timer.stop();
-
-    if (is_success)
-    {
-        cout << "Planning successful! " << endl;
-        // cout << "hello" << endl;
-        int cost = 0;
-        int makespan = 0;
-        for (const auto& s : solution)
-        {
-            cost += s.cost;
-            makespan = max<int>(makespan, s.cost);
-        }
-
-        ofstream fout(outputFile);
-        fout << "statistics:" << endl;
-
-        fout << "cost: " << cost << endl;
-        cerr << "cost: " << cost << endl;
-
-        fout << "makespan: " << makespan << endl;
-
-        fout << "runtime: " << timer.elapsedSeconds() << endl;
-        cerr << "runtime: " << timer.elapsedSeconds() * 1000 << "ms" << endl;
-
-        fout << "highLevelExpanded: " << mapf.highLevelExpanded() << endl;
-        cerr << "highLevelExpanded: " << mapf.highLevelExpanded() << endl;
-
-        fout << "lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
-        cerr << "lowLevelExpanded: " << mapf.lowLevelExpanded() << endl;
-
-        fout << "schedule:" << endl;
-        for (size_t i = 0; i < solution.size(); i++)
-        {
-            // cout << "Solution for: " << i << endl;
-            // for (size_t i = 0; i < solution[i].actions.size(); ++i) {
-            //   cout << solution[i].path[i].second << ": " <<
-            //   solution[i].path[i].first << "->" << solution[i].actions[i].first
-            //   << "(cost: " << solution[i].actions[i].second << ")" << endl;
-            // }
-            // cout << solution[i].path.back().second << ": " <<
-            // solution[i].path.back().first << endl;
-
-            fout << "  agent" << i << ":" << endl;
-            for (const auto& state : solution[i].path)
-            {
-                fout << "    - x: " << state.first.x << endl
-                     << "      y: " << state.first.y << endl
-                     << "      t: " << state.second << endl;
-            }
-
-            cerr << "agent " << i << ": ";
-            for (const auto& state : solution[i].path)
-            {
-                cerr << "(" << state.first.x << "," << state.first.y << "),";
-            }
-            cerr << endl;
-        }
-    }
-    else
+    if (!is_success)
     {
         cout << "Planning NOT successful!" << endl;
     }
