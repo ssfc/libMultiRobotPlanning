@@ -1002,19 +1002,19 @@ public:
 
             std::map<size_t, Constraints> constraints;
             environment.generate_constraints_from_conflict(conflict, constraints);
-            for (const auto& c : constraints)
+            for (const auto& constraint : constraints)
             {
-                // std::cout << "Add HL node for " << c.first << std::endl;
-                size_t i = c.first;
+                // std::cout << "Add HL node for " << constraint.first << std::endl;
+                size_t i = constraint.first;
                 // std::cout << "create child with id " << id << std::endl;
                 HighLevelNode new_node = best_node;
                 new_node.id = id;
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.constraints[i] << std::endl;
-                // std::cout << c.second << std::endl;
-                assert(!new_node.constraints[i].overlap(c.second));
+                // std::cout << constraint.second << std::endl;
+                assert(!new_node.constraints[i].overlap(constraint.second));
 
-                new_node.constraints[i].add(c.second);
+                new_node.constraints[i].add(constraint.second);
 
                 new_node.cost -= new_node.solution[i].cost;
 
