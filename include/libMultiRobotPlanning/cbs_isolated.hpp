@@ -468,12 +468,6 @@ public:
         }
     }
 
-    // This function is called on every high-level expansion and can be used for statistical purposes.
-    void expand_high_level_node()
-    {
-        num_expanded_high_level_nodes++;
-    }
-
 
     TimeLocation get_time_location(size_t agentIdx,
                           const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
@@ -881,6 +875,12 @@ public:
       start_time(clock())
     {}
 
+    // This function is called on every high-level expansion and can be used for statistical purposes.
+    void expand_high_level_node()
+    {
+        num_expanded_high_level_nodes++;
+    }
+
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
                            std::vector<PlanResult<TimeLocation, Action, int> >& solution)
     {
@@ -920,7 +920,7 @@ public:
         while (!open.empty())
         {
             HighLevelNode best_node = open.top();
-            environment.expand_high_level_node();
+            expand_high_level_node();
             // std::cout << "expand: " << best_node << std::endl;
 
             open.pop();
@@ -949,8 +949,8 @@ public:
                 double elapsed_time = (clock() - start_time) / CLOCKS_PER_SEC;
                 std::cerr << "runtime: " << elapsed_time * 1000 << "ms" << std::endl;
 
-                fout << "highLevelExpanded: " << environment.num_expanded_high_level_nodes << std::endl;
-                std::cerr << "highLevelExpanded: " << environment.num_expanded_high_level_nodes << std::endl;
+                fout << "highLevelExpanded: " << num_expanded_high_level_nodes << std::endl;
+                std::cerr << "highLevelExpanded: " << num_expanded_high_level_nodes << std::endl;
 
                 fout << "lowLevelExpanded: " << environment.num_expanded_low_level_nodes << std::endl;
                 std::cerr << "lowLevelExpanded: " << environment.num_expanded_low_level_nodes << std::endl;
