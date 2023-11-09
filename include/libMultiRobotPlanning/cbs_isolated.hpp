@@ -928,17 +928,17 @@ public:
         int id = 1;
         while (!open.empty())
         {
-            HighLevelNode P = open.top();
+            HighLevelNode best_node = open.top();
             environment.expand_high_level_node();
-            // std::cout << "expand: " << P << std::endl;
+            // std::cout << "expand: " << best_node << std::endl;
 
             open.pop();
 
             Conflict conflict;
-            if (!environment.get_first_conflict(P.solution, conflict))
+            if (!environment.get_first_conflict(best_node.solution, conflict))
             {
-                std::cout << "done; cost: " << P.cost << std::endl;
-                solution = P.solution;
+                std::cout << "done; cost: " << best_node.cost << std::endl;
+                solution = best_node.solution;
 
                 double elapsed_time = (clock() - start_time) / CLOCKS_PER_SEC;
                 std::cerr << "runtime: " << elapsed_time * 1000 << "ms" << std::endl;
@@ -958,7 +958,7 @@ public:
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
                 // std::cout << "create child with id " << id << std::endl;
-                HighLevelNode newNode = P;
+                HighLevelNode newNode = best_node;
                 newNode.id = id;
                 // (optional) check that this constraint was not included already
                 // std::cout << newNode.constraints[i] << std::endl;
