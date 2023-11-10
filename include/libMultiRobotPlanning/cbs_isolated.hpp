@@ -934,7 +934,7 @@ public:
             // LowLevelEnvironment environment(environment, i, start.constraints[i]);
             environment.set_low_Level_context(i, start.constraints[i]);
             LowLevel low_level(environment);
-            bool is_success = low_level.low_level_search(start_time_locations[i], start.solution[i]);
+            bool is_success = environment.low_level_search(start_time_locations[i], start.solution[i]);
 
             if (!is_success)
             {
@@ -1047,7 +1047,7 @@ public:
                 // LowLevelEnvironment environment(environment, i, new_node.constraints[i]);
                 environment.set_low_Level_context(i, new_node.constraints[i]);
                 LowLevel low_level(environment);
-                bool is_success = low_level.low_level_search(start_time_locations[i], new_node.solution[i]);
+                bool is_success = environment.low_level_search(start_time_locations[i], new_node.solution[i]);
 
                 new_node.cost += new_node.solution[i].cost;
 
