@@ -762,9 +762,6 @@ able to search on the low-level while taking the constraints into account.
 \tparam Environment This class needs to provide the custom logic. In particular,
 it needs to support the following functions:
 
-  - `Cost admissible_heuristic(const Location& s)`\n
-    Admissible heuristic. Needs to take current context into account.
-
   - `bool is_solution(const Location& s)`\n
     Return true if the given state is a goal state for the current agent.
 
