@@ -376,6 +376,11 @@ public:
         }
     }
 
+    void onExpandLowLevelNode()
+    {
+        num_expanded_low_level_nodes++;
+    }
+
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
     bool get_first_conflict(const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
@@ -564,24 +569,26 @@ public:
         environment.set_low_Level_context(agentIdx, input_constraints);
     }
 
-    int admissible_heuristic(const TimeLocation& s)
+    int admissible_heuristic(const TimeLocation& s) // 这个就是原有
     {
         return environment.admissible_heuristic(s);
     }
 
-    bool is_solution(const TimeLocation& s)
+    bool is_solution(const TimeLocation& s) // 这个也是原有
     {
         return environment.is_solution(s);
     }
 
+    // 这个也是原有
     void get_neighbors(const TimeLocation& s, std::vector<Neighbor<TimeLocation, Action, int> >& neighbors)
     {
         environment.get_neighbors(s, neighbors);
     }
 
+    // 这个也是原有
     void onExpandLowLevelNode()
     {
-        environment.num_expanded_low_level_nodes++;
+        environment.onExpandLowLevelNode();
     }
 
 };
