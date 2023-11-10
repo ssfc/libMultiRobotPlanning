@@ -593,7 +593,7 @@ public:
         environment.get_neighbors(s, neighbors);
     }
 
-    void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
+    void onExpandLowLevelNode()
     {
         environment.num_expanded_low_level_nodes++;
     }
@@ -688,7 +688,7 @@ public:
         while (!open_set.empty())
         {
             LowLevelListNode current = open_set.top();
-            low_level_environment.onExpandLowLevelNode(current.location, current.f_score, current.g_score);
+            low_level_environment.onExpandLowLevelNode();
 
             if (low_level_environment.is_solution(current.location))
             {
