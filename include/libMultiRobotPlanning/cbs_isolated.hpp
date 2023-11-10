@@ -97,7 +97,7 @@ struct Neighbor
     {}
 };
 
-struct PlanResult
+struct AgentPlan
 {
     // path constructing locations and their g_score
     std::vector<std::pair<TimeLocation, int> > path;
@@ -344,7 +344,7 @@ public:
 class HighLevelNode
 {
 public:
-    std::vector<PlanResult> solution;
+    std::vector<AgentPlan> solution;
     std::vector<Constraints> constraints;
     int cost;
     int id;
@@ -499,7 +499,7 @@ public:
 
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
-    bool get_first_conflict(const std::vector<PlanResult>& solution,
+    bool get_first_conflict(const std::vector<AgentPlan>& solution,
                           Conflict& result)
     {
         int max_t = 0;
@@ -588,7 +588,7 @@ public:
     }
 
 
-    TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
+    TimeLocation get_time_location(size_t agentIdx, const std::vector<AgentPlan>& solution, size_t t)
     {
         assert(agentIdx < solution.size());
 
@@ -628,7 +628,7 @@ public:
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
 
-    bool low_level_search(const TimeLocation& start_location, PlanResult& solution)
+    bool low_level_search(const TimeLocation& start_location, AgentPlan& solution)
     {
         int initialCost = 0;
         solution.path.clear();
@@ -816,7 +816,7 @@ public:
     {}
 
     bool high_level_search(const std::vector<TimeLocation>& start_time_locations,
-                           std::vector<PlanResult>& solution)
+                           std::vector<AgentPlan>& solution)
     {
         HighLevelNode start;
         start.solution.resize(start_time_locations.size());
