@@ -575,7 +575,7 @@ public:
             agent_index(agentIdx),
             constraints(input_constraints)
     {
-        environment.set_low_Level_context(agentIdx, constraints);
+        environment.set_low_Level_context(agentIdx, input_constraints);
     }
 
     int admissible_heuristic(const TimeLocation& s)
