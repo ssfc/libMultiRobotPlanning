@@ -555,25 +555,11 @@ class LowLevelEnvironment
 {
 private:
     Environment& environment;
-    // size_t m_agentIdx;
-    // const Constraints& m_constraints;
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    std::vector<Location> goals;
-    // vector< vector<int> > m_heuristic;
-    size_t agent_index;
-    Constraints constraints;
-    int last_goal_constraint;
-    int num_expanded_low_level_nodes;
-    bool disappear_at_goal;
 
 public:
     LowLevelEnvironment(Environment& input_environment, size_t agentIdx,
                         const Constraints& input_constraints)
-            : environment(input_environment),
-            agent_index(agentIdx),
-            constraints(input_constraints)
+            : environment(input_environment)
     {
         environment.set_low_Level_context(agentIdx, input_constraints);
     }
