@@ -663,9 +663,9 @@ public:
     // member funcs
     LowLevel(LowLevelEnvironment& input_environment) : low_level_environment(input_environment) {}
 
-    bool low_level_search(const TimeLocation& start_location, PlanResult<TimeLocation, Action, int>& solution,
-                       int initialCost = 0)
+    bool low_level_search(const TimeLocation& start_location, PlanResult<TimeLocation, Action, int>& solution)
     {
+        int initialCost = 0;
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(start_location, 0));
         solution.actions.clear();
