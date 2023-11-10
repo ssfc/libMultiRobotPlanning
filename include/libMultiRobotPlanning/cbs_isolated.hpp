@@ -645,7 +645,7 @@ class LowLevel
 {
 private:
     // member vars
-    LowLevelEnvironment& low_level_environment; // include map size, obstacle position, agent goal.
+    Environment& low_level_environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<LowLevelListNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -654,7 +654,7 @@ private:
 
 public:
     // member funcs
-    LowLevel(LowLevelEnvironment& input_environment) : low_level_environment(input_environment) {}
+    LowLevel(Environment& input_environment) : low_level_environment(input_environment) {}
 
     bool low_level_search(const TimeLocation& start_location, PlanResult<TimeLocation, Action, int>& solution)
     {
@@ -864,8 +864,9 @@ public:
             //   start.solution[i] = solution[i];
             //   std::cout << "use existing solution for agent: " << i << std::endl;
             // } else {
-            LowLevelEnvironment low_level_environment(environment, i, start.constraints[i]);
-            LowLevel low_level(low_level_environment);
+            // LowLevelEnvironment low_level_environment(environment, i, start.constraints[i]);
+            environment.set_low_Level_context(i, start.constraints[i]);
+            LowLevel low_level(environment);
             bool is_success = low_level.low_level_search(start_time_locations[i], start.solution[i]);
 
             if (!is_success)
@@ -976,8 +977,9 @@ public:
 
                 new_node.cost -= new_node.solution[i].cost;
 
-                LowLevelEnvironment low_level_environment(environment, i, new_node.constraints[i]);
-                LowLevel low_level(low_level_environment);
+                // LowLevelEnvironment low_level_environment(environment, i, new_node.constraints[i]);
+                environment.set_low_Level_context(i, new_node.constraints[i]);
+                LowLevel low_level(environment);
                 bool is_success = low_level.low_level_search(start_time_locations[i], new_node.solution[i]);
 
                 new_node.cost += new_node.solution[i].cost;
