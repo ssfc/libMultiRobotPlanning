@@ -13,7 +13,6 @@
 #include <libMultiRobotPlanning/cbs_isolated.hpp>
 
 using namespace std;
-using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
 
