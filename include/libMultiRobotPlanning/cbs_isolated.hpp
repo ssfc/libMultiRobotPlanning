@@ -515,47 +515,6 @@ public:
     }
 };
 
-class HighLevelNode
-{
-public:
-    std::vector<PlanResult<TimeLocation, Action, int> > solution;
-    std::vector<Constraints> constraints;
-    int cost;
-    int id;
-    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-    boost::heap::mutable_<true> >::handle_type handle;
-
-public:
-    bool operator<(const HighLevelNode& other) const
-    {
-        // if (cost != n.cost)
-
-        return cost > other.cost;
-        // return id > n.id;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& high_level_node)
-    {
-        os << "id: " << high_level_node.id << " cost: " << high_level_node.cost << std::endl;
-        for (size_t i = 0; i < high_level_node.solution.size(); ++i)
-        {
-            os << "Agent: " << i << std::endl;
-            os << " States:" << std::endl;
-
-            for (size_t t = 0; t < high_level_node.solution[i].path.size(); ++t)
-            {
-                os << "  " << high_level_node.solution[i].path[t].first << std::endl;
-            }
-
-            os << " Constraints:" << std::endl;
-            os << high_level_node.constraints[i];
-            os << " cost: " << high_level_node.solution[i].cost << std::endl;
-        }
-
-        return os;
-    }
-};
-
 // inner class definition
 class LowLevelListNode
 {
@@ -724,7 +683,46 @@ public:
     }
 };
 
+class HighLevelNode
+{
+public:
+    std::vector<PlanResult<TimeLocation, Action, int> > solution;
+    std::vector<Constraints> constraints;
+    int cost;
+    int id;
+    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+    boost::heap::mutable_<true> >::handle_type handle;
 
+public:
+    bool operator<(const HighLevelNode& other) const
+    {
+        // if (cost != n.cost)
+
+        return cost > other.cost;
+        // return id > n.id;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& high_level_node)
+    {
+        os << "id: " << high_level_node.id << " cost: " << high_level_node.cost << std::endl;
+        for (size_t i = 0; i < high_level_node.solution.size(); ++i)
+        {
+            os << "Agent: " << i << std::endl;
+            os << " States:" << std::endl;
+
+            for (size_t t = 0; t < high_level_node.solution[i].path.size(); ++t)
+            {
+                os << "  " << high_level_node.solution[i].path[t].first << std::endl;
+            }
+
+            os << " Constraints:" << std::endl;
+            os << high_level_node.constraints[i];
+            os << " cost: " << high_level_node.solution[i].cost << std::endl;
+        }
+
+        return os;
+    }
+};
 
 /*!
   \example cbs.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
