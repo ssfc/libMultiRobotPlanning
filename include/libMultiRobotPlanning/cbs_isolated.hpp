@@ -713,127 +713,6 @@ public:
     }
 };
 
-class LowLevel
-{
-private:
-    // member vars
-    Environment& environment; // include map size, obstacle position, agent goal.
-    // 定义openSet_t和fibHeapHandle_t
-    using OpenSet = boost::heap::fibonacci_heap<LowLevelNode>;
-    using HeapHandle = typename OpenSet::handle_type;
-    // using OpenSet = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
-    // using HeapHandle = typename OpenSet::handle_type;
-
-public:
-    // member funcs
-    LowLevel(Environment& input_environment) : environment(input_environment) {}
-
-    bool low_level_search(const TimeLocation& start_location, PlanResult<TimeLocation, Action, int>& solution)
-    {
-        int initialCost = 0;
-        solution.path.clear();
-        solution.path.emplace_back(std::make_pair<>(start_location, 0));
-        solution.actions.clear();
-        solution.cost = 0;
-
-        OpenSet open_set;
-        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
-        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
-        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
-
-        auto handle = open_set.push(LowLevelNode(start_location,
-          environment.admissible_heuristic(start_location),
-          initialCost));
-        location_to_heap.insert(std::make_pair<>(start_location, handle));
-        (*handle).handle = handle;
-
-        std::vector<Neighbor<TimeLocation, Action, int> > neighbors;
-        neighbors.reserve(10);
-
-        while (!open_set.empty())
-        {
-            LowLevelNode current = open_set.top();
-            environment.onExpandLowLevelNode();
-
-            if (environment.is_solution(current.location))
-            {
-                solution.path.clear();
-                solution.actions.clear();
-                auto iter = came_from.find(current.location);
-                while (iter != came_from.end())
-                {
-                    solution.path.emplace_back(
-                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                    solution.actions.emplace_back(std::make_pair<>(
-                            std::get<1>(iter->second), std::get<2>(iter->second)));
-                    iter = came_from.find(std::get<0>(iter->second));
-                }
-
-                solution.path.emplace_back(std::make_pair<>
-                                                   (start_location, initialCost));
-                std::reverse(solution.path.begin(), solution.path.end());
-                std::reverse(solution.actions.begin(), solution.actions.end());
-                solution.cost = current.g_score;
-                solution.fmin = current.f_score;
-
-                return true;
-            }
-
-            open_set.pop();
-            location_to_heap.erase(current.location);
-            closed_set.insert(current.location);
-
-            // traverse neighbors
-            neighbors.clear();
-            environment.get_neighbors(current.location, neighbors);
-            for (const Neighbor<TimeLocation, Action, int>& neighbor : neighbors)
-            {
-                if (closed_set.find(neighbor.location) == closed_set.end())
-                {
-                    int tentative_gScore = current.g_score + neighbor.cost;
-                    auto iter = location_to_heap.find(neighbor.location);
-                    if (iter == location_to_heap.end())
-                    {  // Discover a new node
-                        int f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
-                        auto handle = open_set.push(LowLevelNode(neighbor.location, f_score, tentative_gScore));
-                        (*handle).handle = handle;
-                        location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
-                        // std::cout << "  this is a new node " << f_score << "," <<
-                        // tentative_gScore << std::endl;
-                    }
-                    else
-                    {
-                        auto handle = iter->second;
-                        // std::cout << "  this is an old node: " << tentative_gScore << ","
-                        // << (*handle).g_score << std::endl;
-                        // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).g_score)
-                        {
-                            continue;
-                        }
-
-                        // update f and g_score
-                        int delta = (*handle).g_score - tentative_gScore;
-                        (*handle).g_score = tentative_gScore;
-                        (*handle).f_score -= delta;
-                        open_set.increase(handle);
-                    }
-
-                    // Best path for this node so far
-                    // TODO: this is not the best way to update "came_from", but otherwise
-                    // default c'tors of TimeLocation and Action are required
-                    came_from.erase(neighbor.location);
-                    came_from.insert(std::make_pair<>(neighbor.location,
-                                                      std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
-                                                                        tentative_gScore)));
-                }
-            }
-        }
-
-        return false;
-    }
-};
-
 /*!
   \example cbs.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
   problem in a 2D grid world with up/down/left/right actions
@@ -933,7 +812,6 @@ public:
             // } else {
             // LowLevelEnvironment environment(environment, i, start.constraints[i]);
             environment.set_low_Level_context(i, start.constraints[i]);
-            LowLevel low_level(environment);
             bool is_success = environment.low_level_search(start_time_locations[i], start.solution[i]);
 
             if (!is_success)
@@ -1046,7 +924,6 @@ public:
 
                 // LowLevelEnvironment environment(environment, i, new_node.constraints[i]);
                 environment.set_low_Level_context(i, new_node.constraints[i]);
-                LowLevel low_level(environment);
                 bool is_success = environment.low_level_search(start_time_locations[i], new_node.solution[i]);
 
                 new_node.cost += new_node.solution[i].cost;
