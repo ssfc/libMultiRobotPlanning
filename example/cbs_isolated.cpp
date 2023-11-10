@@ -13,8 +13,6 @@
 #include <libMultiRobotPlanning/cbs_isolated.hpp>
 
 using namespace std;
-using libMultiRobotPlanning::PlanResult;
-
 
 ostream& operator<<(ostream& os, const Action& this_action)
 {

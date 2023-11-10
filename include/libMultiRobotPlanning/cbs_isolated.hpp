@@ -16,10 +16,7 @@
 #include <boost/heap/fibonacci_heap.hpp>
 #include <boost/heap/d_ary_heap.hpp>
 
-#include "planresult.hpp"
 #include "util.hpp"
-
-using libMultiRobotPlanning::PlanResult;
 
 // #include "low_level.hpp"
 
@@ -98,6 +95,19 @@ struct Neighbor
               action(input_action),
               cost(input_cost)
     {}
+};
+
+template <typename State, typename Action, typename Cost>
+struct PlanResult
+{
+    // path constructing locations and their g_score
+    std::vector<std::pair<State, Cost> > path;
+    //! actions and their cost
+    std::vector<std::pair<Action, Cost> > actions;
+    //! actual cost of the result
+    Cost cost;
+    //! lower bound of the cost (for suboptimal solvers)
+    Cost fmin;
 };
 
 // Conflict Custom conflict description.
