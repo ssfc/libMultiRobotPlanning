@@ -566,7 +566,7 @@ public:
                         const Constraints& input_constraints)
             : environment(input_environment)
     {
-        environment.set_low_Level_context(agentIdx, input_constraints);
+        environment.set_low_Level_context(agentIdx, input_constraints); // 这个也是原有
     }
 
     int admissible_heuristic(const TimeLocation& s) // 这个就是原有
