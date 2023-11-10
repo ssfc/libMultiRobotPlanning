@@ -556,44 +556,6 @@ public:
     }
 };
 
-class LowLevelEnvironment
-{
-private:
-    Environment& environment;
-
-public:
-    LowLevelEnvironment(Environment& input_environment, size_t agentIdx,
-                        const Constraints& input_constraints)
-            : environment(input_environment)
-    {
-        environment.set_low_Level_context(agentIdx, input_constraints); // 这个也是原有
-    }
-
-    int admissible_heuristic(const TimeLocation& s) // 这个就是原有
-    {
-        return environment.admissible_heuristic(s);
-    }
-
-    bool is_solution(const TimeLocation& s) // 这个也是原有
-    {
-        return environment.is_solution(s);
-    }
-
-    // 这个也是原有
-    void get_neighbors(const TimeLocation& s, std::vector<Neighbor<TimeLocation, Action, int> >& neighbors)
-    {
-        environment.get_neighbors(s, neighbors);
-    }
-
-    // 这个也是原有
-    void onExpandLowLevelNode()
-    {
-        environment.onExpandLowLevelNode();
-    }
-
-};
-
-
 // inner class definition
 class LowLevelListNode
 {
