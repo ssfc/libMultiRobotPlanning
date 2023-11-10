@@ -855,16 +855,16 @@ public:
       start_time(clock())
     {}
 
-    bool high_level_search(const std::vector<TimeLocation>& initialStates,
+    bool high_level_search(const std::vector<TimeLocation>& start_time_locations,
                            std::vector<PlanResult<TimeLocation, Action, int> >& solution)
     {
         HighLevelNode start;
-        start.solution.resize(initialStates.size());
-        start.constraints.resize(initialStates.size());
+        start.solution.resize(start_time_locations.size());
+        start.constraints.resize(start_time_locations.size());
         start.cost = 0;
         start.id = 0;
 
-        for (size_t i = 0; i < initialStates.size(); ++i)
+        for (size_t i = 0; i < start_time_locations.size(); ++i)
         {
             // if (   i < solution.size()
             //     && solution[i].path.size() > 1) {
@@ -873,7 +873,7 @@ public:
             // } else {
             LowLevelEnvironment low_level_environment(environment, i, start.constraints[i]);
             LowLevel low_level(low_level_environment);
-            bool is_success = low_level.low_level_search(initialStates[i], start.solution[i]);
+            bool is_success = low_level.low_level_search(start_time_locations[i], start.solution[i]);
 
             if (!is_success)
             {
@@ -985,7 +985,7 @@ public:
 
                 LowLevelEnvironment low_level_environment(environment, i, new_node.constraints[i]);
                 LowLevel low_level(low_level_environment);
-                bool is_success = low_level.low_level_search(initialStates[i], new_node.solution[i]);
+                bool is_success = low_level.low_level_search(start_time_locations[i], new_node.solution[i]);
 
                 new_node.cost += new_node.solution[i].cost;
 
