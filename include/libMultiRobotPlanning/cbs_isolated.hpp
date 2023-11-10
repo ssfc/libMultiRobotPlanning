@@ -272,6 +272,52 @@ public:
     }
 };
 
+
+class LowLevelNode
+{
+public:
+    TimeLocation location;
+    int f_score;
+    int g_score;
+
+    // 定义 handle: 就是上面那个HeapHandle
+    typename boost::heap::fibonacci_heap<LowLevelNode>::handle_type handle;
+    // typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+
+public:
+    LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
+            : location(input_state),
+              f_score(input_fScore),
+              g_score(input_gScore)
+    {}
+
+    bool operator<(const LowLevelNode& other) const
+    {
+        // Sort order
+        // 1. lowest f_score
+        // 2. highest g_score
+
+        // Our heap is a maximum heap, so we invert the comperator function here
+        if (f_score != other.f_score)
+        {
+            return f_score > other.f_score;
+        }
+        else
+        {
+            return g_score < other.g_score;
+        }
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
+    {
+        os << "location: " << node.location << " f_score: " << node.f_score
+           << " g_score: " << node.g_score;
+
+        return os;
+    }
+
+};
+
 class Environment
 {
 public:
@@ -515,62 +561,15 @@ public:
     }
 };
 
-// inner class definition
-class LowLevelListNode
-{
-public:
-    TimeLocation location;
-    int f_score;
-    int g_score;
-
-    // 定义 handle: 就是上面那个HeapHandle
-    typename boost::heap::fibonacci_heap<LowLevelListNode>::handle_type handle;
-    // typename boost::heap::d_ary_heap<LowLevelListNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
-
-public:
-    LowLevelListNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
-            : location(input_state),
-              f_score(input_fScore),
-              g_score(input_gScore)
-    {}
-
-    bool operator<(const LowLevelListNode& other) const
-    {
-        // Sort order
-        // 1. lowest f_score
-        // 2. highest g_score
-
-        // Our heap is a maximum heap, so we invert the comperator function here
-        if (f_score != other.f_score)
-        {
-            return f_score > other.f_score;
-        }
-        else
-        {
-            return g_score < other.g_score;
-        }
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const LowLevelListNode& node)
-    {
-        os << "location: " << node.location << " f_score: " << node.f_score
-           << " g_score: " << node.g_score;
-
-        return os;
-    }
-
-};
-
-
 class LowLevel
 {
 private:
     // member vars
     Environment& environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
-    using OpenSet = boost::heap::fibonacci_heap<LowLevelListNode>;
+    using OpenSet = boost::heap::fibonacci_heap<LowLevelNode>;
     using HeapHandle = typename OpenSet::handle_type;
-    // using OpenSet = boost::heap::d_ary_heap<LowLevelListNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+    // using OpenSet = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
@@ -590,7 +589,7 @@ public:
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
-        auto handle = open_set.push(LowLevelListNode(start_location,
+        auto handle = open_set.push(LowLevelNode(start_location,
           environment.admissible_heuristic(start_location),
           initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
@@ -601,7 +600,7 @@ public:
 
         while (!open_set.empty())
         {
-            LowLevelListNode current = open_set.top();
+            LowLevelNode current = open_set.top();
             environment.onExpandLowLevelNode();
 
             if (environment.is_solution(current.location))
@@ -644,7 +643,7 @@ public:
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
                         int f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
-                        auto handle = open_set.push(LowLevelListNode(neighbor.location, f_score, tentative_gScore));
+                        auto handle = open_set.push(LowLevelNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
