@@ -607,7 +607,7 @@ class LowLevel
 {
 private:
     // member vars
-    Environment& low_level_environment; // include map size, obstacle position, agent goal.
+    Environment& environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<LowLevelListNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -616,7 +616,7 @@ private:
 
 public:
     // member funcs
-    LowLevel(Environment& input_environment) : low_level_environment(input_environment) {}
+    LowLevel(Environment& input_environment) : environment(input_environment) {}
 
     bool low_level_search(const TimeLocation& start_location, PlanResult<TimeLocation, Action, int>& solution)
     {
@@ -632,7 +632,7 @@ public:
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
         auto handle = open_set.push(LowLevelListNode(start_location,
-          low_level_environment.admissible_heuristic(start_location),
+          environment.admissible_heuristic(start_location),
           initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
@@ -643,9 +643,9 @@ public:
         while (!open_set.empty())
         {
             LowLevelListNode current = open_set.top();
-            low_level_environment.onExpandLowLevelNode();
+            environment.onExpandLowLevelNode();
 
-            if (low_level_environment.is_solution(current.location))
+            if (environment.is_solution(current.location))
             {
                 solution.path.clear();
                 solution.actions.clear();
@@ -675,7 +675,7 @@ public:
 
             // traverse neighbors
             neighbors.clear();
-            low_level_environment.get_neighbors(current.location, neighbors);
+            environment.get_neighbors(current.location, neighbors);
             for (const Neighbor<TimeLocation, Action, int>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
@@ -684,7 +684,7 @@ public:
                     auto iter = location_to_heap.find(neighbor.location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + low_level_environment.admissible_heuristic(neighbor.location);
+                        int f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
                         auto handle = open_set.push(LowLevelListNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
@@ -826,7 +826,7 @@ public:
             //   start.solution[i] = solution[i];
             //   std::cout << "use existing solution for agent: " << i << std::endl;
             // } else {
-            // LowLevelEnvironment low_level_environment(environment, i, start.constraints[i]);
+            // LowLevelEnvironment environment(environment, i, start.constraints[i]);
             environment.set_low_Level_context(i, start.constraints[i]);
             LowLevel low_level(environment);
             bool is_success = low_level.low_level_search(start_time_locations[i], start.solution[i]);
@@ -939,7 +939,7 @@ public:
 
                 new_node.cost -= new_node.solution[i].cost;
 
-                // LowLevelEnvironment low_level_environment(environment, i, new_node.constraints[i]);
+                // LowLevelEnvironment environment(environment, i, new_node.constraints[i]);
                 environment.set_low_Level_context(i, new_node.constraints[i]);
                 LowLevel low_level(environment);
                 bool is_success = low_level.low_level_search(start_time_locations[i], new_node.solution[i]);
