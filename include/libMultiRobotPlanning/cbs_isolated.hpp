@@ -97,17 +97,16 @@ struct Neighbor
     {}
 };
 
-template <typename Cost>
 struct PlanResult
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<TimeLocation, Cost> > path;
+    std::vector<std::pair<TimeLocation, int> > path;
     //! actions and their cost
-    std::vector<std::pair<Action, Cost> > actions;
+    std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
-    Cost cost;
+    int cost;
     //! lower bound of the cost (for suboptimal solvers)
-    Cost fmin;
+    int fmin;
 };
 
 // Conflict Custom conflict description.
@@ -345,7 +344,7 @@ public:
 class HighLevelNode
 {
 public:
-    std::vector<PlanResult<int> > solution;
+    std::vector<PlanResult> solution;
     std::vector<Constraints> constraints;
     int cost;
     int id;
@@ -500,7 +499,7 @@ public:
 
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
-    bool get_first_conflict(const std::vector<PlanResult<int> >& solution,
+    bool get_first_conflict(const std::vector<PlanResult>& solution,
                           Conflict& result)
     {
         int max_t = 0;
@@ -589,9 +588,7 @@ public:
     }
 
 
-    TimeLocation get_time_location(size_t agentIdx,
-                          const std::vector<PlanResult<int> >& solution,
-                          size_t t)
+    TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
     {
         assert(agentIdx < solution.size());
 
@@ -631,7 +628,7 @@ public:
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
 
-    bool low_level_search(const TimeLocation& start_location, PlanResult<int>& solution)
+    bool low_level_search(const TimeLocation& start_location, PlanResult& solution)
     {
         int initialCost = 0;
         solution.path.clear();
@@ -819,7 +816,7 @@ public:
     {}
 
     bool high_level_search(const std::vector<TimeLocation>& start_time_locations,
-                           std::vector<PlanResult<int> >& solution)
+                           std::vector<PlanResult>& solution)
     {
         HighLevelNode start;
         start.solution.resize(start_time_locations.size());
