@@ -84,7 +84,7 @@ enum class Action
     Wait,
 };
 
-template <typename Action, typename Cost>
+template <typename Cost>
 struct Neighbor
 {
     //! neighboring location
@@ -444,7 +444,7 @@ public:
     }
 
     void get_neighbors(const TimeLocation& time_location,
-                       std::vector<Neighbor<Action, int> >& neighbors)
+                       std::vector<Neighbor<int> >& neighbors)
     {
         // cout << "#VC " << constraints.vertexConstraints.size() << endl;
         // for(const auto& vc : constraints.vertexConstraints) {
@@ -456,31 +456,31 @@ public:
         TimeLocation wait_neighbor(time_location.time + 1, time_location.x, time_location.y);
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Action, int>(wait_neighbor, Action::Wait, 1));
+            neighbors.emplace_back(Neighbor<int>(wait_neighbor, Action::Wait, 1));
         }
 
         TimeLocation west_neighbor(time_location.time + 1, time_location.x - 1, time_location.y);
         if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Action, int>(west_neighbor, Action::Left, 1));
+            neighbors.emplace_back(Neighbor<int>(west_neighbor, Action::Left, 1));
         }
 
         TimeLocation east_neighbor(time_location.time + 1, time_location.x + 1, time_location.y);
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Action, int>(east_neighbor, Action::Right, 1));
+            neighbors.emplace_back(Neighbor<int>(east_neighbor, Action::Right, 1));
         }
 
         TimeLocation north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Action, int>(north_neighbor, Action::Up, 1));
+            neighbors.emplace_back(Neighbor<int>(north_neighbor, Action::Up, 1));
         }
 
         TimeLocation south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Action, int>(south_neighbor, Action::Down, 1));
+            neighbors.emplace_back(Neighbor<int>(south_neighbor, Action::Down, 1));
         }
     }
 
@@ -641,7 +641,7 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Neighbor<Action, int> > neighbors;
+        std::vector<Neighbor<int> > neighbors;
         neighbors.reserve(10);
 
         while (!open_set.empty())
@@ -680,7 +680,7 @@ public:
             // traverse neighbors
             neighbors.clear();
             get_neighbors(current.location, neighbors);
-            for (const Neighbor<Action, int>& neighbor : neighbors)
+            for (const Neighbor<int>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
