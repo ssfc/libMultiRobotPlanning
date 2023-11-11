@@ -28,7 +28,7 @@ enum class Action
     North,
     South,
     East,
-    Right,
+    West,
     Wait,
 };
 
@@ -434,7 +434,7 @@ public:
         TimeLocation east_neighbor(time_location.time + 1, time_location.x + 1, time_location.y);
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
-            neighbors.emplace_back(Neighbor(east_neighbor, Action::Right, 1));
+            neighbors.emplace_back(Neighbor(east_neighbor, Action::West, 1));
         }
 
         TimeLocation north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
