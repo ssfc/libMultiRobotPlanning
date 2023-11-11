@@ -22,8 +22,8 @@ ostream& operator<<(ostream& os, const Action& this_action)
         case Action::South:
             os << "South";
             break;
-        case Action::Left:
-            os << "Left";
+        case Action::East:
+            os << "East";
             break;
         case Action::Right:
             os << "Right";
