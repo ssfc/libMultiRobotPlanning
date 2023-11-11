@@ -455,7 +455,111 @@ public:
             neighbors.emplace_back(Neighbor(south_neighbor, Action::South, 1));
         }
     }
-    
+
+    bool low_level_search(const TimeLocation& start_location, AgentPlan& solution)
+    {
+        int initialCost = 0;
+        solution.path.clear();
+        solution.path.emplace_back(std::make_pair<>(start_location, 0));
+        solution.actions.clear();
+        solution.cost = 0;
+
+        OpenSet open_set;
+        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
+
+        auto handle = open_set.push(LowLevelNode(start_location,
+                                                 admissible_heuristic(start_location),
+                                                 initialCost));
+        location_to_heap.insert(std::make_pair<>(start_location, handle));
+        (*handle).handle = handle;
+
+        std::vector<Neighbor> neighbors;
+        neighbors.reserve(10);
+
+        while (!open_set.empty())
+        {
+            LowLevelNode current = open_set.top();
+            num_expanded_low_level_nodes++;
+
+            if (is_solution(current.time_location))
+            {
+                solution.path.clear();
+                solution.actions.clear();
+                auto iter = came_from.find(current.time_location);
+                while (iter != came_from.end())
+                {
+                    solution.path.emplace_back(
+                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    solution.actions.emplace_back(std::make_pair<>(
+                            std::get<1>(iter->second), std::get<2>(iter->second)));
+                    iter = came_from.find(std::get<0>(iter->second));
+                }
+
+                solution.path.emplace_back(std::make_pair<>
+                                                   (start_location, initialCost));
+                std::reverse(solution.path.begin(), solution.path.end());
+                std::reverse(solution.actions.begin(), solution.actions.end());
+                solution.cost = current.g_score;
+                solution.fmin = current.f_score;
+
+                return true;
+            }
+
+            open_set.pop();
+            location_to_heap.erase(current.time_location);
+            closed_set.insert(current.time_location);
+
+            // traverse neighbors
+            neighbors.clear();
+            get_neighbors(current.time_location, neighbors);
+            for (const Neighbor& neighbor : neighbors)
+            {
+                if (closed_set.find(neighbor.time_location) == closed_set.end())
+                {
+                    int tentative_gScore = current.g_score + neighbor.cost;
+                    auto iter = location_to_heap.find(neighbor.time_location);
+                    if (iter == location_to_heap.end())
+                    {  // Discover a new node
+                        int f_score = tentative_gScore + admissible_heuristic(neighbor.time_location);
+                        auto handle = open_set.push(LowLevelNode(neighbor.time_location, f_score, tentative_gScore));
+                        (*handle).handle = handle;
+                        location_to_heap.insert(std::make_pair<>(neighbor.time_location, handle));
+                        // std::cout << "  this is a new node " << f_score << "," <<
+                        // tentative_gScore << std::endl;
+                    }
+                    else
+                    {
+                        auto handle = iter->second;
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // << (*handle).g_score << std::endl;
+                        // We found this node before with a better path
+                        if (tentative_gScore >= (*handle).g_score)
+                        {
+                            continue;
+                        }
+
+                        // update f and g_score
+                        int delta = (*handle).g_score - tentative_gScore;
+                        (*handle).g_score = tentative_gScore;
+                        (*handle).f_score -= delta;
+                        open_set.increase(handle);
+                    }
+
+                    // Best path for this node so far
+                    // TODO: this is not the best way to update "came_from", but otherwise
+                    // default c'tors of TimeLocation and Action are required
+                    came_from.erase(neighbor.time_location);
+                    came_from.insert(std::make_pair<>(neighbor.time_location,
+                                                      std::make_tuple<>(current.time_location, neighbor.action, neighbor.cost,
+                                                                        tentative_gScore)));
+                }
+            }
+        }
+
+        return false;
+    }
 
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
@@ -586,111 +690,6 @@ public:
         const auto& con = constraints.edge_constraints;
 
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
-    }
-
-    bool low_level_search(const TimeLocation& start_location, AgentPlan& solution)
-    {
-        int initialCost = 0;
-        solution.path.clear();
-        solution.path.emplace_back(std::make_pair<>(start_location, 0));
-        solution.actions.clear();
-        solution.cost = 0;
-
-        OpenSet open_set;
-        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
-        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
-        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
-
-        auto handle = open_set.push(LowLevelNode(start_location,
-                                                 admissible_heuristic(start_location),
-                                                 initialCost));
-        location_to_heap.insert(std::make_pair<>(start_location, handle));
-        (*handle).handle = handle;
-
-        std::vector<Neighbor> neighbors;
-        neighbors.reserve(10);
-
-        while (!open_set.empty())
-        {
-            LowLevelNode current = open_set.top();
-            num_expanded_low_level_nodes++;
-
-            if (is_solution(current.time_location))
-            {
-                solution.path.clear();
-                solution.actions.clear();
-                auto iter = came_from.find(current.time_location);
-                while (iter != came_from.end())
-                {
-                    solution.path.emplace_back(
-                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                    solution.actions.emplace_back(std::make_pair<>(
-                            std::get<1>(iter->second), std::get<2>(iter->second)));
-                    iter = came_from.find(std::get<0>(iter->second));
-                }
-
-                solution.path.emplace_back(std::make_pair<>
-                                                   (start_location, initialCost));
-                std::reverse(solution.path.begin(), solution.path.end());
-                std::reverse(solution.actions.begin(), solution.actions.end());
-                solution.cost = current.g_score;
-                solution.fmin = current.f_score;
-
-                return true;
-            }
-
-            open_set.pop();
-            location_to_heap.erase(current.time_location);
-            closed_set.insert(current.time_location);
-
-            // traverse neighbors
-            neighbors.clear();
-            get_neighbors(current.time_location, neighbors);
-            for (const Neighbor& neighbor : neighbors)
-            {
-                if (closed_set.find(neighbor.time_location) == closed_set.end())
-                {
-                    int tentative_gScore = current.g_score + neighbor.cost;
-                    auto iter = location_to_heap.find(neighbor.time_location);
-                    if (iter == location_to_heap.end())
-                    {  // Discover a new node
-                        int f_score = tentative_gScore + admissible_heuristic(neighbor.time_location);
-                        auto handle = open_set.push(LowLevelNode(neighbor.time_location, f_score, tentative_gScore));
-                        (*handle).handle = handle;
-                        location_to_heap.insert(std::make_pair<>(neighbor.time_location, handle));
-                        // std::cout << "  this is a new node " << f_score << "," <<
-                        // tentative_gScore << std::endl;
-                    }
-                    else
-                    {
-                        auto handle = iter->second;
-                        // std::cout << "  this is an old node: " << tentative_gScore << ","
-                        // << (*handle).g_score << std::endl;
-                        // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).g_score)
-                        {
-                            continue;
-                        }
-
-                        // update f and g_score
-                        int delta = (*handle).g_score - tentative_gScore;
-                        (*handle).g_score = tentative_gScore;
-                        (*handle).f_score -= delta;
-                        open_set.increase(handle);
-                    }
-
-                    // Best path for this node so far
-                    // TODO: this is not the best way to update "came_from", but otherwise
-                    // default c'tors of TimeLocation and Action are required
-                    came_from.erase(neighbor.time_location);
-                    came_from.insert(std::make_pair<>(neighbor.time_location,
-                                                      std::make_tuple<>(current.time_location, neighbor.action, neighbor.cost,
-                                                                        tentative_gScore)));
-                }
-            }
-        }
-
-        return false;
     }
 
     bool high_level_search()
