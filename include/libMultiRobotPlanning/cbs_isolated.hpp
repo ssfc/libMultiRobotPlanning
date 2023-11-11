@@ -220,9 +220,9 @@ public:
             }
         }
 
-        for (const auto& ec : edge_constraints)
+        for (const auto& edge_constraint : edge_constraints)
         {
-            if (other.edge_constraints.count(ec) > 0)
+            if (other.edge_constraints.count(edge_constraint) > 0)
             {
                 return true;
             }
@@ -238,9 +238,9 @@ public:
             os << vertex_constraint << std::endl;
         }
 
-        for (const auto& ec : constraints.edge_constraints)
+        for (const auto& edge_constraint : constraints.edge_constraints)
         {
-            os << ec << std::endl;
+            os << edge_constraint << std::endl;
         }
 
         return os;
