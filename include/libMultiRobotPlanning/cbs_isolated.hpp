@@ -726,7 +726,7 @@ public:
             }
 
             // Implement A1 LINE 3
-            // Root.cost = SIC(Root.solution) // 计算目标函数
+            // Root.cost = SIC(Root.solution) // SIC: abbreviation of sum of individual costs heuristic
             root.cost += root.solution[i].cost;
         }
 
