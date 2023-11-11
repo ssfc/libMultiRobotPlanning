@@ -455,11 +455,7 @@ public:
             neighbors.emplace_back(Neighbor(south_neighbor, Action::South, 1));
         }
     }
-
-    void onExpandLowLevelNode()
-    {
-        num_expanded_low_level_nodes++;
-    }
+    
 
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
@@ -617,7 +613,7 @@ public:
         while (!open_set.empty())
         {
             LowLevelNode current = open_set.top();
-            onExpandLowLevelNode();
+            num_expanded_low_level_nodes++;
 
             if (is_solution(current.time_location))
             {
@@ -710,6 +706,8 @@ public:
         start.cost = 0;
         start.id = 0;
 
+        // A1 LINE 2
+        // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
         for (size_t i = 0; i < num_agents; i++)
         {
             // if (   i < solution.size()
