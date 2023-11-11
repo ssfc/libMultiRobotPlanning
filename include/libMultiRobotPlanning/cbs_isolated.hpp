@@ -34,15 +34,15 @@ enum class Action
 
 struct Neighbor
 {
-    //! neighboring location
-    TimeLocation location;
-    //! action to get to the neighboring location
+    //! neighboring time_location
+    TimeLocation time_location;
+    //! action to get to the neighboring time_location
     Action action;
-    //! cost to get to the neighboring location, usually 1
+    //! cost to get to the neighboring time_location, usually 1
     int cost;
 
     Neighbor(const TimeLocation& input_location, const Action& input_action, int input_cost)
-            : location(input_location),
+            : time_location(input_location),
               action(input_action),
               cost(input_cost)
     {}
@@ -253,7 +253,7 @@ public:
 class LowLevelNode
 {
 public:
-    TimeLocation location;
+    TimeLocation time_location;
     int f_score;
     int g_score;
 
@@ -263,7 +263,7 @@ public:
 
 public:
     LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
-            : location(input_state),
+            : time_location(input_state),
               f_score(input_fScore),
               g_score(input_gScore)
     {}
@@ -287,7 +287,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
     {
-        os << "location: " << node.location << " f_score: " << node.f_score
+        os << "time_location: " << node.time_location << " f_score: " << node.f_score
            << " g_score: " << node.g_score;
 
         return os;
@@ -618,11 +618,11 @@ public:
             LowLevelNode current = open_set.top();
             onExpandLowLevelNode();
 
-            if (is_solution(current.location))
+            if (is_solution(current.time_location))
             {
                 solution.path.clear();
                 solution.actions.clear();
-                auto iter = came_from.find(current.location);
+                auto iter = came_from.find(current.time_location);
                 while (iter != came_from.end())
                 {
                     solution.path.emplace_back(
@@ -643,24 +643,24 @@ public:
             }
 
             open_set.pop();
-            location_to_heap.erase(current.location);
-            closed_set.insert(current.location);
+            location_to_heap.erase(current.time_location);
+            closed_set.insert(current.time_location);
 
             // traverse neighbors
             neighbors.clear();
-            get_neighbors(current.location, neighbors);
+            get_neighbors(current.time_location, neighbors);
             for (const Neighbor& neighbor : neighbors)
             {
-                if (closed_set.find(neighbor.location) == closed_set.end())
+                if (closed_set.find(neighbor.time_location) == closed_set.end())
                 {
                     int tentative_gScore = current.g_score + neighbor.cost;
-                    auto iter = location_to_heap.find(neighbor.location);
+                    auto iter = location_to_heap.find(neighbor.time_location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
-                        auto handle = open_set.push(LowLevelNode(neighbor.location, f_score, tentative_gScore));
+                        int f_score = tentative_gScore + admissible_heuristic(neighbor.time_location);
+                        auto handle = open_set.push(LowLevelNode(neighbor.time_location, f_score, tentative_gScore));
                         (*handle).handle = handle;
-                        location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
+                        location_to_heap.insert(std::make_pair<>(neighbor.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -685,9 +685,9 @@ public:
                     // Best path for this node so far
                     // TODO: this is not the best way to update "came_from", but otherwise
                     // default c'tors of TimeLocation and Action are required
-                    came_from.erase(neighbor.location);
-                    came_from.insert(std::make_pair<>(neighbor.location,
-                                                      std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
+                    came_from.erase(neighbor.time_location);
+                    came_from.insert(std::make_pair<>(neighbor.time_location,
+                                                      std::make_tuple<>(current.time_location, neighbor.action, neighbor.cost,
                                                                         tentative_gScore)));
                 }
             }
