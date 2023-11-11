@@ -430,6 +430,16 @@ public:
                && con.find(VertexConstraint(time_location.time, time_location.x, time_location.y)) == con.end();
     }
 
+    // low level 工具函数 get_neighbors的工具函数
+    bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
+    {
+        // assert(constraints);
+        const auto& con = constraints.edge_constraints;
+
+        return con.find(EdgeConstraint(s1.time, s1.x, s1.y,
+                                       s2.x, s2.y)) == con.end();
+    }
+
     // low level 工具函数
     void get_neighbors(const TimeLocation& time_location, std::vector<Neighbor>& neighbors)
     {
@@ -688,15 +698,6 @@ public:
                     conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
             input_constraints[conflict.agent2] = c2;
         }
-    }
-
-    bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
-    {
-        // assert(constraints);
-        const auto& con = constraints.edge_constraints;
-
-        return con.find(EdgeConstraint(s1.time, s1.x, s1.y,
-                                       s2.x, s2.y)) == con.end();
     }
 
     bool high_level_search()
