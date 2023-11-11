@@ -382,7 +382,7 @@ public:
               disappear_at_goal(input_disappearAtGoal),
               start_time(clock())
     {}
-    
+
 
     // Set the current context to a particular agent with the given set of constraints
     void set_low_Level_context(size_t agentIdx, Constraints input_constraints)
