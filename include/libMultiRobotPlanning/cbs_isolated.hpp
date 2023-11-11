@@ -564,6 +564,30 @@ public:
         return false;
     }
 
+    // HighLevel 工具函数 get_first_conflict 的工具函数
+    TimeLocation get_time_location(size_t agentIdx, const std::vector<AgentPlan>& solution, size_t t)
+    {
+        assert(agentIdx < solution.size());
+
+        if (t < solution[agentIdx].path.size())
+        {
+            return solution[agentIdx].path[t].first;
+        }
+
+        assert(!solution[agentIdx].path.empty());
+
+        if (disappear_at_goal)
+        {
+            // This is a trick to avoid changing the rest of the code significantly
+            // After an agent disappeared, put it at a unique but invalid position
+            // This will cause all calls to equal_except_time(.) to return false.
+            return TimeLocation(-1, -1 * (agentIdx + 1), -1);
+        }
+
+        return solution[agentIdx].path.back().first;
+    }
+
+    // HighLevel 工具函数
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
     bool get_first_conflict(const std::vector<AgentPlan>& solution, Conflict& result)
@@ -629,6 +653,7 @@ public:
         return false;
     }
 
+    // High level 工具函数
     // Create a list of constraints for the given conflict.
     void generate_constraints_from_conflict(const Conflict& conflict, std::map<size_t, Constraints>& input_constraints)
     {
@@ -651,29 +676,6 @@ public:
                     conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
             input_constraints[conflict.agent2] = c2;
         }
-    }
-
-
-    TimeLocation get_time_location(size_t agentIdx, const std::vector<AgentPlan>& solution, size_t t)
-    {
-        assert(agentIdx < solution.size());
-
-        if (t < solution[agentIdx].path.size())
-        {
-            return solution[agentIdx].path[t].first;
-        }
-
-        assert(!solution[agentIdx].path.empty());
-
-        if (disappear_at_goal)
-        {
-            // This is a trick to avoid changing the rest of the code significantly
-            // After an agent disappeared, put it at a unique but invalid position
-            // This will cause all calls to equal_except_time(.) to return false.
-            return TimeLocation(-1, -1 * (agentIdx + 1), -1);
-        }
-
-        return solution[agentIdx].path.back().first;
     }
 
     bool location_valid(const TimeLocation& s)
