@@ -418,6 +418,7 @@ public:
                && time_location.time > last_goal_constraint;
     }
 
+    // low level 工具函数
     void get_neighbors(const TimeLocation& time_location, std::vector<Neighbor>& neighbors)
     {
         // cout << "#VC " << constraints.vertex_constraints.size() << endl;
@@ -565,8 +566,7 @@ public:
 
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
-    bool get_first_conflict(const std::vector<AgentPlan>& solution,
-                          Conflict& result)
+    bool get_first_conflict(const std::vector<AgentPlan>& solution, Conflict& result)
     {
         int max_t = 0;
         for (const auto& sol : solution)
