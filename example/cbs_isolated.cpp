@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, is_disappear_at_goal);
-    HighLevel cbs(mapf, dimx, dimy, obstacles, goals, is_disappear_at_goal);
+    HighLevel cbs(mapf);
     vector<AgentPlan> solution;
 
     bool is_success = cbs.high_level_search(start_time_location, solution);

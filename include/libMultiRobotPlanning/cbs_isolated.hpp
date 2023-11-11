@@ -785,33 +785,13 @@ class HighLevel
 {
 private:
     Environment& environment;
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    std::vector<Location> goals;
-    // vector< vector<int> > m_heuristic;
-    size_t agent_index;
-    Constraints constraints;
-    int last_goal_constraint;
-    int num_expanded_low_level_nodes;
-    bool disappear_at_goal;
 
     // debug var
     double start_time;
 
 public:
-    HighLevel(Environment& environment, size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
-        std::vector<Location> input_goals, bool input_disappearAtGoal = false)
+    HighLevel(Environment& environment)
     : environment(environment),
-      num_columns(input_dimx),
-      num_rows(input_dimy),
-      obstacles(std::move(input_obstacles)),
-      goals(std::move(input_goals)),
-      agent_index(0),
-            // constraints(nullptr),
-      last_goal_constraint(-1),
-      num_expanded_low_level_nodes(0),
-      disappear_at_goal(input_disappearAtGoal),
       start_time(clock())
     {}
 
