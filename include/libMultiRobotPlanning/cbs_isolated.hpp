@@ -737,12 +737,14 @@ public:
         // typename boost::heap::fibonacci_heap<HighLevelNode>::handle_type open;
         auto handle = open.push(root);
         (*handle).handle = handle;
-        
+
         int id = 1;
         // Implement A1 LINE 5
         // while OPEN not empty do
         while (!open.empty())
         {
+            // Implement A1 LINE 6
+            // P ← the best node from OPEN // the lowest solution cost
             HighLevelNode best_node = open.top();
             num_expanded_high_level_nodes++; // high-level node expanded
             // std::cout << "expand: " << best_node << std::endl;
