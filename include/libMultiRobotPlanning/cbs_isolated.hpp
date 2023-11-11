@@ -412,8 +412,7 @@ public:
                && time_location.time > last_goal_constraint;
     }
 
-    void get_neighbors(const TimeLocation& time_location,
-                       std::vector<Neighbor>& neighbors)
+    void get_neighbors(const TimeLocation& time_location, std::vector<Neighbor>& neighbors)
     {
         // cout << "#VC " << constraints.vertexConstraints.size() << endl;
         // for(const auto& vc : constraints.vertexConstraints) {
