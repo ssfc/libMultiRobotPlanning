@@ -202,6 +202,7 @@ public:
     std::unordered_set<EdgeConstraint> edge_constraints;
 
 public:
+    // 将另一个对象中的所有元素插入到当前对象的集合中。
     void add(const Constraints& other)
     {
         vertex_constraints.insert(other.vertex_constraints.begin(),
@@ -210,6 +211,7 @@ public:
                                other.edge_constraints.end());
     }
 
+    // 检查当前对象的顶点约束和边约束是否与另一个对象中的任何约束重叠。
     bool overlap(const Constraints& other) const
     {
         for (const auto& vertex_constraint : vertex_constraints)
