@@ -76,10 +76,8 @@ public:
     size_t agent2;
     Type type;
 
-    int x1;
-    int y1;
-    int x2;
-    int y2;
+    int x1; int y1;
+    int x2; int y2;
 
 public:
     friend std::ostream& operator<<(std::ostream& os, const Conflict& conflict)
