@@ -74,7 +74,7 @@ public:
     Type type;
 
     int time;
-    
+
     size_t agent1;
     int x1; int y1;
 
@@ -105,8 +105,8 @@ public:
     int y;
 
 public:
-    VertexConstraint(int time, int x, int y)
-            : time(time), x(x), y(y)
+    VertexConstraint(int time, int input_x, int input_y)
+            : time(time), x(input_x), y(input_y)
     {}
 
     bool operator==(const VertexConstraint& other) const
