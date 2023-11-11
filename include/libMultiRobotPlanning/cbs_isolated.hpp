@@ -739,9 +739,10 @@ public:
         return false;
     }
 
-    bool high_level_search(const std::vector<TimeLocation>& start_time_locations,
-                           std::vector<AgentPlan>& solution)
+    bool high_level_search(const std::vector<TimeLocation>& start_time_locations)
     {
+        std::vector<AgentPlan> solution;
+
         HighLevelNode start;
         start.solution.resize(start_time_locations.size());
         start.constraints.resize(start_time_locations.size());
