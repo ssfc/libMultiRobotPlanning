@@ -345,8 +345,8 @@ public:
     size_t agent_index;
     Constraints constraints;
     int last_goal_constraint;
-    int num_expanded_low_level_nodes;
-    int num_expanded_high_level_nodes;
+    size_t num_expanded_low_level_nodes;
+    size_t num_expanded_high_level_nodes;
     bool disappear_at_goal;
 
     // debug var
