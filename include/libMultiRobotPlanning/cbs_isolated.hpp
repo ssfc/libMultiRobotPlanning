@@ -400,6 +400,7 @@ public:
         }
     }
 
+    // low level 工具函数
     int admissible_heuristic(const TimeLocation& time_location)
     {
         // cout << "H: " <<  s << " " << m_heuristic[agent_index][s.x + num_columns *
@@ -409,6 +410,7 @@ public:
                abs(time_location.y - goals[agent_index].y);
     }
 
+    // low level 工具函数
     bool is_solution(const TimeLocation& time_location)
     {
         return time_location.x == goals[agent_index].x
