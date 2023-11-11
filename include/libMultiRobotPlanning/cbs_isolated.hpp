@@ -683,9 +683,10 @@ public:
         // assert(constraints);
         const auto& con = constraints.vertex_constraints;
 
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
-               con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
+        return s.x >= 0 && s.x < num_columns
+        && s.y >= 0 && s.y < num_rows
+        && obstacles.find(Location(s.x, s.y)) == obstacles.end()
+        && con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
     }
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
