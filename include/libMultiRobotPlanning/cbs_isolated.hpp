@@ -702,15 +702,15 @@ public:
         std::vector<AgentPlan> solution;
 
         HighLevelNode start;
-        start.solution.resize(start_time_locations.size());
+        start.solution.resize(num_agents);
         // std::cerr << "start_time_locations size: " << start_time_locations.size() << std::endl;
         // A1 LINE 1
         // Root.constraints = ∅ // 最开始无约束
-        start.constraints.resize(start_time_locations.size());
+        start.constraints.resize(num_agents);
         start.cost = 0;
         start.id = 0;
 
-        for (size_t i = 0; i < start_time_locations.size(); ++i)
+        for (size_t i = 0; i < num_agents; i++)
         {
             // if (   i < solution.size()
             //     && solution[i].path.size() > 1) {
