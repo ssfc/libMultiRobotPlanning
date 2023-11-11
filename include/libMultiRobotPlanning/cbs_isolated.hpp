@@ -197,23 +197,23 @@ namespace std
 class Constraints
 {
 public:
-    std::unordered_set<VertexConstraint> vertexConstraints;
+    std::unordered_set<VertexConstraint> vertex_constraints;
     std::unordered_set<EdgeConstraint> edgeConstraints;
 
 public:
     void add(const Constraints& other)
     {
-        vertexConstraints.insert(other.vertexConstraints.begin(),
-                                 other.vertexConstraints.end());
+        vertex_constraints.insert(other.vertex_constraints.begin(),
+                                 other.vertex_constraints.end());
         edgeConstraints.insert(other.edgeConstraints.begin(),
                                other.edgeConstraints.end());
     }
 
     bool overlap(const Constraints& other) const
     {
-        for (const auto& vc : vertexConstraints)
+        for (const auto& vc : vertex_constraints)
         {
-            if (other.vertexConstraints.count(vc) > 0)
+            if (other.vertex_constraints.count(vc) > 0)
             {
                 return true;
             }
@@ -232,7 +232,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Constraints& constraints)
     {
-        for (const auto& vc : constraints.vertexConstraints)
+        for (const auto& vc : constraints.vertex_constraints)
         {
             os << vc << std::endl;
         }
@@ -387,7 +387,7 @@ public:
         agent_index = agentIdx;
         constraints = input_constraints;
         last_goal_constraint = -1;
-        for (const auto& vc : input_constraints.vertexConstraints)
+        for (const auto& vc : input_constraints.vertex_constraints)
         {
             if (vc.x == goals[agent_index].x && vc.y == goals[agent_index].y)
             {
@@ -414,8 +414,8 @@ public:
 
     void get_neighbors(const TimeLocation& time_location, std::vector<Neighbor>& neighbors)
     {
-        // cout << "#VC " << constraints.vertexConstraints.size() << endl;
-        // for(const auto& vc : constraints.vertexConstraints) {
+        // cout << "#VC " << constraints.vertex_constraints.size() << endl;
+        // for(const auto& vc : constraints.vertex_constraints) {
         //   cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
         //   endl;
         // }
@@ -529,7 +529,7 @@ public:
         if (conflict.type == Conflict::Vertex)
         {
             Constraints c1;
-            c1.vertexConstraints.emplace(
+            c1.vertex_constraints.emplace(
                     VertexConstraint(conflict.time, conflict.x1, conflict.y1));
             input_constraints[conflict.agent1] = c1;
             input_constraints[conflict.agent2] = c1;
@@ -573,7 +573,7 @@ public:
     bool location_valid(const TimeLocation& s)
     {
         // assert(constraints);
-        const auto& con = constraints.vertexConstraints;
+        const auto& con = constraints.vertex_constraints;
 
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
