@@ -678,15 +678,15 @@ public:
         }
     }
 
-    bool location_valid(const TimeLocation& s)
+    bool location_valid(const TimeLocation& time_location)
     {
         // assert(constraints);
         const auto& con = constraints.vertex_constraints;
 
-        return s.x >= 0 && s.x < num_columns
-        && s.y >= 0 && s.y < num_rows
-        && obstacles.find(Location(s.x, s.y)) == obstacles.end()
-        && con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
+        return time_location.x >= 0 && time_location.x < num_columns
+        && time_location.y >= 0 && time_location.y < num_rows
+        && obstacles.find(Location(time_location.x, time_location.y)) == obstacles.end()
+        && con.find(VertexConstraint(time_location.time, time_location.x, time_location.y)) == con.end();
     }
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
