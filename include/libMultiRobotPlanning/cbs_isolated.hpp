@@ -146,10 +146,8 @@ class EdgeConstraint
 {
 public:
     int time;
-    int x1;
-    int y1;
-    int x2;
-    int y2;
+    int x1; int y1;
+    int x2; int y2;
 
 public:
     EdgeConstraint(int time, int x1, int y1, int x2, int y2)
