@@ -5,9 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-#include <boost/functional/hash.hpp>
 #include <boost/program_options.hpp>
-
 #include <yaml-cpp/yaml.h>
 
 #include <libMultiRobotPlanning/cbs_isolated.hpp>
