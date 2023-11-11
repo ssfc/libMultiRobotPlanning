@@ -397,6 +397,9 @@ public:
     int num_expanded_high_level_nodes;
     bool disappear_at_goal;
 
+    // debug var
+    double start_time;
+
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<LowLevelNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -415,7 +418,8 @@ public:
               last_goal_constraint(-1),
               num_expanded_low_level_nodes(0),
               num_expanded_high_level_nodes(0),
-              disappear_at_goal(input_disappearAtGoal)
+              disappear_at_goal(input_disappearAtGoal),
+              start_time(clock())
     {}
 
     Environment(const Environment&) = delete;
@@ -729,6 +733,154 @@ public:
                                                       std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
                                                                         tentative_gScore)));
                 }
+            }
+        }
+
+        return false;
+    }
+
+    bool high_level_search(const std::vector<TimeLocation>& start_time_locations,
+                           std::vector<AgentPlan>& solution)
+    {
+        HighLevelNode start;
+        start.solution.resize(start_time_locations.size());
+        start.constraints.resize(start_time_locations.size());
+        start.cost = 0;
+        start.id = 0;
+
+        for (size_t i = 0; i < start_time_locations.size(); ++i)
+        {
+            // if (   i < solution.size()
+            //     && solution[i].path.size() > 1) {
+            //   start.solution[i] = solution[i];
+            //   std::cout << "use existing solution for agent: " << i << std::endl;
+            // } else {
+            // LowLevelEnvironment environment(environment, i, start.constraints[i]);
+            set_low_Level_context(i, start.constraints[i]);
+            bool is_success = low_level_search(start_time_locations[i], start.solution[i]);
+
+            if (!is_success)
+            {
+                return false;
+            }
+            // }
+            start.cost += start.solution[i].cost;
+        }
+
+        // std::priority_queue<HighLevelNode> open;
+        typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+                boost::heap::mutable_<true> > open;
+        auto handle = open.push(start);
+        (*handle).handle = handle;
+
+        solution.clear();
+        int id = 1;
+        while (!open.empty())
+        {
+            HighLevelNode best_node = open.top();
+            num_expanded_high_level_nodes++; // high-level node expanded
+            // std::cout << "expand: " << best_node << std::endl;
+
+            open.pop();
+
+            Conflict conflict;
+            if (!get_first_conflict(best_node.solution, conflict))
+            {
+                solution = best_node.solution;
+
+                std::cout << "Planning successful! " << std::endl;
+
+                int makespan = 0;
+                for (const auto& s : solution)
+                {
+                    makespan = std::max<int>(makespan, s.cost);
+                }
+
+                std::ofstream fout("output.yaml");
+                fout << "statistics:" << std::endl;
+
+                fout << "cost: " << best_node.cost << std::endl;
+                std::cerr << "cost: " << best_node.cost << std::endl;
+
+                fout << "makespan: " << makespan << std::endl;
+
+                double elapsed_time = (clock() - start_time) / CLOCKS_PER_SEC;
+                std::cerr << "runtime: " << elapsed_time * 1000 << "ms" << std::endl;
+
+                fout << "highLevelExpanded: " << num_expanded_high_level_nodes << std::endl;
+                std::cerr << "highLevelExpanded: " << num_expanded_high_level_nodes << std::endl;
+
+                fout << "lowLevelExpanded: " << num_expanded_low_level_nodes << std::endl;
+                std::cerr << "lowLevelExpanded: " << num_expanded_low_level_nodes << std::endl;
+
+                fout << "schedule:" << std::endl;
+                for (size_t i = 0; i < solution.size(); i++)
+                {
+                    // cout << "Solution for: " << i << endl;
+                    // for (size_t i = 0; i < solution[i].actions.size(); ++i) {
+                    //   cout << solution[i].path[i].second << ": " <<
+                    //   solution[i].path[i].first << "->" << solution[i].actions[i].first
+                    //   << "(cost: " << solution[i].actions[i].second << ")" << endl;
+                    // }
+                    // cout << solution[i].path.back().second << ": " <<
+                    // solution[i].path.back().first << endl;
+
+                    fout << "  agent" << i << ":" << std::endl;
+                    for (const auto& state : solution[i].path)
+                    {
+                        fout << "    - x: " << state.first.x << std::endl
+                             << "      y: " << state.first.y << std::endl
+                             << "      t: " << state.second << std::endl;
+                    }
+
+                    std::cerr << "agent " << i << ": ";
+                    for (const auto& state : solution[i].path)
+                    {
+                        std::cerr << "(" << state.first.x << "," << state.first.y << "),";
+                    }
+                    std::cerr << std::endl;
+                }
+
+                return true;
+            }
+
+            // create additional nodes to resolve conflict
+            // std::cout << "Found conflict: " << conflict << std::endl;
+            // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
+            // conflict.type << std::endl;
+
+            std::map<size_t, Constraints> constraints;
+            generate_constraints_from_conflict(conflict, constraints);
+            for (const auto& constraint : constraints)
+            {
+                // std::cout << "Add HL node for " << constraint.first << std::endl;
+                size_t i = constraint.first;
+                // std::cout << "create child with id " << id << std::endl;
+                HighLevelNode new_node = best_node;
+                new_node.id = id;
+                // (optional) check that this constraint was not included already
+                // std::cout << new_node.constraints[i] << std::endl;
+                // std::cout << constraint.second << std::endl;
+                assert(!new_node.constraints[i].overlap(constraint.second));
+
+                new_node.constraints[i].add(constraint.second);
+
+                new_node.cost -= new_node.solution[i].cost;
+
+                // LowLevelEnvironment environment(environment, i, new_node.constraints[i]);
+                set_low_Level_context(i, new_node.constraints[i]);
+                bool is_success = low_level_search(start_time_locations[i], new_node.solution[i]);
+
+                new_node.cost += new_node.solution[i].cost;
+
+                if (is_success)
+                {
+                    // std::cout << "  is_success. cost: " << new_node.cost << std::endl;
+                    auto handle = open.push(new_node);
+                    (*handle).handle = handle;
+                }
+
+                ++id;
             }
         }
 
