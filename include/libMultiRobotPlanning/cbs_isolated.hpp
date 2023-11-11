@@ -612,7 +612,7 @@ public:
     // HighLevel 工具函数
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
-    bool get_first_conflict(const std::vector<AgentPlan>& solution, Conflict& result)
+    bool get_first_conflict(const std::vector<AgentPlan>& solution, Conflict& first_conflict)
     {
         int max_t = 0;
         for (const auto& sol : solution)
@@ -631,12 +631,12 @@ public:
                     TimeLocation state2 = get_time_location(j, solution, t);
                     if (state1.equal_except_time(state2))
                     {
-                        result.time = t;
-                        result.agent1 = i;
-                        result.agent2 = j;
-                        result.type = Conflict::VertexConflict;
-                        result.x1 = state1.x;
-                        result.y1 = state1.y;
+                        first_conflict.time = t;
+                        first_conflict.agent1 = i;
+                        first_conflict.agent2 = j;
+                        first_conflict.type = Conflict::VertexConflict;
+                        first_conflict.x1 = state1.x;
+                        first_conflict.y1 = state1.y;
                         // cout << "VC " << t << "," << state1.x << "," << state1.y <<
                         // endl;
 
@@ -657,14 +657,14 @@ public:
                     TimeLocation state2b = get_time_location(j, solution, t + 1);
                     if (state1a.equal_except_time(state2b) && state1b.equal_except_time(state2a))
                     {
-                        result.time = t;
-                        result.agent1 = i;
-                        result.agent2 = j;
-                        result.type = Conflict::EdgeConflict;
-                        result.x1 = state1a.x;
-                        result.y1 = state1a.y;
-                        result.x2 = state1b.x;
-                        result.y2 = state1b.y;
+                        first_conflict.time = t;
+                        first_conflict.agent1 = i;
+                        first_conflict.agent2 = j;
+                        first_conflict.type = Conflict::EdgeConflict;
+                        first_conflict.x1 = state1a.x;
+                        first_conflict.y1 = state1a.y;
+                        first_conflict.x2 = state1b.x;
+                        first_conflict.y2 = state1b.y;
 
                         return true;
                     }
