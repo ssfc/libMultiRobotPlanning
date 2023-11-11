@@ -755,9 +755,9 @@ public:
                 std::cout << "Planning successful! " << std::endl;
 
                 int makespan = 0;
-                for (const auto& s : solution)
+                for (const auto& agent_plan : solution)
                 {
-                    makespan = std::max<int>(makespan, s.cost);
+                    makespan = std::max<int>(makespan, agent_plan.cost);
                 }
 
                 std::ofstream fout("output.yaml");
