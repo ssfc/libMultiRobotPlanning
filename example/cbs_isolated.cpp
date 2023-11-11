@@ -115,7 +115,6 @@ int main(int argc, char* argv[])
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, is_disappear_at_goal);
-    vector<AgentPlan> solution;
 
     bool is_success = mapf.high_level_search(start_time_locations);
     if (!is_success)
