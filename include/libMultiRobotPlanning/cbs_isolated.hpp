@@ -130,12 +130,12 @@ namespace std
     template <>
     struct hash<VertexConstraint>
     {
-        size_t operator()(const VertexConstraint& s) const
+        size_t operator()(const VertexConstraint& vertex_constraint) const
         {
             size_t seed = 0;
-            boost::hash_combine(seed, s.time);
-            boost::hash_combine(seed, s.x);
-            boost::hash_combine(seed, s.y);
+            boost::hash_combine(seed, vertex_constraint.time);
+            boost::hash_combine(seed, vertex_constraint.x);
+            boost::hash_combine(seed, vertex_constraint.y);
             return seed;
         }
     };
