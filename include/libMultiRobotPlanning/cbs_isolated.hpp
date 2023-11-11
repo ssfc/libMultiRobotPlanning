@@ -382,7 +382,7 @@ public:
     }
 };
 
-class Environment
+class CBS
 {
 public:
     int num_columns;
@@ -407,7 +407,7 @@ public:
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
-    Environment(size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
+    CBS(size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
                 std::vector<Location> input_goals, bool input_disappearAtGoal = false)
             : num_columns(input_dimx),
               num_rows(input_dimy),
@@ -422,8 +422,8 @@ public:
               start_time(clock())
     {}
 
-    Environment(const Environment&) = delete;
-    Environment& operator=(const Environment&) = delete;
+    CBS(const CBS&) = delete;
+    CBS& operator=(const CBS&) = delete;
 
     // Set the current context to a particular agent with the given set of constraints
     void set_low_Level_context(size_t agentIdx, Constraints input_constraints)
