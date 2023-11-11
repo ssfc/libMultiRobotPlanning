@@ -737,8 +737,7 @@ public:
         // typename boost::heap::fibonacci_heap<HighLevelNode>::handle_type open;
         auto handle = open.push(root);
         (*handle).handle = handle;
-
-        solution.clear();
+        
         int id = 1;
         // Implement A1 LINE 5
         // while OPEN not empty do
