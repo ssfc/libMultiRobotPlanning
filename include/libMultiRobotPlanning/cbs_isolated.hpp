@@ -702,8 +702,9 @@ public:
 
         HighLevelNode start;
         start.solution.resize(start_time_locations.size());
+        // std::cerr << "start_time_locations size: " << start_time_locations.size() << std::endl;
         // A1 LINE 1
-        // R.constraints = ∅ // 最开始无约束
+        // Root.constraints = ∅ // 最开始无约束
         start.constraints.resize(start_time_locations.size());
         start.cost = 0;
         start.id = 0;
