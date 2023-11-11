@@ -730,6 +730,8 @@ public:
             root.cost += root.solution[i].cost;
         }
 
+        // Implement A1 LINE 4
+        // insert Root to OPEN
         // std::priority_queue<HighLevelNode> open;
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > open;
         // typename boost::heap::fibonacci_heap<HighLevelNode>::handle_type open;
