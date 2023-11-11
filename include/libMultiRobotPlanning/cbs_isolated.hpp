@@ -180,14 +180,14 @@ namespace std
     template <>
     struct hash<EdgeConstraint>
     {
-        size_t operator()(const EdgeConstraint& s) const
+        size_t operator()(const EdgeConstraint& edge_constraint) const
         {
             size_t seed = 0;
-            boost::hash_combine(seed, s.time);
-            boost::hash_combine(seed, s.x1);
-            boost::hash_combine(seed, s.y1);
-            boost::hash_combine(seed, s.x2);
-            boost::hash_combine(seed, s.y2);
+            boost::hash_combine(seed, edge_constraint.time);
+            boost::hash_combine(seed, edge_constraint.x1);
+            boost::hash_combine(seed, edge_constraint.y1);
+            boost::hash_combine(seed, edge_constraint.x2);
+            boost::hash_combine(seed, edge_constraint.y2);
 
             return seed;
         }
