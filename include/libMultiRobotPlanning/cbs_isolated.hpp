@@ -754,6 +754,8 @@ public:
             // Validate the paths in P until a conflict occurs.
             // Implement A1 LINE 8
             // if P has no conflict then
+            // Implement A1 LINE 10
+            // C ← first conflict (ai, aj , v, t) in P
             Conflict conflict;
             if (!get_first_conflict(best_node.solution, conflict))
             {
