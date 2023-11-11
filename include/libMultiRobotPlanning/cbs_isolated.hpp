@@ -302,8 +302,8 @@ public:
     std::vector<Constraints> constraints;
     int cost;
     int id;
-    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-    boost::heap::mutable_<true> >::handle_type handle;
+    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >::handle_type handle;
+    // typename boost::heap::fibonacci_heap<HighLevelNode>::handle_type handle;
 
 public:
     bool operator<(const HighLevelNode& other) const
@@ -726,8 +726,8 @@ public:
         }
 
         // std::priority_queue<HighLevelNode> open;
-        typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-                boost::heap::mutable_<true> > open;
+        typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > open;
+        // typename boost::heap::fibonacci_heap<HighLevelNode>::handle_type open;
         auto handle = open.push(start);
         (*handle).handle = handle;
 
