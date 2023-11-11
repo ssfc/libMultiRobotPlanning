@@ -68,7 +68,7 @@ public:
     enum Type
     {
         VertexConflict,
-        Edge,
+        EdgeConflict,
     };
 
     int time;
@@ -86,8 +86,8 @@ public:
         {
             case VertexConflict:
                 return os << conflict.time << ": VertexConflict(" << conflict.x1 << "," << conflict.y1 << ")";
-            case Edge:
-                return os << conflict.time << ": Edge(" << conflict.x1 << "," << conflict.y1 << ","
+            case EdgeConflict:
+                return os << conflict.time << ": EdgeConflict(" << conflict.x1 << "," << conflict.y1 << ","
                           << conflict.x2 << "," << conflict.y2 << ")";
         }
 
@@ -506,7 +506,7 @@ public:
                         result.time = t;
                         result.agent1 = i;
                         result.agent2 = j;
-                        result.type = Conflict::Edge;
+                        result.type = Conflict::EdgeConflict;
                         result.x1 = state1a.x;
                         result.y1 = state1a.y;
                         result.x2 = state1b.x;
@@ -532,7 +532,7 @@ public:
             input_constraints[conflict.agent1] = c1;
             input_constraints[conflict.agent2] = c1;
         }
-        else if (conflict.type == Conflict::Edge)
+        else if (conflict.type == Conflict::EdgeConflict)
         {
             Constraints c1;
             c1.edge_constraints.emplace(EdgeConstraint(
