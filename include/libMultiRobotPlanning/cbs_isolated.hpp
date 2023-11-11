@@ -418,6 +418,18 @@ public:
                && time_location.time > last_goal_constraint;
     }
 
+    // low level 工具函数 get_neighbors的工具函数
+    bool location_valid(const TimeLocation& time_location)
+    {
+        // assert(constraints);
+        const auto& con = constraints.vertex_constraints;
+
+        return time_location.x >= 0 && time_location.x < num_columns
+               && time_location.y >= 0 && time_location.y < num_rows
+               && obstacles.find(Location(time_location.x, time_location.y)) == obstacles.end()
+               && con.find(VertexConstraint(time_location.time, time_location.x, time_location.y)) == con.end();
+    }
+
     // low level 工具函数
     void get_neighbors(const TimeLocation& time_location, std::vector<Neighbor>& neighbors)
     {
@@ -676,17 +688,6 @@ public:
                     conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
             input_constraints[conflict.agent2] = c2;
         }
-    }
-
-    bool location_valid(const TimeLocation& time_location)
-    {
-        // assert(constraints);
-        const auto& con = constraints.vertex_constraints;
-
-        return time_location.x >= 0 && time_location.x < num_columns
-        && time_location.y >= 0 && time_location.y < num_rows
-        && obstacles.find(Location(time_location.x, time_location.y)) == obstacles.end()
-        && con.find(VertexConstraint(time_location.time, time_location.x, time_location.y)) == con.end();
     }
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
