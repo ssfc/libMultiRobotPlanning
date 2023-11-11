@@ -67,7 +67,7 @@ class Conflict
 public:
     enum Type
     {
-        Vertex,
+        VertexConflict,
         Edge,
     };
 
@@ -84,8 +84,8 @@ public:
     {
         switch (conflict.type)
         {
-            case Vertex:
-                return os << conflict.time << ": Vertex(" << conflict.x1 << "," << conflict.y1 << ")";
+            case VertexConflict:
+                return os << conflict.time << ": VertexConflict(" << conflict.x1 << "," << conflict.y1 << ")";
             case Edge:
                 return os << conflict.time << ": Edge(" << conflict.x1 << "," << conflict.y1 << ","
                           << conflict.x2 << "," << conflict.y2 << ")";
@@ -480,7 +480,7 @@ public:
                         result.time = t;
                         result.agent1 = i;
                         result.agent2 = j;
-                        result.type = Conflict::Vertex;
+                        result.type = Conflict::VertexConflict;
                         result.x1 = state1.x;
                         result.y1 = state1.y;
                         // cout << "VC " << t << "," << state1.x << "," << state1.y <<
@@ -524,7 +524,7 @@ public:
     // Create a list of constraints for the given conflict.
     void generate_constraints_from_conflict(const Conflict& conflict, std::map<size_t, Constraints>& input_constraints)
     {
-        if (conflict.type == Conflict::Vertex)
+        if (conflict.type == Conflict::VertexConflict)
         {
             Constraints c1;
             c1.vertex_constraints.emplace(
