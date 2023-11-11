@@ -748,9 +748,12 @@ public:
             HighLevelNode best_node = open.top();
             num_expanded_high_level_nodes++; // high-level node expanded
             // std::cout << "expand: " << best_node << std::endl;
-
             open.pop();
 
+            // Implement A1 LINE 7
+            // Validate the paths in P until a conflict occurs.
+            // Implement A1 LINE 8
+            // if P has no conflict then
             Conflict conflict;
             if (!get_first_conflict(best_node.solution, conflict))
             {
