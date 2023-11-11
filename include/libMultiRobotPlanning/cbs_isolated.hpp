@@ -724,7 +724,9 @@ public:
             {
                 return false;
             }
-            // }
+
+            // Implement A1 LINE 3
+            // Root.cost = SIC(Root.solution) // 计算目标函数
             start.cost += start.solution[i].cost;
         }
 
