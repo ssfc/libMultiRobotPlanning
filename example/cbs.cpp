@@ -13,55 +13,6 @@ using namespace std;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
-// Location Custom state for the search
-class TimeLocation
-{
-public:
-    int time;
-    int x;
-    int y;
-
-public:
-    TimeLocation(int time, int x, int y) :
-    time(time), x(x), y(y)
-    {}
-
-    bool operator==(const TimeLocation& other) const
-    {
-        return time == other.time
-        && x == other.x
-        && y == other.y;
-    }
-
-    bool equalExceptTime(const TimeLocation& other) const
-    {
-        return x == other.x
-        && y == other.y;
-    }
-
-    friend ostream& operator<<(ostream& os, const TimeLocation& s)
-    {
-        return os << s.time << ": (" << s.x << "," << s.y << ")";
-      // return os << "(" << s.x << "," << s.y << ")";
-    }
-};
-
-namespace std
-{
-    template <>
-    struct hash<TimeLocation>
-    {
-        size_t operator()(const TimeLocation& s) const
-        {
-            size_t seed = 0;
-            boost::hash_combine(seed, s.time);
-            boost::hash_combine(seed, s.x);
-            boost::hash_combine(seed, s.y);
-
-            return seed;
-        }
-    };
-}
 
 // Action Custom action for the search.
 // 枚举类
@@ -406,7 +357,7 @@ public:
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
                     TimeLocation state2 = getState(j, solution, t);
-                    if (state1.equalExceptTime(state2))
+                    if (state1.equal_except_time(state2))
                     {
                         result.time = t;
                         result.agent1 = i;
@@ -432,7 +383,7 @@ public:
                 {
                     TimeLocation state2a = getState(j, solution, t);
                     TimeLocation state2b = getState(j, solution, t + 1);
-                    if (state1a.equalExceptTime(state2b) && state1b.equalExceptTime(state2a))
+                    if (state1a.equal_except_time(state2b) && state1b.equal_except_time(state2a))
                     {
                         result.time = t;
                         result.agent1 = i;
@@ -512,7 +463,7 @@ public:
         {
           // This is a trick to avoid changing the rest of the code significantly
           // After an agent disappeared, put it at a unique but invalid position
-          // This will cause all calls to equalExceptTime(.) to return false.
+          // This will cause all calls to equal_except_time(.) to return false.
           return TimeLocation(-1, -1 * (agentIdx + 1), -1);
         }
 
