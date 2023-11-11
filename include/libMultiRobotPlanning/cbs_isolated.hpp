@@ -150,8 +150,11 @@ public:
     int x2; int y2;
 
 public:
-    EdgeConstraint(int time, int x1, int y1, int x2, int y2)
-            : time(time), x1(x1), y1(y1), x2(x2), y2(y2) {}
+    EdgeConstraint(int time, int input_x1, int input_y1, int input_x2, int input_y2)
+            : time(time),
+            x1(input_x1), y1(input_y1),
+            x2(input_x2), y2(input_y2)
+            {}
 
     bool operator<(const EdgeConstraint& other) const
     {
