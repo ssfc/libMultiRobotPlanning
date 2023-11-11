@@ -695,7 +695,8 @@ public:
         // assert(constraints);
         const auto& con = constraints.edge_constraints;
 
-        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
+        return con.find(EdgeConstraint(s1.time, s1.x, s1.y,
+                                       s2.x, s2.y)) == con.end();
     }
 
     bool high_level_search()
