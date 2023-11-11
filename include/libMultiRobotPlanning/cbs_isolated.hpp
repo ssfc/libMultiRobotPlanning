@@ -394,6 +394,7 @@ public:
     Constraints constraints;
     int last_goal_constraint;
     int num_expanded_low_level_nodes;
+    int num_expanded_high_level_nodes;
     bool disappear_at_goal;
 
     // 定义openSet_t和fibHeapHandle_t
@@ -413,6 +414,7 @@ public:
             // constraints(nullptr),
               last_goal_constraint(-1),
               num_expanded_low_level_nodes(0),
+              num_expanded_high_level_nodes(0),
               disappear_at_goal(input_disappearAtGoal)
     {}
 
@@ -791,7 +793,6 @@ private:
     size_t agent_index;
     Constraints constraints;
     int last_goal_constraint;
-    int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
@@ -809,7 +810,6 @@ public:
       agent_index(0),
             // constraints(nullptr),
       last_goal_constraint(-1),
-      num_expanded_high_level_nodes(0),
       num_expanded_low_level_nodes(0),
       disappear_at_goal(input_disappearAtGoal),
       start_time(clock())
@@ -854,7 +854,7 @@ public:
         while (!open.empty())
         {
             HighLevelNode best_node = open.top();
-            num_expanded_high_level_nodes++; // high-level node expanded
+            environment.num_expanded_high_level_nodes++; // high-level node expanded
             // std::cout << "expand: " << best_node << std::endl;
 
             open.pop();
@@ -883,8 +883,8 @@ public:
                 double elapsed_time = (clock() - start_time) / CLOCKS_PER_SEC;
                 std::cerr << "runtime: " << elapsed_time * 1000 << "ms" << std::endl;
 
-                fout << "highLevelExpanded: " << num_expanded_high_level_nodes << std::endl;
-                std::cerr << "highLevelExpanded: " << num_expanded_high_level_nodes << std::endl;
+                fout << "highLevelExpanded: " << environment.num_expanded_high_level_nodes << std::endl;
+                std::cerr << "highLevelExpanded: " << environment.num_expanded_high_level_nodes << std::endl;
 
                 fout << "lowLevelExpanded: " << environment.num_expanded_low_level_nodes << std::endl;
                 std::cerr << "lowLevelExpanded: " << environment.num_expanded_low_level_nodes << std::endl;
