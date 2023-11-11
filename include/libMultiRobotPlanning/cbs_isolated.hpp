@@ -25,7 +25,7 @@
 // 枚举类
 enum class Action
 {
-    Up,
+    North,
     South,
     Left,
     Right,
@@ -440,7 +440,7 @@ public:
         TimeLocation north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
-            neighbors.emplace_back(Neighbor(north_neighbor, Action::Up, 1));
+            neighbors.emplace_back(Neighbor(north_neighbor, Action::North, 1));
         }
 
         TimeLocation south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);

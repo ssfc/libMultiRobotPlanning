@@ -16,8 +16,8 @@ ostream& operator<<(ostream& os, const Action& this_action)
 {
     switch (this_action)
     {
-        case Action::Up:
-            os << "Up";
+        case Action::North:
+            os << "North";
             break;
         case Action::South:
             os << "South";
