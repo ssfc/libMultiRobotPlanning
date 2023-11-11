@@ -743,7 +743,7 @@ public:
         return false;
     }
 
-    bool high_level_search(const std::vector<TimeLocation>& start_time_locations)
+    bool high_level_search()
     {
         std::vector<AgentPlan> solution;
 
