@@ -403,9 +403,9 @@ public:
     // low level 工具函数
     int admissible_heuristic(const TimeLocation& time_location)
     {
-        // cout << "H: " <<  s << " " << m_heuristic[agent_index][s.x + num_columns *
-        // s.y] << endl;
-        // return m_heuristic[agent_index][s.x + num_columns * s.y];
+        // cout << "H: " <<  time_location << " " << m_heuristic[agent_index][time_location.x + num_columns *
+        // time_location.y] << endl;
+        // return m_heuristic[agent_index][time_location.x + num_columns * time_location.y];
         return abs(time_location.x - goals[agent_index].x) +
                abs(time_location.y - goals[agent_index].y);
     }
