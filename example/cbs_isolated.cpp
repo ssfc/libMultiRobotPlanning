@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
         start_time_location_set.insert(s);
     }
 
-    CBS mapf(dimx, dimy, obstacles, goals, is_disappear_at_goal);
+    CBS mapf(dimx, dimy, obstacles, start_time_locations, goals, is_disappear_at_goal);
 
     bool is_success = mapf.high_level_search(start_time_locations);
     if (!is_success)

@@ -388,6 +388,7 @@ public:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
+    std::vector<TimeLocation> start_time_locations;
     std::vector<Location> goals;
     // vector< vector<int> > m_heuristic;
     size_t agent_index;
@@ -408,10 +409,13 @@ public:
 
 public:
     CBS(size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
-                std::vector<Location> input_goals, bool input_disappearAtGoal = false)
+        std::vector<TimeLocation> input_start_time_locations,
+        std::vector<Location> input_goals,
+        bool input_disappearAtGoal = false)
             : num_columns(input_dimx),
               num_rows(input_dimy),
               obstacles(std::move(input_obstacles)),
+              start_time_locations(std::move(input_start_time_locations)),
               goals(std::move(input_goals)),
               agent_index(0),
             // constraints(nullptr),
