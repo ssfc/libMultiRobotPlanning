@@ -704,21 +704,21 @@ public:
     {
         std::vector<AgentPlan> solution;
 
-        HighLevelNode start;
-        start.solution.resize(num_agents);
+        HighLevelNode root;
+        root.solution.resize(num_agents);
         // std::cerr << "start_time_locations size: " << start_time_locations.size() << std::endl;
         // A1 LINE 1
         // Root.constraints = ∅ // 最开始无约束
-        start.constraints.resize(num_agents);
-        start.cost = 0;
-        start.id = 0;
+        root.constraints.resize(num_agents);
+        root.cost = 0;
+        root.id = 0;
 
         // A1 LINE 2
         // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
         for (size_t i = 0; i < num_agents; i++)
         {
-            set_low_Level_context(i, start.constraints[i]);
-            bool is_success = low_level_search(start_time_locations[i], start.solution[i]);
+            set_low_Level_context(i, root.constraints[i]);
+            bool is_success = low_level_search(start_time_locations[i], root.solution[i]);
 
             if (!is_success)
             {
@@ -727,13 +727,13 @@ public:
 
             // Implement A1 LINE 3
             // Root.cost = SIC(Root.solution) // 计算目标函数
-            start.cost += start.solution[i].cost;
+            root.cost += root.solution[i].cost;
         }
 
         // std::priority_queue<HighLevelNode> open;
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > open;
         // typename boost::heap::fibonacci_heap<HighLevelNode>::handle_type open;
-        auto handle = open.push(start);
+        auto handle = open.push(root);
         (*handle).handle = handle;
 
         solution.clear();
