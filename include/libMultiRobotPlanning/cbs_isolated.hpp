@@ -212,9 +212,9 @@ public:
 
     bool overlap(const Constraints& other) const
     {
-        for (const auto& vc : vertex_constraints)
+        for (const auto& vertex_constraint : vertex_constraints)
         {
-            if (other.vertex_constraints.count(vc) > 0)
+            if (other.vertex_constraints.count(vertex_constraint) > 0)
             {
                 return true;
             }
@@ -233,9 +233,9 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Constraints& constraints)
     {
-        for (const auto& vc : constraints.vertex_constraints)
+        for (const auto& vertex_constraint : constraints.vertex_constraints)
         {
-            os << vc << std::endl;
+            os << vertex_constraint << std::endl;
         }
 
         for (const auto& ec : constraints.edge_constraints)
@@ -388,11 +388,11 @@ public:
         agent_index = agentIdx;
         constraints = input_constraints;
         last_goal_constraint = -1;
-        for (const auto& vc : input_constraints.vertex_constraints)
+        for (const auto& vertex_constraint : input_constraints.vertex_constraints)
         {
-            if (vc.x == goals[agent_index].x && vc.y == goals[agent_index].y)
+            if (vertex_constraint.x == goals[agent_index].x && vertex_constraint.y == goals[agent_index].y)
             {
-                last_goal_constraint = std::max(last_goal_constraint, vc.time);
+                last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
             }
         }
     }
@@ -416,8 +416,8 @@ public:
     void get_neighbors(const TimeLocation& time_location, std::vector<Neighbor>& neighbors)
     {
         // cout << "#VC " << constraints.vertex_constraints.size() << endl;
-        // for(const auto& vc : constraints.vertex_constraints) {
-        //   cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
+        // for(const auto& vertex_constraint : constraints.vertex_constraints) {
+        //   cout << "  " << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y <<
         //   endl;
         // }
         neighbors.clear();
