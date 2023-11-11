@@ -71,12 +71,14 @@ public:
         EdgeConflict,
     };
 
-    int time;
-    size_t agent1;
-    size_t agent2;
     Type type;
 
+    int time;
+    
+    size_t agent1;
     int x1; int y1;
+
+    size_t agent2;
     int x2; int y2;
 
 public:
