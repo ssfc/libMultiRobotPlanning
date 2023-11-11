@@ -740,6 +740,8 @@ public:
 
         solution.clear();
         int id = 1;
+        // Implement A1 LINE 5
+        // while OPEN not empty do
         while (!open.empty())
         {
             HighLevelNode best_node = open.top();
