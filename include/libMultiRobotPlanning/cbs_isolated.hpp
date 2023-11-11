@@ -212,7 +212,7 @@ public:
     }
 
     // 检查当前对象的顶点约束和边约束是否与另一个对象中的任何约束重叠。
-    bool overlap(const Constraints& other) const
+    bool is_overlap(const Constraints& other) const
     {
         for (const auto& vertex_constraint : vertex_constraints)
         {
@@ -819,7 +819,7 @@ public:
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.constraints[i] << std::endl;
                 // std::cout << constraint.second << std::endl;
-                assert(!new_node.constraints[i].overlap(constraint.second));
+                assert(!new_node.constraints[i].is_overlap(constraint.second));
 
                 new_node.constraints[i].add(constraint.second);
 
