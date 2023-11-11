@@ -489,12 +489,12 @@ public:
         solution.actions.clear();
         solution.cost = 0;
 
-        OpenHeap open_set;
+        OpenHeap open_heap;
         std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
-        auto handle = open_set.push(LowLevelNode(start_location,
+        auto handle = open_heap.push(LowLevelNode(start_location,
                          admissible_heuristic(start_location),
                          initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
@@ -503,9 +503,9 @@ public:
         std::vector<Neighbor> neighbors;
         neighbors.reserve(10);
 
-        while (!open_set.empty())
+        while (!open_heap.empty())
         {
-            LowLevelNode current = open_set.top();
+            LowLevelNode current = open_heap.top();
             num_expanded_low_level_nodes++;
 
             if (is_solution(current.time_location))
@@ -532,7 +532,7 @@ public:
                 return true;
             }
 
-            open_set.pop();
+            open_heap.pop();
             location_to_heap.erase(current.time_location);
             closed_set.insert(current.time_location);
 
@@ -548,7 +548,7 @@ public:
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
                         int f_score = tentative_gScore + admissible_heuristic(neighbor.time_location);
-                        auto handle = open_set.push(LowLevelNode(neighbor.time_location, f_score, tentative_gScore));
+                        auto handle = open_heap.push(LowLevelNode(neighbor.time_location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
@@ -569,7 +569,7 @@ public:
                         int delta = (*handle).g_score - tentative_gScore;
                         (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
-                        open_set.increase(handle);
+                        open_heap.increase(handle);
                     }
 
                     // Best path for this node so far
