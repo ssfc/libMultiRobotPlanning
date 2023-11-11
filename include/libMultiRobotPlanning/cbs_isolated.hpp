@@ -717,12 +717,6 @@ public:
         // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
         for (size_t i = 0; i < num_agents; i++)
         {
-            // if (   i < solution.size()
-            //     && solution[i].path.size() > 1) {
-            //   start.solution[i] = solution[i];
-            //   std::cout << "use existing solution for agent: " << i << std::endl;
-            // } else {
-            // LowLevelEnvironment environment(environment, i, start.constraints[i]);
             set_low_Level_context(i, start.constraints[i]);
             bool is_success = low_level_search(start_time_locations[i], start.solution[i]);
 
