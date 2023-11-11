@@ -118,7 +118,14 @@ int main(int argc, char* argv[])
     HighLevel cbs(mapf);
     vector<AgentPlan> solution;
 
+    /*
     bool is_success = cbs.high_level_search(start_time_location, solution);
+    if (!is_success)
+    {
+        cout << "Planning NOT successful!" << endl;
+    }*/
+
+    bool is_success = mapf.high_level_search(start_time_location, solution);
     if (!is_success)
     {
         cout << "Planning NOT successful!" << endl;
