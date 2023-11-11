@@ -356,12 +356,6 @@ public:
     // debug var
     double start_time;
 
-    // 定义openSet_t和fibHeapHandle_t
-    using OpenHeap = boost::heap::fibonacci_heap<LowLevelNode>;
-    using HeapHandle = typename OpenHeap::handle_type;
-    // using OpenHeap = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
-    // using HeapHandle = typename OpenHeap::handle_type;
-
 public:
     CBS(size_t input_dimx, size_t input_dimy, std::unordered_set<Location> input_obstacles,
         size_t input_num_agents,
@@ -488,6 +482,12 @@ public:
         solution.path.emplace_back(std::make_pair<>(start_location, 0));
         solution.actions.clear();
         solution.cost = 0;
+
+        // 定义openSet_t和fibHeapHandle_t
+        using OpenHeap = boost::heap::fibonacci_heap<LowLevelNode>;
+        using HeapHandle = typename OpenHeap::handle_type;
+        // using OpenHeap = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+        // using HeapHandle = typename OpenHeap::handle_type;
 
         OpenHeap open_heap;
         std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
