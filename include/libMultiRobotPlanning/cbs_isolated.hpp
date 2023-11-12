@@ -258,8 +258,8 @@ public:
     int g_score;
 
     // 定义 handle: 就是上面那个HeapHandle
-    typename boost::heap::fibonacci_heap<LowLevelNode>::handle_type handle;
-    // typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+    // typename boost::heap::fibonacci_heap<LowLevelNode>::handle_type handle;
+    typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
 public:
     LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
@@ -303,7 +303,6 @@ public:
     int cost;
     int id;
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >::handle_type handle;
-    // typename boost::heap::fibonacci_heap<HighLevelNode>::handle_type handle;
 
 public:
     bool operator<(const HighLevelNode& other) const
@@ -484,10 +483,10 @@ public:
         solution.cost = 0;
 
         // 定义openSet_t和fibHeapHandle_t
-        using OpenHeap = boost::heap::fibonacci_heap<LowLevelNode>;
-        using HeapHandle = typename OpenHeap::handle_type;
-        // using OpenHeap = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+        // using OpenHeap = boost::heap::fibonacci_heap<LowLevelNode>;
         // using HeapHandle = typename OpenHeap::handle_type;
+        using OpenHeap = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+        using HeapHandle = typename OpenHeap::handle_type;
 
         OpenHeap open_heap;
         std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
@@ -735,7 +734,6 @@ public:
         // insert Root to OPEN
         // std::priority_queue<HighLevelNode> open;
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > open;
-        // typename boost::heap::fibonacci_heap<HighLevelNode>::handle_type open;
         auto handle = open.push(root);
         (*handle).handle = handle;
 
