@@ -586,26 +586,26 @@ public:
     }
 
     // HighLevel 工具函数 get_first_conflict 的工具函数
-    TimeLocation get_time_location(size_t agentIdx, const std::vector<AgentPlan>& solution, size_t t)
+    TimeLocation get_time_location(size_t input_agent_index, const std::vector<AgentPlan>& solution, size_t t)
     {
-        assert(agentIdx < solution.size());
+        assert(input_agent_index < solution.size());
 
-        if (t < solution[agentIdx].path.size())
+        if (t < solution[input_agent_index].path.size())
         {
-            return solution[agentIdx].path[t].first;
+            return solution[input_agent_index].path[t].first;
         }
 
-        assert(!solution[agentIdx].path.empty());
+        assert(!solution[input_agent_index].path.empty());
 
         if (disappear_at_goal)
         {
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
             // This will cause all calls to equal_except_time(.) to return false.
-            return TimeLocation(-1, -1 * (agentIdx + 1), -1);
+            return TimeLocation(-1, -1 * (input_agent_index + 1), -1);
         }
 
-        return solution[agentIdx].path.back().first;
+        return solution[input_agent_index].path.back().first;
     }
 
     // HighLevel 工具函数
