@@ -612,6 +612,7 @@ public:
     // HighLevel 工具函数
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
+    // Comment: 这个函数有两个目标，是否有冲突，有冲突还要引用并改变冲突。
     bool get_first_conflict(const std::vector<AgentPlan>& solution, Conflict& first_conflict)
     {
         int max_t = 0;
