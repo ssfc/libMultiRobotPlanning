@@ -378,10 +378,10 @@ public:
 
 
     // Set the current context to a particular agent with the given set of constraints
-    void set_low_Level_context(size_t agentIdx, Constraints input_constraints)
+    void set_low_Level_context(size_t input_agent_index, Constraints input_constraints)
     {
         // assert(input_constraints);  // NOLINT
-        agent_index = agentIdx;
+        agent_index = input_agent_index;
         constraints = input_constraints;
         last_goal_constraint = -1;
         for (const auto& vertex_constraint : input_constraints.vertex_constraints)
