@@ -843,6 +843,8 @@ public:
                 // std::cout << new_constraint.second << std::endl;
 
                 new_node.constraints[i].add(new_constraint.second);
+                // 为什么这里的constraints不会和new_constraint重叠？
+                // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
 
                 new_node.cost -= new_node.solution[i].cost;
 
