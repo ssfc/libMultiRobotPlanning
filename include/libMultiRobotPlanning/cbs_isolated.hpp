@@ -829,19 +829,19 @@ public:
             // A1 LINE 11
             // for each agent ai in C do
             std::map<size_t, Constraints> new_constraints = generate_constraints_from_conflict(conflict);
-            for (const auto& constraint : new_constraints)
+            for (const auto& new_constraint : new_constraints)
             {
-                // std::cout << "Add HL node for " << constraint.first << std::endl;
-                size_t i = constraint.first;
+                // std::cout << "Add HL node for " << new_constraint.first << std::endl;
+                size_t i = new_constraint.first;
                 // std::cout << "create child with id " << id << std::endl;
                 HighLevelNode new_node = best_node;
                 new_node.id = id;
-                // (optional) check that this constraint was not included already
+                // (optional) check that this new_constraint was not included already
                 // std::cout << new_node.constraints[i] << std::endl;
-                // std::cout << constraint.second << std::endl;
-                assert(!new_node.constraints[i].is_overlap(constraint.second));
+                // std::cout << new_constraint.second << std::endl;
+                assert(!new_node.constraints[i].is_overlap(new_constraint.second));
 
-                new_node.constraints[i].add(constraint.second);
+                new_node.constraints[i].add(new_constraint.second);
 
                 new_node.cost -= new_node.solution[i].cost;
 
