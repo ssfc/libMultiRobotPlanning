@@ -725,12 +725,12 @@ public:
                 return false;
             }
 
-            // Implement A1 LINE 3
+            //  A1 LINE 3
             // Root.cost = SIC(Root.solution) // SIC: abbreviation of sum of individual costs heuristic
             root.cost += root.solution[i].cost;
         }
 
-        // Implement A1 LINE 4
+        //  A1 LINE 4
         // insert Root to OPEN
         // std::priority_queue<HighLevelNode> open;
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > open;
@@ -738,22 +738,22 @@ public:
         (*handle).handle = handle;
 
         int id = 1;
-        // Implement A1 LINE 5
+        //  A1 LINE 5
         // while OPEN not empty do
         while (!open.empty())
         {
-            // Implement A1 LINE 6
+            //  A1 LINE 6
             // P ← the best node from OPEN // the lowest solution cost
             HighLevelNode best_node = open.top();
             num_expanded_high_level_nodes++; // high-level node expanded
             // std::cout << "expand: " << best_node << std::endl;
             open.pop();
 
-            // Implement A1 LINE 7
+            //  A1 LINE 7
             // Validate the paths in P until a conflict occurs.
-            // Implement A1 LINE 8
+            //  A1 LINE 8
             // if P has no conflict then
-            // Implement A1 LINE 10
+            //  A1 LINE 10
             // C ← first conflict (ai, aj , v, t) in P
             Conflict conflict;
             if (!get_first_conflict(best_node.solution, conflict))
