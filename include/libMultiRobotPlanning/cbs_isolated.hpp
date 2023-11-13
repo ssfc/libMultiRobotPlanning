@@ -842,6 +842,8 @@ public:
                 // std::cout << new_node.constraints[i] << std::endl;
                 // std::cout << new_constraint.second << std::endl;
 
+                // A1 LINE 13
+                // new_node.constriants ← best_node.constriants + (ai, s, t)
                 new_node.constraints[i].add(new_constraint.second);
                 // 为什么这里的constraints不会和new_constraint重叠？
                 // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
