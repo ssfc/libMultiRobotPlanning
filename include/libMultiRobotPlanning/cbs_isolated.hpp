@@ -848,6 +848,9 @@ public:
                 // 为什么这里的constraints不会和new_constraint重叠？
                 // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
 
+                // A1 LINE 16
+                // new_node.cost = SIC(new_node.solution)
+                // 这里是增量更新，计算前先减去，算完后再加回来。
                 new_node.cost -= new_node.solution[i].cost;
 
                 // LowLevelEnvironment environment(environment, i, new_node.constraints[i]);
