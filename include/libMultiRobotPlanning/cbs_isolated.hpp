@@ -841,7 +841,6 @@ public:
                 // (optional) check that this new_constraint was not included already
                 // std::cout << new_node.constraints[i] << std::endl;
                 // std::cout << new_constraint.second << std::endl;
-                assert(!new_node.constraints[i].is_overlap(new_constraint.second));
 
                 new_node.constraints[i].add(new_constraint.second);
 
