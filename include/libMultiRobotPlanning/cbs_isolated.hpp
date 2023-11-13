@@ -862,6 +862,8 @@ public:
                 if (is_success)
                 {
                     // std::cout << "  is_success. cost: " << new_node.cost << std::endl;
+                    // A1 LINE 17
+                    // Insert new_node to OPEN
                     auto handle = open.push(new_node);
                     (*handle).handle = handle;
                 }
