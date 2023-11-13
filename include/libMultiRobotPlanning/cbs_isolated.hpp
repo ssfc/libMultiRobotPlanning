@@ -679,29 +679,29 @@ public:
     // Create a list of constraints for the given conflict.
     std::map<size_t, Constraints> generate_constraints_from_conflict(const Conflict& conflict)
     {
-        std::map<size_t, Constraints> input_constraints;
+        std::map<size_t, Constraints> constraints_from_conflict;
 
         if (conflict.type == Conflict::VertexConflict)
         {
             Constraints c1;
             c1.vertex_constraints.emplace(
                     VertexConstraint(conflict.time, conflict.x1, conflict.y1));
-            input_constraints[conflict.agent1] = c1;
-            input_constraints[conflict.agent2] = c1;
+            constraints_from_conflict[conflict.agent1] = c1;
+            constraints_from_conflict[conflict.agent2] = c1;
         }
         else if (conflict.type == Conflict::EdgeConflict)
         {
             Constraints c1;
             c1.edge_constraints.emplace(EdgeConstraint(
                     conflict.time, conflict.x1, conflict.y1, conflict.x2, conflict.y2));
-            input_constraints[conflict.agent1] = c1;
+            constraints_from_conflict[conflict.agent1] = c1;
             Constraints c2;
             c2.edge_constraints.emplace(EdgeConstraint(
                     conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
-            input_constraints[conflict.agent2] = c2;
+            constraints_from_conflict[conflict.agent2] = c2;
         }
 
-        return input_constraints;
+        return constraints_from_conflict;
     }
 
     bool high_level_search()
