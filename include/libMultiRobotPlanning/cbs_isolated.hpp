@@ -677,8 +677,10 @@ public:
 
     // High level 工具函数
     // Create a list of constraints for the given conflict.
-    void generate_constraints_from_conflict(const Conflict& conflict, std::map<size_t, Constraints>& input_constraints)
+    std::map<size_t, Constraints> generate_constraints_from_conflict(const Conflict& conflict)
     {
+        std::map<size_t, Constraints> input_constraints;
+
         if (conflict.type == Conflict::VertexConflict)
         {
             Constraints c1;
@@ -698,6 +700,8 @@ public:
                     conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
             input_constraints[conflict.agent2] = c2;
         }
+
+        return input_constraints;
     }
 
     bool high_level_search()
@@ -821,8 +825,7 @@ public:
             // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
             // conflict.type << std::endl;
 
-            std::map<size_t, Constraints> constraints;
-            generate_constraints_from_conflict(conflict, constraints);
+            std::map<size_t, Constraints> constraints = generate_constraints_from_conflict(conflict);
             for (const auto& constraint : constraints)
             {
                 // std::cout << "Add HL node for " << constraint.first << std::endl;
