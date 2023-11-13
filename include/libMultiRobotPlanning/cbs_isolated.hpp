@@ -834,6 +834,8 @@ public:
                 // std::cout << "Add HL node for " << new_constraint.first << std::endl;
                 size_t i = new_constraint.first;
                 // std::cout << "create child with id " << id << std::endl;
+                // A1 LINE 12
+                // new_node ← new node
                 HighLevelNode new_node = best_node;
                 new_node.id = id;
                 // (optional) check that this new_constraint was not included already
