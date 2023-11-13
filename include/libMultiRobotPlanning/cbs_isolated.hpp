@@ -826,8 +826,10 @@ public:
             // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
             // conflict.type << std::endl;
 
-            std::map<size_t, Constraints> constraints = generate_constraints_from_conflict(conflict);
-            for (const auto& constraint : constraints)
+            // A1 LINE 11
+            // for each agent ai in C do
+            std::map<size_t, Constraints> new_constraints = generate_constraints_from_conflict(conflict);
+            for (const auto& constraint : new_constraints)
             {
                 // std::cout << "Add HL node for " << constraint.first << std::endl;
                 size_t i = constraint.first;
