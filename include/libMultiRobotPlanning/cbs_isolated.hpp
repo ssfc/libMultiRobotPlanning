@@ -298,17 +298,41 @@ public:
 class LowLevel
 {
 public:
+    // input var
     size_t num_rows;
     size_t num_columns;
     std::unordered_set<Location> obstacles;
     size_t low_level_agent_index;
     Location start;
+    std::vector<Location> goals;
     Location goal;
     Constraints low_level_constraints;
-    int last_goal_constraint;
     bool disappear_at_goal;
 
+    // process var
+    int last_goal_constraint;
+
 public:
+    LowLevel(size_t input_num_rows,
+             size_t input_num_columns,
+             std::unordered_set<Location> input_obstacles,
+             size_t input_agent_index,
+             Location input_start,
+             std::vector<Location> input_goals,
+             Location input_goal,
+             Constraints input_constraints,
+             bool input_disappear_at_goal):
+             num_rows(input_num_rows),
+             num_columns(input_num_columns),
+             obstacles(input_obstacles),
+             low_level_agent_index(input_agent_index),
+             start(input_start),
+             goals(input_goals),
+             goal(input_goal),
+             low_level_constraints(input_constraints),
+             disappear_at_goal(input_disappear_at_goal)
+    {}
+
     // Set the current context to a particular agent with the given set of low_level_constraints
     void set_low_Level_context(size_t input_agent_index, Constraints input_constraints)
     {
