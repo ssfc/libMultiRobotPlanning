@@ -361,6 +361,14 @@ public:
                abs(time_location.y - goals[low_level_agent_index].y);
     }
 
+    // low level 工具函数
+    bool is_solution(const TimeLocation& time_location)
+    {
+        return time_location.x == goals[low_level_agent_index].x
+               && time_location.y == goals[low_level_agent_index].y
+               && time_location.time > last_goal_constraint;
+    }
+
 };
 
 class HighLevelNode
