@@ -233,14 +233,14 @@ public:
         return false;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Constraints& constraints)
+    friend std::ostream& operator<<(std::ostream& os, const Constraints& input_constraints)
     {
-        for (const auto& vertex_constraint : constraints.vertex_constraints)
+        for (const auto& vertex_constraint : input_constraints.vertex_constraints)
         {
             os << vertex_constraint << std::endl;
         }
 
-        for (const auto& edge_constraint : constraints.edge_constraints)
+        for (const auto& edge_constraint : input_constraints.edge_constraints)
         {
             os << edge_constraint << std::endl;
         }
