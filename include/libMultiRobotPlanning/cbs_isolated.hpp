@@ -391,6 +391,47 @@ public:
                                        s2.x, s2.y)) == con.end();
     }
 
+    // low level 工具函数
+    void get_neighbors(const TimeLocation& time_location, std::vector<Neighbor>& neighbors)
+    {
+        // cout << "#VC " << low_level_constraints.vertex_constraints.size() << endl;
+        // for(const auto& vertex_constraint : low_level_constraints.vertex_constraints) {
+        //   cout << "  " << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y <<
+        //   endl;
+        // }
+        neighbors.clear();
+
+        TimeLocation wait_neighbor(time_location.time + 1, time_location.x, time_location.y);
+        if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
+        {
+            neighbors.emplace_back(Neighbor(wait_neighbor, Action::Wait, 1));
+        }
+
+        TimeLocation west_neighbor(time_location.time + 1, time_location.x - 1, time_location.y);
+        if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
+        {
+            neighbors.emplace_back(Neighbor(west_neighbor, Action::East, 1));
+        }
+
+        TimeLocation east_neighbor(time_location.time + 1, time_location.x + 1, time_location.y);
+        if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
+        {
+            neighbors.emplace_back(Neighbor(east_neighbor, Action::West, 1));
+        }
+
+        TimeLocation north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
+        if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
+        {
+            neighbors.emplace_back(Neighbor(north_neighbor, Action::North, 1));
+        }
+
+        TimeLocation south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);
+        if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
+        {
+            neighbors.emplace_back(Neighbor(south_neighbor, Action::South, 1));
+        }
+    }
+
 };
 
 class HighLevelNode
