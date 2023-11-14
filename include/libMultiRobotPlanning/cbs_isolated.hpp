@@ -309,6 +309,21 @@ public:
     bool disappear_at_goal;
 
 public:
+    // Set the current context to a particular agent with the given set of low_level_constraints
+    void set_low_Level_context(size_t input_agent_index, Constraints input_constraints)
+    {
+        // assert(input_constraints);  // NOLINT
+        low_level_agent_index = input_agent_index;
+        low_level_constraints = input_constraints;
+        last_goal_constraint = -1;
+        for (const auto& vertex_constraint : input_constraints.vertex_constraints)
+        {
+            if (vertex_constraint.x == goals[low_level_agent_index].x && vertex_constraint.y == goals[low_level_agent_index].y)
+            {
+                last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
+            }
+        }
+    }
 
 };
 
