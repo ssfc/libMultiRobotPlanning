@@ -479,7 +479,7 @@ public:
 
     bool low_level_search(const TimeLocation& start_location, AgentPlan& solution)
     {
-        int initialCost = 0;
+        int initial_cost = 0;
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(start_location, 0));
         solution.actions.clear();
@@ -498,7 +498,7 @@ public:
 
         auto handle = open_heap.push(LowLevelNode(start_location,
                          admissible_heuristic(start_location),
-                         initialCost));
+                         initial_cost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
@@ -525,7 +525,7 @@ public:
                 }
 
                 solution.path.emplace_back(std::make_pair<>
-                                                   (start_location, initialCost));
+                                                   (start_location, initial_cost));
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
