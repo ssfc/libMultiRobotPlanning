@@ -312,6 +312,9 @@ public:
     // process var
     int last_goal_constraint;
 
+    // debug var
+    size_t num_expanded_low_level_nodes;
+
 public:
     LowLevel(size_t input_num_rows,
              size_t input_num_columns,
@@ -330,7 +333,8 @@ public:
              goals(input_goals),
              goal(input_goal),
              low_level_constraints(input_constraints),
-             disappear_at_goal(input_disappear_at_goal)
+             disappear_at_goal(input_disappear_at_goal),
+             num_expanded_low_level_nodes(0)
     {
         set_low_Level_context(input_agent_index, input_constraints);
     }
@@ -432,6 +436,116 @@ public:
         }
     }
 
+    bool low_level_search(const TimeLocation& start_location, AgentPlan& solution)
+    {
+        int initial_cost = 0;
+        solution.path.clear();
+        solution.path.emplace_back(std::make_pair<>(start_location, 0));
+        solution.actions.clear();
+        solution.cost = 0;
+
+        // 定义openSet_t和fibHeapHandle_t
+        // using OpenHeap = boost::heap::fibonacci_heap<LowLevelNode>;
+        // using HeapHandle = typename OpenHeap::handle_type;
+        using OpenHeap = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+        using HeapHandle = typename OpenHeap::handle_type;
+
+        OpenHeap open_heap;
+        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
+
+        auto handle = open_heap.push(LowLevelNode(start_location,
+                                                  admissible_heuristic(start_location),
+                                                  initial_cost));
+        location_to_heap.insert(std::make_pair<>(start_location, handle));
+        (*handle).handle = handle;
+
+        std::vector<Neighbor> neighbors;
+        neighbors.reserve(10);
+
+        while (!open_heap.empty())
+        {
+            LowLevelNode current = open_heap.top();
+            num_expanded_low_level_nodes++;
+
+            if (is_solution(current.time_location))
+            {
+                solution.path.clear();
+                solution.actions.clear();
+                auto iter = came_from.find(current.time_location);
+                while (iter != came_from.end())
+                {
+                    solution.path.emplace_back(
+                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    solution.actions.emplace_back(std::make_pair<>(
+                            std::get<1>(iter->second), std::get<2>(iter->second)));
+                    iter = came_from.find(std::get<0>(iter->second));
+                }
+
+                solution.path.emplace_back(std::make_pair<>
+                                                   (start_location, initial_cost));
+                std::reverse(solution.path.begin(), solution.path.end());
+                std::reverse(solution.actions.begin(), solution.actions.end());
+                solution.cost = current.g_score;
+                solution.fmin = current.f_score;
+
+                return true;
+            }
+
+            open_heap.pop();
+            location_to_heap.erase(current.time_location);
+            closed_set.insert(current.time_location);
+
+            // traverse neighbors
+            neighbors.clear();
+            get_neighbors(current.time_location, neighbors);
+            for (const Neighbor& neighbor : neighbors)
+            {
+                if (closed_set.find(neighbor.time_location) == closed_set.end())
+                {
+                    int tentative_gScore = current.g_score + neighbor.cost;
+                    auto iter = location_to_heap.find(neighbor.time_location);
+                    if (iter == location_to_heap.end())
+                    {  // Discover a new node
+                        int f_score = tentative_gScore + admissible_heuristic(neighbor.time_location);
+                        auto handle = open_heap.push(LowLevelNode(neighbor.time_location, f_score, tentative_gScore));
+                        (*handle).handle = handle;
+                        location_to_heap.insert(std::make_pair<>(neighbor.time_location, handle));
+                        // std::cout << "  this is a new node " << f_score << "," <<
+                        // tentative_gScore << std::endl;
+                    }
+                    else
+                    {
+                        auto handle = iter->second;
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // << (*handle).g_score << std::endl;
+                        // We found this node before with a better path
+                        if (tentative_gScore >= (*handle).g_score)
+                        {
+                            continue;
+                        }
+
+                        // update f and g_score
+                        int delta = (*handle).g_score - tentative_gScore;
+                        (*handle).g_score = tentative_gScore;
+                        (*handle).f_score -= delta;
+                        open_heap.increase(handle);
+                    }
+
+                    // Best path for this node so far
+                    // TODO: this is not the best way to update "came_from", but otherwise
+                    // default c'tors of TimeLocation and Action are required
+                    came_from.erase(neighbor.time_location);
+                    came_from.insert(std::make_pair<>(neighbor.time_location,
+                                                      std::make_tuple<>(current.time_location, neighbor.action, neighbor.cost,
+                                                                        tentative_gScore)));
+                }
+            }
+        }
+
+        return false;
+    }
 };
 
 class HighLevelNode
