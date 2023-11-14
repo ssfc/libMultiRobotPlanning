@@ -295,6 +295,23 @@ public:
 
 };
 
+class LowLevel
+{
+public:
+    size_t num_rows;
+    size_t num_columns;
+    std::unordered_set<Location> obstacles;
+    size_t low_level_agent_index;
+    Location start;
+    Location goal;
+    Constraints low_level_constraints;
+    int last_goal_constraint;
+    bool disappear_at_goal;
+
+public:
+
+};
+
 class HighLevelNode
 {
 public:
