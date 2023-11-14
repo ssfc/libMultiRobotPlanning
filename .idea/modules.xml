@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/libMultiRobotPlanning.iml" filepath="$PROJECT_DIR$/.idea/libMultiRobotPlanning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/read_filename.py.iml" filepath="$PROJECT_DIR$/.idea/read_filename.py.iml" />
     </modules>
   </component>
 </project>
