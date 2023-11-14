@@ -381,6 +381,16 @@ public:
                && con.find(VertexConstraint(time_location.time, time_location.x, time_location.y)) == con.end();
     }
 
+    // low level 工具函数 get_neighbors的工具函数
+    bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
+    {
+        // assert(low_level_constraints);
+        const auto& con = low_level_constraints.edge_constraints;
+
+        return con.find(EdgeConstraint(s1.time, s1.x, s1.y,
+                                       s2.x, s2.y)) == con.end();
+    }
+
 };
 
 class HighLevelNode
