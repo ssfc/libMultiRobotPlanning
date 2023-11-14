@@ -338,14 +338,17 @@ public:
 class CBS
 {
 public:
+    // high level vars.
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
     size_t num_agents;
     std::vector<TimeLocation> start_time_locations;
     std::vector<Location> goals;
+
+    // low-level vars.
     // vector< vector<int> > m_heuristic;
-    size_t agent_index;
+    size_t low_level_agent_index;
     Constraints constraints;
     int last_goal_constraint;
     size_t num_expanded_low_level_nodes;
@@ -367,7 +370,7 @@ public:
               num_agents(input_num_agents),
               start_time_locations(std::move(input_start_time_locations)),
               goals(std::move(input_goals)),
-              agent_index(0),
+              low_level_agent_index(0),
             // constraints(nullptr),
               last_goal_constraint(-1),
               num_expanded_low_level_nodes(0),
@@ -381,12 +384,12 @@ public:
     void set_low_Level_context(size_t input_agent_index, Constraints input_constraints)
     {
         // assert(input_constraints);  // NOLINT
-        agent_index = input_agent_index;
+        low_level_agent_index = input_agent_index;
         constraints = input_constraints;
         last_goal_constraint = -1;
         for (const auto& vertex_constraint : input_constraints.vertex_constraints)
         {
-            if (vertex_constraint.x == goals[agent_index].x && vertex_constraint.y == goals[agent_index].y)
+            if (vertex_constraint.x == goals[low_level_agent_index].x && vertex_constraint.y == goals[low_level_agent_index].y)
             {
                 last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
             }
@@ -396,18 +399,18 @@ public:
     // low level 工具函数
     int admissible_heuristic(const TimeLocation& time_location)
     {
-        // cout << "H: " <<  time_location << " " << m_heuristic[agent_index][time_location.x + num_columns *
+        // cout << "H: " <<  time_location << " " << m_heuristic[low_level_agent_index][time_location.x + num_columns *
         // time_location.y] << endl;
-        // return m_heuristic[agent_index][time_location.x + num_columns * time_location.y];
-        return abs(time_location.x - goals[agent_index].x) +
-               abs(time_location.y - goals[agent_index].y);
+        // return m_heuristic[low_level_agent_index][time_location.x + num_columns * time_location.y];
+        return abs(time_location.x - goals[low_level_agent_index].x) +
+               abs(time_location.y - goals[low_level_agent_index].y);
     }
 
     // low level 工具函数
     bool is_solution(const TimeLocation& time_location)
     {
-        return time_location.x == goals[agent_index].x
-               && time_location.y == goals[agent_index].y
+        return time_location.x == goals[low_level_agent_index].x
+               && time_location.y == goals[low_level_agent_index].y
                && time_location.time > last_goal_constraint;
     }
 
