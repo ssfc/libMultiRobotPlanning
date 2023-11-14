@@ -331,7 +331,9 @@ public:
              goal(input_goal),
              low_level_constraints(input_constraints),
              disappear_at_goal(input_disappear_at_goal)
-    {}
+    {
+        set_low_Level_context(input_agent_index, input_constraints);
+    }
 
     // Set the current context to a particular agent with the given set of low_level_constraints
     void set_low_Level_context(size_t input_agent_index, Constraints input_constraints)
