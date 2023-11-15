@@ -978,11 +978,6 @@ public:
         // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
         for (size_t i = 0; i < num_agents; i++)
         {
-            // set_low_Level_context(i, root.constraints_group[i]);
-            // bool is_success = low_level_search(start_time_locations[i], root.solution[i]);
-
-
-
             auto low_level = LowLevel(num_columns, num_rows, obstacles,
                                       i, start_time_locations[i], goals, goals[i],
                                       root.constraints_group[i], false);
