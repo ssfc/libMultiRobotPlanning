@@ -462,8 +462,8 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Child> neighbors;
-        neighbors.reserve(10);
+        std::vector<Child> children;
+        children.reserve(10);
 
         while (!open_heap.empty())
         {
@@ -498,10 +498,10 @@ public:
             location_to_heap.erase(current.time_location);
             closed_set.insert(current.time_location);
 
-            // traverse neighbors
-            neighbors.clear();
-            generate_children(current.time_location, neighbors);
-            for (const Child& neighbor : neighbors)
+            // traverse children
+            children.clear();
+            generate_children(current.time_location, children);
+            for (const Child& neighbor : children)
             {
                 if (closed_set.find(neighbor.time_location) == closed_set.end())
                 {
@@ -756,8 +756,8 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Child> neighbors;
-        neighbors.reserve(10);
+        std::vector<Child> children;
+        children.reserve(10);
 
         while (!open_heap.empty())
         {
@@ -792,10 +792,10 @@ public:
             location_to_heap.erase(current.time_location);
             closed_set.insert(current.time_location);
 
-            // traverse neighbors
-            neighbors.clear();
-            generate_children(current.time_location, neighbors);
-            for (const Child& neighbor : neighbors)
+            // traverse children
+            children.clear();
+            generate_children(current.time_location, children);
+            for (const Child& neighbor : children)
             {
                 if (closed_set.find(neighbor.time_location) == closed_set.end())
                 {
