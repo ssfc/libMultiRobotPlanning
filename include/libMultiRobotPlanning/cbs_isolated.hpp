@@ -501,18 +501,18 @@ public:
             // traverse children
             children.clear();
             generate_children(current.time_location, children);
-            for (const Child& neighbor : children)
+            for (const Child& child : children)
             {
-                if (closed_set.find(neighbor.time_location) == closed_set.end())
+                if (closed_set.find(child.time_location) == closed_set.end())
                 {
-                    int tentative_gScore = current.g_score + neighbor.cost;
-                    auto iter = location_to_heap.find(neighbor.time_location);
+                    int tentative_gScore = current.g_score + child.cost;
+                    auto iter = location_to_heap.find(child.time_location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + admissible_heuristic(neighbor.time_location);
-                        auto handle = open_heap.push(LowLevelNode(neighbor.time_location, f_score, tentative_gScore));
+                        int f_score = tentative_gScore + admissible_heuristic(child.time_location);
+                        auto handle = open_heap.push(LowLevelNode(child.time_location, f_score, tentative_gScore));
                         (*handle).handle = handle;
-                        location_to_heap.insert(std::make_pair<>(neighbor.time_location, handle));
+                        location_to_heap.insert(std::make_pair<>(child.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -537,9 +537,9 @@ public:
                     // Best path for this node so far
                     // TODO: this is not the best way to update "came_from", but otherwise
                     // default c'tors of TimeLocation and Action are required
-                    came_from.erase(neighbor.time_location);
-                    came_from.insert(std::make_pair<>(neighbor.time_location,
-                                                      std::make_tuple<>(current.time_location, neighbor.action, neighbor.cost,
+                    came_from.erase(child.time_location);
+                    came_from.insert(std::make_pair<>(child.time_location,
+                                                      std::make_tuple<>(current.time_location, child.action, child.cost,
                                                                         tentative_gScore)));
                 }
             }
@@ -795,18 +795,18 @@ public:
             // traverse children
             children.clear();
             generate_children(current.time_location, children);
-            for (const Child& neighbor : children)
+            for (const Child& child : children)
             {
-                if (closed_set.find(neighbor.time_location) == closed_set.end())
+                if (closed_set.find(child.time_location) == closed_set.end())
                 {
-                    int tentative_gScore = current.g_score + neighbor.cost;
-                    auto iter = location_to_heap.find(neighbor.time_location);
+                    int tentative_gScore = current.g_score + child.cost;
+                    auto iter = location_to_heap.find(child.time_location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + admissible_heuristic(neighbor.time_location);
-                        auto handle = open_heap.push(LowLevelNode(neighbor.time_location, f_score, tentative_gScore));
+                        int f_score = tentative_gScore + admissible_heuristic(child.time_location);
+                        auto handle = open_heap.push(LowLevelNode(child.time_location, f_score, tentative_gScore));
                         (*handle).handle = handle;
-                        location_to_heap.insert(std::make_pair<>(neighbor.time_location, handle));
+                        location_to_heap.insert(std::make_pair<>(child.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -831,9 +831,9 @@ public:
                     // Best path for this node so far
                     // TODO: this is not the best way to update "came_from", but otherwise
                     // default c'tors of TimeLocation and Action are required
-                    came_from.erase(neighbor.time_location);
-                    came_from.insert(std::make_pair<>(neighbor.time_location,
-                                                      std::make_tuple<>(current.time_location, neighbor.action, neighbor.cost,
+                    came_from.erase(child.time_location);
+                    came_from.insert(std::make_pair<>(child.time_location,
+                                                      std::make_tuple<>(current.time_location, child.action, child.cost,
                                                                         tentative_gScore)));
                 }
             }
