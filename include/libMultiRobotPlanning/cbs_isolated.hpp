@@ -299,8 +299,8 @@ class LowLevel
 {
 public:
     // input var
-    size_t num_rows;
     size_t num_columns;
+    size_t num_rows;
     std::unordered_set<Location> obstacles;
     size_t low_level_agent_index;
     Location start;
@@ -316,8 +316,8 @@ public:
     size_t num_expanded_low_level_nodes;
 
 public:
-    LowLevel(size_t input_num_rows,
-             size_t input_num_columns,
+    LowLevel(size_t input_num_columns,
+             size_t input_num_rows,
              std::unordered_set<Location> input_obstacles,
              size_t input_agent_index,
              Location input_start,
@@ -325,8 +325,8 @@ public:
              Location input_goal,
              Constraints input_constraints,
              bool input_disappear_at_goal):
-             num_rows(input_num_rows),
              num_columns(input_num_columns),
+             num_rows(input_num_rows),
              obstacles(input_obstacles),
              low_level_agent_index(input_agent_index),
              start(input_start),
@@ -978,6 +978,24 @@ public:
         {
             set_low_Level_context(i, root.constraints[i]);
             bool is_success = low_level_search(start_time_locations[i], root.solution[i]);
+
+            /*
+            auto low_level = LowLevel(map, starts[ai], goals[ai],
+                                      multi_agent_h_values[ai], ai, new_node.constraints);
+                                      */
+
+            /*
+             num_rows(input_num_rows),
+             num_columns(input_num_columns),
+             obstacles(input_obstacles),
+             low_level_agent_index(input_agent_index),
+             start(input_start),
+             goals(input_goals),
+             goal(input_goal),
+             low_level_constraints(input_constraints),
+             disappear_at_goal(input_disappear_at_goal),
+             */
+
 
             if (!is_success)
             {
