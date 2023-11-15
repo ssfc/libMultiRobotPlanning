@@ -979,14 +979,15 @@ public:
             set_low_Level_context(i, root.constraints[i]);
             bool is_success = low_level_search(start_time_locations[i], root.solution[i]);
 
-            /*
-            auto low_level = LowLevel(map, starts[ai], goals[ai],
-                                      multi_agent_h_values[ai], ai, new_node.constraints);
-                                      */
+
+            auto low_level = LowLevel(num_columns, num_rows, obstacles,
+                                      i, start_time_locations[i], goals, goals[i],
+                                      root.constraints[i], false);
+
 
             /*
-             num_rows(input_num_rows),
              num_columns(input_num_columns),
+             num_rows(input_num_rows),
              obstacles(input_obstacles),
              low_level_agent_index(input_agent_index),
              start(input_start),
@@ -1116,7 +1117,7 @@ public:
                 // std::cout << new_constraint.second << std::endl;
 
                 // A1 LINE 13
-                // new_node.constriants ← best_node.constriants + (ai, s, t)
+                // new_node.constraints ← best_node.constraints + (ai, s, t)
                 new_node.constraints[i].add(new_constraint.second);
                 // 为什么这里的constraints不会和new_constraint重叠？
                 // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
