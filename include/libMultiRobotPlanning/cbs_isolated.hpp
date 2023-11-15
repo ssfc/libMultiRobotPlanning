@@ -303,7 +303,7 @@ public:
     size_t num_rows;
     std::unordered_set<Location> obstacles;
     size_t low_level_agent_index;
-    Location start;
+    TimeLocation start_time_location;
     std::vector<Location> goals;
     Location goal;
     Constraints low_level_constraints;
@@ -320,7 +320,7 @@ public:
              size_t input_num_rows,
              std::unordered_set<Location> input_obstacles,
              size_t input_agent_index,
-             Location input_start,
+             TimeLocation input_time_location,
              std::vector<Location> input_goals,
              Location input_goal,
              Constraints input_constraints,
@@ -329,7 +329,7 @@ public:
              num_rows(input_num_rows),
              obstacles(input_obstacles),
              low_level_agent_index(input_agent_index),
-             start(input_start),
+             start_time_location(input_time_location),
              goals(input_goals),
              goal(input_goal),
              low_level_constraints(input_constraints),
@@ -979,11 +979,10 @@ public:
             set_low_Level_context(i, root.constraints_group[i]);
             bool is_success = low_level_search(start_time_locations[i], root.solution[i]);
 
-            /*
+
             auto low_level = LowLevel(num_columns, num_rows, obstacles,
                                       i, start_time_locations[i], goals, goals[i],
-                                      root.constraints_group, false);
-                                      */
+                                      root.constraints_group[i], false);
 
 
             /*
