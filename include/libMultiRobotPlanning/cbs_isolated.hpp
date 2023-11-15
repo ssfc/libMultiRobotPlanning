@@ -294,7 +294,7 @@ public:
     }
 
 };
-/*
+
 class LowLevel
 {
 public:
@@ -306,7 +306,7 @@ public:
     Location start;
     std::vector<Location> goals;
     Location goal;
-    std::vector<Constraints> low_level_constraints;
+    Constraints low_level_constraints;
     bool disappear_at_goal;
 
     // process var
@@ -323,7 +323,7 @@ public:
              Location input_start,
              std::vector<Location> input_goals,
              Location input_goal,
-             std::vector<Constraints> input_constraints,
+             Constraints input_constraints,
              bool input_disappear_at_goal):
              num_columns(input_num_columns),
              num_rows(input_num_rows),
@@ -547,7 +547,7 @@ public:
 
         return false;
     }
-};*/
+};
 
 class HighLevelNode
 {
