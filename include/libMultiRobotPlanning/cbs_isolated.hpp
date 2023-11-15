@@ -312,9 +312,6 @@ public:
     // process var
     int last_goal_constraint;
 
-    // debug var
-    size_t num_expanded_low_level_nodes;
-
 public:
     LowLevel(size_t input_num_columns,
              size_t input_num_rows,
@@ -333,8 +330,7 @@ public:
              goals(input_goals),
              goal(input_goal),
              low_level_constraints(input_constraints),
-             disappear_at_goal(input_disappear_at_goal),
-             num_expanded_low_level_nodes(0)
+             disappear_at_goal(input_disappear_at_goal)
     {
         set_low_Level_context(input_agent_index, input_constraints);
     }
@@ -437,7 +433,7 @@ public:
     }
 
     // 引用传递大型计算结果
-    bool low_level_search(AgentPlan& solution)
+    bool low_level_search(AgentPlan& solution, size_t& num_expanded_low_level_nodes)
     {
         int initial_cost = 0;
         solution.path.clear();
@@ -766,7 +762,7 @@ public:
             auto low_level = LowLevel(num_columns, num_rows, obstacles,
                                       i, start_time_locations[i], goals, goals[i],
                                       root.constraints_group[i], false);
-            bool is_success = low_level.low_level_search(root.solution[i]);
+            bool is_success = low_level.low_level_search(root.solution[i], num_expanded_low_level_nodes);
 
             /*
              num_columns(input_num_columns),
@@ -913,7 +909,7 @@ public:
                 auto low_level = LowLevel(num_columns, num_rows, obstacles,
                                           i, start_time_locations[i], goals, goals[i],
                                           new_node.constraints_group[i], false);
-                bool is_success = low_level.low_level_search(new_node.solution[i]);
+                bool is_success = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
                 new_node.cost += new_node.solution[i].cost;
 
