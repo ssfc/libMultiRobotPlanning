@@ -71,20 +71,20 @@ public:
         EdgeConflict,
     };
 
-    Type type;
+    Type conflict_type;
 
     int time;
 
     size_t agent1;
-    int x1; int y1;
-
     size_t agent2;
+
+    int x1; int y1;
     int x2; int y2;
 
 public:
     friend std::ostream& operator<<(std::ostream& os, const Conflict& conflict)
     {
-        switch (conflict.type)
+        switch (conflict.conflict_type)
         {
             case VertexConflict:
                 return os << conflict.time << ": VertexConflict(" << conflict.x1 << "," << conflict.y1 << ")";
@@ -891,7 +891,7 @@ public:
                         first_conflict.time = t;
                         first_conflict.agent1 = i;
                         first_conflict.agent2 = j;
-                        first_conflict.type = Conflict::VertexConflict;
+                        first_conflict.conflict_type = Conflict::VertexConflict;
                         first_conflict.x1 = state1.x;
                         first_conflict.y1 = state1.y;
                         // cout << "VC " << t << "," << state1.x << "," << state1.y <<
@@ -917,7 +917,7 @@ public:
                         first_conflict.time = t;
                         first_conflict.agent1 = i;
                         first_conflict.agent2 = j;
-                        first_conflict.type = Conflict::EdgeConflict;
+                        first_conflict.conflict_type = Conflict::EdgeConflict;
                         first_conflict.x1 = state1a.x;
                         first_conflict.y1 = state1a.y;
                         first_conflict.x2 = state1b.x;
@@ -936,7 +936,7 @@ public:
     // Create a list of low_level_constraints for the given conflict.
     void generate_constraints_from_conflict(const Conflict& input_conflict, std::map<size_t, Constraints>& constraints_from_conflict)
     {
-        if (input_conflict.type == Conflict::VertexConflict)
+        if (input_conflict.conflict_type == Conflict::VertexConflict)
         {
             Constraints c1;
             c1.vertex_constraints.emplace(
@@ -944,7 +944,7 @@ public:
             constraints_from_conflict[input_conflict.agent1] = c1;
             constraints_from_conflict[input_conflict.agent2] = c1;
         }
-        else if (input_conflict.type == Conflict::EdgeConflict)
+        else if (input_conflict.conflict_type == Conflict::EdgeConflict)
         {
             Constraints c1;
             c1.edge_constraints.emplace(EdgeConstraint(
@@ -1097,8 +1097,8 @@ public:
 
             // create additional nodes to resolve conflict
             // std::cout << "Found conflict: " << conflict << std::endl;
-            // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
-            // conflict.type << std::endl;
+            // std::cout << "Found conflict at t=" << conflict.time << " conflict_type: " <<
+            // conflict.conflict_type << std::endl;
 
             // A1 LINE 11
             // for each agent ai in C do
