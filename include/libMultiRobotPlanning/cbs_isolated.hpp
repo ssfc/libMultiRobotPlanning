@@ -437,8 +437,10 @@ public:
     }
 
     // 引用传递大型计算结果
-    bool low_level_search(const TimeLocation& start_location, AgentPlan& solution)
+    bool low_level_search(AgentPlan& solution)
     {
+        TimeLocation start_location = start_time_location;
+
         int initial_cost = 0;
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(start_location, 0));
@@ -984,7 +986,7 @@ public:
             auto low_level = LowLevel(num_columns, num_rows, obstacles,
                                       i, start_time_locations[i], goals, goals[i],
                                       root.constraints_group[i], false);
-            bool is_success = low_level.low_level_search(start_time_locations[i], root.solution[i]);
+            bool is_success = low_level.low_level_search(root.solution[i]);
 
             /*
              num_columns(input_num_columns),
