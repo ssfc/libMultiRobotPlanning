@@ -439,11 +439,9 @@ public:
     // 引用传递大型计算结果
     bool low_level_search(AgentPlan& solution)
     {
-        TimeLocation start_location = start_time_location;
-
         int initial_cost = 0;
         solution.path.clear();
-        solution.path.emplace_back(std::make_pair<>(start_location, 0));
+        solution.path.emplace_back(std::make_pair<>(start_time_location, 0));
         solution.actions.clear();
         solution.cost = 0;
 
@@ -458,10 +456,10 @@ public:
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
-        auto handle = open_heap.push(LowLevelNode(start_location,
-                                                  admissible_heuristic(start_location),
+        auto handle = open_heap.push(LowLevelNode(start_time_location,
+                                                  admissible_heuristic(start_time_location),
                                                   initial_cost));
-        location_to_heap.insert(std::make_pair<>(start_location, handle));
+        location_to_heap.insert(std::make_pair<>(start_time_location, handle));
         (*handle).handle = handle;
 
         std::vector<Child> children;
@@ -487,7 +485,7 @@ public:
                 }
 
                 solution.path.emplace_back(std::make_pair<>
-                                                   (start_location, initial_cost));
+                                                   (start_time_location, initial_cost));
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
