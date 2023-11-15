@@ -396,43 +396,43 @@ public:
     }
 
     // low level 工具函数: 引用传递计算大型结果
-    void generate_children(const TimeLocation& time_location, std::vector<Child>& neighbors)
+    void generate_children(const TimeLocation& time_location, std::vector<Child>& children)
     {
         // cout << "#VC " << low_level_constraints.vertex_constraints.size() << endl;
         // for(const auto& vertex_constraint : low_level_constraints.vertex_constraints) {
         //   cout << "  " << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y <<
         //   endl;
         // }
-        neighbors.clear();
+        children.clear();
 
         TimeLocation wait_neighbor(time_location.time + 1, time_location.x, time_location.y);
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
-            neighbors.emplace_back(Child(wait_neighbor, Action::Wait, 1));
+            children.emplace_back(Child(wait_neighbor, Action::Wait, 1));
         }
 
         TimeLocation west_neighbor(time_location.time + 1, time_location.x - 1, time_location.y);
         if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
-            neighbors.emplace_back(Child(west_neighbor, Action::East, 1));
+            children.emplace_back(Child(west_neighbor, Action::East, 1));
         }
 
         TimeLocation east_neighbor(time_location.time + 1, time_location.x + 1, time_location.y);
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
-            neighbors.emplace_back(Child(east_neighbor, Action::West, 1));
+            children.emplace_back(Child(east_neighbor, Action::West, 1));
         }
 
         TimeLocation north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
-            neighbors.emplace_back(Child(north_neighbor, Action::North, 1));
+            children.emplace_back(Child(north_neighbor, Action::North, 1));
         }
 
         TimeLocation south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
-            neighbors.emplace_back(Child(south_neighbor, Action::South, 1));
+            children.emplace_back(Child(south_neighbor, Action::South, 1));
         }
     }
 
