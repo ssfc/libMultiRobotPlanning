@@ -395,7 +395,7 @@ public:
                                        s2.x, s2.y)) == con.end();
     }
 
-    // low level 工具函数
+    // low level 工具函数: 引用传递计算大型结果
     void get_neighbors(const TimeLocation& time_location, std::vector<Neighbor>& neighbors)
     {
         // cout << "#VC " << low_level_constraints.vertex_constraints.size() << endl;
@@ -436,6 +436,7 @@ public:
         }
     }
 
+    // 引用传递大型计算结果
     bool low_level_search(const TimeLocation& start_location, AgentPlan& solution)
     {
         int initial_cost = 0;
