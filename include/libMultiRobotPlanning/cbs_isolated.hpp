@@ -294,7 +294,7 @@ public:
     }
 
 };
-
+/*
 class LowLevel
 {
 public:
@@ -306,7 +306,7 @@ public:
     Location start;
     std::vector<Location> goals;
     Location goal;
-    Constraints low_level_constraints;
+    std::vector<Constraints> low_level_constraints;
     bool disappear_at_goal;
 
     // process var
@@ -323,7 +323,7 @@ public:
              Location input_start,
              std::vector<Location> input_goals,
              Location input_goal,
-             Constraints input_constraints,
+             std::vector<Constraints> input_constraints,
              bool input_disappear_at_goal):
              num_columns(input_num_columns),
              num_rows(input_num_rows),
@@ -547,7 +547,7 @@ public:
 
         return false;
     }
-};
+};*/
 
 class HighLevelNode
 {
@@ -979,10 +979,11 @@ public:
             set_low_Level_context(i, root.constraints[i]);
             bool is_success = low_level_search(start_time_locations[i], root.solution[i]);
 
-
+            /*
             auto low_level = LowLevel(num_columns, num_rows, obstacles,
                                       i, start_time_locations[i], goals, goals[i],
-                                      root.constraints[i], false);
+                                      root.constraints, false);
+                                      */
 
 
             /*
@@ -1101,7 +1102,7 @@ public:
 
             // A1 LINE 11
             // for each agent ai in C do
-            std::map<size_t, Constraints> new_constraints;
+            std::map<size_t, Constraints> new_constraints; // agent_index到constraints的映射
             generate_constraints_from_conflict(conflict, new_constraints);
             for (const auto& new_constraint : new_constraints)
             {
