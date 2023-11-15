@@ -865,7 +865,7 @@ public:
         return solution[input_agent_index].path.back().first;
     }
 
-    // HighLevel 工具函数
+    // HighLevel 工具函数: 引用传递计算大型结果
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
     // Comment: 这个函数有两个目标，是否有冲突，有冲突还要引用并改变冲突。
@@ -962,6 +962,7 @@ public:
         return constraints_from_conflict;
     }
 
+    // 引用传递大型计算结果
     bool high_level_search()
     {
         std::vector<AgentPlan> solution;
