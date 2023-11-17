@@ -772,18 +772,6 @@ public:
             low_level.set_low_Level_context(start_time_locations[i], goals[i], root.constraints_group[i]);
             bool is_success = low_level.low_level_search(root.solution[i], num_expanded_low_level_nodes);
 
-            /*
-             num_columns(input_num_columns),
-             num_rows(input_num_rows),
-             obstacles(input_obstacles),
-             low_level_agent_index(input_agent_index),
-             start(input_start),
-             goal(input_goal),
-             low_level_constraints(input_constraints),
-             disappear_at_goal(input_disappear_at_goal),
-             */
-
-
             if (!is_success)
             {
                 return false;
