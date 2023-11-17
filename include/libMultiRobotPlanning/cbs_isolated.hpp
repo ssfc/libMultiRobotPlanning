@@ -643,14 +643,23 @@ public:
 
     void generate_text_instance()
     {
-        std::vector<std::vector<int>> map;
+        std::vector<std::vector<char>> map;
         map.resize(num_rows);
         for(int i=0;i<num_rows;i++)
         {
             map[i].resize(num_columns);
+            for(int j=0;j<num_columns;j++)
+            {
+                map[i][j] = '.';
+            }
         }
 
-        
+        for (const auto& obstacle : obstacles)
+        {
+            //打印当前元素的值
+            map[obstacle.y][obstacle.x] = '@';
+        }
+
     }
 
     // HighLevel 工具函数 get_first_conflict 的工具函数
