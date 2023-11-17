@@ -327,16 +327,15 @@ public:
              low_level_constraints(input_constraints),
              disappear_at_goal(input_disappear_at_goal)
     {
-        set_low_Level_context(input_constraints);
+        set_low_Level_context();
     }
 
     // Set the current context to a particular agent with the given set of low_level_constraints
-    void set_low_Level_context(Constraints input_constraints)
+    void set_low_Level_context()
     {
         // assert(input_constraints);  // NOLINT
-        low_level_constraints = input_constraints;
         last_goal_constraint = -1;
-        for (const auto& vertex_constraint : input_constraints.vertex_constraints)
+        for (const auto& vertex_constraint : low_level_constraints.vertex_constraints)
         {
             if (vertex_constraint.x == goal.x && vertex_constraint.y == goal.y)
             {
