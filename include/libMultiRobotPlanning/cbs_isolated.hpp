@@ -641,6 +641,10 @@ public:
         std::cout << std::endl;
     }
 
+    void generate_text_instance()
+    {
+
+    }
 
     // HighLevel 工具函数 get_first_conflict 的工具函数
     TimeLocation get_time_location(size_t input_agent_index, const std::vector<AgentPlan>& solution, size_t t)
