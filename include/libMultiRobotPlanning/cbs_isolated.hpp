@@ -629,7 +629,17 @@ public:
               num_expanded_high_level_nodes(0),
               disappear_at_goal(input_disappearAtGoal),
               start_time(clock())
-    {}
+    {
+        std::cerr<<"goals[0].x: " << goals[0].x << std::endl;
+        std::cerr<<"goals[0].y: " << goals[0].y << std::endl;
+
+        for (const auto& obstacle : obstacles)
+        {
+            //打印当前元素的值
+            std::cout << "(" << obstacle.x << "," << obstacle.y << ")";
+        }
+        std::cout << std::endl;
+    }
 
 
     // HighLevel 工具函数 get_first_conflict 的工具函数
