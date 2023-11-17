@@ -764,11 +764,12 @@ public:
 
         // A1 LINE 2
         // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
+        auto low_level = LowLevel(num_columns, num_rows, obstacles,
+                                  start_time_locations[0], goals[0],
+                                  root.constraints_group[0], false);
         for (size_t i = 0; i < num_agents; i++)
         {
-            auto low_level = LowLevel(num_columns, num_rows, obstacles,
-                                      start_time_locations[i], goals[i],
-                                      root.constraints_group[i], false);
+            low_level.set_low_Level_context(start_time_locations[i], goals[i], root.constraints_group[i]);
             bool is_success = low_level.low_level_search(root.solution[i], num_expanded_low_level_nodes);
 
             /*
@@ -911,10 +912,8 @@ public:
                 // new_node.cost = SIC(new_node.solution)
                 // 这里是增量更新，计算前先减去，算完后再加回来。
                 new_node.cost -= new_node.solution[i].cost;
-
-                auto low_level = LowLevel(num_columns, num_rows, obstacles,
-                                          start_time_locations[i], goals[i],
-                                          new_node.constraints_group[i], false);
+                
+                low_level.set_low_Level_context(start_time_locations[i], goals[i], new_node.constraints_group[i]);
                 bool is_success = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
                 new_node.cost += new_node.solution[i].cost;
