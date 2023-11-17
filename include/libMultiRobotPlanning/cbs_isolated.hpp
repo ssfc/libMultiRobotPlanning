@@ -339,9 +339,23 @@ public:
     }
 
     // Set the current context to a particular agent with the given set of low_level_constraints
-    void set_low_Level_context()
+    void set_low_Level_context(TimeLocation input_time_location,
+                               Location input_goal,
+                               Constraints input_constraints)
     {
+        start_time_location = input_time_location;
+        goal = input_goal;
+        low_level_constraints = input_constraints;
 
+        // assert(input_constraints);  // NOLINT
+        last_goal_constraint = -1;
+        for (const auto& vertex_constraint : low_level_constraints.vertex_constraints)
+        {
+            if (vertex_constraint.x == goal.x && vertex_constraint.y == goal.y)
+            {
+                last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
+            }
+        }
     }
 
     // low level 工具函数
