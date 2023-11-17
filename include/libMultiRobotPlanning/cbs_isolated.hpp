@@ -643,7 +643,14 @@ public:
 
     void generate_text_instance()
     {
+        std::vector<std::vector<int>> map;
+        map.resize(num_rows);
+        for(int i=0;i<num_rows;i++)
+        {
+            map[i].resize(num_columns);
+        }
 
+        
     }
 
     // HighLevel 工具函数 get_first_conflict 的工具函数
