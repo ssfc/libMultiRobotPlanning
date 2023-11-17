@@ -316,7 +316,6 @@ public:
     LowLevel(size_t input_num_columns,
              size_t input_num_rows,
              std::unordered_set<Location> input_obstacles,
-             size_t input_agent_index,
              TimeLocation input_time_location,
              std::vector<Location> input_goals,
              Location input_goal,
@@ -325,21 +324,19 @@ public:
              num_columns(input_num_columns),
              num_rows(input_num_rows),
              obstacles(input_obstacles),
-             low_level_agent_index(input_agent_index),
              start_time_location(input_time_location),
              goals(input_goals),
              goal(input_goal),
              low_level_constraints(input_constraints),
              disappear_at_goal(input_disappear_at_goal)
     {
-        set_low_Level_context(input_agent_index, input_constraints);
+        set_low_Level_context(input_constraints);
     }
 
     // Set the current context to a particular agent with the given set of low_level_constraints
-    void set_low_Level_context(size_t input_agent_index, Constraints input_constraints)
+    void set_low_Level_context(Constraints input_constraints)
     {
         // assert(input_constraints);  // NOLINT
-        low_level_agent_index = input_agent_index;
         low_level_constraints = input_constraints;
         last_goal_constraint = -1;
         for (const auto& vertex_constraint : input_constraints.vertex_constraints)
@@ -760,7 +757,7 @@ public:
         for (size_t i = 0; i < num_agents; i++)
         {
             auto low_level = LowLevel(num_columns, num_rows, obstacles,
-                                      i, start_time_locations[i], goals, goals[i],
+                                      start_time_locations[i], goals, goals[i],
                                       root.constraints_group[i], false);
             bool is_success = low_level.low_level_search(root.solution[i], num_expanded_low_level_nodes);
 
@@ -907,7 +904,7 @@ public:
                 new_node.cost -= new_node.solution[i].cost;
 
                 auto low_level = LowLevel(num_columns, num_rows, obstacles,
-                                          i, start_time_locations[i], goals, goals[i],
+                                          start_time_locations[i], goals, goals[i],
                                           new_node.constraints_group[i], false);
                 bool is_success = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
