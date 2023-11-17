@@ -302,7 +302,7 @@ public:
     size_t num_columns;
     size_t num_rows;
     std::unordered_set<Location> obstacles;
-    size_t low_level_agent_index;
+
     TimeLocation start_time_location;
     Location goal;
     Constraints low_level_constraints;
