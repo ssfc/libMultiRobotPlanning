@@ -666,9 +666,16 @@ public:
         {
             for(int j=0;j<num_columns;j++)
             {
-                fout << map[i][j];
+                fout << map[i][j] << " ";
             }
             fout << std::endl;
+        }
+
+        fout << num_agents << std::endl;
+        for (size_t i=0;i<num_agents;i++)
+        {
+            fout << start_time_locations[i].x << " " << start_time_locations[i].y << " "
+                 << goals[i].x << " " << goals[i].y << std::endl;
         }
 
     }
