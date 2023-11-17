@@ -344,7 +344,7 @@ public:
         last_goal_constraint = -1;
         for (const auto& vertex_constraint : input_constraints.vertex_constraints)
         {
-            if (vertex_constraint.x == goals[low_level_agent_index].x && vertex_constraint.y == goals[low_level_agent_index].y)
+            if (vertex_constraint.x == goal.x && vertex_constraint.y == goal.y)
             {
                 last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
             }
@@ -357,15 +357,15 @@ public:
         // cout << "H: " <<  time_location << " " << m_heuristic[low_level_agent_index][time_location.x + num_columns *
         // time_location.y] << endl;
         // return m_heuristic[low_level_agent_index][time_location.x + num_columns * time_location.y];
-        return abs(time_location.x - goals[low_level_agent_index].x) +
-               abs(time_location.y - goals[low_level_agent_index].y);
+        return abs(time_location.x - goal.x) +
+               abs(time_location.y - goal.y);
     }
 
     // low level 工具函数
     bool is_solution(const TimeLocation& time_location)
     {
-        return time_location.x == goals[low_level_agent_index].x
-               && time_location.y == goals[low_level_agent_index].y
+        return time_location.x == goal.x
+               && time_location.y == goal.y
                && time_location.time > last_goal_constraint;
     }
 
