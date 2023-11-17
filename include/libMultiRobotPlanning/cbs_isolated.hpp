@@ -641,7 +641,7 @@ public:
         std::cout << std::endl;
     }
 
-    void generate_text_instance()
+    void generate_text_instance(std::string input_filename)
     {
         std::vector<std::vector<char>> map;
         map.resize(num_rows);
@@ -659,6 +659,10 @@ public:
             //打印当前元素的值
             map[obstacle.y][obstacle.x] = '@';
         }
+
+        std::ofstream fout(input_filename);
+        fout << num_rows << " " << num_columns << std::endl;
+
 
     }
 
@@ -850,7 +854,7 @@ public:
                     makespan = std::max<int>(makespan, agent_plan.cost);
                 }
 
-                std::ofstream fout("output.yaml");
+                std::ofstream fout("output.yaml", std::ios::out);
                 fout << "statistics:" << std::endl;
 
                 fout << "cost: " << best_node.cost << std::endl;
