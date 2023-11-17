@@ -912,7 +912,7 @@ public:
                 // new_node.cost = SIC(new_node.solution)
                 // 这里是增量更新，计算前先减去，算完后再加回来。
                 new_node.cost -= new_node.solution[i].cost;
-                
+
                 low_level.set_low_Level_context(start_time_locations[i], goals[i], new_node.constraints_group[i]);
                 bool is_success = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
