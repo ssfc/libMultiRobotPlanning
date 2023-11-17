@@ -660,9 +660,16 @@ public:
             map[obstacle.y][obstacle.x] = '@';
         }
 
-        std::ofstream fout(input_filename);
+        std::ofstream fout(input_filename, std::ios::out);
         fout << num_rows << " " << num_columns << std::endl;
-
+        for(int i=0;i<num_rows;i++)
+        {
+            for(int j=0;j<num_columns;j++)
+            {
+                fout << map[i][j];
+            }
+            fout << std::endl;
+        }
 
     }
 
