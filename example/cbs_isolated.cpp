@@ -116,20 +116,50 @@ int main(int argc, char* argv[])
     CBS mapf(dimx, dimy, obstacles, goals.size(), start_time_locations, goals, is_disappear_at_goal);
     mapf.generate_text_instance("hello.txt");
 
-    std::string directory_path = "/home/ssfc/libMultiRobotPlanning/benchmark/32x32_obst204";
-
-    // 遍历目录
-    for (const auto& entry : fs::directory_iterator(directory_path))
-    {
-        // 输出文件名
-        std::cout << entry.path().filename().string() << std::endl;
-    }
-
 
     bool is_success = mapf.high_level_search();
     if (!is_success)
     {
         cout << "Planning NOT successful!" << endl;
+    }
+
+    std::string directory_path = "/home/ssfc/libMultiRobotPlanning/benchmark/8x8_obst12";
+
+    // 遍历目录
+    for (const auto& entry : fs::directory_iterator(directory_path))
+    {
+        // 输出文件名
+        std::cout << entry.path().string() << std::endl;
+        std::string yaml_filename = entry.path().string();
+
+
+        YAML::Node config = YAML::LoadFile(yaml_filename);
+
+        unordered_set<Location> obstacles;
+        vector<Location> goals;
+        vector<TimeLocation> start_time_locations;
+
+        const auto& dim = config["map"]["dimensions"];
+        int dimx = dim[0].as<int>();
+        int dimy = dim[1].as<int>();
+
+        for (const auto& node : config["map"]["obstacles"])
+        {
+            obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
+        }
+
+        for (const auto& node : config["agents"])
+        {
+            const auto& start = node["start"];
+            const auto& goal = node["goal"];
+            start_time_locations.emplace_back(TimeLocation(0, start[0].as<int>(), start[1].as<int>()));
+            // cout << "s: " << start_time_locations.back() << endl;
+            goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
+        }
+
+        CBS mapf(dimx, dimy, obstacles, goals.size(), start_time_locations, goals, is_disappear_at_goal);
+        mapf.generate_text_instance("hello.txt");
+
     }
 
     return 0;
