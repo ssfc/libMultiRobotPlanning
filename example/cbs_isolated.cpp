@@ -123,10 +123,10 @@ int main(int argc, char* argv[])
         cout << "Planning NOT successful!" << endl;
     }
 
-    std::string directory_path = "/home/ssfc/libMultiRobotPlanning/benchmark/8x8_obst12";
+    std::string yaml_path = "/home/ssfc/libMultiRobotPlanning/benchmark/8x8_obst12";
 
     // 遍历目录
-    for (const auto& entry : fs::directory_iterator(directory_path))
+    for (const auto& entry : fs::directory_iterator(yaml_path))
     {
         // 输出文件名
         std::cout << entry.path().string() << std::endl;
