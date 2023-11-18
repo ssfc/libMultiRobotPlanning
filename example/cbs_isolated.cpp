@@ -11,6 +11,7 @@
 #include <libMultiRobotPlanning/cbs_isolated.hpp>
 
 using namespace std;
+namespace fs = std::filesystem;
 
 ostream& operator<<(ostream& os, const Action& this_action)
 {
@@ -114,6 +115,16 @@ int main(int argc, char* argv[])
 
     CBS mapf(dimx, dimy, obstacles, goals.size(), start_time_locations, goals, is_disappear_at_goal);
     mapf.generate_text_instance("hello.txt");
+
+    std::string directory_path = "/home/ssfc/libMultiRobotPlanning/benchmark/32x32_obst204";
+
+    // 遍历目录
+    for (const auto& entry : fs::directory_iterator(directory_path))
+    {
+        // 输出文件名
+        std::cout << entry.path().filename().string() << std::endl;
+    }
+
 
     bool is_success = mapf.high_level_search();
     if (!is_success)

@@ -5,6 +5,7 @@
 #ifndef LIBMULTIROBOTPLANNING_CBS_ISOLATED_HPP
 #define LIBMULTIROBOTPLANNING_CBS_ISOLATED_HPP
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <unordered_map>
