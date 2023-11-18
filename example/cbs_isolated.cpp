@@ -46,11 +46,11 @@ int main(int argc, char* argv[])
     // Declare the supported options.
     po::options_description desc("Allowed options");
     string input_filename;
-    string outputFile;
+    string output_filename;
     bool is_disappear_at_goal;
     desc.add_options()("help", "produce help message")
             ("input,i", po::value<string>(&input_filename)->required(), "input file (YAML)")
-            ("output,o", po::value<string>(&outputFile)->required(), "output file (YAML)")
+            ("output,o", po::value<string>(&output_filename)->required(), "output file (YAML)")
             ("disappear-at-goal", po::bool_switch(&is_disappear_at_goal), "make agents to disappear at goal rather than staying there");
 
     try
