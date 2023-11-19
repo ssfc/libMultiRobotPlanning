@@ -631,6 +631,8 @@ public:
               disappear_at_goal(input_disappearAtGoal),
               start_time(clock())
     {
+        // 检查地图读入是否正确。
+        /*
         std::cerr<<"goals[0].x: " << goals[0].x << std::endl;
         std::cerr<<"goals[0].y: " << goals[0].y << std::endl;
 
@@ -640,6 +642,7 @@ public:
             std::cout << "(" << obstacle.x << "," << obstacle.y << ")";
         }
         std::cout << std::endl;
+         */
     }
 
     void generate_text_instance(std::string input_filename)

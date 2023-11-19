@@ -114,8 +114,7 @@ int main(int argc, char* argv[])
     }
 
     CBS mapf(dimx, dimy, obstacles, goals.size(), start_time_locations, goals, is_disappear_at_goal);
-    mapf.generate_text_instance("hello.txt");
-
+    // mapf.generate_text_instance("hello.txt");
 
     bool is_success = mapf.high_level_search();
     if (!is_success)
@@ -123,6 +122,7 @@ int main(int argc, char* argv[])
         cout << "Planning NOT successful!" << endl;
     }
 
+    /*
     std::string yaml_path = "/home/ssfc/libMultiRobotPlanning/benchmark/8x8_obst12";
     std::string txt_path = "/home/ssfc/MAPF-CBS-cpp-mine/benchmark/8x8_obst12";
 
@@ -164,6 +164,7 @@ int main(int argc, char* argv[])
         mapf.generate_text_instance(txt_filename);
 
     }
+     */
 
     return 0;
 }
