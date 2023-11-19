@@ -124,6 +124,7 @@ int main(int argc, char* argv[])
     }
 
     std::string yaml_path = "/home/ssfc/libMultiRobotPlanning/benchmark/8x8_obst12";
+    std::string txt_path = "/home/ssfc/MAPF-CBS-cpp-mine/benchmark/8x8_obst12";
 
     // 遍历目录
     for (const auto& entry : fs::directory_iterator(yaml_path))
@@ -131,7 +132,9 @@ int main(int argc, char* argv[])
         // 输出文件名
         std::cout << entry.path().string() << std::endl;
         std::string yaml_filename = entry.path().string();
-
+        size_t pos = entry.path().filename().string().find(".yaml");
+        std::string txt_filename = txt_path + "/" + entry.path().filename().string().replace(pos, 5, ".txt");
+        std::cerr << txt_filename << std::endl;
 
         YAML::Node config = YAML::LoadFile(yaml_filename);
 
@@ -158,7 +161,7 @@ int main(int argc, char* argv[])
         }
 
         CBS mapf(dimx, dimy, obstacles, goals.size(), start_time_locations, goals, is_disappear_at_goal);
-        mapf.generate_text_instance("hello.txt");
+        mapf.generate_text_instance(txt_filename);
 
     }
 
