@@ -956,10 +956,9 @@ public:
                 low_level.set_low_level_context(start_time_locations[i], goals[i], new_node.constraints_group[i]);
                 bool is_path_found = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
-                new_node.cost += new_node.solution[i].cost;
-
                 if (is_path_found)
                 {
+                    new_node.cost += new_node.solution[i].cost;
                     // std::cout << "  is_path_found. cost: " << new_node.cost << std::endl;
                     // A1 LINE 17
                     // Insert new_node to OPEN
