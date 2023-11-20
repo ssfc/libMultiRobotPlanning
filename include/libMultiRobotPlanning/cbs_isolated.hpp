@@ -822,9 +822,9 @@ public:
         for (size_t i = 0; i < num_agents; i++)
         {
             low_level.set_low_Level_context(start_time_locations[i], goals[i], root.constraints_group[i]);
-            bool is_success = low_level.low_level_search(root.solution[i], num_expanded_low_level_nodes);
+            bool is_path_found = low_level.low_level_search(root.solution[i], num_expanded_low_level_nodes);
 
-            if (!is_success)
+            if (!is_path_found)
             {
                 return false;
             }
@@ -954,13 +954,13 @@ public:
                 new_node.cost -= new_node.solution[i].cost;
 
                 low_level.set_low_Level_context(start_time_locations[i], goals[i], new_node.constraints_group[i]);
-                bool is_success = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
+                bool is_path_found = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
                 new_node.cost += new_node.solution[i].cost;
 
-                if (is_success)
+                if (is_path_found)
                 {
-                    // std::cout << "  is_success. cost: " << new_node.cost << std::endl;
+                    // std::cout << "  is_path_found. cost: " << new_node.cost << std::endl;
                     // A1 LINE 17
                     // Insert new_node to OPEN
                     auto handle = open.push(new_node);
