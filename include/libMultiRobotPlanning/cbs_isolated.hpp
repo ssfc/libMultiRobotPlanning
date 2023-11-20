@@ -606,8 +606,8 @@ public:
 
     // low-level vars.
     // vector< vector<int> > m_heuristic;
-    size_t num_expanded_low_level_nodes;
     size_t num_expanded_high_level_nodes;
+    size_t num_expanded_low_level_nodes;
     bool disappear_at_goal;
 
     // debug var
@@ -626,8 +626,8 @@ public:
               start_time_locations(std::move(input_start_time_locations)),
               goals(std::move(input_goals)),
             // low_level_constraints(nullptr),
-              num_expanded_low_level_nodes(0),
               num_expanded_high_level_nodes(0),
+              num_expanded_low_level_nodes(0),
               disappear_at_goal(input_disappearAtGoal),
               start_time(clock())
     {
