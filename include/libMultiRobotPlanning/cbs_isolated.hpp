@@ -340,7 +340,7 @@ public:
     }
 
     // Set the current context to a particular agent with the given set of low_level_constraints
-    void set_low_Level_context(TimeLocation input_time_location,
+    void set_low_level_context(TimeLocation input_time_location,
                                Location input_goal,
                                Constraints input_constraints)
     {
@@ -821,7 +821,7 @@ public:
                                   root.constraints_group[0], false);
         for (size_t i = 0; i < num_agents; i++)
         {
-            low_level.set_low_Level_context(start_time_locations[i], goals[i], root.constraints_group[i]);
+            low_level.set_low_level_context(start_time_locations[i], goals[i], root.constraints_group[i]);
             bool is_path_found = low_level.low_level_search(root.solution[i], num_expanded_low_level_nodes);
 
             if (!is_path_found)
@@ -953,7 +953,7 @@ public:
                 // 这里是增量更新，计算前先减去，算完后再加回来。
                 new_node.cost -= new_node.solution[i].cost;
 
-                low_level.set_low_Level_context(start_time_locations[i], goals[i], new_node.constraints_group[i]);
+                low_level.set_low_level_context(start_time_locations[i], goals[i], new_node.constraints_group[i]);
                 bool is_path_found = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
                 new_node.cost += new_node.solution[i].cost;
