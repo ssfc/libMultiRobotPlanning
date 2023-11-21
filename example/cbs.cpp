@@ -289,14 +289,14 @@ public:
         // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + num_columns *
         // s.y] << endl;
         // return m_heuristic[m_agentIdx][s.x + num_columns * s.y];
-        return abs(s.x - m_goals[m_agentIdx].x) +
-               abs(s.y - m_goals[m_agentIdx].y);
+        return abs(s.location.x - m_goals[m_agentIdx].x) +
+               abs(s.location.y - m_goals[m_agentIdx].y);
     }
 
     bool is_solution(const TimeLocation& s)
     {
-        return s.x == m_goals[m_agentIdx].x
-        && s.y == m_goals[m_agentIdx].y
+        return s.location.x == m_goals[m_agentIdx].x
+        && s.location.y == m_goals[m_agentIdx].y
         && s.time > m_lastGoalConstraint;
     }
 
@@ -309,31 +309,31 @@ public:
         // }
         neighbors.clear();
 
-        TimeLocation wait_neighbor(time_location.time + 1, time_location.x, time_location.y);
+        TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(wait_neighbor, Action::Wait, 1));
         }
 
-        TimeLocation west_neighbor(time_location.time + 1, time_location.x - 1, time_location.y);
+        TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
         if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(west_neighbor, Action::Left, 1));
         }
 
-        TimeLocation east_neighbor(time_location.time + 1, time_location.x + 1, time_location.y);
+        TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(east_neighbor, Action::Right, 1));
         }
 
-        TimeLocation north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
+        TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(north_neighbor, Action::Up, 1));
         }
 
-        TimeLocation south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);
+        TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(south_neighbor, Action::Down, 1));
@@ -363,8 +363,8 @@ public:
                         result.agent1 = i;
                         result.agent2 = j;
                         result.type = Conflict::Vertex;
-                        result.x1 = state1.x;
-                        result.y1 = state1.y;
+                        result.x1 = state1.location.x;
+                        result.y1 = state1.location.y;
                         // cout << "VC " << t << "," << state1.x << "," << state1.y <<
                         // endl;
 
@@ -389,10 +389,10 @@ public:
                         result.agent1 = i;
                         result.agent2 = j;
                         result.type = Conflict::Edge;
-                        result.x1 = state1a.x;
-                        result.y1 = state1a.y;
-                        result.x2 = state1b.x;
-                        result.y2 = state1b.y;
+                        result.x1 = state1a.location.x;
+                        result.y1 = state1a.location.y;
+                        result.x2 = state1b.location.x;
+                        result.y2 = state1b.location.y;
 
                         return true;
                     }
@@ -464,7 +464,7 @@ public:
           // This is a trick to avoid changing the rest of the code significantly
           // After an agent disappeared, put it at a unique but invalid position
           // This will cause all calls to equal_except_time(.) to return false.
-          return TimeLocation(-1, -1 * (agentIdx + 1), -1);
+          return TimeLocation(-1, Location(-1 * (agentIdx + 1), -1));
         }
 
         return solution[agentIdx].path.back().first;
@@ -475,9 +475,10 @@ public:
         assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
 
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
-               con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
+        return s.location.x >= 0 && s.location.x < num_columns
+        && s.location.y >= 0 && s.location.y < num_rows &&
+               obstacles.find(Location(s.location.x, s.location.y)) == obstacles.end() &&
+               con.find(VertexConstraint(s.time, s.location.x, s.location.y)) == con.end();
     }
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
@@ -485,7 +486,8 @@ public:
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
 
-        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
+        return con.find(EdgeConstraint(s1.time, s1.location.x, s1.location.y, s2.location.x, s2.location.y))
+        == con.end();
     }
 };
 
@@ -542,7 +544,7 @@ int main(int argc, char* argv[])
     {
         const auto& start = node["start"];
         const auto& goal = node["goal"];
-        startStates.emplace_back(TimeLocation(0, start[0].as<int>(), start[1].as<int>()));
+        startStates.emplace_back(TimeLocation(0, Location(start[0].as<int>(), start[1].as<int>())));
         // cout << "s: " << startStates.back() << endl;
         goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }
@@ -613,15 +615,15 @@ int main(int argc, char* argv[])
             fout << "  agent" << a << ":" << endl;
             for (const auto& state : solution[a].path)
             {
-                fout << "    - x: " << state.first.x << endl
-                    << "      y: " << state.first.y << endl
+                fout << "    - x: " << state.first.location.x << endl
+                    << "      y: " << state.first.location.y << endl
                     << "      t: " << state.second << endl;
             }
 
             cerr << "agent " << a << ": ";
             for (const auto& state : solution[a].path)
             {
-                cerr << "(" << state.first.x << "," << state.first.y << "),";
+                cerr << "(" << state.first.location.x << "," << state.first.location.y << "),";
             }
             cerr << endl;
         }

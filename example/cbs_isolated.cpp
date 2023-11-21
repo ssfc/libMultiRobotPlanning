@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
     {
         const auto& start = node["start"];
         const auto& goal = node["goal"];
-        start_time_locations.emplace_back(TimeLocation(0, start[0].as<int>(), start[1].as<int>()));
+        start_time_locations.emplace_back(TimeLocation(0, Location(start[0].as<int>(), start[1].as<int>())));
         // cout << "s: " << start_time_locations.back() << endl;
         goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }

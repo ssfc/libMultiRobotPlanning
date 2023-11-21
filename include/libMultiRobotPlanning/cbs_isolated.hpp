@@ -367,15 +367,15 @@ public:
         // cout << "H: " <<  time_location << " " << m_heuristic[low_level_agent_index][time_location.x + num_columns *
         // time_location.y] << endl;
         // return m_heuristic[low_level_agent_index][time_location.x + num_columns * time_location.y];
-        return abs(time_location.x - goal.x) +
-               abs(time_location.y - goal.y);
+        return abs(time_location.location.x - goal.x) +
+               abs(time_location.location.y - goal.y);
     }
 
     // low level 工具函数
     bool is_solution(const TimeLocation& time_location)
     {
-        return time_location.x == goal.x
-               && time_location.y == goal.y
+        return time_location.location.x == goal.x
+               && time_location.location.y == goal.y
                && time_location.time > last_goal_constraint;
     }
 
@@ -385,10 +385,11 @@ public:
         // assert(low_level_constraints);
         const auto& con = low_level_constraints.vertex_constraints;
 
-        return time_location.x >= 0 && time_location.x < num_columns
-               && time_location.y >= 0 && time_location.y < num_rows
-               && obstacles.find(Location(time_location.x, time_location.y)) == obstacles.end()
-               && con.find(VertexConstraint(time_location.time, Location(time_location.x, time_location.y))) == con.end();
+        return time_location.location.x >= 0 && time_location.location.x < num_columns
+               && time_location.location.y >= 0 && time_location.location.y < num_rows
+               && obstacles.find(Location(time_location.location.x, time_location.location.y))
+               == obstacles.end()
+               && con.find(VertexConstraint(time_location.time, time_location.location)) == con.end();
     }
 
     // low level 工具函数 get_neighbors的工具函数
@@ -397,8 +398,8 @@ public:
         // assert(low_level_constraints);
         const auto& con = low_level_constraints.edge_constraints;
 
-        return con.find(EdgeConstraint(s1.time, s1.x, s1.y,
-                                       s2.x, s2.y)) == con.end();
+        return con.find(EdgeConstraint(s1.time, s1.location.x, s1.location.y,
+                                       s2.location.x, s2.location.y)) == con.end();
     }
 
     // low level 工具函数: 引用传递计算大型结果
@@ -411,31 +412,31 @@ public:
         // }
         children.clear();
 
-        TimeLocation wait_neighbor(time_location.time + 1, time_location.x, time_location.y);
+        TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
             children.emplace_back(Child(wait_neighbor, Action::Wait, 1));
         }
 
-        TimeLocation west_neighbor(time_location.time + 1, time_location.x - 1, time_location.y);
+        TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
         if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
             children.emplace_back(Child(west_neighbor, Action::East, 1));
         }
 
-        TimeLocation east_neighbor(time_location.time + 1, time_location.x + 1, time_location.y);
+        TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
             children.emplace_back(Child(east_neighbor, Action::West, 1));
         }
 
-        TimeLocation north_neighbor(time_location.time + 1, time_location.x, time_location.y + 1);
+        TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
             children.emplace_back(Child(north_neighbor, Action::North, 1));
         }
 
-        TimeLocation south_neighbor(time_location.time + 1, time_location.x, time_location.y - 1);
+        TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
             children.emplace_back(Child(south_neighbor, Action::South, 1));
@@ -680,7 +681,7 @@ public:
         fout << num_agents << std::endl;
         for (size_t i=0;i<num_agents;i++)
         {
-            fout << start_time_locations[i].x << " " << start_time_locations[i].y << " "
+            fout << start_time_locations[i].location.x << " " << start_time_locations[i].location.y << " "
                  << goals[i].x << " " << goals[i].y << std::endl;
         }
 
@@ -703,7 +704,7 @@ public:
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
             // This will cause all calls to equal_except_time(.) to return false.
-            return TimeLocation(-1, -1 * (input_agent_index + 1), -1);
+            return TimeLocation(-1, Location(-1 * (input_agent_index + 1), -1));
         }
 
         return solution[input_agent_index].path.back().first;
@@ -736,8 +737,8 @@ public:
                         first_conflict.agent1 = i;
                         first_conflict.agent2 = j;
                         first_conflict.conflict_type = Conflict::VertexConflict;
-                        first_conflict.x1 = state1.x;
-                        first_conflict.y1 = state1.y;
+                        first_conflict.x1 = state1.location.x;
+                        first_conflict.y1 = state1.location.y;
                         // cout << "VC " << t << "," << state1.x << "," << state1.y <<
                         // endl;
 
@@ -762,10 +763,10 @@ public:
                         first_conflict.agent1 = i;
                         first_conflict.agent2 = j;
                         first_conflict.conflict_type = Conflict::EdgeConflict;
-                        first_conflict.x1 = state1a.x;
-                        first_conflict.y1 = state1a.y;
-                        first_conflict.x2 = state1b.x;
-                        first_conflict.y2 = state1b.y;
+                        first_conflict.x1 = state1a.location.x;
+                        first_conflict.y1 = state1a.location.y;
+                        first_conflict.x2 = state1b.location.x;
+                        first_conflict.y2 = state1b.location.y;
 
                         return true;
                     }
@@ -906,15 +907,15 @@ public:
                     fout << "  agent" << i << ":" << std::endl;
                     for (const auto& state : solution[i].path)
                     {
-                        fout << "    - x: " << state.first.x << std::endl
-                             << "      y: " << state.first.y << std::endl
+                        fout << "    - x: " << state.first.location.x << std::endl
+                             << "      y: " << state.first.location.y << std::endl
                              << "      t: " << state.second << std::endl;
                     }
 
                     std::cerr << "agent " << i << ": ";
                     for (const auto& state : solution[i].path)
                     {
-                        std::cerr << "(" << state.first.x << "," << state.first.y << "),";
+                        std::cerr << "(" << state.first.location.x << "," << state.first.location.y << "),";
                     }
                     std::cerr << std::endl;
                 }
