@@ -13,7 +13,11 @@ public:
 
 public:
     Location() = default;
-    Location(int x, int y) : x(x), y(y) {}
+
+    Location(int input_x, int input_y) :
+    x(input_x),
+    y(input_y)
+    {}
 
     bool operator==(const Location& other) const
     {
