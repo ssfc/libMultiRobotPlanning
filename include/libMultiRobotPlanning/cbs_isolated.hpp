@@ -102,27 +102,29 @@ class VertexConstraint
 {
 public:
     int time;
-    int x;
-    int y;
+    Location location;
 
 public:
-    VertexConstraint(int input_time, int input_x, int input_y)
-            : time(input_time), x(input_x), y(input_y)
+    VertexConstraint(int input_time, Location input_location):
+        time(input_time),
+        location(input_location)
     {}
 
     bool operator==(const VertexConstraint& other) const
     {
-        return std::tie(time, x, y) == std::tie(other.time, other.x, other.y);
+        return std::tie(time, location) == std::tie(other.time, other.location);
     }
 
     bool operator<(const VertexConstraint& other) const
     {
-        return std::tie(time, x, y) < std::tie(other.time, other.x, other.y);
+        return std::tie(time, location.x, location.y)
+        < std::tie(other.time, other.location.x, other.location.y);
     }
 
     friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& vertex_constraint)
     {
-        return os << "VC(" << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y << ")";
+        return os << "VC(" << vertex_constraint.time << "," << vertex_constraint.location.x << ","
+        << vertex_constraint.location.y << ")";
     }
 };
 
@@ -135,8 +137,8 @@ namespace std
         {
             size_t seed = 0;
             boost::hash_combine(seed, vertex_constraint.time);
-            boost::hash_combine(seed, vertex_constraint.x);
-            boost::hash_combine(seed, vertex_constraint.y);
+            boost::hash_combine(seed, vertex_constraint.location.x);
+            boost::hash_combine(seed, vertex_constraint.location.y);
             return seed;
         }
     };
@@ -332,7 +334,7 @@ public:
         last_goal_constraint = -1;
         for (const auto& vertex_constraint : low_level_constraints.vertex_constraints)
         {
-            if (vertex_constraint.x == goal.x && vertex_constraint.y == goal.y)
+            if (vertex_constraint.location.x == goal.x && vertex_constraint.location.y == goal.y)
             {
                 last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
             }
@@ -352,7 +354,7 @@ public:
         last_goal_constraint = -1;
         for (const auto& vertex_constraint : low_level_constraints.vertex_constraints)
         {
-            if (vertex_constraint.x == goal.x && vertex_constraint.y == goal.y)
+            if (vertex_constraint.location.x == goal.x && vertex_constraint.location.y == goal.y)
             {
                 last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
             }
@@ -386,7 +388,7 @@ public:
         return time_location.x >= 0 && time_location.x < num_columns
                && time_location.y >= 0 && time_location.y < num_rows
                && obstacles.find(Location(time_location.x, time_location.y)) == obstacles.end()
-               && con.find(VertexConstraint(time_location.time, time_location.x, time_location.y)) == con.end();
+               && con.find(VertexConstraint(time_location.time, Location(time_location.x, time_location.y))) == con.end();
     }
 
     // low level 工具函数 get_neighbors的工具函数
@@ -782,7 +784,7 @@ public:
         {
             Constraints c1;
             c1.vertex_constraints.emplace(
-            VertexConstraint(input_conflict.time, input_conflict.x1, input_conflict.y1));
+            VertexConstraint(input_conflict.time, Location(input_conflict.x1, input_conflict.y1)));
             constraints_from_conflict[input_conflict.agent1] = c1;
             constraints_from_conflict[input_conflict.agent2] = c1;
         }
