@@ -145,17 +145,14 @@ int main(int argc, char* argv[]) {
   std::string mapFile;
   std::string outputFile;
   float w;
-  desc.add_options()("help", "produce help message")(
-      "startX", po::value<int>(&startX)->required(),
-      "start position x-component")("startY",
-                                    po::value<int>(&startY)->required(),
-                                    "start position y-component")(
-      "goalX", po::value<int>(&goalX)->required(), "goal position x-component")(
-      "goalY", po::value<int>(&goalY)->required(), "goal position y-component")(
-      "map,m", po::value<std::string>(&mapFile)->required(), "input map (txt)")(
-      "output,o", po::value<std::string>(&outputFile)->required(),
-      "output file (YAML)")("suboptimality,w", po::value<float>(&w)->required(),
-                            "suboptimality factor");
+  desc.add_options()("help", "produce help message")
+      ("startX", po::value<int>(&startX)->required(), "start position x-component")
+      ("startY", po::value<int>(&startY)->required(), "start position y-component")
+      ("goalX", po::value<int>(&goalX)->required(), "goal position x-component")
+      ("goalY", po::value<int>(&goalY)->required(), "goal position y-component")
+      ("map,m", po::value<std::string>(&mapFile)->required(), "input map (txt)")
+      ("output,o", po::value<std::string>(&outputFile)->required(), "output file (YAML)")
+      ("suboptimality,w", po::value<float>(&w)->required(), "suboptimality factor");
 
   try {
     po::variables_map vm;

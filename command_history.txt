@@ -1,0 +1,1000 @@
+ 2267  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2268  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2269  cmake .. ; make
+ 2270  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2271  cmake .. ; make
+ 2272  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2273  cmake .. ; make
+ 2274  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2275  cmake .. ; make
+ 2276  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2277  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2278  cmake .. ; make
+ 2279  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2280  cmake .. ; make
+ 2281  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2282  cmake .. ; make
+ 2283  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2284  cmake .. ; make
+ 2285  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2286  cmake .. ; make
+ 2287  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2288  cmake .. ; make
+ 2289  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2290  cmake .. ; make
+ 2291  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2292  cmake .. ; make
+ 2293  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2294  cmake .. ; make
+ 2295  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2296  cmake .. ; make
+ 2297  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2298  cmake .. ; make
+ 2299  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2300  cmake .. ; make
+ 2301  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2302  cmake .. ; make
+ 2303  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2304  cmake .. ; make
+ 2305  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2306  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2307  cmake .. ; make
+ 2308  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2309  cmake .. ; make
+ 2310  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2311  cmake .. ; make
+ 2312  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2313  cmake .. ; make
+ 2314  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2315  cmake .. ; make
+ 2316  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2317  cmake .. ; make
+ 2318  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2319  cmake .. ; make
+ 2320  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2321  cmake .. ; make
+ 2322  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2323  cmake .. ; make
+ 2324  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2325  cmake .. ; make
+ 2326  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2327  cmake .. ; make
+ 2328  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2329  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2330  cmake .. ; make
+ 2331  clear
+ 2332  cmake .. ; make
+ 2333  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2334  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2335  cmake .. ; make
+ 2336  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2337  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2338  cmake .. ; make
+ 2339  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2340  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2341  cmake .. ; make
+ 2342  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2343  cmake .. ; make
+ 2344  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2345  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2346  cmake .. ; make
+ 2347  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2348  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2349  cmake .. ; make
+ 2350  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2351  cmake .. ; make
+ 2352  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2353  cmake .. ; make
+ 2354  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2355  cmake .. ; make
+ 2356  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2357  cmake .. ; make
+ 2358  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2359  cmake .. ; make
+ 2360  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2361  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2362  cmake .. ; make
+ 2363  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2364  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2365  cmake .. ; make
+ 2366  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2367  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2368  cmake .. ; make
+ 2369  ls
+ 2370  cd ..
+ 2371  ls
+ 2372  g++ ./example/a_star.cpp ./include/libMultiRobotPlanning/a_star.hpp
+ 2373  cmake .. ; make
+ 2374  cd build
+ 2375  cmake .. ; make
+ 2376  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2377  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2378  cmake .. ; make
+ 2379  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2380  cmake .. ; make
+ 2381  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2382  cmake .. ; make
+ 2383  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2384  cmake .. ; make
+ 2385  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2386  cmake .. ; make
+ 2387  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2388  cmake .. ; make
+ 2389  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2390  ls
+ 2391  ./cbs_roadmap -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2392  cmake .. ; make
+ 2393  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2394  cmake .. ; make
+ 2395  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2396  cmake .. ; make
+ 2397  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2398  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex9.yaml -o output.yaml 
+ 2399  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2400  ls
+ 2401  vim output.yaml 
+ 2402  cmake .. ; make
+ 2403  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2404  cmake .. ; make
+ 2405  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2406  ls
+ 2407  vim output.yaml 
+ 2408  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2409  vim output.yaml 
+ 2410  cmake .. ; make
+ 2411  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2412  cmake .. ; make
+ 2413  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2414  cmake .. ; make
+ 2415  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2416  cmake .. ; make
+ 2417  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2418  cmake .. ; make
+ 2419  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2420  cmake .. ; make
+ 2421  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2422  cmake .. ; make
+ 2423  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2424  cmake .. ; make
+ 2425  ls
+ 2426  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2427  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2428  cmake .. ; make
+ 2429  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2430  cmake .. ; make
+ 2431  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2432  cmake .. ; make
+ 2433  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2434  cmake .. ; make
+ 2435  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2436  cmake .. ; make
+ 2437  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2438  cmake .. ; make
+ 2439  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2440  cmake .. ; make
+ 2441  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2442  cmake .. ; make
+ 2443  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2444  cmake .. ; make
+ 2445  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2446  cmake .. ; make
+ 2447  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2448  cmake .. ; make
+ 2449  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2450  cmake .. ; make
+ 2451  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2452  cmake .. ; make
+ 2453  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2454  cmake .. ; make
+ 2455  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2456  cmake .. ; make
+ 2457  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2458  cmake .. ; make
+ 2459  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2460  cmake .. ; make
+ 2461  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2462  cmake .. ; make
+ 2463  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2464  cmake .. ; make
+ 2465  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2466  cmake .. ; make
+ 2467  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2468  cmake .. ; make
+ 2469  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2470  cmake .. ; make
+ 2471  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2472  cmake .. ; make
+ 2473  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2474  cmake .. ; make
+ 2475  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2476  cmake .. ; make
+ 2477  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2478  cmake .. ; make
+ 2479  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2480  cmake .. ; make
+ 2481  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2482  cmake .. ; make
+ 2483  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2484  cmake .. ; make
+ 2485  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2486  cmake .. ; make
+ 2487  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2488  cmake .. ; make
+ 2489  ./a_star_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml 
+ 2490  cmake .. ; make
+ 2491  history
+ 2492  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2493  cmake .. ; make
+ 2494  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2495  cmake .. ; make
+ 2496  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2497  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2498  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2499  cmake .. ; make
+ 2500  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2501  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2502  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2503  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2504  cmake .. ; make
+ 2505  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2506  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2507  cmake .. ; make
+ 2508  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2509  cmake .. ; make
+ 2510  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2511  cmake .. ; make
+ 2512  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2513  cmake .. ; make
+ 2514  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2515  cmake .. ; make
+ 2516  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2517  cmake .. ; make
+ 2518  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2519  cmake .. ; make
+ 2520  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2521  cmake .. ; make
+ 2522  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2523  cmake .. ; make
+ 2524  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2525  cmake .. ; make
+ 2526  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2527  cmake .. ; make
+ 2528  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2529  cmake .. ; make
+ 2530  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2531  cmake .. ; make
+ 2532  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2533  cmake .. ; make
+ 2534  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2535  cmake .. ; make
+ 2536  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2537  cmake .. ; make
+ 2538  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2539  cmake .. ; make
+ 2540  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2541  cmake .. ; make
+ 2542  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2543  cmake .. ; make
+ 2544  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2545  cmake .. ; make
+ 2546  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2547  cmake .. ; make
+ 2548  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2549  cmake .. ; make
+ 2550  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2551  cmake .. ; make
+ 2552  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2553  cmake .. ; make
+ 2554  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2555  cmake .. ; make
+ 2556  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2557  cmake .. ; make
+ 2558  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2559  cmake .. ; make
+ 2560  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2561  cmake .. ; make
+ 2562  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2563  cmake .. ; make
+ 2564  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2565  cmake .. ; make
+ 2566  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2567  cmake .. ; make
+ 2568  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2569  cmake .. ; make
+ 2570  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2571  cmake .. ; make
+ 2572  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2573  cmake .. ; make
+ 2574  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2575  cmake .. ; make
+ 2576  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2577  cmake .. ; make
+ 2578  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2579  cmake .. ; make
+ 2580  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2581  cmake .. ; make
+ 2582  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2583  cmake .. ; make
+ 2584  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2585  cmake .. ; make
+ 2586  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2587  cmake .. ; make
+ 2588  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2589  cmake .. ; make
+ 2590  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2591  cmake .. ; make
+ 2592  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2593  cmake .. ; make
+ 2594  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2595  cmake .. ; make
+ 2596  ls
+ 2597  history
+ 2598  ./a_star -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml
+ 2599  ./low_level -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml
+ 2600  cmake .. ; make
+ 2601  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2602  cmake .. ; make
+ 2603  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2604  cmake .. ; make
+ 2605  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2606  cmake .. ; make
+ 2607  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2608  cmake .. ; make
+ 2609  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2610  cd ..
+ 2611  ls
+ 2612  cd example/
+ 2613  ls
+ 2614  rm low_level.cpp 
+ 2615  cd ..
+ 2616  cd build/
+ 2617  cmake .. ; make
+ 2618  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2619  cmake .. ; make
+ 2620  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2621  cmake .. ; make
+ 2622  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2623  cmake .. ; make
+ 2624  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2625  cmake .. ; make
+ 2626  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2627  cmake .. ; make
+ 2628  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2629  cmake .. ; make
+ 2630  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2631  cmake .. ; make
+ 2632  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2633  cmake .. ; make
+ 2634  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2635  cmake .. ; make
+ 2636  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2637  cmake .. ; make
+ 2638  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2639  cmake .. ; make
+ 2640  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2641  cmake .. ; make
+ 2642  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2643  cmake .. ; make
+ 2644  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2645  cmake .. ; make
+ 2646  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2647  cmake .. ; make
+ 2648  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2649  cmake .. ; make
+ 2650  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2651  cmake .. ; make
+ 2652  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2653  cmake .. ; make
+ 2654  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2655  cmake .. ; make
+ 2656  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2657  cmake .. ; make
+ 2658  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2659  cmake .. ; make
+ 2660  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2661  cmake .. ; make
+ 2662  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2663  cmake .. ; make
+ 2664  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2665  cmake .. ; make
+ 2666  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2667  cmake .. ; make
+ 2668  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2669  cmake .. ; make
+ 2670  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2671  cmake .. ; make
+ 2672  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2673  cmake .. ; make
+ 2674  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2675  cmake .. ; make
+ 2676  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2677  cmake .. ; make
+ 2678  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2679  cmake .. ; make
+ 2680  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2681  cmake .. ; make
+ 2682  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2683  cmake .. ; make
+ 2684  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2685  cmake .. ; make
+ 2686  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2687  cmake .. ; make
+ 2688  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2689  cmake .. ; make
+ 2690  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2691  cmake .. ; make
+ 2692  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2693  cmake .. ; make
+ 2694  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2695  cmake .. ; make
+ 2696  cmake .. ; make\
+ 2697  cmake .. ; make
+ 2698  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2699  cmake .. ; make
+ 2700  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2701  cmake .. ; make
+ 2702  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2703  cmake .. ; make
+ 2704  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2705  cmake .. ; make
+ 2706  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2707  cmake .. ; make
+ 2708  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2709  cmake .. ; make
+ 2710  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2711  cmake .. ; make
+ 2712  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2713  cmake .. ; make
+ 2714  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2715  cmake .. ; make
+ 2716  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2717  cmake .. ; make
+ 2718  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2719  cmake .. ; make
+ 2720  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2721  cmake .. ; make
+ 2722  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2723  cmake .. ; make
+ 2724  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2725  cmake .. ; make
+ 2726  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2727  cmake .. ; make
+ 2728  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2729  cmake .. ; make
+ 2730  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2731  cmake .. ; make
+ 2732  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2733  cmake .. ; make
+ 2734  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2735  cmake .. ; make
+ 2736  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2737  cmake .. ; make
+ 2738  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2739  cmake .. ; make
+ 2740  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2741  cmake .. ; make
+ 2742  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2743  cmake .. ; make
+ 2744  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2745  cmake .. ; make
+ 2746  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2747  cmake .. ; make
+ 2748  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2749  cmake .. ; make
+ 2750  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2751  cmake .. ; make
+ 2752  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2753  cmake .. ; make
+ 2754  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2755  cmake .. ; make
+ 2756  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2757  cmake .. ; make
+ 2758  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2759  cmake .. ; make
+ 2760  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2761  cmake .. ; make
+ 2762  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2763  cmake .. ; make
+ 2764  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2765  cmake .. ; make
+ 2766  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2767  cmake .. ; make
+ 2768  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2769  cmake .. ; make
+ 2770  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2771  cmake .. ; make
+ 2772  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2773  cmake .. ; make
+ 2774  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2775  cmake .. ; make
+ 2776  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2777  cmake .. ; make
+ 2778  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2779  cmake .. ; make
+ 2780  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2781  cmake .. ; make
+ 2782  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2783  cmake .. ; make
+ 2784  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2785  cmake .. ; make
+ 2786  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2787  cmake .. ; make
+ 2788  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2789  cmake .. ; make
+ 2790  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2791  cmake .. ; make
+ 2792  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2793  cmake .. ; make
+ 2794  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2795  cmake .. ; make
+ 2796  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2797  cmake .. ; make
+ 2798  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2799  cmake .. ; make
+ 2800  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2801  cmake .. ; make
+ 2802  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2803  cmake .. ; make
+ 2804  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2805  cmake .. ; make
+ 2806  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2807  cmake .. ; make
+ 2808  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2809  cmake .. ; make
+ 2810  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2811  cmake .. ; make
+ 2812  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2813  cmake .. ; make
+ 2814  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2815  cmake .. ; make
+ 2816  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2817  cmake .. ; make
+ 2818  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2819  cmake .. ; make
+ 2820  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2821  cmake .. ; make
+ 2822  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2823  cmake .. ; make
+ 2824  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2825  cmake .. ; make
+ 2826  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2827  cmake .. ; make
+ 2828  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2829  cmake .. ; make
+ 2830  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2831  cmake .. ; make
+ 2832  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2833  cmake .. ; make
+ 2834  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2835  cmake .. ; make
+ 2836  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2837  cmake .. ; make
+ 2838  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2839  cmake .. ; make
+ 2840  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2841  cmake .. ; make
+ 2842  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2843  cmake .. ; make
+ 2844  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2845  cmake .. ; make
+ 2846  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2847  cmake .. ; make
+ 2848  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2849  cmake .. ; make
+ 2850  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2851  cmake .. ; make
+ 2852  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2853  cmake .. ; make
+ 2854  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2855  cmake .. ; make
+ 2856  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2857  cmake .. ; make
+ 2858  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2859  cmake .. ; make
+ 2860  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2861  cmake .. ; make
+ 2862  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2863  cmake .. ; make
+ 2864  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2865  cmake .. ; make
+ 2866  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2867  cmake .. ; make
+ 2868  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2869  cmake .. ; make
+ 2870  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2871  cmake .. ; make
+ 2872  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2873  cmake .. ; make
+ 2874  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2875  cmake .. ; make
+ 2876  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2877  cmake .. ; make
+ 2878  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2879  cmake .. ; make
+ 2880  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2881  cmake .. ; make
+ 2882  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2883  cmake .. ; make
+ 2884  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2885  cmake .. ; make
+ 2886  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2887  cmake .. ; make
+ 2888  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2889  cmake .. ; make
+ 2890  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2891  cmake .. ; make
+ 2892  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2893  cmake .. ; make
+ 2894  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2895  cmake .. ; make
+ 2896  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2897  cmake .. ; make
+ 2898  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2899  cmake .. ; make
+ 2900  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2901  cmake .. ; make
+ 2902  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2903  cmake .. ; make
+ 2904  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2905  cmake .. ; make
+ 2906  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2907  cmake .. ; make
+ 2908  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2909  cmake .. ; make
+ 2910  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2911  cmake .. ; make
+ 2912  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2913  cmake .. ; make
+ 2914  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2915  cmake .. ; make
+ 2916  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2917  cmake .. ; make
+ 2918  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2919  cmake .. ; make
+ 2920  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2921  cmake .. ; make
+ 2922  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2923  cmake .. ; make
+ 2924  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2925  cmake .. ; make
+ 2926  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2927  cmake .. ; make
+ 2928  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2929  cmake .. ; make
+ 2930  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2931  cmake .. ; make
+ 2932  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2933  cmake .. ; make
+ 2934  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2935  cmake .. ; make
+ 2936  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2937  cmake .. ; make
+ 2938  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2939  cmake .. ; make
+ 2940  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2941  cmake .. ; make
+ 2942  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2943  cmake .. ; make
+ 2944  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2945  cmake .. ; make
+ 2946  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2947  cmake .. ; make
+ 2948  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2949  cmake .. ; make
+ 2950  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2951  cmake .. ; make
+ 2952  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2953  cmake .. ; make
+ 2954  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2955  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex13.yaml -o output.yaml 
+ 2956  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 2957  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 2958  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 2959  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex1.yaml -o output.yaml 
+ 2960  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex0.yaml -o output.yaml 
+ 2961  cmake .. ; make
+ 2962  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 2963  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 2964  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex13.yaml -o output.yaml 
+ 2965  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 2966  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex1.yaml -o output.yaml 
+ 2967  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex0.yaml -o output.yaml 
+ 2968  cmake .. ; make
+ 2969  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2970  cmake .. ; make
+ 2971  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2972  cmake .. ; make
+ 2973  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2974  cmake .. ; make
+ 2975  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2976  cmake .. ; make
+ 2977  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2978  cmake .. ; make
+ 2979  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2980  cmake .. ; make
+ 2981  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2982  cmake .. ; make
+ 2983  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2984  cmake .. ; make
+ 2985  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2986  cmake .. ; make
+ 2987  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2988  cmake .. ; make
+ 2989  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2990  cmake .. ; make
+ 2991  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2992  cmake .. ; make
+ 2993  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2994  cmake .. ; make
+ 2995  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2996  cmake .. ; make
+ 2997  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 2998  cmake .. ; make
+ 2999  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3000  cmake .. ; make
+ 3001  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3002  cmake .. ; make
+ 3003  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3004  cmake .. ; make
+ 3005  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3006  cmake .. ; make
+ 3007  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3008  cmake .. ; make
+ 3009  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3010  cmake .. ; make
+ 3011  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3012  cmake .. ; make
+ 3013  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3014  cmake .. ; make
+ 3015  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3016  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 3017  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3018  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex13.yaml -o output.yaml 
+ 3019  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 3020  cmake .. ; make
+ 3021  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 3022  cmake .. ; make
+ 3023  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 3024  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 3025  cmake .. ; make
+ 3026  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 3027  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3028  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 3029  cmake .. ; make
+ 3030  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3031  cmake .. ; make
+ 3032  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3033  cmake .. ; make
+ 3034  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3035  cmake .. ; make
+ 3036  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3037  cmake .. ; make
+ 3038  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3039  cmake .. ; make
+ 3040  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3041  cmake .. ; make
+ 3042  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3043  cmake .. ; make
+ 3044  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3045  cmake .. ; make
+ 3046  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3047  cmake .. ; make
+ 3048  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3049  cmake .. ; make
+ 3050  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3051  cmake .. ; make
+ 3052  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3053  cmake .. ; make
+ 3054  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3055  cmake .. ; make
+ 3056  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3057  cmake .. ; make
+ 3058  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3059  cmake .. ; make
+ 3060  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3061  cmake .. ; make
+ 3062  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3063  cmake .. ; make
+ 3064  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3065  cmake .. ; make
+ 3066  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3067  cmake .. ; make
+ 3068  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3069  cmake .. ; make
+ 3070  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3071  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex11.yaml -o output.yaml 
+ 3072  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3073  cmake .. ; make
+ 3074  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex11.yaml -o output.yaml 
+ 3075  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 3076  cmake .. ; make
+ 3077  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 3078  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 3079  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex1.yaml -o output.yaml 
+ 3080  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3081  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex1.yaml -o output.yaml 
+ 3082  cmake .. ; make
+ 3083  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3084  cmake .. ; make
+ 3085  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3086  cmake .. ; make
+ 3087  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3088  cmake .. ; make
+ 3089  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3090  cmake .. ; make
+ 3091  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3092  cmake .. ; make
+ 3093  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3094  cmake .. ; make
+ 3095  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3096  cmake .. ; make
+ 3097  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3098  cmake .. ; make
+ 3099  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3100  cmake .. ; make
+ 3101  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3102  cmake .. ; make
+ 3103  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3104  cmake .. ; make
+ 3105  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3106  cmake .. ; make
+ 3107  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3108  cmake .. ; make
+ 3109  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3110  cmake .. ; make
+ 3111  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3112  cmake .. ; make
+ 3113  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3114  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 3115  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 3116  cmake .. ; make
+ 3117  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3118  cmake .. ; make
+ 3119  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3120  cmake .. ; make
+ 3121  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3122  cmake .. ; make
+ 3123  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3124  cmake .. ; make
+ 3125  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3126  cmake .. ; make
+ 3127  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3128  cmake .. ; make
+ 3129  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3130  cmake .. ; make
+ 3131  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3132  ls
+ 3133  vim hello.txt 
+ 3134  cmake .. ; make
+ 3135  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3136  vim hello.txt 
+ 3137  cmake .. ; make
+ 3138  vim hello.txt 
+ 3139  cmake .. ; make
+ 3140  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3141  vim hello.txt 
+ 3142  ls
+ 3143  cp ~/libMultiRobotPlanning/build/hello.txt ~/MAPF-CBS-cpp-mine
+ 3144  cmake .. ; make
+ 3145  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3146  cmake .. ; make
+ 3147  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3148  cmake .. ; make
+ 3149  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3150  cmake .. ; make
+ 3151  cd ..
+ 3152  ls
+ 3153  cd benchmark/
+ 3154  ls
+ 3155  cd 32x32_obst204/
+ 3156  ls
+ 3157  cd ..
+ 3158  ls
+ 3159  cd build/
+ 3160  ls
+ 3161  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3162  cmake .. ; make
+ 3163  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3164  cmake .. ; make
+ 3165  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3166  cmake .. ; make
+ 3167  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3168  cmake .. ; make
+ 3169  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3170  cmake .. ; make
+ 3171  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3172  cmake .. ; make
+ 3173  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3174  cmake .. ; make
+ 3175  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3176  ls
+ 3177  vim hello.txt 
+ 3178  cd ..
+ 3179  ls
+ 3180  cd benchmark/
+ 3181  ls
+ 3182  cmake .. ; make
+ 3183  ls
+ 3184  cd ..
+ 3185  ls
+ 3186  cd build/
+ 3187  ls
+ 3188  cmake .. ; make
+ 3189  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3190  vim hello.txt 
+ 3191  cmake .. ; make
+ 3192  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3193  cmake .. ; make
+ 3194  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3195  cmake .. ; make
+ 3196  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3197  cmake .. ; make
+ 3198  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3199  cmake .. ; make
+ 3200  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3201  cmake .. ; make
+ 3202  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3203  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3204  cmake .. ; make
+ 3205  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3206  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 3207  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 3208  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex1.yaml -o output.yaml 
+ 3209  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex14.yaml -o output.yaml 
+ 3210  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex15.yaml -o output.yaml 
+ 3211  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex16.yaml -o output.yaml 
+ 3212  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents9_ex0.yaml -o output.yaml 
+ 3213  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents9_ex`.yaml -o output.yaml 
+ 3214  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents9_ex1.yaml -o output.yaml 
+ 3215  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents9_ex10.yaml -o output.yaml 
+ 3216  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents9_ex11.yaml -o output.yaml 
+ 3217  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents9_ex12.yaml -o output.yaml 
+ 3218  cmake .. ; make
+ 3219  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents9_ex12.yaml -o output.yaml 
+ 3220  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents9_ex13.yaml -o output.yaml 
+ 3221  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents9_ex14.yaml -o output.yaml 
+ 3222  cmake .. ; make
+ 3223  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3224  cmake .. ; make
+ 3225  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3226  cmake .. ; make
+ 3227  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 3228  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 3229  cmake .. ; make
+ 3230  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3231  cmake .. ; make
+ 3232  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3233  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex11.yaml -o output.yaml 
+ 3234  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex12.yaml -o output.yaml 
+ 3235  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex13.yaml -o output.yaml 
+ 3236  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex14.yaml -o output.yaml 
+ 3237  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3238  cmake .. ; make
+ 3239  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3240  cmake .. ; make
+ 3241  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3242  cmake .. ; make
+ 3243  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3244  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml 
+ 3245  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3246  cmake .. ; make
+ 3247  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3248  cmake .. ; make
+ 3249  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3250  cmake .. ; make
+ 3251  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3252  cmake .. ; make
+ 3253  ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3254  ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml 
+ 3255  history
+ 3256  ls
+ 3257  vim hello.txt 
+ 3258  rm hello.txt 
+ 3259  ls
+ 3260  history
+ 3261  cd ..
+ 3262  find "a_star_map.txt"
+ 3263  ls
+ 3264  cd build
+ 3265  ls
+ 3266  history > command_history.txt
