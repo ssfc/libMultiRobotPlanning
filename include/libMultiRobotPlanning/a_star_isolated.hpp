@@ -245,7 +245,7 @@ public:
             get_neighbors(current.location, neighbors);
             for (const Neighbor<Location, Action, int>& neighbor : neighbors)
             {
-                if (closed_set.find(neighbor.location) == closed_set.end())
+                if (closed_set.find(neighbor.location) == closed_set.end()) // not in closed set
                 {
                     int tentative_gScore = current.g_score + neighbor.cost;
                     auto iter = location_to_heap.find(neighbor.location);
