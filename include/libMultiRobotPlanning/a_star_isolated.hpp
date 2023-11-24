@@ -228,6 +228,8 @@ public:
                 solution.cost = current.g_score;
                 solution.fmin = current.f_score;
 
+                std::cerr << "num expanded nodes: " << num_expanded_nodes << std::endl;
+
                 return true;
             }
 
