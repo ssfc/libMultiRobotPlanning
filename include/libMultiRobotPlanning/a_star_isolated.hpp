@@ -176,9 +176,6 @@ public:
         }
     }
 
-    // This function is called on every expansion and can be used for statistical purposes.
-    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
-
     // This function is called on every node discovery and can be used for statistical purposes.
     void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
@@ -207,7 +204,6 @@ public:
         {
             AStarNode current = open_set.top();
             num_expanded_nodes++;
-            onExpandNode(current.location, current.f_score, current.g_score);
 
             if (is_solution(current.location))
             {
