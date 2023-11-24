@@ -122,9 +122,9 @@ int main(int argc, char* argv[])
         cout << "Planning NOT successful!" << endl;
     }
 
-    /*
-    std::string yaml_path = "/home/ssfc/libMultiRobotPlanning/benchmark/8x8_obst12";
-    std::string txt_path = "/home/ssfc/MAPF-CBS-cpp-mine/benchmark/8x8_obst12";
+    ///*
+    std::string yaml_path = "/home/ssfc/libMultiRobotPlanning/benchmark/32x32_obst204";
+    std::string txt_path = "/home/ssfc/MAPF-CBS-cpp-mine/benchmark/32x32_obst204";
 
     // 遍历目录
     for (const auto& entry : fs::directory_iterator(yaml_path))
@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
         {
             const auto& start = node["start"];
             const auto& goal = node["goal"];
-            start_time_locations.emplace_back(TimeLocation(0, start[0].as<int>(), start[1].as<int>()));
+            start_time_locations.emplace_back(TimeLocation(0, Location(start[0].as<int>(), start[1].as<int>())));
             // cout << "s: " << start_time_locations.back() << endl;
             goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
         }
@@ -164,7 +164,7 @@ int main(int argc, char* argv[])
         mapf.generate_text_instance(txt_filename);
 
     }
-     */
+     //*/
 
     return 0;
 }
