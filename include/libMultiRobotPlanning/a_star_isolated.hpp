@@ -100,6 +100,7 @@ private:
 
     // debug var;
     size_t num_expanded_nodes;
+    size_t num_generated_nodes;
 
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
@@ -116,7 +117,8 @@ public:
             obstacles(std::move(input_obstacles)),
             start(std::move(input_start)),
             goal(std::move(input_goal)),
-            num_expanded_nodes(0)
+            num_expanded_nodes(0),
+            num_generated_nodes(0)
     {}
 
     // This function can return 0 if no suitable heuristic is available.
@@ -229,6 +231,7 @@ public:
                 solution.fmin = current.f_score;
 
                 std::cerr << "num expanded nodes: " << num_expanded_nodes << std::endl;
+                std::cerr << "num generated nodes: " << num_generated_nodes << std::endl;
 
                 return true;
             }
@@ -253,6 +256,7 @@ public:
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
                         onDiscover(neighbor.location, f_score, tentative_gScore);
+                        num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -273,6 +277,7 @@ public:
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
                         onDiscover(neighbor.location, (*handle).f_score, (*handle).g_score);
+                        num_generated_nodes++;
                     }
 
                     // Best path for this node so far
