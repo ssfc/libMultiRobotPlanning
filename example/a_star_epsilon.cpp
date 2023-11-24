@@ -179,7 +179,7 @@ int main(int argc, char* argv[]) {
     std::getline(map, line);
     int x = 0;
     for (char c : line) {
-      if (c == '#') {
+      if (c == '@') {
         obstacles.insert(State(x, y));
       }
       ++x;
