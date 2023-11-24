@@ -98,6 +98,9 @@ private:
     Location start;
     Location goal;
 
+    // debug var;
+    size_t num_expanded_nodes;
+
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -112,7 +115,8 @@ public:
             num_rows(input_num_rows),
             obstacles(std::move(input_obstacles)),
             start(std::move(input_start)),
-            goal(std::move(input_goal))
+            goal(std::move(input_goal)),
+            num_expanded_nodes(0)
     {}
 
     // This function can return 0 if no suitable heuristic is available.
@@ -200,6 +204,7 @@ public:
         while (!open_set.empty())
         {
             AStarNode current = open_set.top();
+            num_expanded_nodes++;
             onExpandNode(current.location, current.f_score, current.g_score);
 
             if (is_solution(current.location))
