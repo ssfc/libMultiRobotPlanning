@@ -22,7 +22,7 @@
 // #define REBUILT_FOCAL_LIST
 // #define CHECK_FOCAL_LIST
 
-template <typename Location, typename Action, typename Cost>
+template <typename Action, typename Cost>
 struct Neighbor
 {
     //! neighboring location
@@ -142,7 +142,7 @@ purposes.
 
             focalSet.push(handle);
 
-            std::vector<Neighbor<State, Action, Cost> > neighbors;
+            std::vector<Neighbor<Action, Cost> > neighbors;
             neighbors.reserve(10);
 
             Cost bestFScore = (*handle).fScore;
@@ -256,7 +256,7 @@ purposes.
                 // traverse neighbors
                 neighbors.clear();
                 m_env.get_neighbors(current.state, neighbors);
-                for (const Neighbor<State, Action, Cost>& neighbor : neighbors) {
+                for (const Neighbor<Action, Cost>& neighbor : neighbors) {
                     if (closedSet.find(neighbor.location) == closedSet.end()) {
                         Cost tentative_gScore = current.gScore + neighbor.cost;
                         auto iter = stateToHeap.find(neighbor.location);
