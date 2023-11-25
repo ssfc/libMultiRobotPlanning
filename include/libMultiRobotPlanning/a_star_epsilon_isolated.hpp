@@ -536,12 +536,9 @@ private:
         boost::heap::compare<compareFocalHeuristic> > focalSet_t;
     #endif
 
-    private:
-        Environment& m_env;
-        float m_w;
-    };
-
-
-
+private:
+    Environment& m_env;
+    float m_w;
+};
 
 #endif //A_STAR_EPSILON_ISOLATED_HPP
