@@ -237,8 +237,8 @@ public:
 
         while (!openSet.empty())
         {
-// update focal list
-#ifdef REBUILT_FOCAL_LIST
+        // update focal list
+        #ifdef REBUILT_FOCAL_LIST
             focalSet.clear();
             const auto& top = openSet.top();
             int bestVal = top.fScore;
@@ -257,42 +257,48 @@ public:
                     break;
                 }
             }
-#else
+        #else
             {
                 int oldBestFScore = bestFScore;
                 bestFScore = openSet.top().fScore;
                 // std::cout << "bestFScore: " << bestFScore << std::endl;
-                if (bestFScore > oldBestFScore) {
+                if (bestFScore > oldBestFScore)
+                {
                     // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
                     // " << bestFScore << std::endl;
                     auto iter = openSet.ordered_begin();
                     auto iterEnd = openSet.ordered_end();
-                    for (; iter != iterEnd; ++iter) {
+                    for (; iter != iterEnd; ++iter)
+                    {
                         int val = iter->fScore;
-                        if (val > oldBestFScore * m_w && val <= bestFScore * m_w) {
+                        if (val > oldBestFScore * m_w && val <= bestFScore * m_w)
+                        {
                             const Node& n = *iter;
                             focalSet.push(n.handle);
                         }
-                        if (val > bestFScore * m_w) {
+                        if (val > bestFScore * m_w)
+                        {
                             break;
                         }
                     }
                 }
             }
-#endif
+        #endif
 // check focal list/open list consistency
 #ifdef CHECK_FOCAL_LIST
+            {
+                // focalSet_t focalSetGolden;
+                bool mismatch = false;
+                const auto& top = openSet.top();
+                int bestVal = top.fScore;
+                auto iter = openSet.ordered_begin();
+                auto iterEnd = openSet.ordered_end();
+                for (; iter != iterEnd; ++iter)
                 {
-        // focalSet_t focalSetGolden;
-        bool mismatch = false;
-        const auto& top = openSet.top();
-        int bestVal = top.fScore;
-        auto iter = openSet.ordered_begin();
-        auto iterEnd = openSet.ordered_end();
-        for (; iter != iterEnd; ++iter) {
           const auto& s = *iter;
           int val = s.fScore;
-          if (val <= bestVal * m_w) {
+          if (val <= bestVal * m_w)
+          {
             // std::cout << "should: " << s << std::endl;
             // focalSetGolden.push(s.handle);
             if (std::find(focalSet.begin(), focalSet.end(), s.handle) ==
@@ -301,7 +307,9 @@ public:
               mismatch = true;
             }
 
-          } else {
+          }
+          else
+          {
             if (std::find(focalSet.begin(), focalSet.end(), s.handle) !=
                 focalSet.end()) {
               std::cout << "focalSet shouldn't have: " << s << std::endl;
@@ -319,7 +327,8 @@ public:
                 Node current = *currentHandle;
                 m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
-                if (m_env.is_solution(current.state)) {
+                if (m_env.is_solution(current.state))
+                {
                     solution.path.clear();
                     solution.actions.clear();
                     auto iter = cameFrom.find(current.state);
