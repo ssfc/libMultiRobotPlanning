@@ -163,7 +163,7 @@ int main(int argc, char* argv[])
     Location start(startX, startY);
     Environment env(dimX, y - 1, obstacles, goal);
 
-    AStarEpsilon<int, Environment> astar(env, w);
+    AStarEpsilon<Environment> astar(env, w);
 
     AgentPlan solution;
 
