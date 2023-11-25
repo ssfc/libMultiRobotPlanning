@@ -13,10 +13,8 @@
 #include <unordered_set>
 #include <vector>
 
-#include "planresult.hpp"
 #include "util.hpp"
 
-using libMultiRobotPlanning::PlanResult;
 
 enum class Action // 模板类Action实例化
 {
@@ -41,6 +39,19 @@ struct Neighbor
               action(input_action),
               cost(input_cost)
     {}
+};
+
+template <typename State, typename Action, typename Cost>
+struct PlanResult
+{
+    // path constructing locations and their g_score
+    std::vector<std::pair<State, Cost> > path;
+    //! actions and their cost
+    std::vector<std::pair<Action, Cost> > actions;
+    //! actual cost of the result
+    Cost cost;
+    //! lower bound of the cost (for suboptimal solvers)
+    Cost fmin;
 };
 
 class AStarNode

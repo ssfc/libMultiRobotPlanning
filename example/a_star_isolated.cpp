@@ -11,7 +11,6 @@
 #include <libMultiRobotPlanning/a_star_isolated.hpp>
 
 using namespace std;
-using libMultiRobotPlanning::PlanResult;
 
 
 ostream& operator<<(ostream& os, const Action& action)
