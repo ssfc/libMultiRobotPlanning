@@ -522,21 +522,19 @@ private:
         }
     };
 
-#ifdef USE_FIBONACCI_HEAP
+    #ifdef USE_FIBONACCI_HEAP
         // typedef typename boost::heap::fibonacci_heap<AStarEpsilonNode> openSet_t;
-  // typedef typename openSet_t::handle_type fibHeapHandle_t;
-  typedef typename boost::heap::fibonacci_heap<
-      fibHeapHandle_t, boost::heap::compare<compareFocalHeuristic> >
-      focalSet_t;
-#else
+        // typedef typename openSet_t::handle_type fibHeapHandle_t;
+        typedef typename boost::heap::fibonacci_heap<
+            fibHeapHandle_t, boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+    #else
         // typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>,
         // boost::heap::mutable_<true> > openSet_t;
         // typedef typename openSet_t::handle_type fibHeapHandle_t;
         typedef typename boost::heap::d_ary_heap<
                 fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-        boost::heap::compare<compareFocalHeuristic> >
-        focalSet_t;
-#endif
+        boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+    #endif
 
     private:
         Environment& m_env;
