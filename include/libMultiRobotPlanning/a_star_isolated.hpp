@@ -40,7 +40,7 @@ struct Child
     {}
 };
 
-struct PlanResult
+struct AgentPlan
 {
     // path constructing locations and their g_score
     std::vector<std::pair<Location, int> > path;
@@ -201,7 +201,7 @@ public:
     }
 
 
-    bool a_star_search(const Location& start_location, PlanResult& solution,
+    bool a_star_search(const Location& start_location, AgentPlan& solution,
                        int initialCost = 0)
     {
         solution.path.clear();
