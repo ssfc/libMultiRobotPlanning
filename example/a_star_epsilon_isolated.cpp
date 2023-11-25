@@ -59,27 +59,27 @@ public:
     bool is_solution(const Location& s) { return s == m_goal; }
 
     void get_neighbors(const Location& s,
-                       std::vector<Neighbor<Action, int> >& neighbors) {
+                       std::vector<Neighbor<int> >& neighbors) {
         neighbors.clear();
 
         Location up(s.x, s.y + 1);
         if (location_valid(up)) {
-            neighbors.emplace_back(Neighbor<Action, int>(up, Action::Up, 1));
+            neighbors.emplace_back(Neighbor<int>(up, Action::Up, 1));
         }
         Location down(s.x, s.y - 1);
         if (location_valid(down)) {
             neighbors.emplace_back(
-                    Neighbor<Action, int>(down, Action::Down, 1));
+                    Neighbor<int>(down, Action::Down, 1));
         }
         Location left(s.x - 1, s.y);
         if (location_valid(left)) {
             neighbors.emplace_back(
-                    Neighbor<Action, int>(left, Action::Left, 1));
+                    Neighbor<int>(left, Action::Left, 1));
         }
         Location right(s.x + 1, s.y);
         if (location_valid(right)) {
             neighbors.emplace_back(
-                    Neighbor<Action, int>(right, Action::Right, 1));
+                    Neighbor<int>(right, Action::Right, 1));
         }
     }
 
