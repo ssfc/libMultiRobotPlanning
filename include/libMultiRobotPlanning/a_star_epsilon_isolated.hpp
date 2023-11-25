@@ -46,11 +46,11 @@ struct Child
     {}
 };
 
-template <typename State, typename Action, typename Cost>
+template <typename Location, typename Action, typename Cost>
 struct AgentPlan
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<State, Cost> > path;
+    std::vector<std::pair<Location, Cost> > path;
     //! actions and their cost
     std::vector<std::pair<Action, Cost> > actions;
     //! actual cost of the result
