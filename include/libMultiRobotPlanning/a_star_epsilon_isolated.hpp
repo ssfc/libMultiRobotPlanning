@@ -258,31 +258,31 @@ public:
                 }
             }
         #else
+            
+            int oldBestFScore = bestFScore;
+            bestFScore = openSet.top().fScore;
+            // std::cout << "bestFScore: " << bestFScore << std::endl;
+            if (bestFScore > oldBestFScore)
             {
-                int oldBestFScore = bestFScore;
-                bestFScore = openSet.top().fScore;
-                // std::cout << "bestFScore: " << bestFScore << std::endl;
-                if (bestFScore > oldBestFScore)
+                // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
+                // " << bestFScore << std::endl;
+                auto iter = openSet.ordered_begin();
+                auto iterEnd = openSet.ordered_end();
+                for (; iter != iterEnd; ++iter)
                 {
-                    // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
-                    // " << bestFScore << std::endl;
-                    auto iter = openSet.ordered_begin();
-                    auto iterEnd = openSet.ordered_end();
-                    for (; iter != iterEnd; ++iter)
+                    int val = iter->fScore;
+                    if (val > oldBestFScore * m_w && val <= bestFScore * m_w)
                     {
-                        int val = iter->fScore;
-                        if (val > oldBestFScore * m_w && val <= bestFScore * m_w)
-                        {
-                            const Node& n = *iter;
-                            focalSet.push(n.handle);
-                        }
-                        if (val > bestFScore * m_w)
-                        {
-                            break;
-                        }
+                        const Node& n = *iter;
+                        focalSet.push(n.handle);
+                    }
+                    if (val > bestFScore * m_w)
+                    {
+                        break;
                     }
                 }
             }
+
         #endif
 // check focal list/open list consistency
 #ifdef CHECK_FOCAL_LIST
