@@ -46,17 +46,16 @@ struct Child
     {}
 };
 
-template <typename Cost>
 struct AgentPlan
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<Location, Cost> > path;
+    std::vector<std::pair<Location, int> > path;
     //! actions and their cost
-    std::vector<std::pair<Action, Cost> > actions;
+    std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
-    Cost cost;
+    int cost;
     //! lower bound of the cost (for suboptimal solvers)
-    Cost fmin;
+    int fmin;
 };
 
 /*!
@@ -126,7 +125,7 @@ purposes.
         AStarEpsilon(Environment& environment, float w)
                 : m_env(environment), m_w(w) {}
 
-        bool search(const State& startState, AgentPlan<Cost>& solution)
+        bool search(const State& startState, AgentPlan& solution)
         {
             solution.path.clear();
             solution.path.emplace_back(std::make_pair<>(startState, 0));
