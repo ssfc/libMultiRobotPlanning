@@ -24,7 +24,7 @@ enum class Action // 模板类Action实例化
     Right,
 };
 
-struct Neighbor
+struct Child
 {
     //! neighboring location
     Location location;
@@ -33,7 +33,7 @@ struct Neighbor
     //! cost to get to the neighboring location, usually 1
     int cost;
 
-    Neighbor(const Location& input_location, const Action& input_action, int input_cost)
+    Child(const Location& input_location, const Action& input_action, int input_cost)
             : location(input_location),
               action(input_action),
               cost(input_cost)
@@ -167,7 +167,7 @@ public:
     }
 
     // get neighbor of current location
-    void get_neighbors(const Location& location, std::vector<Neighbor>& neighbors)
+    void get_neighbors(const Location& location, std::vector<Child>& neighbors)
     {
         neighbors.clear();
 
@@ -175,28 +175,28 @@ public:
 
         if (location_valid(north_neighbor))
         {
-            neighbors.emplace_back(Neighbor(north_neighbor, Action::Up, 1));
+            neighbors.emplace_back(Child(north_neighbor, Action::Up, 1));
         }
 
         Location south_neighbor(location.x, location.y - 1);
 
         if (location_valid(south_neighbor))
         {
-            neighbors.emplace_back(Neighbor(south_neighbor, Action::Down, 1));
+            neighbors.emplace_back(Child(south_neighbor, Action::Down, 1));
         }
 
         Location west_neighbor(location.x - 1, location.y);
 
         if (location_valid(west_neighbor))
         {
-            neighbors.emplace_back(Neighbor(west_neighbor, Action::Left, 1));
+            neighbors.emplace_back(Child(west_neighbor, Action::Left, 1));
         }
 
         Location east_neighbor(location.x + 1, location.y);
 
         if (location_valid(east_neighbor))
         {
-            neighbors.emplace_back(Neighbor(east_neighbor, Action::Right, 1));
+            neighbors.emplace_back(Child(east_neighbor, Action::Right, 1));
         }
     }
 
@@ -219,7 +219,7 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Neighbor> neighbors;
+        std::vector<Child> neighbors;
         neighbors.reserve(10);
 
         while (!open_set.empty())
@@ -261,7 +261,7 @@ public:
             // traverse neighbors
             neighbors.clear();
             get_neighbors(current.location, neighbors);
-            for (const Neighbor& neighbor : neighbors)
+            for (const Child& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end()) // not in closed set
                 {
