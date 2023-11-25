@@ -221,9 +221,7 @@ public:
                 focalSet;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> stateToHeap;
         std::unordered_set<Location, std::hash<Location>> closedSet;
-        std::unordered_map<Location, std::tuple<Location, Action, int, int>,
-        std::hash<Location>>
-                cameFrom;
+        std::unordered_map<Location, std::tuple<Location, Action, int, int>, std::hash<Location>> cameFrom;
 
         auto handle = openSet.push(
                 AStarEpsilonNode(startState, m_env.admissible_heuristic(startState), 0, 0));
