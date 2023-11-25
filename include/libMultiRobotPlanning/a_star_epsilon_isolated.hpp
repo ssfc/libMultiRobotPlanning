@@ -59,6 +59,11 @@ struct AgentPlan
 };
 
 class Environment {
+private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    Location m_goal;
 public:
     Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
                 Location goal)
@@ -67,6 +72,11 @@ public:
               obstacles(std::move(obstacles)),
               m_goal(std::move(goal))  // NOLINT
     {}
+
+    bool location_valid(const Location& s) {
+        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
+               obstacles.find(s) == obstacles.end();
+    }
 
     int admissible_heuristic(const Location& s) {
         return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
@@ -118,18 +128,6 @@ public:
     void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
     void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
-
-public:
-    bool location_valid(const Location& s) {
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(s) == obstacles.end();
-    }
-
-private:
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    Location m_goal;
 };
 
 /*!
