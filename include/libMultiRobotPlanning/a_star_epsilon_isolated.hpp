@@ -289,6 +289,18 @@ private:
     Environment& m_env;
     float m_w;
 
+    typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
+    typedef typename openSet_t::handle_type fibHeapHandle_t;
+// typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
+// boost::heap::arity<2>, boost::heap::mutable_<true>,
+// boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+
+    // typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>,
+    // boost::heap::mutable_<true> > openSet_t;
+    // typedef typename openSet_t::handle_type fibHeapHandle_t;
+    typedef typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
+        boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+
 public:
     AStarEpsilon(Environment& environment, float w)
             : m_env(environment), m_w(w)
@@ -513,21 +525,6 @@ public:
 
         return false;
     }
-
-private:
-
-    typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
-    typedef typename openSet_t::handle_type fibHeapHandle_t;
-// typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
-// boost::heap::arity<2>, boost::heap::mutable_<true>,
-// boost::heap::compare<compareFocalHeuristic> > focalSet_t;
-
-    // typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>,
-    // boost::heap::mutable_<true> > openSet_t;
-    // typedef typename openSet_t::handle_type fibHeapHandle_t;
-    typedef typename boost::heap::d_ary_heap<
-            fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-    boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 };
 
 #endif //A_STAR_EPSILON_ISOLATED_HPP
