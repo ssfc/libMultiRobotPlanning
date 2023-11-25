@@ -356,75 +356,79 @@ public:
             stateToHeap.erase(current.state);
             closedSet.insert(current.state);
 
-                // traverse neighbors
-                neighbors.clear();
-                m_env.get_neighbors(current.state, neighbors);
-                for (const Child& neighbor : neighbors) {
-                    if (closedSet.find(neighbor.location) == closedSet.end()) {
-                        int tentative_gScore = current.gScore + neighbor.cost;
-                        auto iter = stateToHeap.find(neighbor.location);
-                        if (iter == stateToHeap.end()) {  // Discover a new node
-                            // std::cout << "  this is a new node" << std::endl;
-                            int fScore =
-                                    tentative_gScore + m_env.admissible_heuristic(neighbor.location);
-                            int focalHeuristic =
-                                    current.focalHeuristic +
-                                    m_env.focalStateHeuristic(neighbor.location, tentative_gScore) +
-                                    m_env.focalTransitionHeuristic(current.state, neighbor.location,
-                                                                   current.gScore,
-                                                                   tentative_gScore);
-                            auto handle = openSet.push(
-                                    Node(neighbor.location, fScore, tentative_gScore, focalHeuristic));
-                            (*handle).handle = handle;
-                            if (fScore <= bestFScore * m_w) {
-                                // std::cout << "focalAdd: " << *handle << std::endl;
-                                focalSet.push(handle);
-                            }
-                            stateToHeap.insert(std::make_pair<>(neighbor.location, handle));
-                            m_env.onDiscover(neighbor.location, fScore, tentative_gScore);
-                            // std::cout << "  this is a new node " << fScore << "," <<
-                            // tentative_gScore << std::endl;
-                        } else {
-                            auto handle = iter->second;
-                            // We found this node before with a better path
-                            if (tentative_gScore >= (*handle).gScore) {
-                                continue;
-                            }
-                            int last_gScore = (*handle).gScore;
-                            int last_fScore = (*handle).fScore;
-                            // std::cout << "  this is an old node: " << tentative_gScore << ","
-                            // << last_gScore << " " << *handle << std::endl;
-                            // update f and gScore
-                            int delta = last_gScore - tentative_gScore;
-                            (*handle).gScore = tentative_gScore;
-                            (*handle).fScore -= delta;
-                            openSet.increase(handle);
-                            m_env.onDiscover(neighbor.location, (*handle).fScore,
-                                             (*handle).gScore);
-                            if ((*handle).fScore <= bestFScore * m_w &&
-                                last_fScore > bestFScore * m_w) {
-                                // std::cout << "focalAdd: " << *handle << std::endl;
-                                focalSet.push(handle);
-                            }
-                        }
+            // traverse neighbors
+            neighbors.clear();
+            m_env.get_neighbors(current.state, neighbors);
 
-                        // Best path for this node so far
-                        // TODO: this is not the best way to update "cameFrom", but otherwise
-                        // default c'tors of Location and Action are required
-                        cameFrom.erase(neighbor.location);
-                        cameFrom.insert(std::make_pair<>(
-                                neighbor.location,
-                                std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
-                                                  tentative_gScore)));
+            for (const Child& neighbor : neighbors)
+            {
+                if (closedSet.find(neighbor.location) == closedSet.end())
+                {
+                    int tentative_gScore = current.gScore + neighbor.cost;
+                    auto iter = stateToHeap.find(neighbor.location);
+                    if (iter == stateToHeap.end()) {  // Discover a new node
+                        // std::cout << "  this is a new node" << std::endl;
+                        int fScore =
+                                tentative_gScore + m_env.admissible_heuristic(neighbor.location);
+                        int focalHeuristic =
+                                current.focalHeuristic +
+                                m_env.focalStateHeuristic(neighbor.location, tentative_gScore) +
+                                m_env.focalTransitionHeuristic(current.state, neighbor.location,
+                                                               current.gScore,
+                                                               tentative_gScore);
+                        auto handle = openSet.push(
+                                Node(neighbor.location, fScore, tentative_gScore, focalHeuristic));
+                        (*handle).handle = handle;
+                        if (fScore <= bestFScore * m_w) {
+                            // std::cout << "focalAdd: " << *handle << std::endl;
+                            focalSet.push(handle);
+                        }
+                        stateToHeap.insert(std::make_pair<>(neighbor.location, handle));
+                        m_env.onDiscover(neighbor.location, fScore, tentative_gScore);
+                        // std::cout << "  this is a new node " << fScore << "," <<
+                        // tentative_gScore << std::endl;
+                    } else {
+                        auto handle = iter->second;
+                        // We found this node before with a better path
+                        if (tentative_gScore >= (*handle).gScore) {
+                            continue;
+                        }
+                        int last_gScore = (*handle).gScore;
+                        int last_fScore = (*handle).fScore;
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // << last_gScore << " " << *handle << std::endl;
+                        // update f and gScore
+                        int delta = last_gScore - tentative_gScore;
+                        (*handle).gScore = tentative_gScore;
+                        (*handle).fScore -= delta;
+                        openSet.increase(handle);
+                        m_env.onDiscover(neighbor.location, (*handle).fScore,
+                                         (*handle).gScore);
+                        if ((*handle).fScore <= bestFScore * m_w &&
+                            last_fScore > bestFScore * m_w) {
+                            // std::cout << "focalAdd: " << *handle << std::endl;
+                            focalSet.push(handle);
+                        }
                     }
+
+                    // Best path for this node so far
+                    // TODO: this is not the best way to update "cameFrom", but otherwise
+                    // default c'tors of Location and Action are required
+                    cameFrom.erase(neighbor.location);
+                    cameFrom.insert(std::make_pair<>(
+                            neighbor.location,
+                            std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
+                                              tentative_gScore)));
                 }
             }
 
-            return false;
         }
 
-    private:
-        struct Node;
+        return false;
+    }
+
+private:
+    struct Node;
 
 #ifdef USE_FIBONACCI_HEAP
         typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
