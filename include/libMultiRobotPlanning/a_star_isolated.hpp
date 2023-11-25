@@ -40,17 +40,16 @@ struct Neighbor
     {}
 };
 
-template <typename Cost>
 struct PlanResult
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<Location, Cost> > path;
+    std::vector<std::pair<Location, int> > path;
     //! actions and their cost
-    std::vector<std::pair<Action, Cost> > actions;
+    std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
-    Cost cost;
+    int cost;
     //! lower bound of the cost (for suboptimal solvers)
-    Cost fmin;
+    int fmin;
 };
 
 class AStarNode
@@ -202,7 +201,7 @@ public:
     }
 
 
-    bool a_star_search(const Location& start_location, PlanResult<int>& solution,
+    bool a_star_search(const Location& start_location, PlanResult& solution,
                        int initialCost = 0)
     {
         solution.path.clear();

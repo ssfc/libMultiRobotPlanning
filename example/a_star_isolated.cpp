@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
     Location test_start(start_x, start_y); // 构造、重载相等、重载输出
     Location test_goal(goal_x, goal_y); // 构造、重载相等、重载输出
     AStar test_astar(dim_x, y - 1, obstacles, test_start, test_goal); // 模板类实例化
-    PlanResult<int> solution;
+    PlanResult solution;
 
     if (test_astar.location_valid(test_start))
     {
