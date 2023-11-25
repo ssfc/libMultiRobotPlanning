@@ -200,6 +200,10 @@ purposes.
 */
 class AStarEpsilon
 {
+private:
+    Environment& m_env;
+    float m_w;
+
 public:
     AStarEpsilon(Environment& environment, float w)
             : m_env(environment), m_w(w)
@@ -535,10 +539,6 @@ private:
                 fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
         boost::heap::compare<compareFocalHeuristic> > focalSet_t;
     #endif
-
-private:
-    Environment& m_env;
-    float m_w;
 };
 
 #endif //A_STAR_EPSILON_ISOLATED_HPP
