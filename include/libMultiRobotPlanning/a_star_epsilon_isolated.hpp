@@ -286,7 +286,7 @@ public:
         #endif
         // check focal list/open list consistency
         #ifdef CHECK_FOCAL_LIST
-            
+
             // focalSet_t focalSetGolden;
             bool mismatch = false;
             const auto& top = openSet.top();
@@ -324,35 +324,37 @@ public:
 
         #endif
 
-                auto currentHandle = focalSet.top();
-                Node current = *currentHandle;
-                m_env.onExpandNode(current.state, current.fScore, current.gScore);
+            auto currentHandle = focalSet.top();
+            Node current = *currentHandle;
+            m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
-                if (m_env.is_solution(current.state))
+            if (m_env.is_solution(current.state))
+            {
+                solution.path.clear();
+                solution.actions.clear();
+                auto iter = cameFrom.find(current.state);
+                while (iter != cameFrom.end())
                 {
-                    solution.path.clear();
-                    solution.actions.clear();
-                    auto iter = cameFrom.find(current.state);
-                    while (iter != cameFrom.end()) {
-                        solution.path.emplace_back(
-                                std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                        solution.actions.emplace_back(std::make_pair<>(
-                                std::get<1>(iter->second), std::get<2>(iter->second)));
-                        iter = cameFrom.find(std::get<0>(iter->second));
-                    }
-                    solution.path.emplace_back(std::make_pair<>(startState, 0));
-                    std::reverse(solution.path.begin(), solution.path.end());
-                    std::reverse(solution.actions.begin(), solution.actions.end());
-                    solution.cost = current.gScore;
-                    solution.fmin = openSet.top().fScore;
-
-                    return true;
+                    solution.path.emplace_back(
+                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    solution.actions.emplace_back(std::make_pair<>(
+                            std::get<1>(iter->second), std::get<2>(iter->second)));
+                    iter = cameFrom.find(std::get<0>(iter->second));
                 }
 
-                focalSet.pop();
-                openSet.erase(currentHandle);
-                stateToHeap.erase(current.state);
-                closedSet.insert(current.state);
+                solution.path.emplace_back(std::make_pair<>(startState, 0));
+                std::reverse(solution.path.begin(), solution.path.end());
+                std::reverse(solution.actions.begin(), solution.actions.end());
+                solution.cost = current.gScore;
+                solution.fmin = openSet.top().fScore;
+
+                return true;
+            }
+
+            focalSet.pop();
+            openSet.erase(currentHandle);
+            stateToHeap.erase(current.state);
+            closedSet.insert(current.state);
 
                 // traverse neighbors
                 neighbors.clear();
