@@ -126,8 +126,8 @@ purposes.
         AStarEpsilon(Environment& environment, float w)
                 : m_env(environment), m_w(w) {}
 
-        bool search(const State& startState,
-                    AgentPlan<State, Action, Cost>& solution) {
+        bool search(const State& startState, AgentPlan<State, Action, Cost>& solution)
+        {
             solution.path.clear();
             solution.path.emplace_back(std::make_pair<>(startState, 0));
             solution.actions.clear();
