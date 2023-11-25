@@ -11,38 +11,6 @@
 #include <libMultiRobotPlanning/a_star_epsilon_isolated.hpp>
 
 
-struct State {
-    State(int x, int y) : x(x), y(y) {}
-
-    State(const State&) = default;
-    State(State&&) = default;
-    State& operator=(const State&) = default;
-    State& operator=(State&&) = default;
-
-    bool operator==(const State& other) const {
-        return std::tie(x, y) == std::tie(other.x, other.y);
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const State& s) {
-        return os << "(" << s.x << "," << s.y << ")";
-    }
-
-    int x;
-    int y;
-};
-
-namespace std {
-    template <>
-    struct hash<State> {
-        size_t operator()(const State& s) const {
-            size_t seed = 0;
-            boost::hash_combine(seed, s.x);
-            boost::hash_combine(seed, s.y);
-            return seed;
-        }
-    };
-}  // namespace std
-
 enum class Action {
     Up,
     Down,
@@ -70,63 +38,63 @@ std::ostream& operator<<(std::ostream& os, const Action& a) {
 
 class Environment {
 public:
-    Environment(size_t dimx, size_t dimy, std::unordered_set<State> obstacles,
-                State goal)
+    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
+                Location goal)
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(obstacles)),
               m_goal(std::move(goal))  // NOLINT
     {}
 
-    int admissible_heuristic(const State& s) {
+    int admissible_heuristic(const Location& s) {
         return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
     }
 
     // a potentially inadmissible heuristic
-    int focalStateHeuristic(const State& /*s*/, int gScore) {
+    int focalStateHeuristic(const Location& /*s*/, int gScore) {
         // prefer lower g-values
         return gScore;
     }
 
-    int focalTransitionHeuristic(const State& /*s1*/, const State& /*s2*/,
+    int focalTransitionHeuristic(const Location& /*s1*/, const Location& /*s2*/,
                                  int gScoreS1, int gScoreS2) {
         // prefer lower g-values
         return gScoreS2 - gScoreS1;
     }
 
-    bool is_solution(const State& s) { return s == m_goal; }
+    bool is_solution(const Location& s) { return s == m_goal; }
 
-    void get_neighbors(const State& s,
-                       std::vector<Neighbor<State, Action, int> >& neighbors) {
+    void get_neighbors(const Location& s,
+                       std::vector<Neighbor<Location, Action, int> >& neighbors) {
         neighbors.clear();
 
-        State up(s.x, s.y + 1);
+        Location up(s.x, s.y + 1);
         if (location_valid(up)) {
-            neighbors.emplace_back(Neighbor<State, Action, int>(up, Action::Up, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(up, Action::Up, 1));
         }
-        State down(s.x, s.y - 1);
+        Location down(s.x, s.y - 1);
         if (location_valid(down)) {
             neighbors.emplace_back(
-                    Neighbor<State, Action, int>(down, Action::Down, 1));
+                    Neighbor<Location, Action, int>(down, Action::Down, 1));
         }
-        State left(s.x - 1, s.y);
+        Location left(s.x - 1, s.y);
         if (location_valid(left)) {
             neighbors.emplace_back(
-                    Neighbor<State, Action, int>(left, Action::Left, 1));
+                    Neighbor<Location, Action, int>(left, Action::Left, 1));
         }
-        State right(s.x + 1, s.y);
+        Location right(s.x + 1, s.y);
         if (location_valid(right)) {
             neighbors.emplace_back(
-                    Neighbor<State, Action, int>(right, Action::Right, 1));
+                    Neighbor<Location, Action, int>(right, Action::Right, 1));
         }
     }
 
-    void onExpandNode(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
+    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
-    void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
+    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
 public:
-    bool location_valid(const State& s) {
+    bool location_valid(const Location& s) {
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(s) == obstacles.end();
     }
@@ -134,8 +102,8 @@ public:
 private:
     int num_columns;
     int num_rows;
-    std::unordered_set<State> obstacles;
-    State m_goal;
+    std::unordered_set<Location> obstacles;
+    Location m_goal;
 };
 
 int main(int argc, char* argv[]) {
@@ -170,7 +138,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::unordered_set<State> obstacles;
+    std::unordered_set<Location> obstacles;
 
     std::ifstream map(mapFile);
     int dimX = 0;
@@ -181,7 +149,7 @@ int main(int argc, char* argv[]) {
         int x = 0;
         for (char c : line) {
             if (c == '@') {
-                obstacles.insert(State(x, y));
+                obstacles.insert(Location(x, y));
             }
             ++x;
         }
@@ -192,13 +160,13 @@ int main(int argc, char* argv[]) {
 
     bool success = false;
 
-    State goal(goalX, goalY);
-    State start(startX, startY);
+    Location goal(goalX, goalY);
+    Location start(startX, startY);
     Environment env(dimX, y - 1, obstacles, goal);
 
-    AStarEpsilon<State, Action, int, Environment> astar(env, w);
+    AStarEpsilon<Location, Action, int, Environment> astar(env, w);
 
-    PlanResult<State, Action, int> solution;
+    PlanResult<Location, Action, int> solution;
 
     if (env.location_valid(start)) {
         success = astar.search(start, solution);
