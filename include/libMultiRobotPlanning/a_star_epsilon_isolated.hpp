@@ -22,6 +22,14 @@
 // #define REBUILT_FOCAL_LIST
 // #define CHECK_FOCAL_LIST
 
+enum class Action
+{
+    Up,
+    Down,
+    Left,
+    Right,
+};
+
 template <typename Action, typename Cost>
 struct Neighbor
 {

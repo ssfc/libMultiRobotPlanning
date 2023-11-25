@@ -11,12 +11,6 @@
 #include <libMultiRobotPlanning/a_star_epsilon_isolated.hpp>
 
 
-enum class Action {
-    Up,
-    Down,
-    Left,
-    Right,
-};
 
 std::ostream& operator<<(std::ostream& os, const Action& a) {
     switch (a) {
