@@ -129,7 +129,7 @@ private:
     // 定义openSet_t和fibHeapHandle_t
     // using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
     // using HeapHandle = typename OpenSet::handle_type;
-    using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+    using OpenSet = typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
     using HeapHandle = typename OpenSet::handle_type;
 
 public:
