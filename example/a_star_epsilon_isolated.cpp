@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
     }
     std::cout << dimX << " " << y << std::endl;
 
-    bool success = false;
+    bool is_success = false;
 
     Location goal(goalX, goalY);
     Location start(startX, startY);
@@ -168,11 +168,11 @@ int main(int argc, char* argv[])
     AgentPlan<Location, Action, int> solution;
 
     if (env.location_valid(start)) {
-        success = astar.search(start, solution);
+        is_success = astar.search(start, solution);
     }
 
     std::ofstream out(outputFile);
-    if (success) {
+    if (is_success) {
         std::cout << "Planning successful! Total cost: " << solution.cost
                   << std::endl;
         for (size_t i = 0; i < solution.actions.size(); ++i) {
