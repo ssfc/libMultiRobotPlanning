@@ -443,8 +443,24 @@ private:
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 #endif
 
-    struct AStarEpsilonNode
+    class AStarEpsilonNode
     {
+    public:
+        Location state;
+
+        int fScore;
+        int gScore;
+        int focalHeuristic;
+
+        fibHeapHandle_t handle;
+        // #ifdef USE_FIBONACCI_HEAP
+        //   typename boost::heap::fibonacci_heap<AStarEpsilonNode>::handle_type handle;
+        // #else
+        //   typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>,
+        //   boost::heap::mutable_<true> >::handle_type handle;
+        // #endif
+
+    public:
         AStarEpsilonNode(const Location& state, int fScore, int gScore, int focalHeuristic)
                 : state(state),
                   fScore(fScore),
@@ -476,20 +492,6 @@ private:
 
             return os;
         }
-
-        Location state;
-
-        int fScore;
-        int gScore;
-        int focalHeuristic;
-
-        fibHeapHandle_t handle;
-        // #ifdef USE_FIBONACCI_HEAP
-        //   typename boost::heap::fibonacci_heap<AStarEpsilonNode>::handle_type handle;
-        // #else
-        //   typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>,
-        //   boost::heap::mutable_<true> >::handle_type handle;
-        // #endif
     };
 
     struct compareFocalHeuristic
