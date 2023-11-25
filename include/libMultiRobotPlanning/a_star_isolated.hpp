@@ -24,7 +24,7 @@ enum class Action // 模板类Action实例化
     Right,
 };
 
-template <typename Location, typename Action, typename Cost>
+template <typename Action, typename Cost>
 struct Neighbor
 {
     //! neighboring location
@@ -169,7 +169,7 @@ public:
     }
 
     // get neighbor of current location
-    void get_neighbors(const Location& location, std::vector<Neighbor<Location, Action, int> >& neighbors)
+    void get_neighbors(const Location& location, std::vector<Neighbor<Action, int> >& neighbors)
     {
         neighbors.clear();
 
@@ -177,28 +177,28 @@ public:
 
         if (location_valid(north_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(north_neighbor, Action::Up, 1));
+            neighbors.emplace_back(Neighbor<Action, int>(north_neighbor, Action::Up, 1));
         }
 
         Location south_neighbor(location.x, location.y - 1);
 
         if (location_valid(south_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(south_neighbor, Action::Down, 1));
+            neighbors.emplace_back(Neighbor<Action, int>(south_neighbor, Action::Down, 1));
         }
 
         Location west_neighbor(location.x - 1, location.y);
 
         if (location_valid(west_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(west_neighbor, Action::Left, 1));
+            neighbors.emplace_back(Neighbor<Action, int>(west_neighbor, Action::Left, 1));
         }
 
         Location east_neighbor(location.x + 1, location.y);
 
         if (location_valid(east_neighbor))
         {
-            neighbors.emplace_back(Neighbor<Location, Action, int>(east_neighbor, Action::Right, 1));
+            neighbors.emplace_back(Neighbor<Action, int>(east_neighbor, Action::Right, 1));
         }
     }
 
@@ -221,7 +221,7 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Neighbor<Location, Action, int> > neighbors;
+        std::vector<Neighbor<Action, int> > neighbors;
         neighbors.reserve(10);
 
         while (!open_set.empty())
@@ -263,7 +263,7 @@ public:
             // traverse neighbors
             neighbors.clear();
             get_neighbors(current.location, neighbors);
-            for (const Neighbor<Location, Action, int>& neighbor : neighbors)
+            for (const Neighbor<Action, int>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end()) // not in closed set
                 {
