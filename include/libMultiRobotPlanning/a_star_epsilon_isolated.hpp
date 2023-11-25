@@ -118,8 +118,7 @@ purposes.
     \tparam LocationHasher A class to convert a state to a hash value. Default:
    std::hash<Location>
 */
-    template <typename Environment,
-            typename LocationHasher = std::hash<Location> >
+    template <typename Environment, typename LocationHasher = std::hash<Location> >
     class AStarEpsilon {
     public:
         AStarEpsilon(Environment& environment, float w)
@@ -135,10 +134,10 @@ purposes.
             openSet_t openSet;
             focalSet_t
                     focalSet;  // subset of open nodes that are within suboptimality bound
-            std::unordered_map<Location, fibHeapHandle_t, LocationHasher> stateToHeap;
-            std::unordered_set<Location, LocationHasher> closedSet;
+            std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> stateToHeap;
+            std::unordered_set<Location, std::hash<Location>> closedSet;
             std::unordered_map<Location, std::tuple<Location, Action, int, int>,
-            LocationHasher>
+            std::hash<Location>>
                     cameFrom;
 
             auto handle = openSet.push(
