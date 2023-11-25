@@ -253,8 +253,8 @@ public:
 
 struct compareFocalHeuristic
 {
-    typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
-    typedef typename openSet_t::handle_type fibHeapHandle_t;
+    using openSet_t = typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
+    using fibHeapHandle_t = typename openSet_t::handle_type;
 
     bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
     {
