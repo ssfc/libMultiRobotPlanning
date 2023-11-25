@@ -118,43 +118,45 @@ purposes.
     \tparam LocationHasher A class to convert a state to a hash value. Default:
    std::hash<Location>
 */
-    template <typename Environment>
-    class AStarEpsilon {
-    public:
-        AStarEpsilon(Environment& environment, float w)
-                : m_env(environment), m_w(w) {}
+template <typename Environment>
+class AStarEpsilon
+{
+public:
+    AStarEpsilon(Environment& environment, float w)
+            : m_env(environment), m_w(w)
+            {}
 
-        bool search(const Location& startState, AgentPlan& solution)
-        {
-            solution.path.clear();
-            solution.path.emplace_back(std::make_pair<>(startState, 0));
-            solution.actions.clear();
-            solution.cost = 0;
+    bool search(const Location& startState, AgentPlan& solution)
+    {
+        solution.path.clear();
+        solution.path.emplace_back(std::make_pair<>(startState, 0));
+        solution.actions.clear();
+        solution.cost = 0;
 
-            openSet_t openSet;
-            focalSet_t
-                    focalSet;  // subset of open nodes that are within suboptimality bound
-            std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> stateToHeap;
-            std::unordered_set<Location, std::hash<Location>> closedSet;
-            std::unordered_map<Location, std::tuple<Location, Action, int, int>,
-            std::hash<Location>>
-                    cameFrom;
+        openSet_t openSet;
+        focalSet_t
+                focalSet;  // subset of open nodes that are within suboptimality bound
+        std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> stateToHeap;
+        std::unordered_set<Location, std::hash<Location>> closedSet;
+        std::unordered_map<Location, std::tuple<Location, Action, int, int>,
+        std::hash<Location>>
+                cameFrom;
 
-            auto handle = openSet.push(
-                    Node(startState, m_env.admissible_heuristic(startState), 0, 0));
-            stateToHeap.insert(std::make_pair<>(startState, handle));
-            (*handle).handle = handle;
+        auto handle = openSet.push(
+                Node(startState, m_env.admissible_heuristic(startState), 0, 0));
+        stateToHeap.insert(std::make_pair<>(startState, handle));
+        (*handle).handle = handle;
 
-            focalSet.push(handle);
+        focalSet.push(handle);
 
-            std::vector<Child> neighbors;
-            neighbors.reserve(10);
+        std::vector<Child> neighbors;
+        neighbors.reserve(10);
 
-            int bestFScore = (*handle).fScore;
+        int bestFScore = (*handle).fScore;
 
-            // std::cout << "new search" << std::endl;
+        // std::cout << "new search" << std::endl;
 
-            while (!openSet.empty()) {
+        while (!openSet.empty()) {
 // update focal list
 #ifdef REBUILT_FOCAL_LIST
                 focalSet.clear();
