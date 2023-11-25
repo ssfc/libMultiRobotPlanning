@@ -40,7 +40,7 @@ struct Neighbor
     {}
 };
 
-template <typename Action, typename Cost>
+template <typename Cost>
 struct PlanResult
 {
     // path constructing locations and their g_score
@@ -202,7 +202,7 @@ public:
     }
 
 
-    bool a_star_search(const Location& start_location, PlanResult<Action, int>& solution,
+    bool a_star_search(const Location& start_location, PlanResult<int>& solution,
                        int initialCost = 0)
     {
         solution.path.clear();
