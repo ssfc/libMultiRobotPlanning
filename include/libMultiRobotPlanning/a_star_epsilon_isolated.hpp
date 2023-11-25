@@ -200,7 +200,7 @@ class AStarEpsilonNode
 {
 public:
     using openSet_t = typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
-    typedef typename openSet_t::handle_type fibHeapHandle_t;
+    using fibHeapHandle_t = typename openSet_t::handle_type;
 
     Location state;
 
