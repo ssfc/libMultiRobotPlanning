@@ -444,46 +444,47 @@ private:
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 #endif
 
-        struct Node {
-            Node(const Location& state, int fScore, int gScore, int focalHeuristic)
-                    : state(state),
-                      fScore(fScore),
-                      gScore(gScore),
-                      focalHeuristic(focalHeuristic) {}
+    struct Node
+    {
+        Node(const Location& state, int fScore, int gScore, int focalHeuristic)
+                : state(state),
+                  fScore(fScore),
+                  gScore(gScore),
+                  focalHeuristic(focalHeuristic) {}
 
-            bool operator<(const Node& other) const {
-                // Sort order
-                // 1. lowest fScore
-                // 2. highest gScore
+        bool operator<(const Node& other) const {
+            // Sort order
+            // 1. lowest fScore
+            // 2. highest gScore
 
-                // Our heap is a maximum heap, so we invert the comperator function here
-                if (fScore != other.fScore) {
-                    return fScore > other.fScore;
-                } else {
-                    return gScore < other.gScore;
-                }
+            // Our heap is a maximum heap, so we invert the comperator function here
+            if (fScore != other.fScore) {
+                return fScore > other.fScore;
+            } else {
+                return gScore < other.gScore;
             }
+        }
 
-            friend std::ostream& operator<<(std::ostream& os, const Node& node) {
-                os << "state: " << node.state << " fScore: " << node.fScore
-                   << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
-                return os;
-            }
+        friend std::ostream& operator<<(std::ostream& os, const Node& node) {
+            os << "state: " << node.state << " fScore: " << node.fScore
+               << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
+            return os;
+        }
 
-            Location state;
+        Location state;
 
-            int fScore;
-            int gScore;
-            int focalHeuristic;
+        int fScore;
+        int gScore;
+        int focalHeuristic;
 
-            fibHeapHandle_t handle;
-            // #ifdef USE_FIBONACCI_HEAP
-            //   typename boost::heap::fibonacci_heap<Node>::handle_type handle;
-            // #else
-            //   typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
-            //   boost::heap::mutable_<true> >::handle_type handle;
-            // #endif
-        };
+        fibHeapHandle_t handle;
+        // #ifdef USE_FIBONACCI_HEAP
+        //   typename boost::heap::fibonacci_heap<Node>::handle_type handle;
+        // #else
+        //   typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+        //   boost::heap::mutable_<true> >::handle_type handle;
+        // #endif
+    };
 
         struct compareFocalHeuristic {
             bool operator()(const fibHeapHandle_t& h1,
