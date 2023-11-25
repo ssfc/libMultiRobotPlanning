@@ -30,7 +30,6 @@ enum class Action
     Right,
 };
 
-template <typename Cost>
 struct Neighbor
 {
     //! neighboring location
@@ -38,9 +37,9 @@ struct Neighbor
     //! action to get to the neighboring location
     Action action;
     //! cost to get to the neighboring location, usually 1
-    Cost cost;
+    int cost;
 
-    Neighbor(const Location& input_location, const Action& input_action, Cost input_cost)
+    Neighbor(const Location& input_location, const Action& input_action, int input_cost)
             : location(input_location),
               action(input_action),
               cost(input_cost)
@@ -150,7 +149,7 @@ purposes.
 
             focalSet.push(handle);
 
-            std::vector<Neighbor<Cost> > neighbors;
+            std::vector<Neighbor> neighbors;
             neighbors.reserve(10);
 
             Cost bestFScore = (*handle).fScore;
@@ -264,7 +263,7 @@ purposes.
                 // traverse neighbors
                 neighbors.clear();
                 m_env.get_neighbors(current.state, neighbors);
-                for (const Neighbor<Cost>& neighbor : neighbors) {
+                for (const Neighbor& neighbor : neighbors) {
                     if (closedSet.find(neighbor.location) == closedSet.end()) {
                         Cost tentative_gScore = current.gScore + neighbor.cost;
                         auto iter = stateToHeap.find(neighbor.location);
