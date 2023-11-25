@@ -196,6 +196,60 @@ purposes.
     \tparam LocationHasher A class to convert a state to a hash value. Default:
    std::hash<Location>
 */
+class AStarEpsilonNode
+{
+public:
+    typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
+    typedef typename openSet_t::handle_type fibHeapHandle_t;
+
+    Location state;
+
+    int fScore;
+    int gScore;
+    int focalHeuristic;
+
+    fibHeapHandle_t handle;
+    // #ifdef USE_FIBONACCI_HEAP
+    //   typename boost::heap::fibonacci_heap<AStarEpsilonNode>::handle_type handle;
+    // #else
+    //   typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>,
+    //   boost::heap::mutable_<true> >::handle_type handle;
+    // #endif
+
+public:
+    AStarEpsilonNode(const Location& state, int fScore, int gScore, int focalHeuristic)
+            : state(state),
+              fScore(fScore),
+              gScore(gScore),
+              focalHeuristic(focalHeuristic)
+    {}
+
+    bool operator<(const AStarEpsilonNode& other) const
+    {
+        // Sort order
+        // 1. lowest fScore
+        // 2. highest gScore
+
+        // Our heap is a maximum heap, so we invert the comperator function here
+        if (fScore != other.fScore)
+        {
+            return fScore > other.fScore;
+        }
+        else
+        {
+            return gScore < other.gScore;
+        }
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const AStarEpsilonNode& node)
+    {
+        os << "state: " << node.state << " fScore: " << node.fScore
+           << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
+
+        return os;
+    }
+};
+
 class AStarEpsilon
 {
 private:
@@ -428,7 +482,6 @@ public:
     }
 
 private:
-    struct AStarEpsilonNode;
 
     typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type fibHeapHandle_t;
@@ -436,56 +489,7 @@ private:
 // boost::heap::arity<2>, boost::heap::mutable_<true>,
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 
-    class AStarEpsilonNode
-    {
-    public:
-        Location state;
 
-        int fScore;
-        int gScore;
-        int focalHeuristic;
-
-        fibHeapHandle_t handle;
-        // #ifdef USE_FIBONACCI_HEAP
-        //   typename boost::heap::fibonacci_heap<AStarEpsilonNode>::handle_type handle;
-        // #else
-        //   typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>,
-        //   boost::heap::mutable_<true> >::handle_type handle;
-        // #endif
-
-    public:
-        AStarEpsilonNode(const Location& state, int fScore, int gScore, int focalHeuristic)
-                : state(state),
-                  fScore(fScore),
-                  gScore(gScore),
-                  focalHeuristic(focalHeuristic)
-                  {}
-
-        bool operator<(const AStarEpsilonNode& other) const
-        {
-            // Sort order
-            // 1. lowest fScore
-            // 2. highest gScore
-
-            // Our heap is a maximum heap, so we invert the comperator function here
-            if (fScore != other.fScore)
-            {
-                return fScore > other.fScore;
-            }
-            else
-            {
-                return gScore < other.gScore;
-            }
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const AStarEpsilonNode& node)
-        {
-            os << "state: " << node.state << " fScore: " << node.fScore
-               << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
-
-            return os;
-        }
-    };
 
     struct compareFocalHeuristic
     {
