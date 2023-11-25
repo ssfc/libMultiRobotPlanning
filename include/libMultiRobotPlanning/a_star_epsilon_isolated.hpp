@@ -15,13 +15,42 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "util.hpp"
 #include "neighbor.hpp"
 #include "planresult.hpp"
 
 // #define REBUILT_FOCAL_LIST
 // #define CHECK_FOCAL_LIST
 
-namespace libMultiRobotPlanning {
+template <typename Location, typename Action, typename Cost>
+struct Neighbor
+{
+    //! neighboring location
+    Location location;
+    //! action to get to the neighboring location
+    Action action;
+    //! cost to get to the neighboring location, usually 1
+    Cost cost;
+
+    Neighbor(const Location& input_location, const Action& input_action, Cost input_cost)
+            : location(input_location),
+              action(input_action),
+              cost(input_cost)
+    {}
+};
+
+template <typename State, typename Action, typename Cost>
+struct PlanResult
+{
+    // path constructing locations and their g_score
+    std::vector<std::pair<State, Cost> > path;
+    //! actions and their cost
+    std::vector<std::pair<Action, Cost> > actions;
+    //! actual cost of the result
+    Cost cost;
+    //! lower bound of the cost (for suboptimal solvers)
+    Cost fmin;
+};
 
 /*!
   \example a_star_epsilon.cpp Simple example using a 2D grid world and
@@ -393,7 +422,6 @@ purposes.
         float m_w;
     };
 
-}  // namespace libMultiRobotPlanning
 
 
 

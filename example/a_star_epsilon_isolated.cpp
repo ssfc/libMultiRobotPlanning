@@ -8,11 +8,8 @@
 #include <boost/functional/hash.hpp>
 #include <boost/program_options.hpp>
 
-#include <libMultiRobotPlanning/a_star_epsilon.hpp>
+#include <libMultiRobotPlanning/a_star_epsilon_isolated.hpp>
 
-using libMultiRobotPlanning::AStarEpsilon;
-using libMultiRobotPlanning::Neighbor;
-using libMultiRobotPlanning::PlanResult;
 
 struct State {
     State(int x, int y) : x(x), y(y) {}
