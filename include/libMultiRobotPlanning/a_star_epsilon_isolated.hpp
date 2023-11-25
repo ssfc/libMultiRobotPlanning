@@ -118,7 +118,7 @@ purposes.
     \tparam LocationHasher A class to convert a state to a hash value. Default:
    std::hash<Location>
 */
-    template <typename Environment, typename LocationHasher = std::hash<Location> >
+    template <typename Environment>
     class AStarEpsilon {
     public:
         AStarEpsilon(Environment& environment, float w)
