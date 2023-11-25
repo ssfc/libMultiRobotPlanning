@@ -46,7 +46,7 @@ struct Child
     {}
 };
 
-template <typename Action, typename Cost>
+template <typename Cost>
 struct AgentPlan
 {
     // path constructing locations and their g_score
@@ -126,7 +126,7 @@ purposes.
         AStarEpsilon(Environment& environment, float w)
                 : m_env(environment), m_w(w) {}
 
-        bool search(const State& startState, AgentPlan<Action, Cost>& solution)
+        bool search(const State& startState, AgentPlan<Cost>& solution)
         {
             solution.path.clear();
             solution.path.emplace_back(std::make_pair<>(startState, 0));
