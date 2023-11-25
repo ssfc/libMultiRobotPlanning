@@ -493,9 +493,10 @@ private:
         // #endif
     };
 
-        struct compareFocalHeuristic {
-            bool operator()(const fibHeapHandle_t& h1,
-                            const fibHeapHandle_t& h2) const {
+        struct compareFocalHeuristic
+        {
+            bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
+            {
                 // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
                 // Path Finding" by Cohen et. al.)
                 // 1. lowest focalHeuristic
@@ -503,13 +504,18 @@ private:
                 // 3. highest gScore
 
                 // Our heap is a maximum heap, so we invert the comperator function here
-                if ((*h1).focalHeuristic != (*h2).focalHeuristic) {
+                if ((*h1).focalHeuristic != (*h2).focalHeuristic)
+                {
                     return (*h1).focalHeuristic > (*h2).focalHeuristic;
                     // } else if ((*h1).fScore != (*h2).fScore) {
                     //   return (*h1).fScore > (*h2).fScore;
-                } else if ((*h1).fScore != (*h2).fScore) {
+                }
+                else if ((*h1).fScore != (*h2).fScore)
+                {
                     return (*h1).fScore > (*h2).fScore;
-                } else {
+                }
+                else
+                {
                     return (*h1).gScore < (*h2).gScore;
                 }
             }
