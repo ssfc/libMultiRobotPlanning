@@ -47,7 +47,7 @@ struct Child
 };
 
 template <typename State, typename Action, typename Cost>
-struct PlanResult
+struct AgentPlan
 {
     // path constructing locations and their g_score
     std::vector<std::pair<State, Cost> > path;
@@ -127,7 +127,7 @@ purposes.
                 : m_env(environment), m_w(w) {}
 
         bool search(const State& startState,
-                    PlanResult<State, Action, Cost>& solution) {
+                    AgentPlan<State, Action, Cost>& solution) {
             solution.path.clear();
             solution.path.emplace_back(std::make_pair<>(startState, 0));
             solution.actions.clear();

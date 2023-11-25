@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
 
     AStarEpsilon<Location, Action, int, Environment> astar(env, w);
 
-    PlanResult<Location, Action, int> solution;
+    AgentPlan<Location, Action, int> solution;
 
     if (env.location_valid(start)) {
         success = astar.search(start, solution);
