@@ -314,8 +314,7 @@ public:
         solution.cost = 0;
 
         openSet_t openSet;
-        focalSet_t
-                focalSet;  // subset of open nodes that are within suboptimality bound
+        focalSet_t focalSet;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> stateToHeap;
         std::unordered_set<Location, std::hash<Location>> closedSet;
         std::unordered_map<Location, std::tuple<Location, Action, int, int>, std::hash<Location>> cameFrom;
