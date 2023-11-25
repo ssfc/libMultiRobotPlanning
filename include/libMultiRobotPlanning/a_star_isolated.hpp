@@ -2,8 +2,8 @@
 // Created by take_ on 2023/11/6.
 //
 
-#ifndef LIBMULTIROBOTPLANNING_A_STAR_ISOLATED_HPP
-#define LIBMULTIROBOTPLANNING_A_STAR_ISOLATED_HPP
+#ifndef A_STAR_ISOLATED_HPP
+#define A_STAR_ISOLATED_HPP
 
 #include <boost/heap/fibonacci_heap.hpp>
 #include <boost/heap/d_ary_heap.hpp>
@@ -312,4 +312,4 @@ public:
 };
 
 
-#endif //LIBMULTIROBOTPLANNING_A_STAR_ISOLATED_HPP
+#endif //A_STAR_ISOLATED_HPP
