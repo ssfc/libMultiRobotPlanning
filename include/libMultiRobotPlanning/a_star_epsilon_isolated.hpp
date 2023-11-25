@@ -450,24 +450,31 @@ private:
                 : state(state),
                   fScore(fScore),
                   gScore(gScore),
-                  focalHeuristic(focalHeuristic) {}
+                  focalHeuristic(focalHeuristic)
+                  {}
 
-        bool operator<(const Node& other) const {
+        bool operator<(const Node& other) const
+        {
             // Sort order
             // 1. lowest fScore
             // 2. highest gScore
 
             // Our heap is a maximum heap, so we invert the comperator function here
-            if (fScore != other.fScore) {
+            if (fScore != other.fScore)
+            {
                 return fScore > other.fScore;
-            } else {
+            }
+            else
+            {
                 return gScore < other.gScore;
             }
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const Node& node) {
+        friend std::ostream& operator<<(std::ostream& os, const Node& node)
+        {
             os << "state: " << node.state << " fScore: " << node.fScore
                << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
+
             return os;
         }
 
