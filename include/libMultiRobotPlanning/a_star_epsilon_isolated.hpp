@@ -284,45 +284,45 @@ public:
             }
 
         #endif
-// check focal list/open list consistency
-#ifdef CHECK_FOCAL_LIST
+        // check focal list/open list consistency
+        #ifdef CHECK_FOCAL_LIST
+            
+            // focalSet_t focalSetGolden;
+            bool mismatch = false;
+            const auto& top = openSet.top();
+            int bestVal = top.fScore;
+            auto iter = openSet.ordered_begin();
+            auto iterEnd = openSet.ordered_end();
+            for (; iter != iterEnd; ++iter)
             {
-                // focalSet_t focalSetGolden;
-                bool mismatch = false;
-                const auto& top = openSet.top();
-                int bestVal = top.fScore;
-                auto iter = openSet.ordered_begin();
-                auto iterEnd = openSet.ordered_end();
-                for (; iter != iterEnd; ++iter)
+                const auto& s = *iter;
+                int val = s.fScore;
+                if (val <= bestVal * m_w)
                 {
-                    const auto& s = *iter;
-                    int val = s.fScore;
-                    if (val <= bestVal * m_w)
+                    // std::cout << "should: " << s << std::endl;
+                    // focalSetGolden.push(s.handle);
+                    if (std::find(focalSet.begin(), focalSet.end(), s.handle) == focalSet.end())
                     {
-                        // std::cout << "should: " << s << std::endl;
-                        // focalSetGolden.push(s.handle);
-                        if (std::find(focalSet.begin(), focalSet.end(), s.handle) == focalSet.end())
-                        {
-                            std::cout << "focalSet misses: " << s << std::endl;
-                            mismatch = true;
-                        }
+                        std::cout << "focalSet misses: " << s << std::endl;
+                        mismatch = true;
+                    }
 
-                    }
-                    else
-                    {
-                        if (std::find(focalSet.begin(), focalSet.end(), s.handle) != focalSet.end())
-                        {
-                            std::cout << "focalSet shouldn't have: " << s << std::endl;
-                            mismatch = true;
-                        }
-                        // break;
-                    }
                 }
-
-                assert(!mismatch);
-                // assert(focalSet == focalSetGolden);
+                else
+                {
+                    if (std::find(focalSet.begin(), focalSet.end(), s.handle) != focalSet.end())
+                    {
+                        std::cout << "focalSet shouldn't have: " << s << std::endl;
+                        mismatch = true;
+                    }
+                    // break;
+                }
             }
-#endif
+
+            assert(!mismatch);
+            // assert(focalSet == focalSetGolden);
+
+        #endif
 
                 auto currentHandle = focalSet.top();
                 Node current = *currentHandle;
