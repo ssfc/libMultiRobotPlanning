@@ -222,7 +222,7 @@ public:
                 cameFrom;
 
         auto handle = openSet.push(
-                Node(startState, m_env.admissible_heuristic(startState), 0, 0));
+                AStarEpsilonNode(startState, m_env.admissible_heuristic(startState), 0, 0));
         stateToHeap.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
 
@@ -273,7 +273,7 @@ public:
                     int val = iter->fScore;
                     if (val > oldBestFScore * m_w && val <= bestFScore * m_w)
                     {
-                        const Node& n = *iter;
+                        const AStarEpsilonNode& n = *iter;
                         focalSet.push(n.handle);
                     }
                     if (val > bestFScore * m_w)
@@ -325,7 +325,7 @@ public:
         #endif
 
             auto currentHandle = focalSet.top();
-            Node current = *currentHandle;
+            AStarEpsilonNode current = *currentHandle;
             m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
             if (m_env.is_solution(current.state))
@@ -377,7 +377,7 @@ public:
                                                                current.gScore,
                                                                tentative_gScore);
                         auto handle = openSet.push(
-                                Node(neighbor.location, fScore, tentative_gScore, focalHeuristic));
+                                AStarEpsilonNode(neighbor.location, fScore, tentative_gScore, focalHeuristic));
                         (*handle).handle = handle;
                         if (fScore <= bestFScore * m_w) {
                             // std::cout << "focalAdd: " << *handle << std::endl;
@@ -428,31 +428,31 @@ public:
     }
 
 private:
-    struct Node;
+    struct AStarEpsilonNode;
 
 #ifdef USE_FIBONACCI_HEAP
-    typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
+    typedef typename boost::heap::fibonacci_heap<AStarEpsilonNode> openSet_t;
     typedef typename openSet_t::handle_type fibHeapHandle_t;
 // typedef typename boost::heap::fibonacci_heap<fibHeapHandle_t,
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 #else
-    typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
+    typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type fibHeapHandle_t;
 // typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
 // boost::heap::arity<2>, boost::heap::mutable_<true>,
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 #endif
 
-    struct Node
+    struct AStarEpsilonNode
     {
-        Node(const Location& state, int fScore, int gScore, int focalHeuristic)
+        AStarEpsilonNode(const Location& state, int fScore, int gScore, int focalHeuristic)
                 : state(state),
                   fScore(fScore),
                   gScore(gScore),
                   focalHeuristic(focalHeuristic)
                   {}
 
-        bool operator<(const Node& other) const
+        bool operator<(const AStarEpsilonNode& other) const
         {
             // Sort order
             // 1. lowest fScore
@@ -469,7 +469,7 @@ private:
             }
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const Node& node)
+        friend std::ostream& operator<<(std::ostream& os, const AStarEpsilonNode& node)
         {
             os << "state: " << node.state << " fScore: " << node.fScore
                << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
@@ -485,9 +485,9 @@ private:
 
         fibHeapHandle_t handle;
         // #ifdef USE_FIBONACCI_HEAP
-        //   typename boost::heap::fibonacci_heap<Node>::handle_type handle;
+        //   typename boost::heap::fibonacci_heap<AStarEpsilonNode>::handle_type handle;
         // #else
-        //   typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+        //   typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>,
         //   boost::heap::mutable_<true> >::handle_type handle;
         // #endif
     };
@@ -521,13 +521,13 @@ private:
     };
 
 #ifdef USE_FIBONACCI_HEAP
-        // typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
+        // typedef typename boost::heap::fibonacci_heap<AStarEpsilonNode> openSet_t;
   // typedef typename openSet_t::handle_type fibHeapHandle_t;
   typedef typename boost::heap::fibonacci_heap<
       fibHeapHandle_t, boost::heap::compare<compareFocalHeuristic> >
       focalSet_t;
 #else
-        // typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+        // typedef typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>,
         // boost::heap::mutable_<true> > openSet_t;
         // typedef typename openSet_t::handle_type fibHeapHandle_t;
         typedef typename boost::heap::d_ary_heap<
