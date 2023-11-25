@@ -137,7 +137,7 @@ purposes.
                     focalSet;  // subset of open nodes that are within suboptimality bound
             std::unordered_map<Location, fibHeapHandle_t, LocationHasher> stateToHeap;
             std::unordered_set<Location, LocationHasher> closedSet;
-            std::unordered_map<Location, std::tuple<Location, Action, Cost, Cost>,
+            std::unordered_map<Location, std::tuple<Location, Action, int, int>,
             LocationHasher>
                     cameFrom;
 
@@ -151,7 +151,7 @@ purposes.
             std::vector<Child> neighbors;
             neighbors.reserve(10);
 
-            Cost bestFScore = (*handle).fScore;
+            int bestFScore = (*handle).fScore;
 
             // std::cout << "new search" << std::endl;
 
@@ -160,11 +160,11 @@ purposes.
 #ifdef REBUILT_FOCAL_LIST
                 focalSet.clear();
       const auto& top = openSet.top();
-      Cost bestVal = top.fScore;
+      int bestVal = top.fScore;
       auto iter = openSet.ordered_begin();
       auto iterEnd = openSet.ordered_end();
       for (; iter != iterEnd; ++iter) {
-        Cost val = iter->fScore;
+        int val = iter->fScore;
         if (val <= bestVal * m_w) {
           const auto& s = *iter;
           focalSet.push(s.handle);
@@ -174,7 +174,7 @@ purposes.
       }
 #else
                 {
-                    Cost oldBestFScore = bestFScore;
+                    int oldBestFScore = bestFScore;
                     bestFScore = openSet.top().fScore;
                     // std::cout << "bestFScore: " << bestFScore << std::endl;
                     if (bestFScore > oldBestFScore) {
@@ -183,7 +183,7 @@ purposes.
                         auto iter = openSet.ordered_begin();
                         auto iterEnd = openSet.ordered_end();
                         for (; iter != iterEnd; ++iter) {
-                            Cost val = iter->fScore;
+                            int val = iter->fScore;
                             if (val > oldBestFScore * m_w && val <= bestFScore * m_w) {
                                 const Node& n = *iter;
                                 focalSet.push(n.handle);
@@ -201,12 +201,12 @@ purposes.
         // focalSet_t focalSetGolden;
         bool mismatch = false;
         const auto& top = openSet.top();
-        Cost bestVal = top.fScore;
+        int bestVal = top.fScore;
         auto iter = openSet.ordered_begin();
         auto iterEnd = openSet.ordered_end();
         for (; iter != iterEnd; ++iter) {
           const auto& s = *iter;
-          Cost val = s.fScore;
+          int val = s.fScore;
           if (val <= bestVal * m_w) {
             // std::cout << "should: " << s << std::endl;
             // focalSetGolden.push(s.handle);
@@ -264,13 +264,13 @@ purposes.
                 m_env.get_neighbors(current.state, neighbors);
                 for (const Child& neighbor : neighbors) {
                     if (closedSet.find(neighbor.location) == closedSet.end()) {
-                        Cost tentative_gScore = current.gScore + neighbor.cost;
+                        int tentative_gScore = current.gScore + neighbor.cost;
                         auto iter = stateToHeap.find(neighbor.location);
                         if (iter == stateToHeap.end()) {  // Discover a new node
                             // std::cout << "  this is a new node" << std::endl;
-                            Cost fScore =
+                            int fScore =
                                     tentative_gScore + m_env.admissible_heuristic(neighbor.location);
-                            Cost focalHeuristic =
+                            int focalHeuristic =
                                     current.focalHeuristic +
                                     m_env.focalStateHeuristic(neighbor.location, tentative_gScore) +
                                     m_env.focalTransitionHeuristic(current.state, neighbor.location,
@@ -293,12 +293,12 @@ purposes.
                             if (tentative_gScore >= (*handle).gScore) {
                                 continue;
                             }
-                            Cost last_gScore = (*handle).gScore;
-                            Cost last_fScore = (*handle).fScore;
+                            int last_gScore = (*handle).gScore;
+                            int last_fScore = (*handle).fScore;
                             // std::cout << "  this is an old node: " << tentative_gScore << ","
                             // << last_gScore << " " << *handle << std::endl;
                             // update f and gScore
-                            Cost delta = last_gScore - tentative_gScore;
+                            int delta = last_gScore - tentative_gScore;
                             (*handle).gScore = tentative_gScore;
                             (*handle).fScore -= delta;
                             openSet.increase(handle);
@@ -345,7 +345,7 @@ purposes.
 #endif
 
         struct Node {
-            Node(const Location& state, Cost fScore, Cost gScore, Cost focalHeuristic)
+            Node(const Location& state, int fScore, int gScore, int focalHeuristic)
                     : state(state),
                       fScore(fScore),
                       gScore(gScore),
@@ -372,9 +372,9 @@ purposes.
 
             Location state;
 
-            Cost fScore;
-            Cost gScore;
-            Cost focalHeuristic;
+            int fScore;
+            int gScore;
+            int focalHeuristic;
 
             fibHeapHandle_t handle;
             // #ifdef USE_FIBONACCI_HEAP
