@@ -176,8 +176,6 @@ public:
         }
     }
 
-    // This function is called on every node discovery and can be used for statistical purposes.
-    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
 
     bool a_star_search(const Location& start_location, PlanResult<Location, Action, int>& solution,
                        int initialCost = 0)
@@ -251,7 +249,6 @@ public:
                         auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
-                        onDiscover(neighbor.location, f_score, tentative_gScore);
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
@@ -272,7 +269,6 @@ public:
                         (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
-                        onDiscover(neighbor.location, (*handle).f_score, (*handle).g_score);
                         num_generated_nodes++;
                     }
 
