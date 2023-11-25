@@ -11,7 +11,6 @@
 #include <libMultiRobotPlanning/a_star_isolated.hpp>
 
 using namespace std;
-using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
 
