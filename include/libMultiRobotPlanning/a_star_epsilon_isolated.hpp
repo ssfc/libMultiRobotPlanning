@@ -199,7 +199,7 @@ public:
             : m_env(environment), m_w(w)
             {}
 
-    bool search(const Location& startState, AgentPlan& solution)
+    bool a_star_epsilon_search(const Location& startState, AgentPlan& solution)
     {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(startState, 0));

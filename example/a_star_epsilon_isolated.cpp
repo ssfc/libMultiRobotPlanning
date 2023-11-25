@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
     AgentPlan solution;
 
     if (env.location_valid(start)) {
-        is_success = astar.search(start, solution);
+        is_success = astar.a_star_epsilon_search(start, solution);
     }
 
     std::ofstream out(outputFile);
