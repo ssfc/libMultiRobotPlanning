@@ -56,86 +56,6 @@ struct AgentPlan
     int fmin;
 };
 
-class Environment
-{
-private:
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    Location m_goal;
-public:
-    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-                Location goal)
-            : num_columns(dimx),
-              num_rows(dimy),
-              obstacles(std::move(obstacles)),
-              m_goal(std::move(goal))  // NOLINT
-    {}
-
-    bool location_valid(const Location& s)
-    {
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(s) == obstacles.end();
-    }
-
-    int admissible_heuristic(const Location& s)
-    {
-        return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
-    }
-
-    // a potentially inadmissible heuristic
-    int focalStateHeuristic(const Location& /*s*/, int gScore)
-    {
-        // prefer lower g-values
-        return gScore;
-    }
-
-    int focalTransitionHeuristic(const Location& /*s1*/, const Location& /*s2*/,
-                                 int gScoreS1, int gScoreS2)
-    {
-        // prefer lower g-values
-        return gScoreS2 - gScoreS1;
-    }
-
-    bool is_solution(const Location& s)
-    {
-        return s == m_goal;
-    }
-
-    void get_neighbors(const Location& s, std::vector<Child>& neighbors)
-    {
-        neighbors.clear();
-
-        Location up(s.x, s.y + 1);
-        if (location_valid(up))
-        {
-            neighbors.emplace_back(Child(up, Action::Up, 1));
-        }
-
-        Location down(s.x, s.y - 1);
-        if (location_valid(down))
-        {
-            neighbors.emplace_back(Child(down, Action::Down, 1));
-        }
-
-        Location left(s.x - 1, s.y);
-        if (location_valid(left))
-        {
-            neighbors.emplace_back(Child(left, Action::Left, 1));
-        }
-
-        Location right(s.x + 1, s.y);
-        if (location_valid(right))
-        {
-            neighbors.emplace_back(Child(right, Action::Right, 1));
-        }
-    }
-
-    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
-
-    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
-};
-
 /*!
   \example a_star_epsilon.cpp Simple example using a 2D grid world and
   up/down/left/right
@@ -283,6 +203,87 @@ struct compareFocalHeuristic
 };
 
 
+class Environment
+{
+private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    Location m_goal;
+public:
+    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
+                Location goal)
+            : num_columns(dimx),
+              num_rows(dimy),
+              obstacles(std::move(obstacles)),
+              m_goal(std::move(goal))  // NOLINT
+    {}
+
+    bool location_valid(const Location& s)
+    {
+        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
+               obstacles.find(s) == obstacles.end();
+    }
+
+    int admissible_heuristic(const Location& s)
+    {
+        return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
+    }
+
+    // a potentially inadmissible heuristic
+    int focalStateHeuristic(const Location& /*s*/, int gScore)
+    {
+        // prefer lower g-values
+        return gScore;
+    }
+
+    int focalTransitionHeuristic(const Location& /*s1*/, const Location& /*s2*/,
+                                 int gScoreS1, int gScoreS2)
+    {
+        // prefer lower g-values
+        return gScoreS2 - gScoreS1;
+    }
+
+    bool is_solution(const Location& s)
+    {
+        return s == m_goal;
+    }
+
+    void get_neighbors(const Location& s, std::vector<Child>& neighbors)
+    {
+        neighbors.clear();
+
+        Location up(s.x, s.y + 1);
+        if (location_valid(up))
+        {
+            neighbors.emplace_back(Child(up, Action::Up, 1));
+        }
+
+        Location down(s.x, s.y - 1);
+        if (location_valid(down))
+        {
+            neighbors.emplace_back(Child(down, Action::Down, 1));
+        }
+
+        Location left(s.x - 1, s.y);
+        if (location_valid(left))
+        {
+            neighbors.emplace_back(Child(left, Action::Left, 1));
+        }
+
+        Location right(s.x + 1, s.y);
+        if (location_valid(right))
+        {
+            neighbors.emplace_back(Child(right, Action::Right, 1));
+        }
+    }
+
+    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
+
+    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
+};
+
+
 class AStarEpsilon
 {
 private:
@@ -319,8 +320,8 @@ public:
         std::unordered_set<Location, std::hash<Location>> closedSet;
         std::unordered_map<Location, std::tuple<Location, Action, int, int>, std::hash<Location>> cameFrom;
 
-        auto handle = openSet.push(
-                AStarEpsilonNode(startState, m_env.admissible_heuristic(startState), 0, 0));
+        auto handle = openSet.push(AStarEpsilonNode(startState,
+                                m_env.admissible_heuristic(startState), 0, 0));
         stateToHeap.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
 
@@ -380,11 +381,10 @@ public:
                     }
                 }
             }
-
         #endif
+
         // check focal list/open list consistency
         #ifdef CHECK_FOCAL_LIST
-
             // focalSet_t focalSetGolden;
             bool mismatch = false;
             const auto& top = openSet.top();
@@ -419,7 +419,6 @@ public:
 
             assert(!mismatch);
             // assert(focalSet == focalSetGolden);
-
         #endif
 
             auto currentHandle = focalSet.top();
@@ -485,12 +484,16 @@ public:
                         m_env.onDiscover(neighbor.location, fScore, tentative_gScore);
                         // std::cout << "  this is a new node " << fScore << "," <<
                         // tentative_gScore << std::endl;
-                    } else {
+                    }
+                    else
+                    {
                         auto handle = iter->second;
                         // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).gScore) {
+                        if (tentative_gScore >= (*handle).gScore)
+                        {
                             continue;
                         }
+
                         int last_gScore = (*handle).gScore;
                         int last_fScore = (*handle).fScore;
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
@@ -500,10 +503,9 @@ public:
                         (*handle).gScore = tentative_gScore;
                         (*handle).fScore -= delta;
                         openSet.increase(handle);
-                        m_env.onDiscover(neighbor.location, (*handle).fScore,
-                                         (*handle).gScore);
-                        if ((*handle).fScore <= bestFScore * m_w &&
-                            last_fScore > bestFScore * m_w) {
+                        m_env.onDiscover(neighbor.location, (*handle).fScore, (*handle).gScore);
+                        if ((*handle).fScore <= bestFScore * m_w && last_fScore > bestFScore * m_w)
+                        {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focalSet.push(handle);
                         }
@@ -513,8 +515,7 @@ public:
                     // TODO: this is not the best way to update "cameFrom", but otherwise
                     // default c'tors of Location and Action are required
                     cameFrom.erase(neighbor.location);
-                    cameFrom.insert(std::make_pair<>(
-                            neighbor.location,
+                    cameFrom.insert(std::make_pair<>(neighbor.location,
                             std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
                                               tentative_gScore)));
                 }
