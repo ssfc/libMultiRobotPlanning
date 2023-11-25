@@ -30,7 +30,7 @@ enum class Action
     Right,
 };
 
-struct Neighbor
+struct Child
 {
     //! neighboring location
     Location location;
@@ -39,7 +39,7 @@ struct Neighbor
     //! cost to get to the neighboring location, usually 1
     int cost;
 
-    Neighbor(const Location& input_location, const Action& input_action, int input_cost)
+    Child(const Location& input_location, const Action& input_action, int input_cost)
             : location(input_location),
               action(input_action),
               cost(input_cost)
@@ -104,7 +104,7 @@ state transition.
   - `bool is_solution(const State& s)`\n
     Return true if the given state is a goal state.
 
-  - `void get_neighbors(const State& s, std::vector<Neighbor<State, Action,
+  - `void get_neighbors(const State& s, std::vector<Child<State, Action,
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
@@ -149,7 +149,7 @@ purposes.
 
             focalSet.push(handle);
 
-            std::vector<Neighbor> neighbors;
+            std::vector<Child> neighbors;
             neighbors.reserve(10);
 
             Cost bestFScore = (*handle).fScore;
@@ -263,7 +263,7 @@ purposes.
                 // traverse neighbors
                 neighbors.clear();
                 m_env.get_neighbors(current.state, neighbors);
-                for (const Neighbor& neighbor : neighbors) {
+                for (const Child& neighbor : neighbors) {
                     if (closedSet.find(neighbor.location) == closedSet.end()) {
                         Cost tentative_gScore = current.gScore + neighbor.cost;
                         auto iter = stateToHeap.find(neighbor.location);
