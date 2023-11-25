@@ -83,49 +83,49 @@ https://doi.org/10.1109/TPAMI.1982.4767270
 This class can either use a fibonacci heap, or a d-ary heap. The latter is the
 default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
 
-\tparam State Custom state for the search. Needs to be copy'able
+\tparam Location Custom state for the search. Needs to be copy'able
 \tparam Action Custom action for the search. Needs to be copy'able
 \tparam Cost Custom Cost type (integer or floating point types)
 \tparam Environment This class needs to provide the custom logic. In
     particular, it needs to support the following functions:
-  - `Cost admissible_heuristic(const State& s)`\n
+  - `Cost admissible_heuristic(const Location& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
-  - `Cost focalStateHeuristic(const State& s, Cost gScore)`\n
+  - `Cost focalStateHeuristic(const Location& s, Cost gScore)`\n
     This function computes a (potentially inadmissible) heuristic for the given
 state.
 
-  - `Cost focalTransitionHeuristic(const State& s1, const State& s2, Cost
+  - `Cost focalTransitionHeuristic(const Location& s1, const Location& s2, Cost
 gScoreS1, Cost gScoreS2)`\n
     This function computes a (potentially inadmissible) heuristic for the given
 state transition.
 
-  - `bool is_solution(const State& s)`\n
+  - `bool is_solution(const Location& s)`\n
     Return true if the given state is a goal state.
 
-  - `void get_neighbors(const State& s, std::vector<Child<State, Action,
+  - `void get_neighbors(const Location& s, std::vector<Child<Location, Action,
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
-  - `void onExpandNode(const State& s, int fScore, int gScore)`\n
+  - `void onExpandNode(const Location& s, int fScore, int gScore)`\n
     This function is called on every expansion and can be used for statistical
 purposes.
 
-  - `void onDiscover(const State& s, int fScore, int gScore)`\n
+  - `void onDiscover(const Location& s, int fScore, int gScore)`\n
     This function is called on every node discovery and can be used for
    statistical purposes.
 
     \tparam LocationHasher A class to convert a state to a hash value. Default:
-   std::hash<State>
+   std::hash<Location>
 */
-    template <typename State, typename Action, typename Cost, typename Environment,
-            typename LocationHasher = std::hash<State> >
+    template <typename Location, typename Action, typename Cost, typename Environment,
+            typename LocationHasher = std::hash<Location> >
     class AStarEpsilon {
     public:
         AStarEpsilon(Environment& environment, float w)
                 : m_env(environment), m_w(w) {}
 
-        bool search(const State& startState, AgentPlan& solution)
+        bool search(const Location& startState, AgentPlan& solution)
         {
             solution.path.clear();
             solution.path.emplace_back(std::make_pair<>(startState, 0));
@@ -135,9 +135,9 @@ purposes.
             openSet_t openSet;
             focalSet_t
                     focalSet;  // subset of open nodes that are within suboptimality bound
-            std::unordered_map<State, fibHeapHandle_t, LocationHasher> stateToHeap;
-            std::unordered_set<State, LocationHasher> closedSet;
-            std::unordered_map<State, std::tuple<State, Action, Cost, Cost>,
+            std::unordered_map<Location, fibHeapHandle_t, LocationHasher> stateToHeap;
+            std::unordered_set<Location, LocationHasher> closedSet;
+            std::unordered_map<Location, std::tuple<Location, Action, Cost, Cost>,
             LocationHasher>
                     cameFrom;
 
@@ -313,7 +313,7 @@ purposes.
 
                         // Best path for this node so far
                         // TODO: this is not the best way to update "cameFrom", but otherwise
-                        // default c'tors of State and Action are required
+                        // default c'tors of Location and Action are required
                         cameFrom.erase(neighbor.location);
                         cameFrom.insert(std::make_pair<>(
                                 neighbor.location,
@@ -345,7 +345,7 @@ purposes.
 #endif
 
         struct Node {
-            Node(const State& state, Cost fScore, Cost gScore, Cost focalHeuristic)
+            Node(const Location& state, Cost fScore, Cost gScore, Cost focalHeuristic)
                     : state(state),
                       fScore(fScore),
                       gScore(gScore),
@@ -370,7 +370,7 @@ purposes.
                 return os;
             }
 
-            State state;
+            Location state;
 
             Cost fScore;
             Cost gScore;
