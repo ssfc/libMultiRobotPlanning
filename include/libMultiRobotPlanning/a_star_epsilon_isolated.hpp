@@ -58,7 +58,8 @@ struct AgentPlan
     int fmin;
 };
 
-class Environment {
+class Environment
+{
 private:
     int num_columns;
     int num_rows;
@@ -73,28 +74,35 @@ public:
               m_goal(std::move(goal))  // NOLINT
     {}
 
-    bool location_valid(const Location& s) {
+    bool location_valid(const Location& s)
+    {
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(s) == obstacles.end();
     }
 
-    int admissible_heuristic(const Location& s) {
+    int admissible_heuristic(const Location& s)
+    {
         return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
     }
 
     // a potentially inadmissible heuristic
-    int focalStateHeuristic(const Location& /*s*/, int gScore) {
+    int focalStateHeuristic(const Location& /*s*/, int gScore)
+    {
         // prefer lower g-values
         return gScore;
     }
 
     int focalTransitionHeuristic(const Location& /*s1*/, const Location& /*s2*/,
-                                 int gScoreS1, int gScoreS2) {
+                                 int gScoreS1, int gScoreS2)
+    {
         // prefer lower g-values
         return gScoreS2 - gScoreS1;
     }
 
-    bool is_solution(const Location& s) { return s == m_goal; }
+    bool is_solution(const Location& s)
+    {
+        return s == m_goal;
+    }
 
     void get_neighbors(const Location& s, std::vector<Child>& neighbors)
     {
@@ -227,23 +235,25 @@ public:
 
         // std::cout << "new search" << std::endl;
 
-        while (!openSet.empty()) {
+        while (!openSet.empty())
+        {
 // update focal list
 #ifdef REBUILT_FOCAL_LIST
-                focalSet.clear();
-      const auto& top = openSet.top();
-      int bestVal = top.fScore;
-      auto iter = openSet.ordered_begin();
-      auto iterEnd = openSet.ordered_end();
-      for (; iter != iterEnd; ++iter) {
-        int val = iter->fScore;
-        if (val <= bestVal * m_w) {
-          const auto& s = *iter;
-          focalSet.push(s.handle);
-        } else {
-          break;
+        focalSet.clear();
+        const auto& top = openSet.top();
+        int bestVal = top.fScore;
+        auto iter = openSet.ordered_begin();
+        auto iterEnd = openSet.ordered_end();
+        for (; iter != iterEnd; ++iter)
+        {
+            int val = iter->fScore;
+            if (val <= bestVal * m_w) {
+              const auto& s = *iter;
+              focalSet.push(s.handle);
+            } else {
+              break;
+            }
         }
-      }
 #else
                 {
                     int oldBestFScore = bestFScore;
