@@ -104,7 +104,8 @@ private:
     Location m_goal;
 };
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     namespace po = boost::program_options;
     // Declare the supported options.
     po::options_description desc("Allowed options");
