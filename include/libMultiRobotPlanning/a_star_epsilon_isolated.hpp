@@ -117,7 +117,7 @@ public:
 
     int f_score;
     int g_score;
-    int focalHeuristic;
+    int focal_heuristic;
 
     fibHeapHandle_t handle;
     // #ifdef USE_FIBONACCI_HEAP
@@ -133,7 +133,7 @@ public:
             : state(input_state),
               f_score(input_f_score),
               g_score(input_gScore),
-              focalHeuristic(input_focalHeuristic)
+              focal_heuristic(input_focalHeuristic)
     {}
 
     bool operator<(const AStarEpsilonNode& other) const
@@ -156,7 +156,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const AStarEpsilonNode& node)
     {
         os << "state: " << node.state << " f_score: " << node.f_score
-           << " g_score: " << node.g_score << " focal: " << node.focalHeuristic;
+           << " g_score: " << node.g_score << " focal: " << node.focal_heuristic;
 
         return os;
     }
@@ -172,14 +172,14 @@ struct compareFocalHeuristic
     {
         // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
         // Path Finding" by Cohen et. al.)
-        // 1. lowest focalHeuristic
+        // 1. lowest focal_heuristic
         // 2. lowest f_score
         // 3. highest g_score
 
         // Our heap is a maximum heap, so we invert the comperator function here
-        if ((*h1).focalHeuristic != (*h2).focalHeuristic)
+        if ((*h1).focal_heuristic != (*h2).focal_heuristic)
         {
-            return (*h1).focalHeuristic > (*h2).focalHeuristic;
+            return (*h1).focal_heuristic > (*h2).focal_heuristic;
             // } else if ((*h1).f_score != (*h2).f_score) {
             //   return (*h1).f_score > (*h2).f_score;
         }
@@ -371,10 +371,10 @@ public:
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
-                        int focalHeuristic = current.focalHeuristic + tentative_gScore +
+                        int focal_heuristic = current.focal_heuristic + tentative_gScore +
                                              - current.g_score + tentative_gScore;
                         auto handle = openSet.push(
-                                AStarEpsilonNode(neighbor.location, f_score, tentative_gScore, focalHeuristic));
+                                AStarEpsilonNode(neighbor.location, f_score, tentative_gScore, focal_heuristic));
                         (*handle).handle = handle;
                         if (f_score <= bestFScore * factor_w)
                         {
