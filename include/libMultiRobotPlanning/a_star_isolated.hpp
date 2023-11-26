@@ -213,7 +213,7 @@ public:
         std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
-        auto handle = open_set.push(AStarNode(start, admissible_heuristic(start), initialCost));
+        auto handle = open_set.emplace(AStarNode(start, admissible_heuristic(start), initialCost));
         location_to_heap.insert(std::make_pair<>(start, handle));
         (*handle).handle = handle;
 
@@ -268,7 +268,7 @@ public:
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
                         int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
-                        auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
+                        auto handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
                         num_generated_nodes++;
