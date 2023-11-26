@@ -275,12 +275,12 @@ public:
 
         openSet_t open_set;
         focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
-        std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> stateToHeap;
+        std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> location_to_heap;
         std::unordered_set<Location, std::hash<Location>> closedSet;
         std::unordered_map<Location, std::tuple<Location, Action, int, int>, std::hash<Location>> came_from;
 
         auto handle = open_set.push(AStarEpsilonNode(startState, admissible_heuristic(startState), 0, 0));
-        stateToHeap.insert(std::make_pair<>(startState, handle));
+        location_to_heap.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
 
         focal_set.push(handle);
@@ -353,7 +353,7 @@ public:
 
             focal_set.pop();
             open_set.erase(currentHandle);
-            stateToHeap.erase(current.state);
+            location_to_heap.erase(current.state);
             closedSet.insert(current.state);
 
             // traverse neighbors
@@ -365,8 +365,8 @@ public:
                 if (closedSet.find(neighbor.location) == closedSet.end())
                 {
                     int tentative_gScore = current.g_score + neighbor.cost;
-                    auto iter = stateToHeap.find(neighbor.location);
-                    if (iter == stateToHeap.end())
+                    auto iter = location_to_heap.find(neighbor.location);
+                    if (iter == location_to_heap.end())
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
@@ -381,7 +381,7 @@ public:
                             focal_set.push(handle);
                         }
 
-                        stateToHeap.insert(std::make_pair<>(neighbor.location, handle));
+                        location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
