@@ -367,44 +367,6 @@ public:
             }
         #endif
 
-            // check focal list/open list consistency
-        #ifdef CHECK_FOCAL_LIST // 也是为了调试，有啥好check的。
-            // focalSet_t focalSetGolden;
-            bool mismatch = false;
-            const auto& top = openSet.top();
-            int bestVal = top.fScore;
-            auto iter = openSet.ordered_begin();
-            auto iterEnd = openSet.ordered_end();
-            for (; iter != iterEnd; ++iter)
-            {
-                const auto& s = *iter;
-                int val = s.fScore;
-                if (val <= bestVal * factor_w)
-                {
-                    // std::cout << "should: " << s << std::endl;
-                    // focalSetGolden.push(s.handle);
-                    if (std::find(focalSet.begin(), focalSet.end(), s.handle) == focalSet.end())
-                    {
-                        std::cout << "focalSet misses: " << s << std::endl;
-                        mismatch = true;
-                    }
-
-                }
-                else
-                {
-                    if (std::find(focalSet.begin(), focalSet.end(), s.handle) != focalSet.end())
-                    {
-                        std::cout << "focalSet shouldn't have: " << s << std::endl;
-                        mismatch = true;
-                    }
-                    // break;
-                }
-            }
-
-            assert(!mismatch);
-            // assert(focalSet == focalSetGolden);
-        #endif
-
             auto currentHandle = focalSet.top();
             AStarEpsilonNode current = *currentHandle;
             onExpandNode(current.state, current.fScore, current.gScore);
