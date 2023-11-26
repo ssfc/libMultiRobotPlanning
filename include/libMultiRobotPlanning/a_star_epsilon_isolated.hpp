@@ -210,11 +210,11 @@ private:
     boost::heap::compare<compareFocalHeuristic> >;
 
 public:
-    AStarEpsilon(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
+    AStarEpsilon(size_t dimx, size_t dimy, std::unordered_set<Location> input_obstacles,
                 Location input_goal, float input_w)
             : num_columns(dimx),
               num_rows(dimy),
-              obstacles(std::move(obstacles)),
+              obstacles(std::move(input_obstacles)),
               m_goal(std::move(input_goal)),  // NOLINT
               factor_w(input_w)
     {
