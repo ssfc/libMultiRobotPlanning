@@ -129,8 +129,8 @@ private:
     // 定义openSet_t和fibHeapHandle_t
     // using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
     // using HeapHandle = typename OpenSet::handle_type;
-    using OpenSet = typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
-    using HeapHandle = typename OpenSet::handle_type;
+    using HeapHandle = typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>
+        ::handle_type;
 
 public:
     // member funcs
@@ -208,7 +208,7 @@ public:
         solution.actions.clear();
         solution.cost = 0;
 
-        OpenSet open_set;
+        boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>> open_set;
         std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heap;
         std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
