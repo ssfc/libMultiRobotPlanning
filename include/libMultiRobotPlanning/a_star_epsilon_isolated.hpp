@@ -232,8 +232,9 @@ public:
 
     bool location_valid(const Location& s)
     {
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(s) == obstacles.end();
+        return s.x >= 0 && s.x < num_columns &&
+            s.y >= 0 && s.y < num_rows &&
+            obstacles.find(s) == obstacles.end();
     }
 
     int admissible_heuristic(const Location& s)
