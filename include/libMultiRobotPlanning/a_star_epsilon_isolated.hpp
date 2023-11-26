@@ -205,6 +205,10 @@ private:
 
     float factor_w;
 
+    // debug var;
+    size_t num_expanded_nodes;
+    size_t num_generated_nodes;
+
     using openSet_t = typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
     using fibHeapHandle_t = typename openSet_t::handle_type;
     using focalSet_t = typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
@@ -217,7 +221,9 @@ public:
               num_rows(dimy),
               obstacles(std::move(input_obstacles)),
               goal(std::move(input_goal)),  // NOLINT
-              factor_w(input_w)
+              factor_w(input_w),
+              num_expanded_nodes(0),
+              num_generated_nodes(0)
     {
         // std::cerr << "factor_w: " << factor_w << std::endl;
     }
