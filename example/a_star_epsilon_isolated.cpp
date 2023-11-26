@@ -101,13 +101,10 @@ int main(int argc, char* argv[])
     Location start(startX, startY);
     Environment env(dimX, y - 1, obstacles, goal, w);
 
-    AStarEpsilon astar(env, w);
-
     AgentPlan solution;
 
     if (env.location_valid(start))
     {
-        // is_success = astar.a_star_epsilon_search(start, solution);
         is_success = env.a_star_epsilon_search(start, solution);
     }
 
