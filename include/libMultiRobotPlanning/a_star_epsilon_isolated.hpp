@@ -89,12 +89,6 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
   - `Cost admissible_heuristic(const Location& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
-
-  - `Cost focalTransitionHeuristic(const Location& s1, const Location& s2, Cost
-gScoreS1, Cost gScoreS2)`\n
-    This function computes a (potentially inadmissible) heuristic for the given
-state transition.
-
   - `bool is_solution(const Location& s)`\n
     Return true if the given state is a goal state.
 
@@ -239,13 +233,6 @@ public:
         return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
     }
 
-    int focalTransitionHeuristic(const Location& /*s1*/, const Location& /*s2*/,
-                                 int gScoreS1, int gScoreS2)
-    {
-        // prefer lower g-values
-        return gScoreS2 - gScoreS1;
-    }
-
     bool is_solution(const Location& s)
     {
         return s == m_goal;
@@ -384,9 +371,7 @@ public:
                         // std::cout << "  this is a new node" << std::endl;
                         int fScore = tentative_gScore + admissible_heuristic(neighbor.location);
                         int focalHeuristic = current.focalHeuristic + tentative_gScore +
-                                             focalTransitionHeuristic(current.state, neighbor.location,
-                                                                            current.gScore,
-                                                                            tentative_gScore);
+                                             - current.gScore + tentative_gScore;
                         auto handle = openSet.push(
                                 AStarEpsilonNode(neighbor.location, fScore, tentative_gScore, focalHeuristic));
                         (*handle).handle = handle;
