@@ -288,7 +288,7 @@ public:
         std::vector<Child> neighbors;
         neighbors.reserve(10);
 
-        int bestFScore = (*handle).f_score;
+        int best_f_score = (*handle).f_score;
 
         // std::cout << "new search" << std::endl;
 
@@ -296,24 +296,24 @@ public:
         while (!open_set.empty())
         {
             // update focal list
-            int oldBestFScore = bestFScore;
-            bestFScore = open_set.top().f_score;
-            // std::cout << "bestFScore: " << bestFScore << std::endl;
-            if (bestFScore > oldBestFScore)
+            int oldBestFScore = best_f_score;
+            best_f_score = open_set.top().f_score;
+            // std::cout << "best_f_score: " << best_f_score << std::endl;
+            if (best_f_score > oldBestFScore)
             {
                 // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
-                // " << bestFScore << std::endl;
+                // " << best_f_score << std::endl;
                 auto iter = open_set.ordered_begin();
                 auto iterEnd = open_set.ordered_end();
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->f_score;
-                    if (val > oldBestFScore * factor_w && val <= bestFScore * factor_w)
+                    if (val > oldBestFScore * factor_w && val <= best_f_score * factor_w)
                     {
                         const AStarEpsilonNode& n = *iter;
                         focal_set.push(n.handle);
                     }
-                    if (val > bestFScore * factor_w)
+                    if (val > best_f_score * factor_w)
                     {
                         break;
                     }
@@ -375,7 +375,7 @@ public:
                         auto handle = open_set.push(
                                 AStarEpsilonNode(neighbor.location, f_score, tentative_gScore, focal_heuristic));
                         (*handle).handle = handle;
-                        if (f_score <= bestFScore * factor_w)
+                        if (f_score <= best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focal_set.push(handle);
@@ -406,7 +406,7 @@ public:
                         open_set.increase(handle);
                         num_generated_nodes++;
 
-                        if ((*handle).f_score <= bestFScore * factor_w && last_fScore > bestFScore * factor_w)
+                        if ((*handle).f_score <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focal_set.push(handle);
