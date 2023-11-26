@@ -201,8 +201,7 @@ public:
     }
 
 
-    bool a_star_search(const Location& start, AgentPlan& solution,
-                       int initialCost = 0)
+    bool a_star_search(AgentPlan& solution, int initialCost = 0)
     {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(start, 0));
