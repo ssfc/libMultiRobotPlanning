@@ -49,18 +49,24 @@ int main(int argc, char* argv[])
             ("output,o", po::value<std::string>(&outputFile)->required(), "output file (YAML)")
             ("suboptimality,w", po::value<float>(&w)->required(), "suboptimality factor");
 
-    try {
+    try
+    {
         po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, desc), vm);
         po::notify(vm);
 
-        if (vm.count("help") != 0u) {
+        if (vm.count("help") != 0u)
+        {
             std::cout << desc << "\n";
+
             return 0;
         }
-    } catch (po::error& e) {
+    }
+    catch (po::error& e)
+    {
         std::cerr << e.what() << std::endl << std::endl;
         std::cerr << desc << std::endl;
+
         return 1;
     }
 
@@ -69,16 +75,21 @@ int main(int argc, char* argv[])
     std::ifstream map(mapFile);
     int dimX = 0;
     int y = 0;
-    while (map.good()) {
+    while (map.good())
+    {
         std::string line;
         std::getline(map, line);
         int x = 0;
-        for (char c : line) {
-            if (c == '@') {
+        for (char c : line)
+        {
+            if (c == '@')
+            {
                 obstacles.insert(Location(x, y));
             }
+
             ++x;
         }
+
         dimX = std::max(dimX, x);
         ++y;
     }
@@ -88,7 +99,7 @@ int main(int argc, char* argv[])
 
     Location goal(goalX, goalY);
     Location start(startX, startY);
-    Environment env(dimX, y - 1, obstacles, goal);
+    Environment env(dimX, y - 1, obstacles, goal, w);
 
     AStarEpsilon astar(env, w);
 

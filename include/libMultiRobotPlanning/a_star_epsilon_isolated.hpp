@@ -210,13 +210,16 @@ private:
     int num_rows;
     std::unordered_set<Location> obstacles;
     Location m_goal;
+
+    float factor_w;
 public:
     Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-                Location goal)
+                Location goal, float input_w)
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(obstacles)),
-              m_goal(std::move(goal))  // NOLINT
+              m_goal(std::move(goal)),  // NOLINT
+              factor_w(input_w)
     {}
 
     bool location_valid(const Location& s)
