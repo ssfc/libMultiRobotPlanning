@@ -273,13 +273,13 @@ public:
         solution.actions.clear();
         solution.cost = 0;
 
-        openSet_t openSet;
+        openSet_t open_set;
         focalSet_t focalSet;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> stateToHeap;
         std::unordered_set<Location, std::hash<Location>> closedSet;
         std::unordered_map<Location, std::tuple<Location, Action, int, int>, std::hash<Location>> cameFrom;
 
-        auto handle = openSet.push(AStarEpsilonNode(startState, admissible_heuristic(startState), 0, 0));
+        auto handle = open_set.push(AStarEpsilonNode(startState, admissible_heuristic(startState), 0, 0));
         stateToHeap.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
 
@@ -293,18 +293,18 @@ public:
         // std::cout << "new search" << std::endl;
 
         size_t num_iters = 0;
-        while (!openSet.empty())
+        while (!open_set.empty())
         {
             // update focal list
             int oldBestFScore = bestFScore;
-            bestFScore = openSet.top().f_score;
+            bestFScore = open_set.top().f_score;
             // std::cout << "bestFScore: " << bestFScore << std::endl;
             if (bestFScore > oldBestFScore)
             {
                 // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
                 // " << bestFScore << std::endl;
-                auto iter = openSet.ordered_begin();
-                auto iterEnd = openSet.ordered_end();
+                auto iter = open_set.ordered_begin();
+                auto iterEnd = open_set.ordered_end();
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->f_score;
@@ -342,7 +342,7 @@ public:
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
-                solution.fmin = openSet.top().f_score;
+                solution.fmin = open_set.top().f_score;
 
                 std::cerr << "num expanded nodes: " << num_expanded_nodes << std::endl;
                 std::cerr << "num generated nodes: " << num_generated_nodes << std::endl;
@@ -352,7 +352,7 @@ public:
             }
 
             focalSet.pop();
-            openSet.erase(currentHandle);
+            open_set.erase(currentHandle);
             stateToHeap.erase(current.state);
             closedSet.insert(current.state);
 
@@ -372,7 +372,7 @@ public:
                         int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
                         int focal_heuristic = current.focal_heuristic + tentative_gScore +
                                              - current.g_score + tentative_gScore;
-                        auto handle = openSet.push(
+                        auto handle = open_set.push(
                                 AStarEpsilonNode(neighbor.location, f_score, tentative_gScore, focal_heuristic));
                         (*handle).handle = handle;
                         if (f_score <= bestFScore * factor_w)
@@ -403,7 +403,7 @@ public:
                         int delta = last_gScore - tentative_gScore;
                         (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
-                        openSet.increase(handle);
+                        open_set.increase(handle);
                         num_generated_nodes++;
 
                         if ((*handle).f_score <= bestFScore * factor_w && last_fScore > bestFScore * factor_w)
