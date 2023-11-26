@@ -303,8 +303,9 @@ private:
         boost::heap::compare<compareFocalHeuristic> >;
 
 public:
-    AStarEpsilon(Environment& environment, float w)
-            : m_env(environment), factor_w(w)
+    AStarEpsilon(Environment& input_environment, float input_w):
+            m_env(input_environment),
+            factor_w(input_w)
             {}
 
     bool a_star_epsilon_search(const Location& startState, AgentPlan& solution)
@@ -505,7 +506,7 @@ public:
                         (*handle).fScore -= delta;
                         openSet.increase(handle);
                         m_env.onDiscover(neighbor.location, (*handle).fScore, (*handle).gScore);
-                        
+
                         if ((*handle).fScore <= bestFScore * factor_w && last_fScore > bestFScore * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
