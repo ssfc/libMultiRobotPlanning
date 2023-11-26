@@ -220,7 +220,9 @@ public:
               obstacles(std::move(obstacles)),
               m_goal(std::move(goal)),  // NOLINT
               factor_w(input_w)
-    {}
+    {
+        // std::cerr << "factor_w: " << factor_w << std::endl;
+    }
 
     bool location_valid(const Location& s)
     {
