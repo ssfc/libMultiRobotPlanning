@@ -322,7 +322,7 @@ public:
         while (!openSet.empty())
         {
             // update focal list
-#ifdef REBUILT_FOCAL_LIST
+        #ifdef REBUILT_FOCAL_LIST // 估计是为了调试吧，不然每一轮rebuild干啥？
             focalSet.clear();
             const auto& top = openSet.top();
             int bestVal = top.fScore;
@@ -341,8 +341,7 @@ public:
                     break;
                 }
             }
-#else
-
+        #else
             int oldBestFScore = bestFScore;
             bestFScore = openSet.top().fScore;
             // std::cout << "bestFScore: " << bestFScore << std::endl;
@@ -366,10 +365,10 @@ public:
                     }
                 }
             }
-#endif
+        #endif
 
             // check focal list/open list consistency
-#ifdef CHECK_FOCAL_LIST
+        #ifdef CHECK_FOCAL_LIST // 也是为了调试，有啥好check的。
             // focalSet_t focalSetGolden;
             bool mismatch = false;
             const auto& top = openSet.top();
@@ -404,7 +403,7 @@ public:
 
             assert(!mismatch);
             // assert(focalSet == focalSetGolden);
-#endif
+        #endif
 
             auto currentHandle = focalSet.top();
             AStarEpsilonNode current = *currentHandle;
