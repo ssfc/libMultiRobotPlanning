@@ -200,7 +200,7 @@ private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
-    Location m_goal;
+    Location goal;
 
     float factor_w;
 
@@ -215,7 +215,7 @@ public:
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(input_obstacles)),
-              m_goal(std::move(input_goal)),  // NOLINT
+              goal(std::move(input_goal)),  // NOLINT
               factor_w(input_w)
     {
         // std::cerr << "factor_w: " << factor_w << std::endl;
@@ -230,12 +230,12 @@ public:
 
     int admissible_heuristic(const Location& s)
     {
-        return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
+        return std::abs(s.x - goal.x) + std::abs(s.y - goal.y);
     }
 
     bool is_solution(const Location& s)
     {
-        return s == m_goal;
+        return s == goal;
     }
 
     void get_neighbors(const Location& s, std::vector<Child>& neighbors)
