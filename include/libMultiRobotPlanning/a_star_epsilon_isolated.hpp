@@ -96,10 +96,6 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
-  - `void onExpandNode(const Location& s, int f_score, int g_score)`\n
-    This function is called on every expansion and can be used for statistical
-purposes.
-
   - `void onDiscover(const Location& s, int f_score, int g_score)`\n
     This function is called on every node discovery and can be used for
    statistical purposes.
@@ -274,8 +270,6 @@ public:
         }
     }
 
-    void onExpandNode(const Location& /*s*/, int /*f_score*/, int /*g_score*/) {}
-
     void onDiscover(const Location& /*s*/, int /*f_score*/, int /*g_score*/) {}
 
     bool a_star_epsilon_search(const Location& startState, AgentPlan& solution)
@@ -333,7 +327,7 @@ public:
 
             auto currentHandle = focalSet.top();
             AStarEpsilonNode current = *currentHandle;
-            onExpandNode(current.state, current.f_score, current.g_score);
+            num_expanded_nodes++;
 
             if (is_solution(current.state))
             {
@@ -354,6 +348,9 @@ public:
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
                 solution.fmin = openSet.top().f_score;
+
+                std::cerr << "num expanded nodes: " << num_expanded_nodes << std::endl;
+                std::cerr << "num generated nodes: " << num_generated_nodes << std::endl;
 
                 return true;
             }
