@@ -94,30 +94,38 @@ int main(int argc, char* argv[])
 
     AgentPlan solution;
 
-    if (env.location_valid(start)) {
+    if (env.location_valid(start))
+    {
         is_success = astar.a_star_epsilon_search(start, solution);
     }
 
     std::ofstream out(outputFile);
-    if (is_success) {
-        std::cout << "Planning successful! Total cost: " << solution.cost
-                  << std::endl;
-        for (size_t i = 0; i < solution.actions.size(); ++i) {
+    if (is_success)
+    {
+        std::cout << "Planning successful! Total cost: " << solution.cost << std::endl;
+        for (size_t i = 0; i < solution.actions.size(); ++i)
+        {
             std::cout << solution.path[i].second << ": " << solution.path[i].first
                       << "->" << solution.actions[i].first
                       << "(cost: " << solution.actions[i].second << ")" << std::endl;
         }
+
         std::cout << solution.path.back().second << ": "
                   << solution.path.back().first << std::endl;
 
         out << "schedule:" << std::endl;
         out << "  agent1:" << std::endl;
-        for (size_t i = 0; i < solution.path.size(); ++i) {
+
+        for (size_t i = 0; i < solution.path.size(); ++i)
+        {
             out << "    - x: " << solution.path[i].first.x << std::endl
                 << "      y: " << solution.path[i].first.y << std::endl
                 << "      t: " << i << std::endl;
         }
-    } else {
+
+    }
+    else
+    {
         std::cout << "Planning NOT successful!" << std::endl;
     }
 
