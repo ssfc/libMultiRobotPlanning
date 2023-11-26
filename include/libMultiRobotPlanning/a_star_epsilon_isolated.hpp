@@ -276,7 +276,7 @@ public:
         openSet_t open_set;
         focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> location_to_heap;
-        std::unordered_set<Location, std::hash<Location>> closedSet;
+        std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location, Action, int, int>, std::hash<Location>> came_from;
 
         auto handle = open_set.push(AStarEpsilonNode(startState, admissible_heuristic(startState), 0, 0));
@@ -354,7 +354,7 @@ public:
             focal_set.pop();
             open_set.erase(currentHandle);
             location_to_heap.erase(current.state);
-            closedSet.insert(current.state);
+            closed_set.insert(current.state);
 
             // traverse neighbors
             neighbors.clear();
@@ -362,7 +362,7 @@ public:
 
             for (const Child& neighbor : neighbors)
             {
-                if (closedSet.find(neighbor.location) == closedSet.end())
+                if (closed_set.find(neighbor.location) == closed_set.end())
                 {
                     int tentative_gScore = current.g_score + neighbor.cost;
                     auto iter = location_to_heap.find(neighbor.location);
