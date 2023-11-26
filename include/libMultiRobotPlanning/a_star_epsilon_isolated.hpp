@@ -322,26 +322,6 @@ public:
         while (!openSet.empty())
         {
             // update focal list
-        #ifdef REBUILT_FOCAL_LIST // 估计是为了调试吧，不然每一轮rebuild干啥？
-            focalSet.clear();
-            const auto& top = openSet.top();
-            int bestVal = top.fScore;
-            auto iter = openSet.ordered_begin();
-            auto iterEnd = openSet.ordered_end();
-            for (; iter != iterEnd; ++iter)
-            {
-                int val = iter->fScore;
-                if (val <= bestVal * factor_w)
-                {
-                    const auto& s = *iter;
-                    focalSet.push(s.handle);
-                }
-                else
-                {
-                    break;
-                }
-            }
-        #else
             int oldBestFScore = bestFScore;
             bestFScore = openSet.top().fScore;
             // std::cout << "bestFScore: " << bestFScore << std::endl;
@@ -365,7 +345,6 @@ public:
                     }
                 }
             }
-        #endif
 
             auto currentHandle = focalSet.top();
             AStarEpsilonNode current = *currentHandle;
