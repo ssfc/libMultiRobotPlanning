@@ -167,36 +167,36 @@ public:
     }
 
     // get neighbor of current location
-    void get_neighbors(const Location& location, std::vector<Child>& neighbors)
+    void get_neighbors(const Location& location, std::vector<Child>& children)
     {
-        neighbors.clear();
+        children.clear();
 
         Location north_neighbor(location.x, location.y + 1);
 
         if (location_valid(north_neighbor))
         {
-            neighbors.emplace_back(Child(north_neighbor, Action::Up, 1));
+            children.emplace_back(Child(north_neighbor, Action::Up, 1));
         }
 
         Location south_neighbor(location.x, location.y - 1);
 
         if (location_valid(south_neighbor))
         {
-            neighbors.emplace_back(Child(south_neighbor, Action::Down, 1));
+            children.emplace_back(Child(south_neighbor, Action::Down, 1));
         }
 
         Location west_neighbor(location.x - 1, location.y);
 
         if (location_valid(west_neighbor))
         {
-            neighbors.emplace_back(Child(west_neighbor, Action::Left, 1));
+            children.emplace_back(Child(west_neighbor, Action::Left, 1));
         }
 
         Location east_neighbor(location.x + 1, location.y);
 
         if (location_valid(east_neighbor))
         {
-            neighbors.emplace_back(Child(east_neighbor, Action::Right, 1));
+            children.emplace_back(Child(east_neighbor, Action::Right, 1));
         }
     }
 
@@ -219,8 +219,8 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Child> neighbors;
-        neighbors.reserve(10);
+        std::vector<Child> children;
+        children.reserve(10);
 
         while (!open_set.empty())
         {
@@ -258,10 +258,10 @@ public:
             location_to_heap.erase(current.location);
             closed_set.insert(current.location);
 
-            // traverse neighbors
-            neighbors.clear();
-            get_neighbors(current.location, neighbors);
-            for (const Child& neighbor : neighbors)
+            // traverse children
+            children.clear();
+            get_neighbors(current.location, children);
+            for (const Child& neighbor : children)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end()) // not in closed set
                 {
