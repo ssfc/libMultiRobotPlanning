@@ -288,7 +288,7 @@ class AStarEpsilon
 {
 private:
     Environment& m_env;
-    float m_w;
+    float factor_w;
 
     using openSet_t = typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
     using fibHeapHandle_t = typename openSet_t::handle_type;
@@ -304,7 +304,7 @@ private:
 
 public:
     AStarEpsilon(Environment& environment, float w)
-            : m_env(environment), m_w(w)
+            : m_env(environment), factor_w(w)
             {}
 
     bool a_star_epsilon_search(const Location& startState, AgentPlan& solution)
@@ -346,7 +346,7 @@ public:
             for (; iter != iterEnd; ++iter)
             {
                 int val = iter->fScore;
-                if (val <= bestVal * m_w)
+                if (val <= bestVal * factor_w)
                 {
                     const auto& s = *iter;
                     focalSet.push(s.handle);
@@ -370,12 +370,12 @@ public:
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->fScore;
-                    if (val > oldBestFScore * m_w && val <= bestFScore * m_w)
+                    if (val > oldBestFScore * factor_w && val <= bestFScore * factor_w)
                     {
                         const AStarEpsilonNode& n = *iter;
                         focalSet.push(n.handle);
                     }
-                    if (val > bestFScore * m_w)
+                    if (val > bestFScore * factor_w)
                     {
                         break;
                     }
@@ -395,7 +395,7 @@ public:
             {
                 const auto& s = *iter;
                 int val = s.fScore;
-                if (val <= bestVal * m_w)
+                if (val <= bestVal * factor_w)
                 {
                     // std::cout << "should: " << s << std::endl;
                     // focalSetGolden.push(s.handle);
@@ -463,12 +463,11 @@ public:
                 {
                     int tentative_gScore = current.gScore + neighbor.cost;
                     auto iter = stateToHeap.find(neighbor.location);
-                    if (iter == stateToHeap.end()) {  // Discover a new node
+                    if (iter == stateToHeap.end())
+                    {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
-                        int fScore =
-                                tentative_gScore + m_env.admissible_heuristic(neighbor.location);
-                        int focalHeuristic =
-                                current.focalHeuristic +
+                        int fScore = tentative_gScore + m_env.admissible_heuristic(neighbor.location);
+                        int focalHeuristic = current.focalHeuristic +
                                 m_env.focalStateHeuristic(neighbor.location, tentative_gScore) +
                                 m_env.focalTransitionHeuristic(current.state, neighbor.location,
                                                                current.gScore,
@@ -476,10 +475,12 @@ public:
                         auto handle = openSet.push(
                                 AStarEpsilonNode(neighbor.location, fScore, tentative_gScore, focalHeuristic));
                         (*handle).handle = handle;
-                        if (fScore <= bestFScore * m_w) {
+                        if (fScore <= bestFScore * factor_w)
+                        {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focalSet.push(handle);
                         }
+
                         stateToHeap.insert(std::make_pair<>(neighbor.location, handle));
                         m_env.onDiscover(neighbor.location, fScore, tentative_gScore);
                         // std::cout << "  this is a new node " << fScore << "," <<
@@ -504,7 +505,8 @@ public:
                         (*handle).fScore -= delta;
                         openSet.increase(handle);
                         m_env.onDiscover(neighbor.location, (*handle).fScore, (*handle).gScore);
-                        if ((*handle).fScore <= bestFScore * m_w && last_fScore > bestFScore * m_w)
+                        
+                        if ((*handle).fScore <= bestFScore * factor_w && last_fScore > bestFScore * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focalSet.push(handle);
