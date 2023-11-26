@@ -96,10 +96,6 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
-  - `void onDiscover(const Location& s, int f_score, int g_score)`\n
-    This function is called on every node discovery and can be used for
-   statistical purposes.
-
     \tparam LocationHasher A class to convert a state to a hash value. Default:
    std::hash<Location>
 */
@@ -270,8 +266,6 @@ public:
         }
     }
 
-    void onDiscover(const Location& /*s*/, int /*f_score*/, int /*g_score*/) {}
-
     bool a_star_epsilon_search(const Location& startState, AgentPlan& solution)
     {
         solution.path.clear();
@@ -386,7 +380,7 @@ public:
                         }
 
                         stateToHeap.insert(std::make_pair<>(neighbor.location, handle));
-                        onDiscover(neighbor.location, f_score, tentative_gScore);
+                        num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -408,7 +402,7 @@ public:
                         (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
                         openSet.increase(handle);
-                        onDiscover(neighbor.location, (*handle).f_score, (*handle).g_score);
+                        num_generated_nodes++;
 
                         if ((*handle).f_score <= bestFScore * factor_w && last_fScore > bestFScore * factor_w)
                         {
