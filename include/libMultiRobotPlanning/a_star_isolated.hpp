@@ -213,8 +213,7 @@ public:
         std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
-        auto handle = open_set.push(AStarNode(start,
-  admissible_heuristic(start), initialCost));
+        auto handle = open_set.push(AStarNode(start, admissible_heuristic(start), initialCost));
         location_to_heap.insert(std::make_pair<>(start, handle));
         (*handle).handle = handle;
 
