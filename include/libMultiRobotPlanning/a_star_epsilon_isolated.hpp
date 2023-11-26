@@ -212,6 +212,12 @@ private:
     Location m_goal;
 
     float factor_w;
+
+    using openSet_t = typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
+    using fibHeapHandle_t = typename openSet_t::handle_type;
+    using focalSet_t = typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
+    boost::heap::compare<compareFocalHeuristic> >;
+
 public:
     Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
                 Location goal, float input_w)
