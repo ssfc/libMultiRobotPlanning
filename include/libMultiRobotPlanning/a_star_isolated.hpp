@@ -213,9 +213,9 @@ public:
         std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
-        auto handle = open_set.emplace(AStarNode(start, admissible_heuristic(start), initialCost));
-        location_to_heap.insert(std::make_pair<>(start, handle));
-        (*handle).handle = handle;
+        auto current_node_handle = open_set.emplace(AStarNode(start, admissible_heuristic(start), initialCost));
+        location_to_heap.insert(std::make_pair<>(start, current_node_handle));
+        (*current_node_handle).handle = current_node_handle;
 
         std::vector<Child> children;
         children.reserve(10);
