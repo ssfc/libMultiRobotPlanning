@@ -211,11 +211,11 @@ private:
 
 public:
     AStarEpsilon(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-                Location goal, float input_w)
+                Location input_goal, float input_w)
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(obstacles)),
-              m_goal(std::move(goal)),  // NOLINT
+              m_goal(std::move(input_goal)),  // NOLINT
               factor_w(input_w)
     {
         // std::cerr << "factor_w: " << factor_w << std::endl;
