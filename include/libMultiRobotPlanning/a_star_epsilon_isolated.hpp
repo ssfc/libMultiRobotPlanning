@@ -292,6 +292,7 @@ public:
 
         // std::cout << "new search" << std::endl;
 
+        size_t num_iters = 0;
         while (!openSet.empty())
         {
             // update focal list
@@ -345,6 +346,7 @@ public:
 
                 std::cerr << "num expanded nodes: " << num_expanded_nodes << std::endl;
                 std::cerr << "num generated nodes: " << num_generated_nodes << std::endl;
+                std::cerr << "num iters: " << num_iters << std::endl;
 
                 return true;
             }
@@ -421,6 +423,7 @@ public:
                 }
             }
 
+            num_iters++;
         }
 
         return false;
