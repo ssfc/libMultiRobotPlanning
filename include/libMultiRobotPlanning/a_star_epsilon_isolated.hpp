@@ -96,11 +96,11 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
-  - `void onExpandNode(const Location& s, int fScore, int gScore)`\n
+  - `void onExpandNode(const Location& s, int f_score, int gScore)`\n
     This function is called on every expansion and can be used for statistical
 purposes.
 
-  - `void onDiscover(const Location& s, int fScore, int gScore)`\n
+  - `void onDiscover(const Location& s, int f_score, int gScore)`\n
     This function is called on every node discovery and can be used for
    statistical purposes.
 
@@ -115,7 +115,7 @@ public:
 
     Location state;
 
-    int fScore;
+    int f_score;
     int gScore;
     int focalHeuristic;
 
@@ -128,9 +128,9 @@ public:
     // #endif
 
 public:
-    AStarEpsilonNode(const Location& state, int fScore, int gScore, int focalHeuristic)
+    AStarEpsilonNode(const Location& state, int f_score, int gScore, int focalHeuristic)
             : state(state),
-              fScore(fScore),
+              f_score(f_score),
               gScore(gScore),
               focalHeuristic(focalHeuristic)
     {}
@@ -138,13 +138,13 @@ public:
     bool operator<(const AStarEpsilonNode& other) const
     {
         // Sort order
-        // 1. lowest fScore
+        // 1. lowest f_score
         // 2. highest gScore
 
         // Our heap is a maximum heap, so we invert the comperator function here
-        if (fScore != other.fScore)
+        if (f_score != other.f_score)
         {
-            return fScore > other.fScore;
+            return f_score > other.f_score;
         }
         else
         {
@@ -154,7 +154,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const AStarEpsilonNode& node)
     {
-        os << "state: " << node.state << " fScore: " << node.fScore
+        os << "state: " << node.state << " f_score: " << node.f_score
            << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
 
         return os;
@@ -172,19 +172,19 @@ struct compareFocalHeuristic
         // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
         // Path Finding" by Cohen et. al.)
         // 1. lowest focalHeuristic
-        // 2. lowest fScore
+        // 2. lowest f_score
         // 3. highest gScore
 
         // Our heap is a maximum heap, so we invert the comperator function here
         if ((*h1).focalHeuristic != (*h2).focalHeuristic)
         {
             return (*h1).focalHeuristic > (*h2).focalHeuristic;
-            // } else if ((*h1).fScore != (*h2).fScore) {
-            //   return (*h1).fScore > (*h2).fScore;
+            // } else if ((*h1).f_score != (*h2).f_score) {
+            //   return (*h1).f_score > (*h2).f_score;
         }
-        else if ((*h1).fScore != (*h2).fScore)
+        else if ((*h1).f_score != (*h2).f_score)
         {
-            return (*h1).fScore > (*h2).fScore;
+            return (*h1).f_score > (*h2).f_score;
         }
         else
         {
@@ -267,9 +267,9 @@ public:
         }
     }
 
-    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
+    void onExpandNode(const Location& /*s*/, int /*f_score*/, int /*gScore*/) {}
 
-    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {}
+    void onDiscover(const Location& /*s*/, int /*f_score*/, int /*gScore*/) {}
 
     bool a_star_epsilon_search(const Location& startState, AgentPlan& solution)
     {
@@ -293,7 +293,7 @@ public:
         std::vector<Child> neighbors;
         neighbors.reserve(10);
 
-        int bestFScore = (*handle).fScore;
+        int bestFScore = (*handle).f_score;
 
         // std::cout << "new search" << std::endl;
 
@@ -301,7 +301,7 @@ public:
         {
             // update focal list
             int oldBestFScore = bestFScore;
-            bestFScore = openSet.top().fScore;
+            bestFScore = openSet.top().f_score;
             // std::cout << "bestFScore: " << bestFScore << std::endl;
             if (bestFScore > oldBestFScore)
             {
@@ -311,7 +311,7 @@ public:
                 auto iterEnd = openSet.ordered_end();
                 for (; iter != iterEnd; ++iter)
                 {
-                    int val = iter->fScore;
+                    int val = iter->f_score;
                     if (val > oldBestFScore * factor_w && val <= bestFScore * factor_w)
                     {
                         const AStarEpsilonNode& n = *iter;
@@ -326,7 +326,7 @@ public:
 
             auto currentHandle = focalSet.top();
             AStarEpsilonNode current = *currentHandle;
-            onExpandNode(current.state, current.fScore, current.gScore);
+            onExpandNode(current.state, current.f_score, current.gScore);
 
             if (is_solution(current.state))
             {
@@ -346,7 +346,7 @@ public:
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.gScore;
-                solution.fmin = openSet.top().fScore;
+                solution.fmin = openSet.top().f_score;
 
                 return true;
             }
@@ -369,21 +369,21 @@ public:
                     if (iter == stateToHeap.end())
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
-                        int fScore = tentative_gScore + admissible_heuristic(neighbor.location);
+                        int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
                         int focalHeuristic = current.focalHeuristic + tentative_gScore +
                                              - current.gScore + tentative_gScore;
                         auto handle = openSet.push(
-                                AStarEpsilonNode(neighbor.location, fScore, tentative_gScore, focalHeuristic));
+                                AStarEpsilonNode(neighbor.location, f_score, tentative_gScore, focalHeuristic));
                         (*handle).handle = handle;
-                        if (fScore <= bestFScore * factor_w)
+                        if (f_score <= bestFScore * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focalSet.push(handle);
                         }
 
                         stateToHeap.insert(std::make_pair<>(neighbor.location, handle));
-                        onDiscover(neighbor.location, fScore, tentative_gScore);
-                        // std::cout << "  this is a new node " << fScore << "," <<
+                        onDiscover(neighbor.location, f_score, tentative_gScore);
+                        // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
                     else
@@ -396,17 +396,17 @@ public:
                         }
 
                         int last_gScore = (*handle).gScore;
-                        int last_fScore = (*handle).fScore;
+                        int last_fScore = (*handle).f_score;
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
                         // << last_gScore << " " << *handle << std::endl;
                         // update f and gScore
                         int delta = last_gScore - tentative_gScore;
                         (*handle).gScore = tentative_gScore;
-                        (*handle).fScore -= delta;
+                        (*handle).f_score -= delta;
                         openSet.increase(handle);
-                        onDiscover(neighbor.location, (*handle).fScore, (*handle).gScore);
+                        onDiscover(neighbor.location, (*handle).f_score, (*handle).gScore);
 
-                        if ((*handle).fScore <= bestFScore * factor_w && last_fScore > bestFScore * factor_w)
+                        if ((*handle).f_score <= bestFScore * factor_w && last_fScore > bestFScore * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focalSet.push(handle);
