@@ -99,13 +99,13 @@ int main(int argc, char* argv[])
 
     Location goal(goalX, goalY);
     Location start(startX, startY);
-    AStarEpsilon env(dimX, y - 1, obstacles, goal, w);
+    AStarEpsilon test(dimX, y - 1, obstacles, goal, w);
 
     AgentPlan solution;
 
-    if (env.location_valid(start))
+    if (test.location_valid(start))
     {
-        is_success = env.a_star_epsilon_search(start, solution);
+        is_success = test.a_star_epsilon_search(start, solution);
     }
 
     std::ofstream out(outputFile);
