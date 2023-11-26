@@ -93,7 +93,7 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
     Return true if the given state is a goal state.
 
   - `void get_neighbors(const Location& s, std::vector<Child<Location, Action,
-   int> >& neighbors)`\n
+   int> >& children)`\n
     Fill the list of neighboring state for the given state s.
 
     \tparam LocationHasher A class to convert a state to a hash value. Default:
@@ -237,32 +237,32 @@ public:
         return s == goal;
     }
 
-    void get_neighbors(const Location& s, std::vector<Child>& neighbors)
+    void get_neighbors(const Location& s, std::vector<Child>& children)
     {
-        neighbors.clear();
+        children.clear();
 
         Location up(s.x, s.y + 1);
         if (location_valid(up))
         {
-            neighbors.emplace_back(Child(up, Action::Up, 1));
+            children.emplace_back(Child(up, Action::Up, 1));
         }
 
         Location down(s.x, s.y - 1);
         if (location_valid(down))
         {
-            neighbors.emplace_back(Child(down, Action::Down, 1));
+            children.emplace_back(Child(down, Action::Down, 1));
         }
 
         Location left(s.x - 1, s.y);
         if (location_valid(left))
         {
-            neighbors.emplace_back(Child(left, Action::Left, 1));
+            children.emplace_back(Child(left, Action::Left, 1));
         }
 
         Location right(s.x + 1, s.y);
         if (location_valid(right))
         {
-            neighbors.emplace_back(Child(right, Action::Right, 1));
+            children.emplace_back(Child(right, Action::Right, 1));
         }
     }
 
@@ -285,8 +285,8 @@ public:
 
         focal_set.push(handle);
 
-        std::vector<Child> neighbors;
-        neighbors.reserve(10);
+        std::vector<Child> children;
+        children.reserve(10);
 
         int best_f_score = (*handle).f_score;
 
@@ -356,11 +356,11 @@ public:
             location_to_heap.erase(current.state);
             closed_set.insert(current.state);
 
-            // traverse neighbors
-            neighbors.clear();
-            get_neighbors(current.state, neighbors);
+            // traverse children
+            children.clear();
+            get_neighbors(current.state, children);
 
-            for (const Child& neighbor : neighbors)
+            for (const Child& neighbor : children)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
