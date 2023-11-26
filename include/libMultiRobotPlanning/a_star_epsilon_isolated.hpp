@@ -96,11 +96,11 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
    int> >& neighbors)`\n
     Fill the list of neighboring state for the given state s.
 
-  - `void onExpandNode(const Location& s, int f_score, int gScore)`\n
+  - `void onExpandNode(const Location& s, int f_score, int g_score)`\n
     This function is called on every expansion and can be used for statistical
 purposes.
 
-  - `void onDiscover(const Location& s, int f_score, int gScore)`\n
+  - `void onDiscover(const Location& s, int f_score, int g_score)`\n
     This function is called on every node discovery and can be used for
    statistical purposes.
 
@@ -116,7 +116,7 @@ public:
     Location state;
 
     int f_score;
-    int gScore;
+    int g_score;
     int focalHeuristic;
 
     fibHeapHandle_t handle;
@@ -132,7 +132,7 @@ public:
                      int input_gScore, int input_focalHeuristic)
             : state(input_state),
               f_score(input_f_score),
-              gScore(input_gScore),
+              g_score(input_gScore),
               focalHeuristic(input_focalHeuristic)
     {}
 
@@ -140,7 +140,7 @@ public:
     {
         // Sort order
         // 1. lowest f_score
-        // 2. highest gScore
+        // 2. highest g_score
 
         // Our heap is a maximum heap, so we invert the comperator function here
         if (f_score != other.f_score)
@@ -149,14 +149,14 @@ public:
         }
         else
         {
-            return gScore < other.gScore;
+            return g_score < other.g_score;
         }
     }
 
     friend std::ostream& operator<<(std::ostream& os, const AStarEpsilonNode& node)
     {
         os << "state: " << node.state << " f_score: " << node.f_score
-           << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
+           << " g_score: " << node.g_score << " focal: " << node.focalHeuristic;
 
         return os;
     }
@@ -174,7 +174,7 @@ struct compareFocalHeuristic
         // Path Finding" by Cohen et. al.)
         // 1. lowest focalHeuristic
         // 2. lowest f_score
-        // 3. highest gScore
+        // 3. highest g_score
 
         // Our heap is a maximum heap, so we invert the comperator function here
         if ((*h1).focalHeuristic != (*h2).focalHeuristic)
@@ -189,7 +189,7 @@ struct compareFocalHeuristic
         }
         else
         {
-            return (*h1).gScore < (*h2).gScore;
+            return (*h1).g_score < (*h2).g_score;
         }
     }
 };
@@ -268,9 +268,9 @@ public:
         }
     }
 
-    void onExpandNode(const Location& /*s*/, int /*f_score*/, int /*gScore*/) {}
+    void onExpandNode(const Location& /*s*/, int /*f_score*/, int /*g_score*/) {}
 
-    void onDiscover(const Location& /*s*/, int /*f_score*/, int /*gScore*/) {}
+    void onDiscover(const Location& /*s*/, int /*f_score*/, int /*g_score*/) {}
 
     bool a_star_epsilon_search(const Location& startState, AgentPlan& solution)
     {
@@ -327,7 +327,7 @@ public:
 
             auto currentHandle = focalSet.top();
             AStarEpsilonNode current = *currentHandle;
-            onExpandNode(current.state, current.f_score, current.gScore);
+            onExpandNode(current.state, current.f_score, current.g_score);
 
             if (is_solution(current.state))
             {
@@ -346,7 +346,7 @@ public:
                 solution.path.emplace_back(std::make_pair<>(startState, 0));
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
-                solution.cost = current.gScore;
+                solution.cost = current.g_score;
                 solution.fmin = openSet.top().f_score;
 
                 return true;
@@ -365,14 +365,14 @@ public:
             {
                 if (closedSet.find(neighbor.location) == closedSet.end())
                 {
-                    int tentative_gScore = current.gScore + neighbor.cost;
+                    int tentative_gScore = current.g_score + neighbor.cost;
                     auto iter = stateToHeap.find(neighbor.location);
                     if (iter == stateToHeap.end())
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
                         int focalHeuristic = current.focalHeuristic + tentative_gScore +
-                                             - current.gScore + tentative_gScore;
+                                             - current.g_score + tentative_gScore;
                         auto handle = openSet.push(
                                 AStarEpsilonNode(neighbor.location, f_score, tentative_gScore, focalHeuristic));
                         (*handle).handle = handle;
@@ -391,21 +391,21 @@ public:
                     {
                         auto handle = iter->second;
                         // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).gScore)
+                        if (tentative_gScore >= (*handle).g_score)
                         {
                             continue;
                         }
 
-                        int last_gScore = (*handle).gScore;
+                        int last_gScore = (*handle).g_score;
                         int last_fScore = (*handle).f_score;
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
                         // << last_gScore << " " << *handle << std::endl;
-                        // update f and gScore
+                        // update f and g_score
                         int delta = last_gScore - tentative_gScore;
-                        (*handle).gScore = tentative_gScore;
+                        (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
                         openSet.increase(handle);
-                        onDiscover(neighbor.location, (*handle).f_score, (*handle).gScore);
+                        onDiscover(neighbor.location, (*handle).f_score, (*handle).g_score);
 
                         if ((*handle).f_score <= bestFScore * factor_w && last_fScore > bestFScore * factor_w)
                         {
