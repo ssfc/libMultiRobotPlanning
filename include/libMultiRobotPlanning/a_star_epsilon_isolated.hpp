@@ -89,9 +89,6 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
   - `Cost admissible_heuristic(const Location& s)`\n
     This function can return 0 if no suitable heuristic is available.
 
-  - `Cost focalStateHeuristic(const Location& s, Cost gScore)`\n
-    This function computes a (potentially inadmissible) heuristic for the given
-state.
 
   - `Cost focalTransitionHeuristic(const Location& s1, const Location& s2, Cost
 gScoreS1, Cost gScoreS2)`\n
@@ -242,13 +239,6 @@ public:
         return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
     }
 
-    // a potentially inadmissible heuristic
-    int focalStateHeuristic(const Location& /*s*/, int gScore)
-    {
-        // prefer lower g-values
-        return gScore;
-    }
-
     int focalTransitionHeuristic(const Location& /*s1*/, const Location& /*s2*/,
                                  int gScoreS1, int gScoreS2)
     {
@@ -393,8 +383,7 @@ public:
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         int fScore = tentative_gScore + admissible_heuristic(neighbor.location);
-                        int focalHeuristic = current.focalHeuristic +
-                                             focalStateHeuristic(neighbor.location, tentative_gScore) +
+                        int focalHeuristic = current.focalHeuristic + tentative_gScore +
                                              focalTransitionHeuristic(current.state, neighbor.location,
                                                                             current.gScore,
                                                                             tentative_gScore);
