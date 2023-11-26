@@ -84,7 +84,7 @@ default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
 \tparam Location Custom state for the search. Needs to be copy'able
 \tparam Action Custom action for the search. Needs to be copy'able
 \tparam Cost Custom Cost type (integer or floating point types)
-\tparam Environment This class needs to provide the custom logic. In
+\tparam AStarEpsilon This class needs to provide the custom logic. In
     particular, it needs to support the following functions:
   - `Cost admissible_heuristic(const Location& s)`\n
     This function can return 0 if no suitable heuristic is available.
@@ -203,7 +203,7 @@ struct compareFocalHeuristic
 };
 
 
-class Environment
+class AStarEpsilon
 {
 private:
     int num_columns;
@@ -219,7 +219,7 @@ private:
     boost::heap::compare<compareFocalHeuristic> >;
 
 public:
-    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
+    AStarEpsilon(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
                 Location goal, float input_w)
             : num_columns(dimx),
               num_rows(dimy),
