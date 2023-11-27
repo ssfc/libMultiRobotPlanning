@@ -192,11 +192,6 @@ public:
         solution.actions.clear();
         solution.cost = 0;
 
-        // A* LINE 2
-        // The set of discovered nodes that may need to be (re-)expanded.
-        // Initially, only the start node is known.
-        // This is usually implemented as a min-heap or priority queue rather than a hash-set.
-        // open_set := {start}
         boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>> open_set;
         std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heap;
         std::unordered_set<Location, std::hash<Location>> closed_set;
@@ -219,6 +214,15 @@ public:
         // how cheap a path could be from start to finish if it goes through n.
         // fScore := map with default value of Infinity
 
+        // A* LINE 7
+        // fScore[start] := h_score(start)
+        // Initialising the parameters of the starting node
+
+        // A* LINE 2
+        // The set of discovered nodes that may need to be (re-)expanded.
+        // Initially, only the start node is known.
+        // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+        // open_set := {start}
         auto current_node_handle = open_set.emplace(AStarNode(start, calculate_h(start), 0));
         location_to_heap.insert(std::make_pair<>(start, current_node_handle));
         (*current_node_handle).handle = current_node_handle;
@@ -226,6 +230,8 @@ public:
         std::vector<Child> children;
         children.reserve(10);
 
+        // A* LINE 8
+        // while openSet is not empty
         while (!open_set.empty())
         {
             AStarNode current = open_set.top();
