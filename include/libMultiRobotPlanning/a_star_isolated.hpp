@@ -328,7 +328,6 @@ public:
                             // A* LINE 20
                             // openSet.add(neighbor)
                             open_set.increase(handle);
-                            num_generated_nodes++;
                         }
                     }
 
