@@ -225,7 +225,6 @@ public:
         // open_set := {start}
         auto current_node_handle = open_set.emplace(AStarNode(start, calculate_h(start), 0));
         location_to_heaphandle.insert(std::make_pair<>(start, current_node_handle));
-        (*current_node_handle).handle = current_node_handle;
 
         std::vector<Child> children;
         children.reserve(10);
@@ -299,7 +298,6 @@ public:
                     {  // Discover a new node
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         auto heaphandle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
-                        (*heaphandle).handle = heaphandle;
                         location_to_heaphandle.insert(std::make_pair<>(neighbor.location, heaphandle));
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
