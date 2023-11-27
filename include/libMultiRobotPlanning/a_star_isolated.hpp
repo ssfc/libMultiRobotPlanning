@@ -228,6 +228,9 @@ public:
         // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
         // gScore := map with default value of Infinity
 
+        // A* LINE 5
+        // gScore[start] := 0
+
         auto current_node_handle = open_set.emplace(AStarNode(start, admissible_heuristic(start), 0));
         location_to_heap.insert(std::make_pair<>(start, current_node_handle));
         (*current_node_handle).handle = current_node_handle;
