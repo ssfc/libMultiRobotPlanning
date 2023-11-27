@@ -146,8 +146,7 @@ public:
     // This function can return 0 if no suitable heuristic is available.
     int admissible_heuristic(const Location& current_location)
     {
-        return abs(current_location.x - goal.x)
-               + abs(current_location.y - goal.y);
+        return abs(current_location.x - goal.x) + abs(current_location.y - goal.y);
     }
 
     // whether agent reach goal or not.
@@ -230,6 +229,11 @@ public:
 
         // A* LINE 5
         // gScore[start] := 0
+
+        // A* LINE 6
+        // For node n, fScore[n] := gScore[n] + h_score(n). fScore[n] represents our current best guess as to
+        // how cheap a path could be from start to finish if it goes through n.
+        // fScore := map with default value of Infinity
 
         auto current_node_handle = open_set.emplace(AStarNode(start, admissible_heuristic(start), 0));
         location_to_heap.insert(std::make_pair<>(start, current_node_handle));
