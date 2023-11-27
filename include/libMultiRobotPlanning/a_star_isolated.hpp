@@ -209,6 +209,11 @@ public:
         solution.actions.clear();
         solution.cost = 0;
 
+        // A* LINE 2
+        // The set of discovered nodes that may need to be (re-)expanded.
+        // Initially, only the start node is known.
+        // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+        // open_set := {start}
         boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>> open_set;
         std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heap;
         std::unordered_set<Location, std::hash<Location>> closed_set;
