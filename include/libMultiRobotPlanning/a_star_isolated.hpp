@@ -235,11 +235,11 @@ public:
                 {
                     // iter->first是location
                     // iter->second是std::tuple<Location,Action,int,int>
-                    solution.path.emplace_back(
+                    solution.path.emplace_back( // pair(Location, int)
                             std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                    solution.actions.emplace_back(std::make_pair<>(
+                    solution.actions.emplace_back(std::make_pair<>( // pair(Location, Action)
                             std::get<1>(iter->second), std::get<2>(iter->second)));
-                    iter = came_from.find(std::get<0>(iter->second));
+                    iter = came_from.find(std::get<0>(iter->second)); // find(Location)
                 }
 
                 solution.path.emplace_back(std::make_pair<>(start, initialCost));
