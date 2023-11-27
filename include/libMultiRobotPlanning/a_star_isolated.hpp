@@ -295,7 +295,7 @@ public:
                     // cost of the cheapest path from start to n currently known
                     int tentative_g_score = current.g_score + neighbor.cost;
                     auto iter = location_to_heap.find(neighbor.location);
-                    if (iter == location_to_heap.end()) // 坐标不在堆中就不比较直接加
+                    if (iter == location_to_heap.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
                     {  // Discover a new node
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         auto handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
