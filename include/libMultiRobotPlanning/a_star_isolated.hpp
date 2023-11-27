@@ -234,9 +234,14 @@ public:
         // while openSet is not empty
         while (!open_set.empty())
         {
+            // A* LINE 9
+            // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
+            // current := the node in open_set having the lowest f_score[] value
             AStarNode current = open_set.top();
             num_expanded_nodes++;
 
+            // A* LINE 10
+            // if current = goal
             if (is_solution(current.location))
             {
                 solution.path.clear();
