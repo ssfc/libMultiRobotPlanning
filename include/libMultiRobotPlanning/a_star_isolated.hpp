@@ -321,6 +321,12 @@ public:
                             int delta = (*handle).g_score - tentative_g_score;
                             (*handle).g_score = tentative_g_score;
                             (*handle).f_score -= delta;
+
+                            // A* LINE 19
+                            // if neighbor not in openSet
+                            
+                            // A* LINE 20
+                            // openSet.add(neighbor)
                             open_set.increase(handle);
                             num_generated_nodes++;
                         }
