@@ -201,7 +201,7 @@ public:
     }
 
 
-    bool a_star_search(AgentPlan& solution, int initialCost = 0)
+    bool a_star_search(AgentPlan& solution)
     {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(start, 0));
@@ -213,7 +213,7 @@ public:
         std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
-        auto current_node_handle = open_set.emplace(AStarNode(start, admissible_heuristic(start), initialCost));
+        auto current_node_handle = open_set.emplace(AStarNode(start, admissible_heuristic(start), 0));
         location_to_heap.insert(std::make_pair<>(start, current_node_handle));
         (*current_node_handle).handle = current_node_handle;
 
@@ -242,7 +242,7 @@ public:
                     iter = came_from.find(std::get<0>(iter->second)); // find(Location)
                 }
 
-                solution.path.emplace_back(std::make_pair<>(start, initialCost));
+                solution.path.emplace_back(std::make_pair<>(start, 0));
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
