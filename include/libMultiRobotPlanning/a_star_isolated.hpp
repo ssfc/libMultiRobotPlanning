@@ -193,7 +193,7 @@ public:
         solution.cost = 0;
 
         boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>> open_set;
-        std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heap;
+        std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heaphandle;
         std::unordered_set<Location, std::hash<Location>> closed_set;
 
         // A* LINE 3
@@ -224,7 +224,7 @@ public:
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
         // open_set := {start}
         auto current_node_handle = open_set.emplace(AStarNode(start, calculate_h(start), 0));
-        location_to_heap.insert(std::make_pair<>(start, current_node_handle));
+        location_to_heaphandle.insert(std::make_pair<>(start, current_node_handle));
         (*current_node_handle).handle = current_node_handle;
 
         std::vector<Child> children;
@@ -275,7 +275,7 @@ public:
             // A* LINE 12
             // openSet.Remove(current)
             open_set.pop();
-            location_to_heap.erase(current.location);
+            location_to_heaphandle.erase(current.location);
             closed_set.insert(current.location);
 
             // traverse children
@@ -294,13 +294,13 @@ public:
                     // tentative_g_score := gScore[current] + d(current, neighbor)
                     // cost of the cheapest path from start to n currently known
                     int tentative_g_score = current.g_score + neighbor.cost;
-                    auto iter = location_to_heap.find(neighbor.location);
-                    if (iter == location_to_heap.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
+                    auto iter = location_to_heaphandle.find(neighbor.location);
+                    if (iter == location_to_heaphandle.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
                     {  // Discover a new node
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         auto handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
                         (*handle).handle = handle;
-                        location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
+                        location_to_heaphandle.insert(std::make_pair<>(neighbor.location, handle));
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
