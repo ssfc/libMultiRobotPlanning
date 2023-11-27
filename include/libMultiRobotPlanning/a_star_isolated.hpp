@@ -324,7 +324,7 @@ public:
 
                             // A* LINE 19
                             // if neighbor not in openSet
-                            
+
                             // A* LINE 20
                             // openSet.add(neighbor)
                             open_set.increase(handle);
