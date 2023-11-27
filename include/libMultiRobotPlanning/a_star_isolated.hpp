@@ -246,6 +246,8 @@ public:
             {
                 solution.path.clear();
                 solution.actions.clear();
+                // A* LINE 11
+                // return reconstruct_path(cameFrom, current)
                 // std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
                 auto iter = came_from.find(current.location);
                 while (iter != came_from.end())
@@ -270,6 +272,8 @@ public:
                 return true;
             }
 
+            // A* LINE 12
+            // openSet.Remove(current)
             open_set.pop();
             location_to_heap.erase(current.location);
             closed_set.insert(current.location);
@@ -277,36 +281,44 @@ public:
             // traverse children
             children.clear();
             get_neighbors(current.location, children);
+            // A* LINE 13
+            // for each neighbor of current
             for (const Child& neighbor : children)
             {
+                // If the successor has not been evaluated
                 if (closed_set.find(neighbor.location) == closed_set.end()) // not in closed set
                 {
-                    int tentative_gScore = current.g_score + neighbor.cost;
+                    // A* LINE 14
+                    // d(current,neighbor) is the weight of the edge from current to neighbor
+                    // tentative_g_score is the distance from start to the neighbor through current
+                    // tentative_g_score := gScore[current] + d(current, neighbor)
+                    // cost of the cheapest path from start to n currently known
+                    int tentative_g_score = current.g_score + neighbor.cost;
                     auto iter = location_to_heap.find(neighbor.location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + calculate_h(neighbor.location);
-                        auto handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_gScore));
+                        int f_score = tentative_g_score + calculate_h(neighbor.location);
+                        auto handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
-                        // tentative_gScore << std::endl;
+                        // tentative_g_score << std::endl;
                     }
                     else
                     {
                         auto handle = iter->second;
-                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
                         // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).g_score)
+                        if (tentative_g_score >= (*handle).g_score)
                         {
                             continue;
                         }
 
                         // update f and g_score
-                        int delta = (*handle).g_score - tentative_gScore;
-                        (*handle).g_score = tentative_gScore;
+                        int delta = (*handle).g_score - tentative_g_score;
+                        (*handle).g_score = tentative_g_score;
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
                         num_generated_nodes++;
@@ -318,7 +330,7 @@ public:
                     came_from.erase(neighbor.location);
                     came_from.insert(std::make_pair<>(neighbor.location,
                                                       std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
-                                                                        tentative_gScore)));
+                                                                        tentative_g_score)));
                 }
             }
         }
