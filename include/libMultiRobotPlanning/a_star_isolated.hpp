@@ -298,9 +298,9 @@ public:
                     if (iter == location_to_heaphandle.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
                     {  // Discover a new node
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
-                        auto handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
-                        (*handle).handle = handle;
-                        location_to_heaphandle.insert(std::make_pair<>(neighbor.location, handle));
+                        auto heaphandle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
+                        (*heaphandle).handle = heaphandle;
+                        location_to_heaphandle.insert(std::make_pair<>(neighbor.location, heaphandle));
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
