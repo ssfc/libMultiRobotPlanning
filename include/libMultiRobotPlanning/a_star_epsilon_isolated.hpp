@@ -418,8 +418,7 @@ public:
                     // default c'tors of Location and Action are required
                     came_from.erase(neighbor.location);
                     came_from.insert(std::make_pair<>(neighbor.location,
-                                                     std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
-                                                                       tentative_gScore)));
+                     std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_gScore)));
                 }
             }
 
