@@ -307,7 +307,7 @@ public:
                     }
                     else // 坐标在堆中。
                     {
-                        auto handle = iter->second; // Location所具有的其他特征。
+                        auto heaphandle = iter->second; // Location所具有的其他特征。
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
 
@@ -315,18 +315,18 @@ public:
                         // if tentative_gScore < gScore[neighbor]
                         // meaning: This path to neighbor is better than any previous one. Record it!
                         // We found this node before with a better path
-                        if (tentative_g_score < (*handle).g_score)
+                        if (tentative_g_score < (*heaphandle).g_score)
                         {
                             // update f and g_score
-                            (*handle).g_score = tentative_g_score;
-                            (*handle).f_score = tentative_g_score + calculate_h(neighbor.location);
+                            (*heaphandle).g_score = tentative_g_score;
+                            (*heaphandle).f_score = tentative_g_score + calculate_h(neighbor.location);
 
                             // A* LINE 19
                             // if neighbor not in openSet
 
                             // A* LINE 20
                             // openSet.add(neighbor)
-                            open_set.increase(handle);
+                            open_set.increase(heaphandle);
                         }
                     }
 
