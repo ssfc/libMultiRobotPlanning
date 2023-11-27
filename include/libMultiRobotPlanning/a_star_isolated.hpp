@@ -94,22 +94,6 @@ public:
     }
 };
 
-/*!
-  \example a_star.cpp Simple example using a 2D grid world and
-  up/down/left/right
-  actions
-*/
-
-/*! \brief A* Algorithm to find the shortest path
-
-This class implements the A* algorithm. A* is an informed search algorithm
-that finds the shortest path for a given map. It can use a heuristic that
-needsto be admissible.
-
-This class can either use a fibonacci heap, or a d-ary heap. The latter is the
-default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
-*/
-
 class AStar
 {
 private:
