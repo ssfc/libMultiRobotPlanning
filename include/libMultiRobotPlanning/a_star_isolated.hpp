@@ -318,9 +318,8 @@ public:
                         if (tentative_g_score < (*handle).g_score)
                         {
                             // update f and g_score
-                            int delta = (*handle).g_score - tentative_g_score;
                             (*handle).g_score = tentative_g_score;
-                            (*handle).f_score -= delta;
+                            (*handle).f_score = tentative_g_score + calculate_h(neighbor.location);
 
                             // A* LINE 19
                             // if neighbor not in openSet
