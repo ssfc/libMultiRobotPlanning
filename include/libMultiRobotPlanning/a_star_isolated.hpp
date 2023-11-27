@@ -198,7 +198,10 @@ public:
         }
     }
 
-
+    // A* LINE 1
+    // A* finds a path from start to goal.
+    // h is the heuristic function. h(n) estimates the cost to reach goal from node n.
+    // function A_Star(start, goal, h_score)
     bool a_star_search(AgentPlan& solution)
     {
         solution.path.clear();
