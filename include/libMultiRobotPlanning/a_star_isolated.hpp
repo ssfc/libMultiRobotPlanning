@@ -295,7 +295,7 @@ public:
                     // cost of the cheapest path from start to n currently known
                     int tentative_g_score = current.g_score + neighbor.cost;
                     auto iter = location_to_heap.find(neighbor.location);
-                    if (iter == location_to_heap.end()) // 坐标不在堆中
+                    if (iter == location_to_heap.end()) // 坐标不在堆中就不比较直接加
                     {  // Discover a new node
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         auto handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
@@ -307,7 +307,7 @@ public:
                     }
                     else // 坐标在堆中。
                     {
-                        auto handle = iter->second;
+                        auto handle = iter->second; // Location所具有的其他特征。
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
 
