@@ -310,6 +310,10 @@ public:
                         auto handle = iter->second;
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
+
+                        // A* LINE 15
+                        // if tentative_gScore < gScore[neighbor]
+                        // meaning: This path to neighbor is better than any previous one. Record it!
                         // We found this node before with a better path
                         if (tentative_g_score >= (*handle).g_score)
                         {
