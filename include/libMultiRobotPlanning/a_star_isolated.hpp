@@ -233,6 +233,8 @@ public:
                 auto iter = came_from.find(current.location);
                 while (iter != came_from.end())
                 {
+                    // iter->first是location
+                    // iter->second是std::tuple<Location,Action,int,int>
                     solution.path.emplace_back(
                             std::make_pair<>(iter->first, std::get<3>(iter->second)));
                     solution.actions.emplace_back(std::make_pair<>(
