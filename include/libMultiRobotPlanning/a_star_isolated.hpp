@@ -229,6 +229,7 @@ public:
             {
                 solution.path.clear();
                 solution.actions.clear();
+                // std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
                 auto iter = came_from.find(current.location);
                 while (iter != came_from.end())
                 {
@@ -239,8 +240,7 @@ public:
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
-                solution.path.emplace_back(std::make_pair<>
-                                                   (start, initialCost));
+                solution.path.emplace_back(std::make_pair<>(start, initialCost));
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
