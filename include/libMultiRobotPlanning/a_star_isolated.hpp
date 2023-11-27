@@ -315,17 +315,15 @@ public:
                         // if tentative_gScore < gScore[neighbor]
                         // meaning: This path to neighbor is better than any previous one. Record it!
                         // We found this node before with a better path
-                        if (tentative_g_score >= (*handle).g_score)
+                        if (tentative_g_score < (*handle).g_score)
                         {
-                            continue;
+                            // update f and g_score
+                            int delta = (*handle).g_score - tentative_g_score;
+                            (*handle).g_score = tentative_g_score;
+                            (*handle).f_score -= delta;
+                            open_set.increase(handle);
+                            num_generated_nodes++;
                         }
-
-                        // update f and g_score
-                        int delta = (*handle).g_score - tentative_g_score;
-                        (*handle).g_score = tentative_g_score;
-                        (*handle).f_score -= delta;
-                        open_set.increase(handle);
-                        num_generated_nodes++;
                     }
 
                     // Best path for this node so far
