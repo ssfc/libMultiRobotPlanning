@@ -330,9 +330,12 @@ public:
                     // TODO: this is not the best way to update "came_from", but otherwise
                     // default c'tors of Location and Action are required
                     came_from.erase(neighbor.location);
+                    // A* LINE 16
+                    // cameFrom[neighbor] := current
+                    // A* LINE 17
+                    // gScore[neighbor] := tentative_gScore
                     came_from.insert(std::make_pair<>(neighbor.location,
-                                                      std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
-                                                                        tentative_g_score)));
+                      std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
                 }
             }
         }
