@@ -217,7 +217,16 @@ public:
         boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>> open_set;
         std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heap;
         std::unordered_set<Location, std::hash<Location>> closed_set;
+
+        // A* LINE 3
+        // For node n, came_from[n] is the node immediately preceding it on the cheapest path from the start
+        // to n currently known.
+        // came_from := an empty map
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
+
+        // A* LINE 4
+        // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
+        // gScore := map with default value of Infinity
 
         auto current_node_handle = open_set.emplace(AStarNode(start, admissible_heuristic(start), 0));
         location_to_heap.insert(std::make_pair<>(start, current_node_handle));
