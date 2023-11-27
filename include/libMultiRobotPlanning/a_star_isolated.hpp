@@ -48,8 +48,6 @@ struct AgentPlan
     std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
     int cost;
-    //! lower bound of the cost (for suboptimal solvers)
-    int fmin;
 };
 
 class AStarNode
@@ -246,7 +244,6 @@ public:
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
-                solution.fmin = current.f_score;
 
                 std::cerr << "num expanded nodes: " << num_expanded_nodes << std::endl;
                 std::cerr << "num generated nodes: " << num_generated_nodes << std::endl;
