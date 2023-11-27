@@ -144,7 +144,7 @@ public:
     {}
 
     // This function can return 0 if no suitable heuristic is available.
-    int admissible_heuristic(const Location& current_location)
+    int calculate_h(const Location& current_location)
     {
         return abs(current_location.x - goal.x) + abs(current_location.y - goal.y);
     }
@@ -235,7 +235,7 @@ public:
         // how cheap a path could be from start to finish if it goes through n.
         // fScore := map with default value of Infinity
 
-        auto current_node_handle = open_set.emplace(AStarNode(start, admissible_heuristic(start), 0));
+        auto current_node_handle = open_set.emplace(AStarNode(start, calculate_h(start), 0));
         location_to_heap.insert(std::make_pair<>(start, current_node_handle));
         (*current_node_handle).handle = current_node_handle;
 
@@ -290,7 +290,7 @@ public:
                     auto iter = location_to_heap.find(neighbor.location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
+                        int f_score = tentative_gScore + calculate_h(neighbor.location);
                         auto handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
