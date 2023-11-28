@@ -286,6 +286,8 @@ public:
 
         // std::cout << "new search" << std::endl;
 
+        // A* LINE 8
+        // while openSet is not empty
         size_t num_iters = 0;
         while (!open_set.empty())
         {
