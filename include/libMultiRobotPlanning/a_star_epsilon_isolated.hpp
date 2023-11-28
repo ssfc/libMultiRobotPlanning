@@ -335,6 +335,8 @@ public:
             {
                 solution.path.clear();
                 solution.actions.clear();
+                // A* LINE 11
+                // return reconstruct_path(cameFrom, current)
                 auto iter = came_from.find(current.location);
                 while (iter != came_from.end())
                 {
