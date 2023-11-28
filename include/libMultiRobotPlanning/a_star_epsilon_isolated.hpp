@@ -309,8 +309,8 @@ public:
                     // val <= old_best_f_score * factor_w已经在里面了，所以无需更新
                     if (val > old_best_f_score * factor_w && val <= best_f_score * factor_w)
                     {
-                        const AStarEpsilonNode& n = *iter;
-                        focal_set.push(n.handle);
+                        const AStarEpsilonNode& node = *iter;
+                        focal_set.push(node.handle);
                     }
 
                     if (val > best_f_score * factor_w) // 因为open_set是有序集，所以中断就可以了。
