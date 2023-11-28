@@ -150,6 +150,6 @@ int main(int argc, char* argv[])
 // (3) debug on ubuntu by cmake:
 // cmake .. ; make
 // ./a_star_epsilon_isolated -m ../test/a_star_map.txt --startX 0 --startY 8 --goalX 4 --goalY 2 -o output.yaml -w 10
-// ./a_star_isolated -m ../benchmark/map_32by32_obst204_agents10_ex0.txt --startX 0 --startY 0 --goalX 0 --goalY 31 -o output.yaml
-// ./a_star_isolated -m ../benchmark/Berlin_1_256.txt --startX 0 --startY 0 --goalX 0 --goalY 254 -o output.yaml
+// ./a_star_epsilon_isolated -m ../benchmark/map_32by32_obst204_agents10_ex0.txt --startX 0 --startY 0 --goalX 0 --goalY 31 -o output.yaml -w 10
+// ./a_star_epsilon_isolated -m ../benchmark/Berlin_1_256.txt --startX 0 --startY 0 --goalX 0 --goalY 254 -o output.yaml -w 10
 
