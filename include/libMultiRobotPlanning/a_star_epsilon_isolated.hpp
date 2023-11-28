@@ -131,13 +131,15 @@ struct compare_focal_heuristic
             // } else if ((*h1).f_score != (*h2).f_score) {
             //   return (*h1).f_score > (*h2).f_score;
         }
+        // 2. lowest f_score
         else if ((*h1).f_score != (*h2).f_score)
         {
-            return (*h1).f_score > (*h2).f_score; // 2. lowest f_score
+            return (*h1).f_score > (*h2).f_score;
         }
+        // 3. highest g_score
         else
         {
-            return (*h1).g_score < (*h2).g_score; // 3. highest g_score
+            return (*h1).g_score < (*h2).g_score;
         }
     }
 };
@@ -236,7 +238,10 @@ public:
         solution.actions.clear();
         solution.cost = 0;
 
+        // 1. lowest f_score // 2. highest g_score
         openSet_t open_set;
+
+        // 1. lowest focal_heuristic // 2. lowest f_score // 3. highest g_score
         focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> location_to_heaphandle;
         std::unordered_set<Location, std::hash<Location>> closed_set;
