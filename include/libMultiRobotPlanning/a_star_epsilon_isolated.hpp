@@ -420,7 +420,7 @@ public:
                         // update f and g_score
                         (*child_handle).g_score = tentative_g_score;
                         (*child_handle).f_score = tentative_g_score + calculate_h(neighbor.location);
-                        open_set.increase(child_handle); // 这里不需要更新focal_set
+                        open_set.increase(child_handle);
                         num_generated_nodes++;
 
                         if ((*child_handle).f_score <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
