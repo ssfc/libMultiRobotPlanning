@@ -277,7 +277,7 @@ public:
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
         (*handle).handle = handle;
 
-        focal_set.push(handle);
+        focal_set.push(handle); // focal set同步open set更新
 
         std::vector<Child> children;
         children.reserve(10);
