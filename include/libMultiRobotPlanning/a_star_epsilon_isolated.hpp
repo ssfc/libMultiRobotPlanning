@@ -389,6 +389,7 @@ public:
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
+                        // focal_heuristic只在插入新节点时更新？
                         int focal_heuristic = current.focal_heuristic + tentative_g_score + neighbor.cost; // ???
                         auto child_handle = open_set.push(AStarEpsilonNode(neighbor.location,
                              f_score, tentative_g_score, focal_heuristic));
