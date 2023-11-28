@@ -223,8 +223,8 @@ public:
         // Initially, only the start node is known.
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
         // open_set := {start}
-        auto current_node_handle = open_set.emplace(AStarNode(start, calculate_h(start), 0));
-        location_to_heaphandle.insert(std::make_pair<>(start, current_node_handle));
+        auto root_handle = open_set.emplace(AStarNode(start, calculate_h(start), 0));
+        location_to_heaphandle.insert(std::make_pair<>(start, root_handle));
 
         std::vector<Child> children;
         children.reserve(10);
