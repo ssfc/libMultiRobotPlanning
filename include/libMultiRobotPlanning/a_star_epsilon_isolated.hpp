@@ -295,7 +295,7 @@ public:
             int old_best_f_score = best_f_score;
             best_f_score = open_set.top().f_score;
             // std::cout << "best_f_score: " << best_f_score << std::endl;
-            if (old_best_f_score < best_f_score) // 满足admissible heuristic
+            if (old_best_f_score < best_f_score) // 满足admissible heuristic才更新focal_set
             {
                 // std::cout << "old_best_f_score: " << old_best_f_score << " newBestFScore:
                 // " << best_f_score << std::endl;
