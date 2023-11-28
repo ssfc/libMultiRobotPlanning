@@ -406,28 +406,28 @@ public:
                     }
                     else
                     {
-                        auto handle = iter->second;
+                        auto child_handle = iter->second;
                         // We found this node before with a better path
-                        if (tentative_g_score >= (*handle).g_score)
+                        if (tentative_g_score >= (*child_handle).g_score)
                         {
                             continue;
                         }
 
-                        int last_gScore = (*handle).g_score;
-                        int last_fScore = (*handle).f_score;
+                        int last_gScore = (*child_handle).g_score;
+                        int last_fScore = (*child_handle).f_score;
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
-                        // << last_gScore << " " << *handle << std::endl;
+                        // << last_gScore << " " << *child_handle << std::endl;
                         // update f and g_score
                         int delta = last_gScore - tentative_g_score;
-                        (*handle).g_score = tentative_g_score;
-                        (*handle).f_score -= delta;
-                        open_set.increase(handle);
+                        (*child_handle).g_score = tentative_g_score;
+                        (*child_handle).f_score -= delta;
+                        open_set.increase(child_handle);
                         num_generated_nodes++;
 
-                        if ((*handle).f_score <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
+                        if ((*child_handle).f_score <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
                         {
-                            // std::cout << "focalAdd: " << *handle << std::endl;
-                            focal_set.push(handle);
+                            // std::cout << "focalAdd: " << *child_handle << std::endl;
+                            focal_set.push(child_handle);
                         }
                     }
 
