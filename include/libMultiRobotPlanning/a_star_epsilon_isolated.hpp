@@ -295,7 +295,7 @@ public:
             int old_best_f_score = best_f_score;
             best_f_score = open_set.top().f_score;
             // std::cout << "best_f_score: " << best_f_score << std::endl;
-            if (best_f_score > old_best_f_score) // 还不如原来的。
+            if (best_f_score > old_best_f_score) // 还不如原来的。???
             {
                 // std::cout << "old_best_f_score: " << old_best_f_score << " newBestFScore:
                 // " << best_f_score << std::endl;
@@ -389,7 +389,7 @@ public:
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
-                        int focal_heuristic = current.focal_heuristic + tentative_g_score + neighbor.cost;
+                        int focal_heuristic = current.focal_heuristic + tentative_g_score + neighbor.cost; // ???
                         auto handle = open_set.push(AStarEpsilonNode(neighbor.location,
                              f_score, tentative_g_score, focal_heuristic));
                         (*handle).handle = handle;
