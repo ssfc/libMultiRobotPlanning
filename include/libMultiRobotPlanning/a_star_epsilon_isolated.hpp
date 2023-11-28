@@ -375,8 +375,14 @@ public:
 
             for (const Child& neighbor : children)
             {
+                // If the successor has not been evaluated
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
+                    // A* LINE 14
+                    // d(current,neighbor) is the weight of the edge from current to neighbor
+                    // tentative_g_score is the distance from start to the neighbor through current
+                    // tentative_g_score := gScore[current] + d(current, neighbor)
+                    // cost of the cheapest path from start to n currently known
                     int tentative_gScore = current.g_score + neighbor.cost;
                     auto iter = location_to_heaphandle.find(neighbor.location);
                     if (iter == location_to_heaphandle.end())
