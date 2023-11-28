@@ -297,15 +297,15 @@ public:
                     if (iter == location_to_heaphandle.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
                     {  // Discover a new node
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
-                        auto heaphandle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
-                        location_to_heaphandle.insert(std::make_pair<>(neighbor.location, heaphandle));
+                        auto heap_handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
+                        location_to_heaphandle.insert(std::make_pair<>(neighbor.location, heap_handle));
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
                     }
                     else // 坐标在堆中。
                     {
-                        auto heaphandle = iter->second; // Location所具有的其他特征。
+                        auto heap_handle = iter->second; // Location所具有的其他特征。
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
 
@@ -313,18 +313,18 @@ public:
                         // if tentative_gScore < gScore[neighbor]
                         // meaning: This path to neighbor is better than any previous one. Record it!
                         // We found this node before with a better path
-                        if (tentative_g_score < (*heaphandle).g_score)
+                        if (tentative_g_score < (*heap_handle).g_score)
                         {
                             // update f and g_score
-                            (*heaphandle).g_score = tentative_g_score;
-                            (*heaphandle).f_score = tentative_g_score + calculate_h(neighbor.location);
+                            (*heap_handle).g_score = tentative_g_score;
+                            (*heap_handle).f_score = tentative_g_score + calculate_h(neighbor.location);
 
                             // A* LINE 19
                             // if neighbor not in openSet
 
                             // A* LINE 20
                             // openSet.add(neighbor)
-                            open_set.increase(heaphandle);
+                            open_set.increase(heap_handle);
                         }
                     }
 
