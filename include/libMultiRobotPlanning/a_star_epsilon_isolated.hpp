@@ -186,7 +186,7 @@ public:
             obstacles.find(input_location) == obstacles.end();
     }
 
-    int admissible_heuristic(const Location& input_location)
+    int calculate_h(const Location& input_location)
     {
         return std::abs(input_location.x - goal.x) + std::abs(input_location.y - goal.y);
     }
@@ -238,7 +238,7 @@ public:
         std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location, Action, int, int>, std::hash<Location>> came_from;
 
-        auto handle = open_set.push(AStarEpsilonNode(start, admissible_heuristic(start), 0, 0));
+        auto handle = open_set.push(AStarEpsilonNode(start, calculate_h(start), 0, 0));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
         (*handle).handle = handle;
 
@@ -327,7 +327,7 @@ public:
                     if (iter == location_to_heaphandle.end())
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
-                        int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
+                        int f_score = tentative_gScore + calculate_h(neighbor.location);
                         int focal_heuristic = current.focal_heuristic + tentative_gScore +
                                              - current.g_score + tentative_gScore;
                         auto handle = open_set.push(
