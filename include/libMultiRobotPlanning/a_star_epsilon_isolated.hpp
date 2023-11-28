@@ -413,15 +413,13 @@ public:
                             continue;
                         }
 
-                        int last_gScore = (*child_handle).g_score;
                         int last_fScore = (*child_handle).f_score;
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << last_gScore << " " << *child_handle << std::endl;
                         // update f and g_score
-                        int delta = last_gScore - tentative_g_score;
                         (*child_handle).g_score = tentative_g_score;
-                        (*child_handle).f_score -= delta;
-                        open_set.increase(child_handle);
+                        (*child_handle).f_score = tentative_g_score + calculate_h(neighbor.location);
+                        open_set.increase(child_handle); // 这里不需要更新focal_set
                         num_generated_nodes++;
 
                         if ((*child_handle).f_score <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
