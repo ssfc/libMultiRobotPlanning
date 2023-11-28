@@ -91,14 +91,13 @@ public:
         // 1. lowest f_score
         // 2. highest g_score
 
-        // Our heap is a maximum heap, so we invert the comperator function here
         if (f_score != other.f_score)
         {
-            return f_score > other.f_score;
+            return f_score > other.f_score; // 反向为小
         }
         else
         {
-            return g_score < other.g_score;
+            return g_score < other.g_score; // 同向为大
         }
     }
 
@@ -125,7 +124,7 @@ struct compare_focal_heuristic
         // 2. lowest f_score
         // 3. highest g_score
 
-        // Our heap is a maximum heap, so we invert the comperator function here
+        // 1. lowest focal_heuristic
         if ((*h1).focal_heuristic != (*h2).focal_heuristic)
         {
             return (*h1).focal_heuristic > (*h2).focal_heuristic;
@@ -134,11 +133,11 @@ struct compare_focal_heuristic
         }
         else if ((*h1).f_score != (*h2).f_score)
         {
-            return (*h1).f_score > (*h2).f_score;
+            return (*h1).f_score > (*h2).f_score; // 2. lowest f_score
         }
         else
         {
-            return (*h1).g_score < (*h2).g_score;
+            return (*h1).g_score < (*h2).g_score; // 3. highest g_score
         }
     }
 };
@@ -160,6 +159,7 @@ private:
     size_t num_generated_nodes;
 
     using openSet_t = typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
+
     using fibHeapHandle_t = typename openSet_t::handle_type;
     using focalSet_t = typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
     boost::heap::compare<compare_focal_heuristic> >;
@@ -263,6 +263,11 @@ public:
         // fScore[start] := h_score(start)
         // Initialising the parameters of the starting node
 
+        // A* LINE 7
+        // The set of discovered nodes that may need to be (re-)expanded.
+        // Initially, only the start node is known.
+        // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+        // open_set := {start}
         auto handle = open_set.push(AStarEpsilonNode(start, calculate_h(start), 0, 0));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
         (*handle).handle = handle;
