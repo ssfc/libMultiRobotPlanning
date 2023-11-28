@@ -196,29 +196,29 @@ public:
         std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heaphandle;
         std::unordered_set<Location, std::hash<Location>> closed_set;
 
-        // A* LINE 3
+        // A* LINE 2
         // For node n, came_from[n] is the node immediately preceding it on the cheapest path from the start
         // to n currently known.
         // came_from := an empty map
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
-        // A* LINE 4
+        // A* LINE 3
         // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
         // gScore := map with default value of Infinity
 
-        // A* LINE 5
+        // A* LINE 4
         // gScore[start] := 0
 
-        // A* LINE 6
+        // A* LINE 5
         // For node n, fScore[n] := gScore[n] + h_score(n). fScore[n] represents our current best guess as to
         // how cheap a path could be from start to finish if it goes through n.
         // fScore := map with default value of Infinity
 
-        // A* LINE 7
+        // A* LINE 6
         // fScore[start] := h_score(start)
         // Initialising the parameters of the starting node
 
-        // A* LINE 2
+        // A* LINE 7
         // The set of discovered nodes that may need to be (re-)expanded.
         // Initially, only the start node is known.
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
