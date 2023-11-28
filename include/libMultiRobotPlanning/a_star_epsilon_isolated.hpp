@@ -367,6 +367,8 @@ public:
             location_to_heaphandle.erase(current.location);
             closed_set.insert(current.location);
 
+            // A* LINE 13
+            // for each neighbor of current
             // traverse children
             children.clear();
             get_neighbors(current.location, children);
