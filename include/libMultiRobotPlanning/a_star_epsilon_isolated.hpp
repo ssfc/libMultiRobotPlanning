@@ -150,6 +150,7 @@ private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
+    Location start;
     Location goal;
 
     float factor_w;
@@ -165,10 +166,11 @@ private:
 
 public:
     AStarEpsilon(size_t dimx, size_t dimy, std::unordered_set<Location> input_obstacles,
-                Location input_goal, float input_w)
+                Location input_start, Location input_goal, float input_w)
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(input_obstacles)),
+              start(std::move(input_start)),
               goal(std::move(input_goal)),  // NOLINT
               factor_w(input_w),
               num_expanded_nodes(0),

@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 
     Location goal(goalX, goalY);
     Location start(startX, startY);
-    AStarEpsilon test(dimX, y - 1, obstacles, goal, w);
+    AStarEpsilon test(dimX, y - 1, obstacles, start, goal, w);
 
     AgentPlan solution;
 
