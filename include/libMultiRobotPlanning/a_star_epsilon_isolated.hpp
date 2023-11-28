@@ -329,6 +329,8 @@ public:
             AStarEpsilonNode current = *current_handle;
             num_expanded_nodes++;
 
+            // A* LINE 10
+            // if current = goal
             if (is_solution(current.location))
             {
                 solution.path.clear();
