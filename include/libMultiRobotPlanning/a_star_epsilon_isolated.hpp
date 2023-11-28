@@ -62,7 +62,7 @@ public:
     using openSet_t = typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
     using fibHeapHandle_t = typename openSet_t::handle_type;
 
-    Location state;
+    Location location;
 
     int f_score;
     int g_score;
@@ -79,7 +79,7 @@ public:
 public:
     AStarEpsilonNode(const Location& input_state, int input_f_score,
                      int input_gScore, int input_focalHeuristic)
-            : state(input_state),
+            : location(input_state),
               f_score(input_f_score),
               g_score(input_gScore),
               focal_heuristic(input_focalHeuristic)
@@ -104,7 +104,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const AStarEpsilonNode& node)
     {
-        os << "state: " << node.state << " f_score: " << node.f_score
+        os << "location: " << node.location << " f_score: " << node.f_score
            << " g_score: " << node.g_score << " focal: " << node.focal_heuristic;
 
         return os;
@@ -281,11 +281,11 @@ public:
             AStarEpsilonNode current = *currentHandle;
             num_expanded_nodes++;
 
-            if (is_solution(current.state))
+            if (is_solution(current.location))
             {
                 solution.path.clear();
                 solution.actions.clear();
-                auto iter = came_from.find(current.state);
+                auto iter = came_from.find(current.location);
                 while (iter != came_from.end())
                 {
                     solution.path.emplace_back(
@@ -309,12 +309,12 @@ public:
 
             focal_set.pop();
             open_set.erase(currentHandle);
-            location_to_heaphandle.erase(current.state);
-            closed_set.insert(current.state);
+            location_to_heaphandle.erase(current.location);
+            closed_set.insert(current.location);
 
             // traverse children
             children.clear();
-            get_neighbors(current.state, children);
+            get_neighbors(current.location, children);
 
             for (const Child& neighbor : children)
             {
@@ -374,7 +374,7 @@ public:
                     // default c'tors of Location and Action are required
                     came_from.erase(neighbor.location);
                     came_from.insert(std::make_pair<>(neighbor.location,
-                     std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_gScore)));
+                     std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_gScore)));
                 }
             }
 
