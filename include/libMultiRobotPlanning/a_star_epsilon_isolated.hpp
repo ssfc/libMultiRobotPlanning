@@ -273,16 +273,16 @@ public:
         // Initially, only the start node is known.
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
         // open_set := {start}
-        auto handle = open_set.push(AStarEpsilonNode(start, calculate_h(start), 0, 0));
-        location_to_heaphandle.insert(std::make_pair<>(start, handle));
-        (*handle).handle = handle;
+        auto root_handle = open_set.push(AStarEpsilonNode(start, calculate_h(start), 0, 0));
+        location_to_heaphandle.insert(std::make_pair<>(start, root_handle));
+        (*root_handle).handle = root_handle;
 
-        focal_set.push(handle); // focal set同步open set更新
+        focal_set.push(root_handle); // focal set同步open set更新
 
         std::vector<Child> children;
         children.reserve(10);
 
-        int best_f_score = (*handle).f_score;
+        int best_f_score = (*root_handle).f_score;
 
         // std::cout << "new search" << std::endl;
 
