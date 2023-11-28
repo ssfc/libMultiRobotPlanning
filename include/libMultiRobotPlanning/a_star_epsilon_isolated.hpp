@@ -273,11 +273,11 @@ public:
         // Initially, only the start node is known.
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
         // open_set := {start}
-        auto root_handle = open_set.push(AStarEpsilonNode(start, calculate_h(start), 0, 0));
+        auto root_handle = open_set.emplace(AStarEpsilonNode(start, calculate_h(start), 0, 0));
         location_to_heaphandle.insert(std::make_pair<>(start, root_handle));
         (*root_handle).handle = root_handle;
 
-        focal_set.push(root_handle); // focal set同步open set更新
+        focal_set.emplace(root_handle); // focal set同步open set更新
 
         std::vector<Child> children;
         children.reserve(10);
@@ -310,7 +310,7 @@ public:
                     if (val > old_best_f_score * factor_w && val <= best_f_score * factor_w)
                     {
                         const AStarEpsilonNode& node = *iter;
-                        focal_set.push(node.handle);
+                        focal_set.emplace(node.handle);
                     }
 
                     if (val > best_f_score * factor_w) // 因为open_set是有序集，所以中断就可以了。
@@ -391,13 +391,13 @@ public:
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         // focal_heuristic只在插入新节点时更新？
                         int focal_heuristic = current.focal_heuristic + tentative_g_score + neighbor.cost; // ???
-                        auto child_handle = open_set.push(AStarEpsilonNode(neighbor.location,
+                        auto child_handle = open_set.emplace(AStarEpsilonNode(neighbor.location,
                              f_score, tentative_g_score, focal_heuristic));
                         (*child_handle).handle = child_handle;
                         if (f_score <= best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
-                            focal_set.push(child_handle);
+                            focal_set.emplace(child_handle);
                         }
 
                         location_to_heaphandle.insert(std::make_pair<>(neighbor.location, child_handle));
@@ -426,7 +426,7 @@ public:
                         if ((*child_handle).f_score <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *child_handle << std::endl;
-                            focal_set.push(child_handle);
+                            focal_set.emplace(child_handle);
                         }
                     }
 
