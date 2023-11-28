@@ -225,7 +225,7 @@ public:
         }
     }
 
-    bool a_star_epsilon_search(const Location& start, AgentPlan& solution)
+    bool a_star_epsilon_search(AgentPlan& solution)
     {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(start, 0));

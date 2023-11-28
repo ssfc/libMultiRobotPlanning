@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
 
     if (test.location_valid(start))
     {
-        is_success = test.a_star_epsilon_search(start, solution);
+        is_success = test.a_star_epsilon_search(solution);
     }
 
     std::ofstream out(outputFile);
