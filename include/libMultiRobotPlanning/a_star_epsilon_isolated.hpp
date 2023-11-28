@@ -393,6 +393,7 @@ public:
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         // focal_heuristic只在插入新节点时更新？
+                        // 为啥focal_heuristic用g来定义？还是叠加的g? 
                         int focal_heuristic = current.focal_heuristic + tentative_g_score + neighbor.cost; // ???
                         auto child_handle = open_set.emplace(AStarEpsilonNode(neighbor.location,
                              f_score, tentative_g_score, focal_heuristic));
