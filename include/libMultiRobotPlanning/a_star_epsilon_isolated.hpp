@@ -112,7 +112,7 @@ public:
 };
 
 
-struct compareFocalHeuristic
+struct compare_focal_heuristic
 {
     using openSet_t = typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
     using fibHeapHandle_t = typename openSet_t::handle_type;
@@ -161,7 +161,7 @@ private:
     using openSet_t = typename boost::heap::d_ary_heap<AStarEpsilonNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
     using fibHeapHandle_t = typename openSet_t::handle_type;
     using focalSet_t = typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-    boost::heap::compare<compareFocalHeuristic> >;
+    boost::heap::compare<compare_focal_heuristic> >;
 
 public:
     AStarEpsilon(size_t dimx, size_t dimy, std::unordered_set<Location> input_obstacles,
@@ -177,46 +177,46 @@ public:
         // std::cerr << "factor_w: " << factor_w << std::endl;
     }
 
-    bool location_valid(const Location& s)
+    bool location_valid(const Location& input_location)
     {
-        return s.x >= 0 && s.x < num_columns &&
-            s.y >= 0 && s.y < num_rows &&
-            obstacles.find(s) == obstacles.end();
+        return input_location.x >= 0 && input_location.x < num_columns &&
+            input_location.y >= 0 && input_location.y < num_rows &&
+            obstacles.find(input_location) == obstacles.end();
     }
 
-    int admissible_heuristic(const Location& s)
+    int admissible_heuristic(const Location& input_location)
     {
-        return std::abs(s.x - goal.x) + std::abs(s.y - goal.y);
+        return std::abs(input_location.x - goal.x) + std::abs(input_location.y - goal.y);
     }
 
-    bool is_solution(const Location& s)
+    bool is_solution(const Location& input_location)
     {
-        return s == goal;
+        return input_location == goal;
     }
 
-    void get_neighbors(const Location& s, std::vector<Child>& children)
+    void get_neighbors(const Location& input_location, std::vector<Child>& children)
     {
         children.clear();
 
-        Location up(s.x, s.y + 1);
+        Location up(input_location.x, input_location.y + 1);
         if (location_valid(up))
         {
             children.emplace_back(Child(up, Action::Up, 1));
         }
 
-        Location down(s.x, s.y - 1);
+        Location down(input_location.x, input_location.y - 1);
         if (location_valid(down))
         {
             children.emplace_back(Child(down, Action::Down, 1));
         }
 
-        Location left(s.x - 1, s.y);
+        Location left(input_location.x - 1, input_location.y);
         if (location_valid(left))
         {
             children.emplace_back(Child(left, Action::Left, 1));
         }
 
-        Location right(s.x + 1, s.y);
+        Location right(input_location.x + 1, input_location.y);
         if (location_valid(right))
         {
             children.emplace_back(Child(right, Action::Right, 1));
