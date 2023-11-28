@@ -390,16 +390,16 @@ public:
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         int focal_heuristic = current.focal_heuristic + tentative_g_score + neighbor.cost; // ???
-                        auto handle = open_set.push(AStarEpsilonNode(neighbor.location,
+                        auto child_handle = open_set.push(AStarEpsilonNode(neighbor.location,
                              f_score, tentative_g_score, focal_heuristic));
-                        (*handle).handle = handle;
+                        (*child_handle).handle = child_handle;
                         if (f_score <= best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
-                            focal_set.push(handle);
+                            focal_set.push(child_handle);
                         }
 
-                        location_to_heaphandle.insert(std::make_pair<>(neighbor.location, handle));
+                        location_to_heaphandle.insert(std::make_pair<>(neighbor.location, child_handle));
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
