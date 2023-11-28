@@ -385,14 +385,13 @@ public:
                     // cost of the cheapest path from start to n currently known
                     int tentative_g_score = current.g_score + neighbor.cost;
                     auto iter = location_to_heaphandle.find(neighbor.location);
-                    if (iter == location_to_heaphandle.end())
+                    if (iter == location_to_heaphandle.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
-                        int focal_heuristic = current.focal_heuristic + tentative_g_score +
-                                             - current.g_score + tentative_g_score;
-                        auto handle = open_set.push(
-                                AStarEpsilonNode(neighbor.location, f_score, tentative_g_score, focal_heuristic));
+                        int focal_heuristic = current.focal_heuristic + tentative_g_score + neighbor.cost;
+                        auto handle = open_set.push(AStarEpsilonNode(neighbor.location,
+                             f_score, tentative_g_score, focal_heuristic));
                         (*handle).handle = handle;
                         if (f_score <= best_f_score * factor_w)
                         {
