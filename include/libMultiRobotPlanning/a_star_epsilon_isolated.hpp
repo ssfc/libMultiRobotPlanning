@@ -28,8 +28,9 @@ enum class Action
     Right,
 };
 
-struct Child
+class Child
 {
+public:
     //! neighboring location
     Location location;
     //! action to get to the neighboring location
@@ -37,6 +38,7 @@ struct Child
     //! cost to get to the neighboring location, usually 1
     int cost;
 
+public:
     Child(const Location& input_location, const Action& input_action, int input_cost)
             : location(input_location),
               action(input_action),
