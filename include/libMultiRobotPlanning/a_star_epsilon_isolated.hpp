@@ -223,10 +223,10 @@ public:
         }
     }
 
-    bool a_star_epsilon_search(const Location& startState, AgentPlan& solution)
+    bool a_star_epsilon_search(const Location& start, AgentPlan& solution)
     {
         solution.path.clear();
-        solution.path.emplace_back(std::make_pair<>(startState, 0));
+        solution.path.emplace_back(std::make_pair<>(start, 0));
         solution.actions.clear();
         solution.cost = 0;
 
@@ -236,8 +236,8 @@ public:
         std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location, Action, int, int>, std::hash<Location>> came_from;
 
-        auto handle = open_set.push(AStarEpsilonNode(startState, admissible_heuristic(startState), 0, 0));
-        location_to_heaphandle.insert(std::make_pair<>(startState, handle));
+        auto handle = open_set.push(AStarEpsilonNode(start, admissible_heuristic(start), 0, 0));
+        location_to_heaphandle.insert(std::make_pair<>(start, handle));
         (*handle).handle = handle;
 
         focal_set.push(handle);
@@ -295,7 +295,7 @@ public:
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
-                solution.path.emplace_back(std::make_pair<>(startState, 0));
+                solution.path.emplace_back(std::make_pair<>(start, 0));
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
