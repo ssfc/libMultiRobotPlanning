@@ -54,49 +54,6 @@ struct AgentPlan
     int cost;
 };
 
-/*!
-  \example a_star_epsilon.cpp Simple example using a 2D grid world and
-  up/down/left/right
-  actions
-*/
-
-/*! \brief A*_epsilon Algorithm to find the shortest path with a given
-suboptimality bound (also known as focal search)
-
-This class implements the A*_epsilon algorithm, an informed search
-algorithm
-that finds the shortest path for a given map up to a suboptimality factor.
-It uses an admissible heuristic (to keep track of the optimum) and an
-inadmissible heuristic (
-to guide the search within a suboptimal bound w.)
-
-Details of the algorithm can be found in the following paper:\n
-Judea Pearl, Jin H. Kim:\n
-"Studies in Semi-Admissible Heuristics."" IEEE Trans. Pattern Anal. Mach.
-Intell. 4(4): 392-399 (1982)\n
-https://doi.org/10.1109/TPAMI.1982.4767270
-
-This class can either use a fibonacci heap, or a d-ary heap. The latter is the
-default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
-
-\tparam Location Custom state for the search. Needs to be copy'able
-\tparam Action Custom action for the search. Needs to be copy'able
-\tparam Cost Custom Cost type (integer or floating point types)
-\tparam AStarEpsilon This class needs to provide the custom logic. In
-    particular, it needs to support the following functions:
-  - `Cost admissible_heuristic(const Location& s)`\n
-    This function can return 0 if no suitable heuristic is available.
-
-  - `bool is_solution(const Location& s)`\n
-    Return true if the given state is a goal state.
-
-  - `void get_neighbors(const Location& s, std::vector<Child<Location, Action,
-   int> >& children)`\n
-    Fill the list of neighboring state for the given state s.
-
-    \tparam LocationHasher A class to convert a state to a hash value. Default:
-   std::hash<Location>
-*/
 class AStarEpsilonNode
 {
 public:
