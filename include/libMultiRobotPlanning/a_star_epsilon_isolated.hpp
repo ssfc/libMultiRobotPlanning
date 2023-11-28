@@ -251,6 +251,18 @@ public:
         // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
         // gScore := map with default value of Infinity
 
+        // A* LINE 4
+        // gScore[start] := 0
+
+        // A* LINE 5
+        // For node n, fScore[n] := gScore[n] + h_score(n). fScore[n] represents our current best guess as to
+        // how cheap a path could be from start to finish if it goes through n.
+        // fScore := map with default value of Infinity
+
+        // A* LINE 6
+        // fScore[start] := h_score(start)
+        // Initialising the parameters of the starting node
+
         auto handle = open_set.push(AStarEpsilonNode(start, calculate_h(start), 0, 0));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
         (*handle).handle = handle;
