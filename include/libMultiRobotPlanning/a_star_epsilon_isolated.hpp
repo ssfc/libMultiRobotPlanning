@@ -292,19 +292,19 @@ public:
         while (!open_set.empty())
         {
             // update focal list
-            int oldBestFScore = best_f_score;
+            int old_best_f_score = best_f_score;
             best_f_score = open_set.top().f_score;
             // std::cout << "best_f_score: " << best_f_score << std::endl;
-            if (best_f_score > oldBestFScore)
+            if (best_f_score > old_best_f_score)
             {
-                // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
+                // std::cout << "old_best_f_score: " << old_best_f_score << " newBestFScore:
                 // " << best_f_score << std::endl;
                 auto iter = open_set.ordered_begin();
                 auto iterEnd = open_set.ordered_end();
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->f_score;
-                    if (val > oldBestFScore * factor_w && val <= best_f_score * factor_w)
+                    if (val > old_best_f_score * factor_w && val <= best_f_score * factor_w)
                     {
                         const AStarEpsilonNode& n = *iter;
                         focal_set.push(n.handle);
