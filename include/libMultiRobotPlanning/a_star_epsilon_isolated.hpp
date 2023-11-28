@@ -320,8 +320,10 @@ public:
                 }
             }
 
-            auto currentHandle = focal_set.top();
-            AStarEpsilonNode current = *currentHandle;
+            // 弹出来的不是open set的top, 而是focal set的top
+            // => 也可以理解，如果弹出的是open set的top, 不就是精确算法了？
+            auto current_handle = focal_set.top();
+            AStarEpsilonNode current = *current_handle;
             num_expanded_nodes++;
 
             if (is_solution(current.location))
@@ -351,7 +353,7 @@ public:
             }
 
             focal_set.pop();
-            open_set.erase(currentHandle);
+            open_set.erase(current_handle);
             location_to_heaphandle.erase(current.location);
             closed_set.insert(current.location);
 
