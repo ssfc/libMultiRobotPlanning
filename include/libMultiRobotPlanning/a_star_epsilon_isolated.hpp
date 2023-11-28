@@ -359,6 +359,9 @@ public:
                 return true;
             }
 
+            // A* LINE 12
+            // openSet.Remove(current)
+            // open_set和focal_set同步更新
             focal_set.pop();
             open_set.erase(current_handle);
             location_to_heaphandle.erase(current.location);
