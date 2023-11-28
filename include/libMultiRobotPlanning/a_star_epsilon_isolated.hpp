@@ -320,6 +320,9 @@ public:
                 }
             }
 
+            // A* LINE 9
+            // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
+            // current := the node in open_set having the lowest f_score[] value
             // 弹出来的不是open set的top, 而是focal set的top
             // => 也可以理解，如果弹出的是open set的top, 不就是精确算法了？
             auto current_handle = focal_set.top();
