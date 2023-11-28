@@ -295,12 +295,13 @@ public:
             int old_best_f_score = best_f_score;
             best_f_score = open_set.top().f_score;
             // std::cout << "best_f_score: " << best_f_score << std::endl;
-            if (best_f_score > old_best_f_score)
+            if (best_f_score > old_best_f_score) // 还不如原来的。
             {
                 // std::cout << "old_best_f_score: " << old_best_f_score << " newBestFScore:
                 // " << best_f_score << std::endl;
                 auto iter = open_set.ordered_begin();
                 auto iterEnd = open_set.ordered_end();
+                // 遍历open_set
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->f_score;
