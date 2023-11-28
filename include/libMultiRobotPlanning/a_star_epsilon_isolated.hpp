@@ -383,16 +383,16 @@ public:
                     // tentative_g_score is the distance from start to the neighbor through current
                     // tentative_g_score := gScore[current] + d(current, neighbor)
                     // cost of the cheapest path from start to n currently known
-                    int tentative_gScore = current.g_score + neighbor.cost;
+                    int tentative_g_score = current.g_score + neighbor.cost;
                     auto iter = location_to_heaphandle.find(neighbor.location);
                     if (iter == location_to_heaphandle.end())
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
-                        int f_score = tentative_gScore + calculate_h(neighbor.location);
-                        int focal_heuristic = current.focal_heuristic + tentative_gScore +
-                                             - current.g_score + tentative_gScore;
+                        int f_score = tentative_g_score + calculate_h(neighbor.location);
+                        int focal_heuristic = current.focal_heuristic + tentative_g_score +
+                                             - current.g_score + tentative_g_score;
                         auto handle = open_set.push(
-                                AStarEpsilonNode(neighbor.location, f_score, tentative_gScore, focal_heuristic));
+                                AStarEpsilonNode(neighbor.location, f_score, tentative_g_score, focal_heuristic));
                         (*handle).handle = handle;
                         if (f_score <= best_f_score * factor_w)
                         {
@@ -403,24 +403,24 @@ public:
                         location_to_heaphandle.insert(std::make_pair<>(neighbor.location, handle));
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
-                        // tentative_gScore << std::endl;
+                        // tentative_g_score << std::endl;
                     }
                     else
                     {
                         auto handle = iter->second;
                         // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).g_score)
+                        if (tentative_g_score >= (*handle).g_score)
                         {
                             continue;
                         }
 
                         int last_gScore = (*handle).g_score;
                         int last_fScore = (*handle).f_score;
-                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << last_gScore << " " << *handle << std::endl;
                         // update f and g_score
-                        int delta = last_gScore - tentative_gScore;
-                        (*handle).g_score = tentative_gScore;
+                        int delta = last_gScore - tentative_g_score;
+                        (*handle).g_score = tentative_g_score;
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
                         num_generated_nodes++;
@@ -437,7 +437,7 @@ public:
                     // default c'tors of Location and Action are required
                     came_from.erase(neighbor.location);
                     came_from.insert(std::make_pair<>(neighbor.location,
-                     std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_gScore)));
+                     std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
                 }
             }
 
