@@ -305,12 +305,14 @@ public:
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->f_score;
+
                     if (val > old_best_f_score * factor_w && val <= best_f_score * factor_w)
                     {
                         const AStarEpsilonNode& n = *iter;
                         focal_set.push(n.handle);
                     }
-                    if (val > best_f_score * factor_w)
+
+                    if (val > best_f_score * factor_w) // 因为open_set是有序集，所以中断就可以了。
                     {
                         break;
                     }
