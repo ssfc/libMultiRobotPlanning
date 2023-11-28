@@ -77,12 +77,12 @@ public:
     // #endif
 
 public:
-    AStarEpsilonNode(const Location& input_state, int input_f_score,
-                     int input_gScore, int input_focalHeuristic)
-            : location(input_state),
+    AStarEpsilonNode(const Location& input_location, int input_f_score,
+                     int input_g_score, int input_focal_heuristic)
+            : location(input_location),
               f_score(input_f_score),
-              g_score(input_gScore),
-              focal_heuristic(input_focalHeuristic)
+              g_score(input_g_score),
+              focal_heuristic(input_focal_heuristic)
     {}
 
     bool operator<(const AStarEpsilonNode& other) const
