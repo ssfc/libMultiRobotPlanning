@@ -225,6 +225,10 @@ public:
         }
     }
 
+    // A* LINE 1
+    // A* finds a path from start to goal.
+    // h is the heuristic function. h(n) estimates the cost to reach goal from node n.
+    // function A_Star(start, goal, h_score)
     bool a_star_epsilon_search(AgentPlan& solution)
     {
         solution.path.clear();
@@ -236,7 +240,16 @@ public:
         focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<Location, fibHeapHandle_t, std::hash<Location>> location_to_heaphandle;
         std::unordered_set<Location, std::hash<Location>> closed_set;
+
+        // A* LINE 2
+        // For node n, came_from[n] is the node immediately preceding it on the cheapest path from the start
+        // to n currently known.
+        // came_from := an empty map
         std::unordered_map<Location, std::tuple<Location, Action, int, int>, std::hash<Location>> came_from;
+
+        // A* LINE 3
+        // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
+        // gScore := map with default value of Infinity
 
         auto handle = open_set.push(AStarEpsilonNode(start, calculate_h(start), 0, 0));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
