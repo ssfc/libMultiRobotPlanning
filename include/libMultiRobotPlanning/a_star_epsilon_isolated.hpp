@@ -394,6 +394,7 @@ public:
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         // focal_heuristic只在插入新节点时更新？
                         // 为啥focal_heuristic用g来定义？还是叠加的g?
+                        // 将focal_heuristic定义为calculate_h, 相当于A*_epsilon论文中的h^=h^F
                         // int focal_heuristic = current.focal_heuristic + tentative_g_score + neighbor.cost; // ???
                         int focal_heuristic = calculate_h(neighbor.location); // ???
                         auto child_handle = open_set.emplace(AStarEpsilonNode(neighbor.location,
