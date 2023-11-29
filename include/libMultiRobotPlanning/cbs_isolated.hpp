@@ -80,7 +80,7 @@ public:
     size_t agent2;
 
     Location location_1;
-    int x2; int y2;
+    Location location_2;
 
 public:
     friend std::ostream& operator<<(std::ostream& os, const Conflict& conflict)
@@ -91,7 +91,7 @@ public:
                 return os << conflict.time << ": VertexConflict(" << conflict.location_1.x << "," << conflict.location_1.y << ")";
             case EdgeConflict:
                 return os << conflict.time << ": EdgeConflict(" << conflict.location_1.x << "," << conflict.location_1.y << ","
-                          << conflict.x2 << "," << conflict.y2 << ")";
+                          << conflict.location_2.x << "," << conflict.location_2.y << ")";
         }
 
         return os;
@@ -761,8 +761,7 @@ public:
                         first_conflict.agent2 = j;
                         first_conflict.conflict_type = Conflict::EdgeConflict;
                         first_conflict.location_1 = state1a.location;
-                        first_conflict.x2 = state1b.location.x;
-                        first_conflict.y2 = state1b.location.y;
+                        first_conflict.location_2 = state1b.location;
 
                         return true;
                     }
@@ -789,14 +788,14 @@ public:
         {
             Constraints c1;
             c1.edge_constraints.emplace(EdgeConstraint(
-                    input_conflict.time, Location(input_conflict.location_1),
-                    Location(input_conflict.x2, input_conflict.y2)));
+                    input_conflict.time, input_conflict.location_1,
+                    input_conflict.location_2));
             constraints_from_conflict[input_conflict.agent1] = c1;
 
             Constraints c2;
             c2.edge_constraints.emplace(EdgeConstraint(
-                    input_conflict.time, Location(input_conflict.x2, input_conflict.y2),
-                    Location(input_conflict.location_1)));
+                    input_conflict.time, input_conflict.location_2,
+                    input_conflict.location_1));
             constraints_from_conflict[input_conflict.agent2] = c2;
         }
     }
