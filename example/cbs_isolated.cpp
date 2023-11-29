@@ -173,3 +173,4 @@ int main(int argc, char* argv[])
 // mkdir build; cd build
 // cmake .. ; make
 // ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml
+// ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml
