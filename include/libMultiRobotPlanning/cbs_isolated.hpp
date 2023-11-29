@@ -149,32 +149,33 @@ class EdgeConstraint
 {
 public:
     int time;
-    int x1; int y1;
+    Location location_1;
     int x2; int y2;
 
 public:
-    EdgeConstraint(int time, int input_x1, int input_y1, int input_x2, int input_y2)
+    EdgeConstraint(int time, Location input_location_1, int input_x2, int input_y2)
             : time(time),
-            x1(input_x1), y1(input_y1),
+            location_1(input_location_1),
             x2(input_x2), y2(input_y2)
             {}
 
     bool operator<(const EdgeConstraint& other) const
     {
-        return std::tie(time, x1, y1, x2, y2) <
-               std::tie(other.time, other.x1, other.y1, other.x2, other.y2);
+        return std::tie(time, location_1.x, location_1.y, x2, y2) <
+               std::tie(other.time, other.location_1.x, other.location_1.y, other.x2, other.y2);
     }
 
     bool operator==(const EdgeConstraint& other) const
     {
-        return std::tie(time, x1, y1, x2, y2) ==
-               std::tie(other.time, other.x1, other.y1, other.x2, other.y2);
+        return std::tie(time, location_1.x, location_1.y, x2, y2) ==
+               std::tie(other.time, other.location_1.x, other.location_1.y, other.x2, other.y2);
     }
 
     friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& edge_constraint)
     {
-        return os << "EC(" << edge_constraint.time << "," << edge_constraint.x1 << "," << edge_constraint.y1 << "," << edge_constraint.x2
-                  << "," << edge_constraint.y2 << ")";
+        return os << "EC(" << edge_constraint.time << ","
+            << edge_constraint.location_1.x << "," << edge_constraint.location_1.y << ","
+            << edge_constraint.x2 << "," << edge_constraint.y2 << ")";
     }
 };
 
@@ -187,8 +188,8 @@ namespace std
         {
             size_t seed = 0;
             boost::hash_combine(seed, edge_constraint.time);
-            boost::hash_combine(seed, edge_constraint.x1);
-            boost::hash_combine(seed, edge_constraint.y1);
+            boost::hash_combine(seed, edge_constraint.location_1.x);
+            boost::hash_combine(seed, edge_constraint.location_1.y);
             boost::hash_combine(seed, edge_constraint.x2);
             boost::hash_combine(seed, edge_constraint.y2);
 
@@ -398,8 +399,7 @@ public:
         // assert(low_level_constraints);
         const auto& con = low_level_constraints.edge_constraints;
 
-        return con.find(EdgeConstraint(s1.time, s1.location.x, s1.location.y,
-                                       s2.location.x, s2.location.y)) == con.end();
+        return con.find(EdgeConstraint(s1.time, s1.location, s2.location.x, s2.location.y)) == con.end();
     }
 
     // low level 工具函数: 引用传递计算大型结果
@@ -791,12 +791,12 @@ public:
         {
             Constraints c1;
             c1.edge_constraints.emplace(EdgeConstraint(
-                    input_conflict.time, input_conflict.x1, input_conflict.y1, input_conflict.x2, input_conflict.y2));
+                    input_conflict.time, Location(input_conflict.x1, input_conflict.y1), input_conflict.x2, input_conflict.y2));
             constraints_from_conflict[input_conflict.agent1] = c1;
 
             Constraints c2;
             c2.edge_constraints.emplace(EdgeConstraint(
-                    input_conflict.time, input_conflict.x2, input_conflict.y2, input_conflict.x1, input_conflict.y1));
+                    input_conflict.time, Location(input_conflict.x2, input_conflict.y2), input_conflict.x1, input_conflict.y1));
             constraints_from_conflict[input_conflict.agent2] = c2;
         }
     }
