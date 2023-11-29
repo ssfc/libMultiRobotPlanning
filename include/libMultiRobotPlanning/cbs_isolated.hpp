@@ -463,7 +463,7 @@ public:
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
-        auto handle = open_heap.push(LowLevelNode(start_time_location,
+        auto handle = open_heap.emplace(LowLevelNode(start_time_location,
                                                   admissible_heuristic(start_time_location),
                                                   initial_cost));
         location_to_heap.insert(std::make_pair<>(start_time_location, handle));
@@ -516,7 +516,7 @@ public:
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
                         int f_score = tentative_gScore + admissible_heuristic(child.time_location);
-                        auto handle = open_heap.push(LowLevelNode(child.time_location, f_score, tentative_gScore));
+                        auto handle = open_heap.emplace(LowLevelNode(child.time_location, f_score, tentative_gScore));
                         location_to_heap.insert(std::make_pair<>(child.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
@@ -838,7 +838,7 @@ public:
         // insert Root to OPEN
         // std::priority_queue<HighLevelNode> open;
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > open;
-        open.push(root);
+        open.emplace(root);
 
         int id = 1;
         //  A1 LINE 5
@@ -961,7 +961,7 @@ public:
                     // std::cout << "  is_path_found. cost: " << new_node.cost << std::endl;
                     // A1 LINE 17
                     // Insert new_node to OPEN
-                    open.push(new_node);
+                    open.emplace(new_node);
                 }
 
                 ++id;
