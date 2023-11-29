@@ -79,7 +79,7 @@ public:
     size_t agent1;
     size_t agent2;
 
-    int x1; int y1;
+    Location location_1;
     int x2; int y2;
 
 public:
@@ -88,9 +88,9 @@ public:
         switch (conflict.conflict_type)
         {
             case VertexConflict:
-                return os << conflict.time << ": VertexConflict(" << conflict.x1 << "," << conflict.y1 << ")";
+                return os << conflict.time << ": VertexConflict(" << conflict.location_1.x << "," << conflict.location_1.y << ")";
             case EdgeConflict:
-                return os << conflict.time << ": EdgeConflict(" << conflict.x1 << "," << conflict.y1 << ","
+                return os << conflict.time << ": EdgeConflict(" << conflict.location_1.x << "," << conflict.location_1.y << ","
                           << conflict.x2 << "," << conflict.y2 << ")";
         }
 
@@ -735,8 +735,7 @@ public:
                         first_conflict.agent1 = i;
                         first_conflict.agent2 = j;
                         first_conflict.conflict_type = Conflict::VertexConflict;
-                        first_conflict.x1 = state1.location.x;
-                        first_conflict.y1 = state1.location.y;
+                        first_conflict.location_1 = state1.location;
                         // cout << "VC " << t << "," << state1.x << "," << state1.y <<
                         // endl;
 
@@ -761,8 +760,7 @@ public:
                         first_conflict.agent1 = i;
                         first_conflict.agent2 = j;
                         first_conflict.conflict_type = Conflict::EdgeConflict;
-                        first_conflict.x1 = state1a.location.x;
-                        first_conflict.y1 = state1a.location.y;
+                        first_conflict.location_1 = state1a.location;
                         first_conflict.x2 = state1b.location.x;
                         first_conflict.y2 = state1b.location.y;
 
@@ -783,7 +781,7 @@ public:
         {
             Constraints c1;
             c1.vertex_constraints.emplace(
-            VertexConstraint(input_conflict.time, Location(input_conflict.x1, input_conflict.y1)));
+            VertexConstraint(input_conflict.time, Location(input_conflict.location_1)));
             constraints_from_conflict[input_conflict.agent1] = c1;
             constraints_from_conflict[input_conflict.agent2] = c1;
         }
@@ -791,14 +789,14 @@ public:
         {
             Constraints c1;
             c1.edge_constraints.emplace(EdgeConstraint(
-                    input_conflict.time, Location(input_conflict.x1, input_conflict.y1),
+                    input_conflict.time, Location(input_conflict.location_1),
                     Location(input_conflict.x2, input_conflict.y2)));
             constraints_from_conflict[input_conflict.agent1] = c1;
 
             Constraints c2;
             c2.edge_constraints.emplace(EdgeConstraint(
                     input_conflict.time, Location(input_conflict.x2, input_conflict.y2),
-                    Location(input_conflict.x1, input_conflict.y1)));
+                    Location(input_conflict.location_1)));
             constraints_from_conflict[input_conflict.agent2] = c2;
         }
     }
