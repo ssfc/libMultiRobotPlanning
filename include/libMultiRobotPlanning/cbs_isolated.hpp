@@ -346,8 +346,7 @@ public:
         // cout << "H: " <<  time_location << " " << m_heuristic[low_level_agent_index][time_location.x + num_columns *
         // time_location.y] << endl;
         // return m_heuristic[low_level_agent_index][time_location.x + num_columns * time_location.y];
-        return abs(time_location.location.x - goal.x) +
-               abs(time_location.location.y - goal.y);
+        return abs(time_location.location.x - goal.x) + abs(time_location.location.y - goal.y);
     }
 
     // low level 工具函数
