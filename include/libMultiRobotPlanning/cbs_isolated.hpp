@@ -750,8 +750,8 @@ public:
         if (input_conflict.conflict_type == Conflict::VertexConflict)
         {
             AgentConstraints c1;
-            c1.vertex_constraints.emplace(
-            VertexConstraint(input_conflict.time, Location(input_conflict.location_1)));
+            c1.vertex_constraints.emplace(VertexConstraint(
+                input_conflict.time, Location(input_conflict.location_1)));
             constraints_from_conflict[input_conflict.agent1] = c1;
             constraints_from_conflict[input_conflict.agent2] = c1;
         }
