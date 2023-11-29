@@ -74,10 +74,10 @@ public:
 
     Type conflict_type;
 
-    int time;
-
     size_t agent1;
     size_t agent2;
+
+    int time;
 
     Location location_1;
     Location location_2;
