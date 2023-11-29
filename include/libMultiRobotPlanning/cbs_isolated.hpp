@@ -663,15 +663,11 @@ public:
     // HighLevel 工具函数 get_first_conflict 的工具函数
     TimeLocation get_time_location(size_t input_agent_index, const std::vector<AgentPlan>& solution, size_t t)
     {
-        assert(input_agent_index < solution.size());
-
         if (t < solution[input_agent_index].path.size())
         {
             return solution[input_agent_index].path[t].first;
         }
-
-        assert(!solution[input_agent_index].path.empty());
-
+        
         if (disappear_at_goal)
         {
             // This is a trick to avoid changing the rest of the code significantly
