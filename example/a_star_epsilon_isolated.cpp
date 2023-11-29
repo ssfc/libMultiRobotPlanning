@@ -114,9 +114,12 @@ int main(int argc, char* argv[])
         std::cout << "Planning successful! Total cost: " << solution.cost << std::endl;
         for (size_t i = 0; i < solution.actions.size(); ++i)
         {
-            std::cout << solution.path[i].second << ": " << solution.path[i].first
-                      << "->" << solution.actions[i].first
-                      << "(cost: " << solution.actions[i].second << ")" << std::endl;
+            if(i==0 || i==1 || i==solution.actions.size()-1)
+            {
+                std::cout << solution.path[i].second << ": " << solution.path[i].first
+                          << "->" << solution.actions[i].first
+                          << "(cost: " << solution.actions[i].second << ")" << std::endl;
+            }
         }
 
         std::cout << solution.path.back().second << ": "
