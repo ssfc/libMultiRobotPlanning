@@ -53,8 +53,6 @@ struct AgentPlan
 {
     // path constructing locations and their g_score
     std::vector<TimeLocation> path;
-    //! actions and their cost
-    std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
     int cost;
 };
@@ -422,7 +420,6 @@ public:
         int initial_cost = 0;
         solution.path.clear();
         solution.path.emplace_back(start_time_location);
-        solution.actions.clear();
         solution.cost = 0;
 
         // 定义openSet_t和fibHeapHandle_t
@@ -452,19 +449,15 @@ public:
             if (is_solution(current.time_location))
             {
                 solution.path.clear();
-                solution.actions.clear();
                 auto iter = came_from.find(current.time_location);
                 while (iter != came_from.end())
                 {
                     solution.path.emplace_back(iter->first);
-                    solution.actions.emplace_back(std::make_pair<>(
-                            std::get<1>(iter->second), std::get<2>(iter->second)));
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
                 solution.path.emplace_back(start_time_location);
                 std::reverse(solution.path.begin(), solution.path.end());
-                std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
 
                 return true;
@@ -857,15 +850,6 @@ public:
                 fout << "schedule:" << std::endl;
                 for (size_t i = 0; i < solution.size(); i++)
                 {
-                    // cout << "Solution for: " << i << endl;
-                    // for (size_t i = 0; i < solution[i].actions.size(); ++i) {
-                    //   cout << solution[i].path[i].second << ": " <<
-                    //   solution[i].path[i].first << "->" << solution[i].actions[i].first
-                    //   << "(cost: " << solution[i].actions[i].second << ")" << endl;
-                    // }
-                    // cout << solution[i].path.back().second << ": " <<
-                    // solution[i].path.back().first << endl;
-
                     fout << "  agent" << i << ":" << std::endl;
                     for (const auto& state : solution[i].path)
                     {
