@@ -667,7 +667,7 @@ public:
         {
             return solution[input_agent_index].path[t].first;
         }
-        
+
         if (disappear_at_goal)
         {
             // This is a trick to avoid changing the rest of the code significantly
