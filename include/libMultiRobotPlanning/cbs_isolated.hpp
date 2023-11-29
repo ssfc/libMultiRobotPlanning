@@ -215,28 +215,6 @@ public:
                                other.edge_constraints.end());
     }
 
-    // 检查当前对象的顶点约束和边约束是否与另一个对象中的任何约束重叠。
-    bool is_overlap(const Constraints& other) const
-    {
-        for (const auto& vertex_constraint : vertex_constraints)
-        {
-            if (other.vertex_constraints.count(vertex_constraint) > 0)
-            {
-                return true;
-            }
-        }
-
-        for (const auto& edge_constraint : edge_constraints)
-        {
-            if (other.edge_constraints.count(edge_constraint) > 0)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     friend std::ostream& operator<<(std::ostream& os, const Constraints& input_constraints)
     {
         for (const auto& vertex_constraint : input_constraints.vertex_constraints)
