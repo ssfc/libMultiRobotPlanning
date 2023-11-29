@@ -52,7 +52,7 @@ struct Child
 struct AgentPlan
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<TimeLocation, int> > path;
+    std::vector<TimeLocation> path;
     //! actions and their cost
     std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
@@ -423,7 +423,7 @@ public:
     {
         int initial_cost = 0;
         solution.path.clear();
-        solution.path.emplace_back(std::make_pair<>(start_time_location, 0));
+        solution.path.emplace_back(start_time_location);
         solution.actions.clear();
         solution.cost = 0;
 
@@ -458,15 +458,13 @@ public:
                 auto iter = came_from.find(current.time_location);
                 while (iter != came_from.end())
                 {
-                    solution.path.emplace_back(
-                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    solution.path.emplace_back(iter->first);
                     solution.actions.emplace_back(std::make_pair<>(
                             std::get<1>(iter->second), std::get<2>(iter->second)));
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
-                solution.path.emplace_back(std::make_pair<>
-                                                   (start_time_location, initial_cost));
+                solution.path.emplace_back(start_time_location);
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
@@ -557,7 +555,7 @@ public:
 
             for (size_t t = 0; t < high_level_node.solution[i].path.size(); ++t)
             {
-                os << "  " << high_level_node.solution[i].path[t].first << std::endl;
+                os << "  " << high_level_node.solution[i].path[t] << std::endl;
             }
 
             os << " AgentConstraints:" << std::endl;
@@ -665,7 +663,7 @@ public:
     {
         if (t < solution[input_agent_index].path.size())
         {
-            return solution[input_agent_index].path[t].first;
+            return solution[input_agent_index].path[t];
         }
 
         if (disappear_at_goal)
@@ -676,7 +674,7 @@ public:
             return TimeLocation(-1, Location(-1 * (input_agent_index + 1), -1));
         }
 
-        return solution[input_agent_index].path.back().first;
+        return solution[input_agent_index].path.back();
     }
 
     // HighLevel 工具函数: 引用传递计算大型结果
@@ -874,15 +872,15 @@ public:
                     fout << "  agent" << i << ":" << std::endl;
                     for (const auto& state : solution[i].path)
                     {
-                        fout << "    - x: " << state.first.location.x << std::endl
-                             << "      y: " << state.first.location.y << std::endl
-                             << "      t: " << state.second << std::endl;
+                        fout << "    - x: " << state.location.x << std::endl
+                             << "      y: " << state.location.y << std::endl
+                             << "      t: " << state.time << std::endl;
                     }
 
                     std::cerr << "agent " << i << ": ";
                     for (const auto& state : solution[i].path)
                     {
-                        std::cerr << "(" << state.first.location.x << "," << state.first.location.y << "),";
+                        std::cerr << "(" << state.location.x << "," << state.location.y << "),";
                     }
                     std::cerr << std::endl;
                 }
