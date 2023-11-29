@@ -198,8 +198,8 @@ namespace std
     };
 }
 
-
-class Constraints
+// constraints of a single agent
+class AgentConstraints
 {
 public:
     std::unordered_set<VertexConstraint> vertex_constraints;
@@ -207,7 +207,7 @@ public:
 
 public:
     // 将另一个对象中的所有元素插入到当前对象的集合中。
-    void add(const Constraints& other)
+    void add(const AgentConstraints& other)
     {
         vertex_constraints.insert(other.vertex_constraints.begin(),
                                  other.vertex_constraints.end());
@@ -215,7 +215,7 @@ public:
                                other.edge_constraints.end());
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Constraints& input_constraints)
+    friend std::ostream& operator<<(std::ostream& os, const AgentConstraints& input_constraints)
     {
         for (const auto& vertex_constraint : input_constraints.vertex_constraints)
         {
@@ -287,7 +287,7 @@ public:
 
     TimeLocation start_time_location;
     Location goal;
-    Constraints low_level_constraints;
+    AgentConstraints low_level_constraints;
     bool disappear_at_goal;
 
     // process var
@@ -299,7 +299,7 @@ public:
              std::unordered_set<Location> input_obstacles,
              TimeLocation input_time_location,
              Location input_goal,
-             Constraints input_constraints,
+             AgentConstraints input_constraints,
              bool input_disappear_at_goal):
              num_columns(input_num_columns),
              num_rows(input_num_rows),
@@ -323,7 +323,7 @@ public:
     // Set the current context to a particular agent with the given set of low_level_constraints
     void set_low_level_context(TimeLocation input_time_location,
                                Location input_goal,
-                               Constraints input_constraints)
+                               AgentConstraints input_constraints)
     {
         start_time_location = input_time_location;
         goal = input_goal;
@@ -533,7 +533,7 @@ class HighLevelNode
 {
 public:
     std::vector<AgentPlan> solution;
-    std::vector<Constraints> constraints_group;
+    std::vector<AgentConstraints> constraints_group;
     int cost;
     int id;
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >::handle_type handle;
@@ -560,7 +560,7 @@ public:
                 os << "  " << high_level_node.solution[i].path[t].first << std::endl;
             }
 
-            os << " Constraints:" << std::endl;
+            os << " AgentConstraints:" << std::endl;
             os << high_level_node.constraints_group[i];
             os << " cost: " << high_level_node.solution[i].cost << std::endl;
         }
@@ -745,11 +745,11 @@ public:
 
     // High level 工具函数
     // Create a list of low_level_constraints for the given conflict.
-    void generate_constraints_from_conflict(const Conflict& input_conflict, std::map<size_t, Constraints>& constraints_from_conflict)
+    void generate_constraints_from_conflict(const Conflict& input_conflict, std::map<size_t, AgentConstraints>& constraints_from_conflict)
     {
         if (input_conflict.conflict_type == Conflict::VertexConflict)
         {
-            Constraints c1;
+            AgentConstraints c1;
             c1.vertex_constraints.emplace(
             VertexConstraint(input_conflict.time, Location(input_conflict.location_1)));
             constraints_from_conflict[input_conflict.agent1] = c1;
@@ -757,13 +757,13 @@ public:
         }
         else if (input_conflict.conflict_type == Conflict::EdgeConflict)
         {
-            Constraints c1;
+            AgentConstraints c1;
             c1.edge_constraints.emplace(EdgeConstraint(
                     input_conflict.time, input_conflict.location_1,
                     input_conflict.location_2));
             constraints_from_conflict[input_conflict.agent1] = c1;
 
-            Constraints c2;
+            AgentConstraints c2;
             c2.edge_constraints.emplace(EdgeConstraint(
                     input_conflict.time, input_conflict.location_2,
                     input_conflict.location_1));
@@ -897,7 +897,7 @@ public:
 
             // A1 LINE 11
             // for each agent ai in C do
-            std::map<size_t, Constraints> new_constraints; // agent_index到constraints的映射
+            std::map<size_t, AgentConstraints> new_constraints; // agent_index到constraints的映射
             generate_constraints_from_conflict(conflict, new_constraints);
             for (const auto& new_constraint : new_constraints)
             {
