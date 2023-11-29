@@ -341,7 +341,7 @@ public:
     }
 
     // low level 工具函数
-    int admissible_heuristic(const TimeLocation& time_location)
+    int calculate_h(const TimeLocation& time_location)
     {
         // cout << "H: " <<  time_location << " " << m_heuristic[low_level_agent_index][time_location.x + num_columns *
         // time_location.y] << endl;
@@ -442,7 +442,7 @@ public:
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
         auto handle = open_heap.emplace(LowLevelNode(start_time_location,
-                                                  admissible_heuristic(start_time_location),
+                                                  calculate_h(start_time_location),
                                                   initial_cost));
         location_to_heap.insert(std::make_pair<>(start_time_location, handle));
 
@@ -493,7 +493,7 @@ public:
                     auto iter = location_to_heap.find(child.time_location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + admissible_heuristic(child.time_location);
+                        int f_score = tentative_gScore + calculate_h(child.time_location);
                         auto handle = open_heap.emplace(LowLevelNode(child.time_location, f_score, tentative_gScore));
                         location_to_heap.insert(std::make_pair<>(child.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
