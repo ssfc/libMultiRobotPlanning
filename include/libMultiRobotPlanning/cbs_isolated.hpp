@@ -352,9 +352,7 @@ public:
     // low level 工具函数
     bool is_solution(const TimeLocation& time_location)
     {
-        return time_location.location.x == goal.x
-               && time_location.location.y == goal.y
-               && time_location.time > last_goal_constraint;
+        return time_location.location == goal && time_location.time > last_goal_constraint;
     }
 
     // low level 工具函数 get_neighbors的工具函数
