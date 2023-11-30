@@ -431,7 +431,7 @@ public:
         OpenHeap open_heap;
         std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heaphandle;
         std::unordered_set<Location, std::hash<Location>> closed_set;
-        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
+        std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
         auto handle = open_heap.emplace(LowLevelNode(TimeLocation(0, start),
                                                   calculate_h(TimeLocation(0, start)),
@@ -449,10 +449,10 @@ public:
             if (is_solution(current.time_location))
             {
                 solution.path.clear();
-                auto iter = came_from.find(current.time_location);
+                auto iter = came_from.find(current.time_location.location);
                 while (iter != came_from.end())
                 {
-                    solution.path.emplace_back(iter->first.location);
+                    solution.path.emplace_back(iter->first);
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
@@ -505,9 +505,9 @@ public:
                     // Best path for this node so far
                     // TODO: this is not the best way to update "came_from", but otherwise
                     // default c'tors of TimeLocation and Action are required
-                    came_from.erase(child.time_location);
-                    came_from.insert(std::make_pair<>(child.time_location,
-                                                      std::make_tuple<>(current.time_location, child.action, child.cost,
+                    came_from.erase(child.time_location.location);
+                    came_from.insert(std::make_pair<>(child.time_location.location,
+                      std::make_tuple<>(current.time_location.location, child.action, child.cost,
                                                                         tentative_gScore)));
                 }
             }
