@@ -417,7 +417,6 @@ public:
     // 引用传递大型计算结果
     bool low_level_search(AgentPlan& solution, size_t& num_expanded_low_level_nodes)
     {
-        int initial_cost = 0;
         solution.path.clear();
         solution.path.emplace_back(start);
         solution.cost = 0;
@@ -434,8 +433,7 @@ public:
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
         auto handle = open_heap.emplace(LowLevelNode(TimeLocation(0, start),
-          calculate_h(TimeLocation(0, start)),
-                                                  initial_cost));
+          calculate_h(TimeLocation(0, start)), 0));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
 
         std::vector<Child> children;
