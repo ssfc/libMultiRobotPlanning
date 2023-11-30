@@ -52,7 +52,7 @@ struct Child
 struct AgentPlan
 {
     // path constructing locations and their g_score
-    std::vector<TimeLocation> path;
+    std::vector<Location> path;
     //! actual cost of the result
     int cost;
 };
@@ -419,7 +419,7 @@ public:
     {
         int initial_cost = 0;
         solution.path.clear();
-        solution.path.emplace_back(start_time_location);
+        solution.path.emplace_back(start_time_location.location);
         solution.cost = 0;
 
         // 定义openSet_t和fibHeapHandle_t
@@ -452,11 +452,11 @@ public:
                 auto iter = came_from.find(current.time_location);
                 while (iter != came_from.end())
                 {
-                    solution.path.emplace_back(iter->first);
+                    solution.path.emplace_back(iter->first.location);
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
-                solution.path.emplace_back(start_time_location);
+                solution.path.emplace_back(start_time_location.location);
                 std::reverse(solution.path.begin(), solution.path.end());
                 solution.cost = current.g_score;
 
@@ -653,7 +653,7 @@ public:
     {
         if (t < solution[input_agent_index].path.size())
         {
-            return solution[input_agent_index].path[t];
+            return TimeLocation(t, solution[input_agent_index].path[t]);
         }
 
         if (disappear_at_goal)
@@ -664,7 +664,7 @@ public:
             return TimeLocation(-1, Location(-1 * (input_agent_index + 1), -1));
         }
 
-        return solution[input_agent_index].path.back();
+        return TimeLocation(t, solution[input_agent_index].path.back());
     }
 
     // HighLevel 工具函数: 引用传递计算大型结果
@@ -853,15 +853,15 @@ public:
                     fout << "  agent" << i << ":" << std::endl;
                     for (const auto& state : solution[i].path)
                     {
-                        fout << "    - x: " << state.location.x << std::endl
-                             << "      y: " << state.location.y << std::endl
-                             << "      t: " << state.time << std::endl;
+                        fout << "    - x: " << state.x << std::endl
+                             << "      y: " << state.y << std::endl
+                             << "      t: " << i << std::endl;
                     }
 
                     std::cerr << "agent " << i << ": ";
                     for (const auto& state : solution[i].path)
                     {
-                        std::cerr << "(" << state.location.x << "," << state.location.y << "),";
+                        std::cerr << "(" << state.x << "," << state.y << "),";
                     }
                     std::cerr << std::endl;
                 }
