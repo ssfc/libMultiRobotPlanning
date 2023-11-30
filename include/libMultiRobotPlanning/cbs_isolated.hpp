@@ -281,7 +281,7 @@ public:
     size_t num_rows;
     std::unordered_set<Location> obstacles;
 
-    TimeLocation start_time_location;
+    Location start;
     Location goal;
     AgentConstraints low_level_constraints;
     bool disappear_at_goal;
@@ -293,14 +293,14 @@ public:
     LowLevel(size_t input_num_columns,
              size_t input_num_rows,
              std::unordered_set<Location> input_obstacles,
-             TimeLocation input_time_location,
+             Location input_start,
              Location input_goal,
              AgentConstraints input_constraints,
              bool input_disappear_at_goal):
              num_columns(input_num_columns),
              num_rows(input_num_rows),
              obstacles(input_obstacles),
-             start_time_location(input_time_location),
+             start(input_start),
              goal(input_goal),
              low_level_constraints(input_constraints),
              disappear_at_goal(input_disappear_at_goal)
@@ -321,7 +321,7 @@ public:
                                Location input_goal,
                                AgentConstraints input_constraints)
     {
-        start_time_location = input_time_location;
+        start = input_time_location.location;
         goal = input_goal;
         low_level_constraints = input_constraints;
 
@@ -419,7 +419,7 @@ public:
     {
         int initial_cost = 0;
         solution.path.clear();
-        solution.path.emplace_back(start_time_location.location);
+        solution.path.emplace_back(start);
         solution.cost = 0;
 
         // 定义openSet_t和fibHeapHandle_t
@@ -433,10 +433,10 @@ public:
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
-        auto handle = open_heap.emplace(LowLevelNode(start_time_location,
-                                                  calculate_h(start_time_location),
+        auto handle = open_heap.emplace(LowLevelNode(TimeLocation(0, start),
+                                                  calculate_h(TimeLocation(0, start)),
                                                   initial_cost));
-        location_to_heaphandle.insert(std::make_pair<>(start_time_location, handle));
+        location_to_heaphandle.insert(std::make_pair<>(TimeLocation(0, start), handle));
 
         std::vector<Child> children;
         children.reserve(10);
@@ -456,7 +456,7 @@ public:
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
-                solution.path.emplace_back(start_time_location.location);
+                solution.path.emplace_back(start);
                 std::reverse(solution.path.begin(), solution.path.end());
                 solution.cost = current.g_score;
 
@@ -776,7 +776,7 @@ public:
         // A1 LINE 2
         // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
         auto low_level = LowLevel(num_columns, num_rows, obstacles,
-                                  start_time_locations[0], goals[0],
+                                  start_time_locations[0].location, goals[0],
                                   root.constraints_group[0], false);
         for (size_t i = 0; i < num_agents; i++)
         {
