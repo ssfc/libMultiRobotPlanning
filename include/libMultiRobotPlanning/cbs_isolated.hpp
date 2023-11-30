@@ -434,7 +434,7 @@ public:
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
         auto handle = open_heap.emplace(LowLevelNode(TimeLocation(0, start),
-                                                  calculate_h(TimeLocation(0, start)),
+          calculate_h(TimeLocation(0, start)),
                                                   initial_cost));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
 
