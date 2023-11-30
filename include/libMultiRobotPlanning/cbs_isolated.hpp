@@ -430,7 +430,7 @@ public:
 
         OpenHeap open_heap;
         std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heaphandle;
-        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
+        std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
         auto handle = open_heap.emplace(LowLevelNode(TimeLocation(0, start),
@@ -465,14 +465,14 @@ public:
 
             open_heap.pop();
             location_to_heaphandle.erase(current.time_location.location);
-            closed_set.insert(current.time_location);
+            closed_set.insert(current.time_location.location);
 
             // traverse children
             children.clear();
             generate_children(current.time_location, children);
             for (const Child& child : children)
             {
-                if (closed_set.find(child.time_location) == closed_set.end())
+                if (closed_set.find(child.time_location.location) == closed_set.end())
                 {
                     int tentative_gScore = current.g_score + child.cost;
                     auto iter = location_to_heaphandle.find(child.time_location.location);
