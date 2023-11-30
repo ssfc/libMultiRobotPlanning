@@ -374,14 +374,14 @@ public:
     }
 
     // low level 工具函数: 引用传递计算大型结果
-    void generate_children(const TimeLocation& time_location, std::vector<Child>& children)
+    std::vector<Child> generate_children(const TimeLocation& time_location)
     {
         // cout << "#VC " << low_level_constraints.vertex_constraints.size() << endl;
         // for(const auto& vertex_constraint : low_level_constraints.vertex_constraints) {
         //   cout << "  " << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y <<
         //   endl;
         // }
-        children.clear();
+        std::vector<Child> children;
 
         TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
@@ -412,6 +412,8 @@ public:
         {
             children.emplace_back(Child(south_neighbor, Action::South, 1));
         }
+
+        return children;
     }
 
     // 引用传递大型计算结果
@@ -435,9 +437,6 @@ public:
         auto handle = open_heap.emplace(LowLevelNode(TimeLocation(0, start),
           calculate_h(TimeLocation(0, start)), 0));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
-
-        std::vector<Child> children;
-        children.reserve(10);
 
         while (!open_heap.empty())
         {
@@ -466,8 +465,7 @@ public:
             closed_set.insert(current.time_location.location);
 
             // traverse children
-            children.clear();
-            generate_children(current.time_location, children);
+            auto children = generate_children(current.time_location);
             for (const Child& child : children)
             {
                 if (closed_set.find(child.time_location.location) == closed_set.end())
