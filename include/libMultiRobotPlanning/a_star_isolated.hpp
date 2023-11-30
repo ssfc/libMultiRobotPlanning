@@ -148,9 +148,9 @@ public:
     }
 
     // get neighbor of current location
-    void get_neighbors(const Location& location, std::vector<Child>& children)
+    std::vector<Child> get_neighbors(const Location& location)
     {
-        children.clear();
+        std::vector<Child> children;
 
         Location north_neighbor(location.x, location.y + 1);
 
@@ -179,6 +179,8 @@ public:
         {
             children.emplace_back(Child(east_neighbor, Action::Right, 1));
         }
+
+        return children;
     }
 
     // A* LINE 1
@@ -225,9 +227,6 @@ public:
         // open_set := {start}
         auto root_handle = open_set.emplace(AStarNode(start, calculate_h(start), 0));
         location_to_heaphandle.insert(std::make_pair<>(start, root_handle));
-
-        std::vector<Child> children;
-        children.reserve(10);
 
         // A* LINE 8
         // while openSet is not empty
@@ -278,8 +277,7 @@ public:
             closed_set.insert(current.location);
 
             // traverse children
-            children.clear();
-            get_neighbors(current.location, children);
+            auto children = get_neighbors(current.location);
             // A* LINE 13
             // for each neighbor of current
             for (const Child& neighbor : children)
