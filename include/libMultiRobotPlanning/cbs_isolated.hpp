@@ -429,14 +429,14 @@ public:
         using HeapHandle = typename OpenHeap::handle_type;
 
         OpenHeap open_heap;
-        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
+        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heaphandle;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
         auto handle = open_heap.emplace(LowLevelNode(start_time_location,
                                                   calculate_h(start_time_location),
                                                   initial_cost));
-        location_to_heap.insert(std::make_pair<>(start_time_location, handle));
+        location_to_heaphandle.insert(std::make_pair<>(start_time_location, handle));
 
         std::vector<Child> children;
         children.reserve(10);
@@ -464,7 +464,7 @@ public:
             }
 
             open_heap.pop();
-            location_to_heap.erase(current.time_location);
+            location_to_heaphandle.erase(current.time_location);
             closed_set.insert(current.time_location);
 
             // traverse children
@@ -475,12 +475,12 @@ public:
                 if (closed_set.find(child.time_location) == closed_set.end())
                 {
                     int tentative_gScore = current.g_score + child.cost;
-                    auto iter = location_to_heap.find(child.time_location);
-                    if (iter == location_to_heap.end())
+                    auto iter = location_to_heaphandle.find(child.time_location);
+                    if (iter == location_to_heaphandle.end())
                     {  // Discover a new node
                         int f_score = tentative_gScore + calculate_h(child.time_location);
                         auto handle = open_heap.emplace(LowLevelNode(child.time_location, f_score, tentative_gScore));
-                        location_to_heap.insert(std::make_pair<>(child.time_location, handle));
+                        location_to_heaphandle.insert(std::make_pair<>(child.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
