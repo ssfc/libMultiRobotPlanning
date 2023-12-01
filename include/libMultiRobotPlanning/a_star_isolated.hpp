@@ -310,6 +310,12 @@ public:
                         came_from.insert(std::make_pair<>(neighbor.location,
                                                           std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
 
+                        // A* LINE 20
+                        // g_score[neighbor] := tentative_gScore
+                        // A* LINE 21
+                        // f_score[neighbor] := tentative_gScore + h(neighbor)
+                        // A* LINE 22
+                        // open_set.add(neighbor)
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         auto child_handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
                         location_to_heaphandle.insert(std::make_pair<>(neighbor.location, child_handle));
