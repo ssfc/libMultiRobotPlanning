@@ -274,15 +274,17 @@ public:
                 return true;
             }
 
-            // A* LINE 12
+            // A* LINE 13
             // openSet.Remove(current)
             open_set.pop();
             location_to_heaphandle.erase(current.location);
+            // A* LINE 14
+            // add current to closedset.
             closed_set.insert(current.location);
 
             // traverse children
             auto children = get_neighbors(current.location);
-            // A* LINE 13
+            // A* LINE 15
             // for each neighbor of current
             for (const Child& neighbor : children)
             {
