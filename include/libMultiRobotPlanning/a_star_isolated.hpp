@@ -300,11 +300,13 @@ public:
                     int tentative_g_score = current.g_score + neighbor.cost;
                     auto iter = location_to_heaphandle.find(neighbor.location);
 
-                    if (iter == location_to_heaphandle.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
-                    {  // Discover a new node
-                        came_from.erase(neighbor.location);
-                        // A* LINE 16
+                    // A* LINE 18
+                    // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
+                    if (iter == location_to_heaphandle.end())
+                    {
+                        // A* LINE 19
                         // cameFrom[neighbor] := current
+                        came_from.erase(neighbor.location);
                         came_from.insert(std::make_pair<>(neighbor.location,
                                                           std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
 
