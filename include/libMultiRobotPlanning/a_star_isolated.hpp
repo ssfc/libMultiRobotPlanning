@@ -292,7 +292,7 @@ public:
                     // cost of the cheapest path from start to n currently known
                     int tentative_g_score = current.g_score + neighbor.cost;
                     auto iter = location_to_heaphandle.find(neighbor.location);
-                    
+
                     if (iter == location_to_heaphandle.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
                     {  // Discover a new node
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
@@ -326,17 +326,10 @@ public:
                             open_set.increase(child_handle);
                         }
                     }
-
-                    // Best path for this node so far
-                    // TODO: this is not the best way to update "came_from", but otherwise
-                    // default c'tors of Location and Action are required
+                    
                     came_from.erase(neighbor.location);
                     // A* LINE 16
                     // cameFrom[neighbor] := current
-                    // A* LINE 17
-                    // gScore[neighbor] := tentative_gScore
-                    // A* LINE 18
-                    // fScore[neighbor] := tentative_gScore + h_score(neighbor)
                     came_from.insert(std::make_pair<>(neighbor.location,
                       std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
                 }
