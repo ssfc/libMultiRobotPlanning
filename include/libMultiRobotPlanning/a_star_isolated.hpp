@@ -196,7 +196,6 @@ public:
 
         boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>> open_set;
         std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heaphandle;
-        std::unordered_set<Location, std::hash<Location>> closed_set;
 
         // A* LINE 2
         // For node n, came_from[n] is the node immediately preceding it on the cheapest path from the start
@@ -227,6 +226,11 @@ public:
         // open_set := {start}
         auto root_handle = open_set.emplace(AStarNode(start, calculate_h(start), 0));
         location_to_heaphandle.insert(std::make_pair<>(start, root_handle));
+
+        // A* LINE 8
+        // node that has already been evaluated. In other words, already been poped from open_set.
+        // closedset := the empty set
+        std::unordered_set<Location, std::hash<Location>> closed_set;
 
         // A* LINE 8
         // while openSet is not empty
