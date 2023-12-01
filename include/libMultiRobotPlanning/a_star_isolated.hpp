@@ -295,6 +295,12 @@ public:
 
                     if (iter == location_to_heaphandle.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
                     {  // Discover a new node
+                        came_from.erase(neighbor.location);
+                        // A* LINE 16
+                        // cameFrom[neighbor] := current
+                        came_from.insert(std::make_pair<>(neighbor.location,
+                                                          std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
+
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         auto child_handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
                         location_to_heaphandle.insert(std::make_pair<>(neighbor.location, child_handle));
@@ -314,6 +320,12 @@ public:
                         // We found this node before with a better path
                         if (tentative_g_score < (*child_handle).g_score)
                         {
+                            came_from.erase(neighbor.location);
+                            // A* LINE 16
+                            // cameFrom[neighbor] := current
+                            came_from.insert(std::make_pair<>(neighbor.location,
+                                                              std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
+
                             // update f and g_score
                             (*child_handle).g_score = tentative_g_score;
                             (*child_handle).f_score = tentative_g_score + calculate_h(neighbor.location);
@@ -326,12 +338,6 @@ public:
                             open_set.increase(child_handle);
                         }
                     }
-                    
-                    came_from.erase(neighbor.location);
-                    // A* LINE 16
-                    // cameFrom[neighbor] := current
-                    came_from.insert(std::make_pair<>(neighbor.location,
-                      std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
                 }
             }
         }
