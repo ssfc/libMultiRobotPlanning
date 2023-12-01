@@ -288,10 +288,11 @@ public:
             // for each neighbor of current
             for (const Child& neighbor : children)
             {
-                // If the successor has not been evaluated
+                // A* LINE 16
+                // if neighbor not in closedset
                 if (closed_set.find(neighbor.location) == closed_set.end()) // not in closed set
                 {
-                    // A* LINE 14
+                    // A* LINE 17
                     // d(current,neighbor) is the weight of the edge from current to neighbor
                     // tentative_g_score is the distance from start to the neighbor through current
                     // tentative_g_score := gScore[current] + d(current, neighbor)
