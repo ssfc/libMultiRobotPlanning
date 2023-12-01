@@ -323,33 +323,34 @@ public:
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
                     }
+                    // A* LINE 23
                     else // 坐标在堆中。
                     {
                         auto child_handle = iter->second; // Location所具有的其他特征。
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
 
-                        // A* LINE 15
+                        // A* LINE 24
                         // if tentative_gScore < gScore[neighbor]
                         // meaning: This path to neighbor is better than any previous one. Record it!
                         // We found this node before with a better path
                         if (tentative_g_score < (*child_handle).g_score)
                         {
-                            came_from.erase(neighbor.location);
-                            // A* LINE 16
+                            // A* LINE 25
                             // cameFrom[neighbor] := current
+                            came_from.erase(neighbor.location);
                             came_from.insert(std::make_pair<>(neighbor.location,
                                                               std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
 
-                            // update f and g_score
+                            // A* LINE 26
+                            // g_score[neighbor] := tentative_gScore
+                            // A* LINE 27
+                            // f_score[neighbor] := tentative_gScore + h(neighbor)
+                            // A* LINE 28
+                            // open_set.update(neighbor)
                             (*child_handle).g_score = tentative_g_score;
                             (*child_handle).f_score = tentative_g_score + calculate_h(neighbor.location);
 
-                            // A* LINE 19
-                            // if neighbor not in openSet
-
-                            // A* LINE 20
-                            // openSet.add(neighbor)
                             open_set.increase(child_handle);
                         }
                     }
@@ -357,6 +358,8 @@ public:
             }
         }
 
+        // A* LINE 29
+        // Open set is empty but goal was never reached
         return false;
     }
 };
