@@ -232,23 +232,23 @@ public:
         // closedset := the empty set
         std::unordered_set<Location, std::hash<Location>> closed_set;
 
-        // A* LINE 8
+        // A* LINE 9
         // while openSet is not empty
         while (!open_set.empty())
         {
-            // A* LINE 9
+            // A* LINE 10
             // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
             // current := the node in open_set having the lowest f_score[] value
             AStarNode current = open_set.top();
             num_expanded_nodes++;
 
-            // A* LINE 10
+            // A* LINE 11
             // if current = goal
             if (is_solution(current.location))
             {
                 solution.path.clear();
                 solution.actions.clear();
-                // A* LINE 11
+                // A* LINE 12
                 // return reconstruct_path(cameFrom, current)
                 // std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
                 auto iter = came_from.find(current.location);
