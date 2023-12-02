@@ -387,7 +387,7 @@ public:
         // }
         std::vector<Neighbor> neighbors;
 
-        TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
+        TimeLocation wait_neighbor(time_location.time + 1, time_location.location);
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
             neighbors.emplace_back(Neighbor(wait_neighbor.time, wait_neighbor.location, Action::Wait, 1));
