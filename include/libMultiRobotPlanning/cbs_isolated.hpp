@@ -381,39 +381,39 @@ public:
         //   cout << "  " << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y <<
         //   endl;
         // }
-        std::vector<Child> children;
+        std::vector<Child> neighbors;
 
         TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
-            children.emplace_back(Child(wait_neighbor, Action::Wait, 1));
+            neighbors.emplace_back(Child(wait_neighbor, Action::Wait, 1));
         }
 
         TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
         if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
-            children.emplace_back(Child(west_neighbor, Action::East, 1));
+            neighbors.emplace_back(Child(west_neighbor, Action::East, 1));
         }
 
         TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
-            children.emplace_back(Child(east_neighbor, Action::West, 1));
+            neighbors.emplace_back(Child(east_neighbor, Action::West, 1));
         }
 
         TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
-            children.emplace_back(Child(north_neighbor, Action::North, 1));
+            neighbors.emplace_back(Child(north_neighbor, Action::North, 1));
         }
 
         TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
-            children.emplace_back(Child(south_neighbor, Action::South, 1));
+            neighbors.emplace_back(Child(south_neighbor, Action::South, 1));
         }
 
-        return children;
+        return neighbors;
     }
 
     // 引用传递大型计算结果
