@@ -378,7 +378,7 @@ public:
     }
 
     // low level 工具函数: 引用传递计算大型结果
-    std::vector<Neighbor> get_neighbors(const TimeLocation& time_location)
+    std::vector<Neighbor> get_neighbors(const LowLevelNode& node)
     {
         // cout << "#VC " << low_level_constraints.vertex_constraints.size() << endl;
         // for(const auto& vertex_constraint : low_level_constraints.vertex_constraints) {
@@ -387,32 +387,37 @@ public:
         // }
         std::vector<Neighbor> neighbors;
 
-        TimeLocation wait_neighbor(time_location.time + 1, time_location.location);
-        if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
+        TimeLocation wait_neighbor(node.time + 1, node.location);
+        if (location_valid(wait_neighbor)
+        && transition_valid(TimeLocation(node.time, node.location), wait_neighbor))
         {
             neighbors.emplace_back(Neighbor(wait_neighbor.time, wait_neighbor.location, Action::Wait, 1));
         }
 
-        TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
-        if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
+        TimeLocation west_neighbor(node.time + 1, Location(node.location.x - 1, node.location.y));
+        if (location_valid(west_neighbor)
+        && transition_valid(TimeLocation(node.time, node.location), west_neighbor))
         {
             neighbors.emplace_back(Neighbor(west_neighbor.time, west_neighbor.location, Action::East, 1));
         }
 
-        TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
-        if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
+        TimeLocation east_neighbor(node.time + 1, Location(node.location.x + 1, node.location.y));
+        if (location_valid(east_neighbor)
+        && transition_valid(TimeLocation(node.time, node.location), east_neighbor))
         {
             neighbors.emplace_back(Neighbor(east_neighbor.time, east_neighbor.location, Action::West, 1));
         }
 
-        TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
-        if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
+        TimeLocation north_neighbor(node.time + 1, Location(node.location.x, node.location.y + 1));
+        if (location_valid(north_neighbor)
+        && transition_valid(TimeLocation(node.time, node.location), north_neighbor))
         {
             neighbors.emplace_back(Neighbor(north_neighbor.time, north_neighbor.location, Action::North, 1));
         }
 
-        TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
-        if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
+        TimeLocation south_neighbor(node.time + 1, Location(node.location.x, node.location.y - 1));
+        if (location_valid(south_neighbor)
+        && transition_valid(TimeLocation(node.time, node.location), south_neighbor))
         {
             neighbors.emplace_back(Neighbor(south_neighbor.time, south_neighbor.location, Action::South, 1));
         }
@@ -469,7 +474,7 @@ public:
             closed_set.insert(current.location);
 
             // traverse neighbors
-            auto neighbors = get_neighbors(TimeLocation(current.time, current.location));
+            auto neighbors = get_neighbors(current);
             for (const auto& child : neighbors)
             {
                 if (closed_set.find(child.location) == closed_set.end())
