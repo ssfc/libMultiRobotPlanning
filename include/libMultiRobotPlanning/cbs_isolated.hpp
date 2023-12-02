@@ -233,7 +233,8 @@ public:
 class LowLevelNode
 {
 public:
-    TimeLocation time_location;
+    int time;
+    Location location;
     int f_score;
     int g_score;
 
@@ -242,8 +243,9 @@ public:
     typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
 public:
-    LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
-            : time_location(input_state),
+    LowLevelNode(int input_time, const Location& input_location, int input_fScore, int input_gScore)
+            : time(input_time),
+              location(input_location),
               f_score(input_fScore),
               g_score(input_gScore)
     {}
@@ -267,7 +269,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
     {
-        os << "time_location: " << node.time_location << " f_score: " << node.f_score
+        os << "time_location: " << node.time << " " <<  node.location << " f_score: " << node.f_score
            << " g_score: " << node.g_score;
 
         return os;
@@ -348,9 +350,9 @@ public:
     }
 
     // low level 工具函数
-    bool is_solution(const TimeLocation& time_location)
+    bool is_solution(int input_time, const Location& input_location)
     {
-        return time_location.location == goal && time_location.time > last_goal_constraint;
+        return input_location == goal && input_time > last_goal_constraint;
     }
 
     // low level 工具函数 get_neighbors的工具函数
@@ -436,7 +438,7 @@ public:
         std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
-        auto handle = open_heap.emplace(LowLevelNode(TimeLocation(0, start),
+        auto handle = open_heap.emplace(LowLevelNode(0, start,
           calculate_h(start), 0));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
 
@@ -445,10 +447,10 @@ public:
             LowLevelNode current = open_heap.top();
             num_expanded_low_level_nodes++;
 
-            if (is_solution(current.time_location))
+            if (is_solution(current.time, current.location))
             {
                 solution.path.clear();
-                auto iter = came_from.find(current.time_location.location);
+                auto iter = came_from.find(current.location);
                 while (iter != came_from.end())
                 {
                     solution.path.emplace_back(iter->first);
@@ -463,11 +465,11 @@ public:
             }
 
             open_heap.pop();
-            location_to_heaphandle.erase(current.time_location.location);
-            closed_set.insert(current.time_location.location);
+            location_to_heaphandle.erase(current.location);
+            closed_set.insert(current.location);
 
             // traverse neighbors
-            auto neighbors = get_neighbors(current.time_location);
+            auto neighbors = get_neighbors(TimeLocation(current.time, current.location));
             for (const auto& child : neighbors)
             {
                 if (closed_set.find(child.location) == closed_set.end())
@@ -477,7 +479,7 @@ public:
                     if (iter == location_to_heaphandle.end())
                     {  // Discover a new node
                         int f_score = tentative_g_score + calculate_h(child.location);
-                        auto handle = open_heap.emplace(LowLevelNode(TimeLocation(child.time, child.location), f_score, tentative_g_score));
+                        auto handle = open_heap.emplace(LowLevelNode(child.time, child.location, f_score, tentative_g_score));
                         location_to_heaphandle.insert(std::make_pair<>(child.location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
@@ -504,7 +506,7 @@ public:
                     // default c'tors of TimeLocation and Action are required
                     came_from.erase(child.location);
                     came_from.insert(std::make_pair<>(child.location,
-                      std::make_tuple<>(current.time_location.location, child.action, child.cost,
+                      std::make_tuple<>(current.location, child.action, child.cost,
                                                                         tentative_g_score)));
                 }
             }
