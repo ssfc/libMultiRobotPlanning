@@ -374,7 +374,7 @@ public:
     }
 
     // low level 工具函数: 引用传递计算大型结果
-    std::vector<Child> generate_children(const TimeLocation& time_location)
+    std::vector<Child> get_neighbors(const TimeLocation& time_location)
     {
         // cout << "#VC " << low_level_constraints.vertex_constraints.size() << endl;
         // for(const auto& vertex_constraint : low_level_constraints.vertex_constraints) {
@@ -465,7 +465,7 @@ public:
             closed_set.insert(current.time_location.location);
 
             // traverse children
-            auto children = generate_children(current.time_location);
+            auto children = get_neighbors(current.time_location);
             for (const Child& child : children)
             {
                 if (closed_set.find(child.time_location.location) == closed_set.end())
