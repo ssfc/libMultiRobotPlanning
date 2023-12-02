@@ -464,9 +464,9 @@ public:
             location_to_heaphandle.erase(current.time_location.location);
             closed_set.insert(current.time_location.location);
 
-            // traverse children
-            auto children = get_neighbors(current.time_location);
-            for (const Child& child : children)
+            // traverse neighbors
+            auto neighbors = get_neighbors(current.time_location);
+            for (const Child& child : neighbors)
             {
                 if (closed_set.find(child.time_location.location) == closed_set.end())
                 {
