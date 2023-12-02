@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
         cout << "Planning NOT successful!" << endl;
     }
 
-    ///*
+    /*
     std::string yaml_path = "/home/ssfc/libMultiRobotPlanning/benchmark/32x32_obst204";
     std::string txt_path = "/home/ssfc/MAPF-CBS-cpp-mine/benchmark/32x32_obst204";
 
@@ -172,5 +172,5 @@ int main(int argc, char* argv[])
 // Test on ubuntu platform:
 // mkdir build; cd build
 // cmake .. ; make
-// ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml
-// ./cbs -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml
+// ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents5_ex_test.yaml -o output.yaml
+// ./cbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml
