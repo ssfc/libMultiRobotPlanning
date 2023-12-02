@@ -317,8 +317,8 @@ public:
                         // A* LINE 22
                         // open_set.add(neighbor)
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
-                        auto child_handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
-                        location_to_heaphandle.insert(std::make_pair<>(neighbor.location, child_handle));
+                        auto neighbor_handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
+                        location_to_heaphandle.insert(std::make_pair<>(neighbor.location, neighbor_handle));
                         num_generated_nodes++;
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
@@ -326,7 +326,7 @@ public:
                     // A* LINE 23
                     else // 坐标在堆中。
                     {
-                        auto child_handle = pair_found->second; // Location所具有的其他特征。
+                        auto neighbor_handle = pair_found->second; // Location所具有的其他特征。
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
 
@@ -334,7 +334,7 @@ public:
                         // if tentative_gScore < gScore[neighbor]
                         // meaning: This path to neighbor is better than any previous one. Record it!
                         // We found this node before with a better path
-                        if (tentative_g_score < (*child_handle).g_score)
+                        if (tentative_g_score < (*neighbor_handle).g_score)
                         {
                             // A* LINE 25
                             // cameFrom[neighbor] := current
@@ -348,10 +348,10 @@ public:
                             // f_score[neighbor] := tentative_gScore + h(neighbor)
                             // A* LINE 28
                             // open_set.update(neighbor)
-                            (*child_handle).g_score = tentative_g_score;
-                            (*child_handle).f_score = tentative_g_score + calculate_h(neighbor.location);
+                            (*neighbor_handle).g_score = tentative_g_score;
+                            (*neighbor_handle).f_score = tentative_g_score + calculate_h(neighbor.location);
 
-                            open_set.increase(child_handle);
+                            open_set.increase(neighbor_handle);
                         }
                     }
                 }
