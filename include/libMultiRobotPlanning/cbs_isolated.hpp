@@ -337,12 +337,12 @@ public:
     }
 
     // low level 工具函数
-    int calculate_h(const TimeLocation& time_location)
+    int calculate_h(const Location& input_location)
     {
         // cout << "H: " <<  time_location << " " << m_heuristic[low_level_agent_index][time_location.x + num_columns *
         // time_location.y] << endl;
         // return m_heuristic[low_level_agent_index][time_location.x + num_columns * time_location.y];
-        return abs(time_location.location.x - goal.x) + abs(time_location.location.y - goal.y);
+        return abs(input_location.x - goal.x) + abs(input_location.y - goal.y);
     }
 
     // low level 工具函数
@@ -435,7 +435,7 @@ public:
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
         auto handle = open_heap.emplace(LowLevelNode(TimeLocation(0, start),
-          calculate_h(TimeLocation(0, start)), 0));
+          calculate_h(start), 0));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
 
         while (!open_heap.empty())
@@ -474,7 +474,7 @@ public:
                     auto iter = location_to_heaphandle.find(child.time_location.location);
                     if (iter == location_to_heaphandle.end())
                     {  // Discover a new node
-                        int f_score = tentative_g_score + calculate_h(child.time_location);
+                        int f_score = tentative_g_score + calculate_h(child.time_location.location);
                         auto handle = open_heap.emplace(LowLevelNode(child.time_location, f_score, tentative_g_score));
                         location_to_heaphandle.insert(std::make_pair<>(child.time_location.location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
@@ -493,7 +493,7 @@ public:
 
                         // update f and g_score
                         (*handle).g_score = tentative_g_score;
-                        (*handle).f_score = tentative_g_score + calculate_h(child.time_location);
+                        (*handle).f_score = tentative_g_score + calculate_h(child.time_location.location);
                         open_heap.increase(handle);
                     }
 
