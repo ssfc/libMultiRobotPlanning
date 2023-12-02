@@ -134,7 +134,7 @@ public:
     }
 
     // whether agent reach goal or not.
-    bool is_solution(const Location& current_location)
+    bool is_goal(const Location& current_location)
     {
         return current_location == goal;
     }
@@ -244,7 +244,7 @@ public:
 
             // A* LINE 11
             // if current = goal
-            if (is_solution(current.location))
+            if (is_goal(current.location))
             {
                 solution.path.clear();
                 solution.actions.clear();
