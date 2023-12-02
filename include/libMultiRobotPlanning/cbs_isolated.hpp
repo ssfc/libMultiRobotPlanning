@@ -36,14 +36,16 @@ enum class Action
 struct Neighbor
 {
     //! neighboring time_location
-    TimeLocation time_location;
+    int time;
+    Location location;
     //! action to get to the neighboring time_location
     Action action;
     //! cost to get to the neighboring time_location, usually 1
     int cost;
 
-    Neighbor(const TimeLocation& input_location, const Action& input_action, int input_cost)
-            : time_location(input_location),
+    Neighbor(int input_time, const Location& input_location, const Action& input_action, int input_cost)
+            : time(input_time),
+              location(input_location),
               action(input_action),
               cost(input_cost)
     {}
@@ -386,31 +388,31 @@ public:
         TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
-            neighbors.emplace_back(Neighbor(wait_neighbor, Action::Wait, 1));
+            neighbors.emplace_back(Neighbor(wait_neighbor.time, wait_neighbor.location, Action::Wait, 1));
         }
 
         TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
         if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
-            neighbors.emplace_back(Neighbor(west_neighbor, Action::East, 1));
+            neighbors.emplace_back(Neighbor(west_neighbor.time, west_neighbor.location, Action::East, 1));
         }
 
         TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
-            neighbors.emplace_back(Neighbor(east_neighbor, Action::West, 1));
+            neighbors.emplace_back(Neighbor(east_neighbor.time, east_neighbor.location, Action::West, 1));
         }
 
         TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
-            neighbors.emplace_back(Neighbor(north_neighbor, Action::North, 1));
+            neighbors.emplace_back(Neighbor(north_neighbor.time, north_neighbor.location, Action::North, 1));
         }
 
         TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
-            neighbors.emplace_back(Neighbor(south_neighbor, Action::South, 1));
+            neighbors.emplace_back(Neighbor(south_neighbor.time, south_neighbor.location, Action::South, 1));
         }
 
         return neighbors;
@@ -468,15 +470,15 @@ public:
             auto neighbors = get_neighbors(current.time_location);
             for (const auto& child : neighbors)
             {
-                if (closed_set.find(child.time_location.location) == closed_set.end())
+                if (closed_set.find(child.location) == closed_set.end())
                 {
                     int tentative_g_score = current.g_score + child.cost;
-                    auto iter = location_to_heaphandle.find(child.time_location.location);
+                    auto iter = location_to_heaphandle.find(child.location);
                     if (iter == location_to_heaphandle.end())
                     {  // Discover a new node
-                        int f_score = tentative_g_score + calculate_h(child.time_location.location);
-                        auto handle = open_heap.emplace(LowLevelNode(child.time_location, f_score, tentative_g_score));
-                        location_to_heaphandle.insert(std::make_pair<>(child.time_location.location, handle));
+                        int f_score = tentative_g_score + calculate_h(child.location);
+                        auto handle = open_heap.emplace(LowLevelNode(TimeLocation(child.time, child.location), f_score, tentative_g_score));
+                        location_to_heaphandle.insert(std::make_pair<>(child.location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
                     }
@@ -493,15 +495,15 @@ public:
 
                         // update f and g_score
                         (*handle).g_score = tentative_g_score;
-                        (*handle).f_score = tentative_g_score + calculate_h(child.time_location.location);
+                        (*handle).f_score = tentative_g_score + calculate_h(child.location);
                         open_heap.increase(handle);
                     }
 
                     // Best path for this node so far
                     // TODO: this is not the best way to update "came_from", but otherwise
                     // default c'tors of TimeLocation and Action are required
-                    came_from.erase(child.time_location.location);
-                    came_from.insert(std::make_pair<>(child.time_location.location,
+                    came_from.erase(child.location);
+                    came_from.insert(std::make_pair<>(child.location,
                       std::make_tuple<>(current.time_location.location, child.action, child.cost,
                                                                         tentative_g_score)));
                 }
