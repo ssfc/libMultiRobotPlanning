@@ -237,10 +237,10 @@ public:
     typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
 public:
-    LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
+    LowLevelNode(const TimeLocation& input_state, int input_f_score, int input_g_score)
             : time_location(input_state),
-              f_score(input_fScore),
-              g_score(input_gScore)
+              f_score(input_f_score),
+              g_score(input_g_score)
     {}
 
     bool operator<(const LowLevelNode& other) const
