@@ -493,9 +493,8 @@ public:
                         }
 
                         // update f and g_score
-                        int delta = (*handle).g_score - tentative_g_score;
                         (*handle).g_score = tentative_g_score;
-                        (*handle).f_score -= delta;
+                        (*handle).f_score = tentative_g_score + calculate_h(child.time_location);
                         open_heap.increase(handle);
                     }
 
