@@ -471,30 +471,30 @@ public:
             {
                 if (closed_set.find(child.time_location) == closed_set.end())
                 {
-                    int tentative_gScore = current.g_score + child.cost;
+                    int tentative_g_score = current.g_score + child.cost;
                     auto iter = time_location_to_heap_handle.find(child.time_location);
                     if (iter == time_location_to_heap_handle.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + calculate_h(child.time_location);
-                        auto handle = open_heap.emplace(LowLevelNode(child.time_location, f_score, tentative_gScore));
+                        int f_score = tentative_g_score + calculate_h(child.time_location);
+                        auto handle = open_heap.emplace(LowLevelNode(child.time_location, f_score, tentative_g_score));
                         time_location_to_heap_handle.insert(std::make_pair<>(child.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
-                        // tentative_gScore << std::endl;
+                        // tentative_g_score << std::endl;
                     }
                     else
                     {
                         auto handle = iter->second;
-                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
                         // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).g_score)
+                        if (tentative_g_score >= (*handle).g_score)
                         {
                             continue;
                         }
 
                         // update f and g_score
-                        int delta = (*handle).g_score - tentative_gScore;
-                        (*handle).g_score = tentative_gScore;
+                        int delta = (*handle).g_score - tentative_g_score;
+                        (*handle).g_score = tentative_g_score;
                         (*handle).f_score -= delta;
                         open_heap.increase(handle);
                     }
@@ -504,8 +504,8 @@ public:
                     // default c'tors of TimeLocation and Action are required
                     came_from.erase(child.time_location);
                     came_from.insert(std::make_pair<>(child.time_location,
-                                                      std::make_tuple<>(current.time_location, child.action, child.cost,
-                                                                        tentative_gScore)));
+                      std::make_tuple<>(current.time_location, child.action, child.cost,
+                            tentative_g_score)));
                 }
             }
         }
