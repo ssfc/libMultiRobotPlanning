@@ -363,8 +363,7 @@ public:
 
         return time_location.location.x >= 0 && time_location.location.x < num_columns
                && time_location.location.y >= 0 && time_location.location.y < num_rows
-               && obstacles.find(Location(time_location.location.x, time_location.location.y))
-               == obstacles.end()
+               && obstacles.find(time_location.location) == obstacles.end()
                && con.find(VertexConstraint(time_location.time, time_location.location)) == con.end();
     }
 
