@@ -374,14 +374,14 @@ public:
     }
 
     // low level 工具函数: 引用传递计算大型结果
-    void get_neighbors(const TimeLocation& time_location, std::vector<Child>& children)
+    std::vector<Child> get_neighbors(const TimeLocation& time_location)
     {
         // cout << "#VC " << low_level_constraints.vertex_constraints.size() << endl;
         // for(const auto& vertex_constraint : low_level_constraints.vertex_constraints) {
         //   cout << "  " << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y <<
         //   endl;
         // }
-        children.clear();
+        std::vector<Child> children;
 
         TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
@@ -412,12 +412,13 @@ public:
         {
             children.emplace_back(Child(south_neighbor, Action::South, 1));
         }
+
+        return children;
     }
 
     // 引用传递大型计算结果
     bool low_level_search(AgentPlan& solution, size_t& num_expanded_low_level_nodes)
     {
-        int initial_cost = 0;
         solution.path.clear();
         solution.path.emplace_back(start_time_location);
         solution.cost = 0;
@@ -435,11 +436,8 @@ public:
 
         auto handle = open_heap.emplace(LowLevelNode(start_time_location,
                                                      calculate_h(start_time_location),
-                                                     initial_cost));
+                                                     0));
         time_location_to_heap_handle.insert(std::make_pair<>(start_time_location, handle));
-
-        std::vector<Child> children;
-        children.reserve(10);
 
         while (!open_heap.empty())
         {
@@ -468,8 +466,7 @@ public:
             closed_set.insert(current.time_location);
 
             // traverse children
-            children.clear();
-            get_neighbors(current.time_location, children);
+            auto children = get_neighbors(current.time_location);
             for (const Child& child : children)
             {
                 if (closed_set.find(child.time_location) == closed_set.end())
