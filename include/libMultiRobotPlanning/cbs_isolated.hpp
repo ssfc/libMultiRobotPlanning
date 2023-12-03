@@ -467,7 +467,7 @@ public:
 
             // traverse neighbors
             auto neighbors = get_neighbors(current.time_location);
-            for (const Neighbor& child : neighbors)
+            for (const auto& child : neighbors)
             {
                 if (closed_set.find(child.time_location) == closed_set.end())
                 {
