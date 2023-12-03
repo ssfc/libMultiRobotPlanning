@@ -33,19 +33,17 @@ enum class Action
     Wait,
 };
 
-struct Neighbor
+struct Child
 {
     //! neighboring time_location
-    int time;
-    Location location;
+    TimeLocation time_location;
     //! action to get to the neighboring time_location
     Action action;
     //! cost to get to the neighboring time_location, usually 1
     int cost;
 
-    Neighbor(int input_time, const Location& input_location, const Action& input_action, int input_cost)
-            : time(input_time),
-              location(input_location),
+    Child(const TimeLocation& input_location, const Action& input_action, int input_cost)
+            : time_location(input_location),
               action(input_action),
               cost(input_cost)
     {}
@@ -54,7 +52,7 @@ struct Neighbor
 struct AgentPlan
 {
     // path constructing locations and their g_score
-    std::vector<Location> path;
+    std::vector<TimeLocation> path;
     //! actual cost of the result
     int cost;
 };
@@ -104,8 +102,8 @@ public:
 
 public:
     VertexConstraint(int input_time, Location input_location):
-        time(input_time),
-        location(input_location)
+            time(input_time),
+            location(input_location)
     {}
 
     bool operator==(const VertexConstraint& other) const
@@ -116,13 +114,13 @@ public:
     bool operator<(const VertexConstraint& other) const
     {
         return std::tie(time, location.x, location.y)
-        < std::tie(other.time, other.location.x, other.location.y);
+               < std::tie(other.time, other.location.x, other.location.y);
     }
 
     friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& vertex_constraint)
     {
         return os << "VC(" << vertex_constraint.time << "," << vertex_constraint.location.x << ","
-        << vertex_constraint.location.y << ")";
+                  << vertex_constraint.location.y << ")";
     }
 };
 
@@ -153,9 +151,9 @@ public:
 public:
     EdgeConstraint(int time, Location input_location_1, Location input_location_2)
             : time(time),
-            location_1(input_location_1),
-            location_2(input_location_2)
-            {}
+              location_1(input_location_1),
+              location_2(input_location_2)
+    {}
 
     bool operator<(const EdgeConstraint& other) const
     {
@@ -172,8 +170,8 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& edge_constraint)
     {
         return os << "EC(" << edge_constraint.time << ","
-            << edge_constraint.location_1.x << "," << edge_constraint.location_1.y << ","
-            << edge_constraint.location_2.x << "," << edge_constraint.location_2.y << ")";
+                  << edge_constraint.location_1.x << "," << edge_constraint.location_1.y << ","
+                  << edge_constraint.location_2.x << "," << edge_constraint.location_2.y << ")";
     }
 };
 
@@ -208,9 +206,9 @@ public:
     void add(const AgentConstraints& other)
     {
         vertex_constraints.insert(other.vertex_constraints.begin(),
-                                 other.vertex_constraints.end());
+                                  other.vertex_constraints.end());
         edge_constraints.insert(other.edge_constraints.begin(),
-                               other.edge_constraints.end());
+                                other.edge_constraints.end());
     }
 
     friend std::ostream& operator<<(std::ostream& os, const AgentConstraints& input_constraints)
@@ -233,8 +231,7 @@ public:
 class LowLevelNode
 {
 public:
-    int time;
-    Location location;
+    TimeLocation time_location;
     int f_score;
     int g_score;
 
@@ -243,9 +240,8 @@ public:
     typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
 public:
-    LowLevelNode(int input_time, const Location& input_location, int input_fScore, int input_gScore)
-            : time(input_time),
-              location(input_location),
+    LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore)
+            : time_location(input_state),
               f_score(input_fScore),
               g_score(input_gScore)
     {}
@@ -269,7 +265,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
     {
-        os << "time_location: " << node.time << " " <<  node.location << " f_score: " << node.f_score
+        os << "time_location: " << node.time_location << " f_score: " << node.f_score
            << " g_score: " << node.g_score;
 
         return os;
@@ -285,7 +281,7 @@ public:
     size_t num_rows;
     std::unordered_set<Location> obstacles;
 
-    Location start;
+    TimeLocation start_time_location;
     Location goal;
     AgentConstraints low_level_constraints;
     bool disappear_at_goal;
@@ -297,17 +293,17 @@ public:
     LowLevel(size_t input_num_columns,
              size_t input_num_rows,
              std::unordered_set<Location> input_obstacles,
-             Location input_start,
+             TimeLocation input_time_location,
              Location input_goal,
              AgentConstraints input_constraints,
              bool input_disappear_at_goal):
-             num_columns(input_num_columns),
-             num_rows(input_num_rows),
-             obstacles(input_obstacles),
-             start(input_start),
-             goal(input_goal),
-             low_level_constraints(input_constraints),
-             disappear_at_goal(input_disappear_at_goal)
+            num_columns(input_num_columns),
+            num_rows(input_num_rows),
+            obstacles(input_obstacles),
+            start_time_location(input_time_location),
+            goal(input_goal),
+            low_level_constraints(input_constraints),
+            disappear_at_goal(input_disappear_at_goal)
     {
         // assert(input_constraints);  // NOLINT
         last_goal_constraint = -1;
@@ -325,7 +321,7 @@ public:
                                Location input_goal,
                                AgentConstraints input_constraints)
     {
-        start = input_time_location.location;
+        start_time_location = input_time_location;
         goal = input_goal;
         low_level_constraints = input_constraints;
 
@@ -341,18 +337,18 @@ public:
     }
 
     // low level 工具函数
-    int calculate_h(const Location& input_location)
+    int calculate_h(const TimeLocation& time_location)
     {
         // cout << "H: " <<  time_location << " " << m_heuristic[low_level_agent_index][time_location.x + num_columns *
         // time_location.y] << endl;
         // return m_heuristic[low_level_agent_index][time_location.x + num_columns * time_location.y];
-        return abs(input_location.x - goal.x) + abs(input_location.y - goal.y);
+        return abs(time_location.location.x - goal.x) + abs(time_location.location.y - goal.y);
     }
 
     // low level 工具函数
-    bool is_solution(int input_time, const Location& input_location)
+    bool is_solution(const TimeLocation& time_location)
     {
-        return input_location == goal && input_time > last_goal_constraint;
+        return time_location.location == goal && time_location.time > last_goal_constraint;
     }
 
     // low level 工具函数 get_neighbors的工具函数
@@ -363,7 +359,8 @@ public:
 
         return time_location.location.x >= 0 && time_location.location.x < num_columns
                && time_location.location.y >= 0 && time_location.location.y < num_rows
-               && obstacles.find(time_location.location) == obstacles.end()
+               && obstacles.find(Location(time_location.location.x, time_location.location.y))
+                  == obstacles.end()
                && con.find(VertexConstraint(time_location.time, time_location.location)) == con.end();
     }
 
@@ -377,58 +374,52 @@ public:
     }
 
     // low level 工具函数: 引用传递计算大型结果
-    std::vector<Neighbor> get_neighbors(const LowLevelNode& node)
+    void generate_children(const TimeLocation& time_location, std::vector<Child>& children)
     {
         // cout << "#VC " << low_level_constraints.vertex_constraints.size() << endl;
         // for(const auto& vertex_constraint : low_level_constraints.vertex_constraints) {
         //   cout << "  " << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y <<
         //   endl;
         // }
-        std::vector<Neighbor> neighbors;
+        children.clear();
 
-        TimeLocation wait_neighbor(node.time + 1, node.location);
-        if (location_valid(wait_neighbor)
-        && transition_valid(TimeLocation(node.time, node.location), wait_neighbor))
+        TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
+        if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
-            neighbors.emplace_back(Neighbor(wait_neighbor.time, wait_neighbor.location, Action::Wait, 1));
+            children.emplace_back(Child(wait_neighbor, Action::Wait, 1));
         }
 
-        TimeLocation west_neighbor(node.time + 1, Location(node.location.x - 1, node.location.y));
-        if (location_valid(west_neighbor)
-        && transition_valid(TimeLocation(node.time, node.location), west_neighbor))
+        TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
+        if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
-            neighbors.emplace_back(Neighbor(west_neighbor.time, west_neighbor.location, Action::East, 1));
+            children.emplace_back(Child(west_neighbor, Action::East, 1));
         }
 
-        TimeLocation east_neighbor(node.time + 1, Location(node.location.x + 1, node.location.y));
-        if (location_valid(east_neighbor)
-        && transition_valid(TimeLocation(node.time, node.location), east_neighbor))
+        TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
+        if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
-            neighbors.emplace_back(Neighbor(east_neighbor.time, east_neighbor.location, Action::West, 1));
+            children.emplace_back(Child(east_neighbor, Action::West, 1));
         }
 
-        TimeLocation north_neighbor(node.time + 1, Location(node.location.x, node.location.y + 1));
-        if (location_valid(north_neighbor)
-        && transition_valid(TimeLocation(node.time, node.location), north_neighbor))
+        TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
+        if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
-            neighbors.emplace_back(Neighbor(north_neighbor.time, north_neighbor.location, Action::North, 1));
+            children.emplace_back(Child(north_neighbor, Action::North, 1));
         }
 
-        TimeLocation south_neighbor(node.time + 1, Location(node.location.x, node.location.y - 1));
-        if (location_valid(south_neighbor)
-        && transition_valid(TimeLocation(node.time, node.location), south_neighbor))
+        TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
+        if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
-            neighbors.emplace_back(Neighbor(south_neighbor.time, south_neighbor.location, Action::South, 1));
+            children.emplace_back(Child(south_neighbor, Action::South, 1));
         }
-
-        return neighbors;
     }
 
     // 引用传递大型计算结果
     bool low_level_search(AgentPlan& solution, size_t& num_expanded_low_level_nodes)
     {
+        int initial_cost = 0;
         solution.path.clear();
-        solution.path.emplace_back(start);
+        solution.path.emplace_back(start_time_location);
         solution.cost = 0;
 
         // 定义openSet_t和fibHeapHandle_t
@@ -437,81 +428,87 @@ public:
         using OpenHeap = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
         using HeapHandle = typename OpenHeap::handle_type;
 
-        OpenHeap open_set;
-        std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heaphandle;
-        std::unordered_set<Location, std::hash<Location>> closed_set;
-        std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
+        OpenHeap open_heap;
+        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> location_to_heap;
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
-        auto handle = open_set.emplace(LowLevelNode(0, start,
-          calculate_h(start), 0));
-        location_to_heaphandle.insert(std::make_pair<>(start, handle));
+        auto handle = open_heap.emplace(LowLevelNode(start_time_location,
+                                                     calculate_h(start_time_location),
+                                                     initial_cost));
+        location_to_heap.insert(std::make_pair<>(start_time_location, handle));
 
-        while (!open_set.empty())
+        std::vector<Child> children;
+        children.reserve(10);
+
+        while (!open_heap.empty())
         {
-            LowLevelNode current = open_set.top();
+            LowLevelNode current = open_heap.top();
             num_expanded_low_level_nodes++;
 
-            if (is_solution(current.time, current.location))
+            if (is_solution(current.time_location))
             {
                 solution.path.clear();
-                auto iter = came_from.find(current.location);
+                auto iter = came_from.find(current.time_location);
                 while (iter != came_from.end())
                 {
                     solution.path.emplace_back(iter->first);
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
-                solution.path.emplace_back(start);
+                solution.path.emplace_back(start_time_location);
                 std::reverse(solution.path.begin(), solution.path.end());
                 solution.cost = current.g_score;
 
                 return true;
             }
 
-            open_set.pop();
-            location_to_heaphandle.erase(current.location);
-            closed_set.insert(current.location);
+            open_heap.pop();
+            location_to_heap.erase(current.time_location);
+            closed_set.insert(current.time_location);
 
-            // traverse neighbors
-            auto neighbors = get_neighbors(current);
-            for (const auto& child : neighbors)
+            // traverse children
+            children.clear();
+            generate_children(current.time_location, children);
+            for (const Child& child : children)
             {
-                if (closed_set.find(child.location) == closed_set.end())
+                if (closed_set.find(child.time_location) == closed_set.end())
                 {
-                    int tentative_g_score = current.g_score + child.cost;
-                    auto iter = location_to_heaphandle.find(child.location);
-                    if (iter == location_to_heaphandle.end())
+                    int tentative_gScore = current.g_score + child.cost;
+                    auto iter = location_to_heap.find(child.time_location);
+                    if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_g_score + calculate_h(child.location);
-                        auto handle = open_set.emplace(LowLevelNode(child.time, child.location, f_score, tentative_g_score));
-                        location_to_heaphandle.insert(std::make_pair<>(child.location, handle));
+                        int f_score = tentative_gScore + calculate_h(child.time_location);
+                        auto handle = open_heap.emplace(LowLevelNode(child.time_location, f_score, tentative_gScore));
+                        location_to_heap.insert(std::make_pair<>(child.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
-                        // tentative_g_score << std::endl;
+                        // tentative_gScore << std::endl;
                     }
                     else
                     {
                         auto handle = iter->second;
-                        // std::cout << "  this is an old node: " << tentative_g_score << ","
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
                         // << (*handle).g_score << std::endl;
                         // We found this node before with a better path
-                        if (tentative_g_score >= (*handle).g_score)
+                        if (tentative_gScore >= (*handle).g_score)
                         {
                             continue;
                         }
 
                         // update f and g_score
-                        (*handle).g_score = tentative_g_score;
-                        (*handle).f_score = tentative_g_score + calculate_h(child.location);
-                        open_set.increase(handle);
+                        int delta = (*handle).g_score - tentative_gScore;
+                        (*handle).g_score = tentative_gScore;
+                        (*handle).f_score -= delta;
+                        open_heap.increase(handle);
                     }
 
                     // Best path for this node so far
                     // TODO: this is not the best way to update "came_from", but otherwise
                     // default c'tors of TimeLocation and Action are required
-                    came_from.erase(child.location);
-                    came_from.insert(std::make_pair<>(child.location,
-                      std::make_tuple<>(current.location, child.action, child.cost,
-                                                                        tentative_g_score)));
+                    came_from.erase(child.time_location);
+                    came_from.insert(std::make_pair<>(child.time_location,
+                                                      std::make_tuple<>(current.time_location, child.action, child.cost,
+                                                                        tentative_gScore)));
                 }
             }
         }
@@ -656,7 +653,7 @@ public:
     {
         if (t < solution[input_agent_index].path.size())
         {
-            return TimeLocation(t, solution[input_agent_index].path[t]);
+            return solution[input_agent_index].path[t];
         }
 
         if (disappear_at_goal)
@@ -667,7 +664,7 @@ public:
             return TimeLocation(-1, Location(-1 * (input_agent_index + 1), -1));
         }
 
-        return TimeLocation(t, solution[input_agent_index].path.back());
+        return solution[input_agent_index].path.back();
     }
 
     // HighLevel 工具函数: 引用传递计算大型结果
@@ -742,7 +739,7 @@ public:
         {
             AgentConstraints c1;
             c1.vertex_constraints.emplace(VertexConstraint(
-                input_conflict.time, Location(input_conflict.location_1)));
+                    input_conflict.time, Location(input_conflict.location_1)));
             constraints_from_conflict[input_conflict.agent1] = c1;
             constraints_from_conflict[input_conflict.agent2] = c1;
         }
@@ -779,7 +776,7 @@ public:
         // A1 LINE 2
         // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
         auto low_level = LowLevel(num_columns, num_rows, obstacles,
-                                  start_time_locations[0].location, goals[0],
+                                  start_time_locations[0], goals[0],
                                   root.constraints_group[0], false);
         for (size_t i = 0; i < num_agents; i++)
         {
@@ -856,15 +853,15 @@ public:
                     fout << "  agent" << i << ":" << std::endl;
                     for (const auto& state : solution[i].path)
                     {
-                        fout << "    - x: " << state.x << std::endl
-                             << "      y: " << state.y << std::endl
-                             << "      t: " << i << std::endl;
+                        fout << "    - x: " << state.location.x << std::endl
+                             << "      y: " << state.location.y << std::endl
+                             << "      t: " << state.time << std::endl;
                     }
 
                     std::cerr << "agent " << i << ": ";
                     for (const auto& state : solution[i].path)
                     {
-                        std::cerr << "(" << state.x << "," << state.y << "),";
+                        std::cerr << "(" << state.location.x << "," << state.location.y << "),";
                     }
                     std::cerr << std::endl;
                 }
