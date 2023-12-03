@@ -39,13 +39,10 @@ struct Neighbor
     TimeLocation time_location;
     //! action to get to the neighboring time_location
     Action action;
-    //! cost to get to the neighboring time_location, usually 1
-    int cost;
 
-    Neighbor(const TimeLocation& input_location, const Action& input_action, int input_cost)
+    Neighbor(const TimeLocation& input_location, const Action& input_action)
             : time_location(input_location),
-              action(input_action),
-              cost(input_cost)
+              action(input_action)
     {}
 };
 
@@ -385,31 +382,31 @@ public:
         TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
-            neighbors.emplace_back(Neighbor(wait_neighbor, Action::Wait, 1));
+            neighbors.emplace_back(Neighbor(wait_neighbor, Action::Wait));
         }
 
         TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
         if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
-            neighbors.emplace_back(Neighbor(west_neighbor, Action::East, 1));
+            neighbors.emplace_back(Neighbor(west_neighbor, Action::East));
         }
 
         TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
-            neighbors.emplace_back(Neighbor(east_neighbor, Action::West, 1));
+            neighbors.emplace_back(Neighbor(east_neighbor, Action::West));
         }
 
         TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
-            neighbors.emplace_back(Neighbor(north_neighbor, Action::North, 1));
+            neighbors.emplace_back(Neighbor(north_neighbor, Action::North));
         }
 
         TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
-            neighbors.emplace_back(Neighbor(south_neighbor, Action::South, 1));
+            neighbors.emplace_back(Neighbor(south_neighbor, Action::South));
         }
 
         return neighbors;
@@ -469,7 +466,7 @@ public:
             {
                 if (closed_set.find(neighbor.time_location) == closed_set.end())
                 {
-                    int tentative_g_score = current.g_score + neighbor.cost;
+                    int tentative_g_score = current.g_score + 1;
                     auto iter = time_location_to_heap_handle.find(neighbor.time_location);
                     if (iter == time_location_to_heap_handle.end())
                     {  // Discover a new node
@@ -501,7 +498,7 @@ public:
                     // default c'tors of TimeLocation and Action are required
                     came_from.erase(neighbor.time_location);
                     came_from.insert(std::make_pair<>(neighbor.time_location,
-                      std::make_tuple<>(current.time_location, neighbor.action, neighbor.cost,
+                      std::make_tuple<>(current.time_location, neighbor.action, 1,
                             tentative_g_score)));
                 }
             }
