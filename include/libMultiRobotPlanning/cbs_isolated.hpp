@@ -437,18 +437,18 @@ public:
         using OpenHeap = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
         using HeapHandle = typename OpenHeap::handle_type;
 
-        OpenHeap open_heap;
+        OpenHeap open_set;
         std::unordered_map<Location, HeapHandle, std::hash<Location>> location_to_heaphandle;
         std::unordered_set<Location, std::hash<Location>> closed_set;
         std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
 
-        auto handle = open_heap.emplace(LowLevelNode(0, start,
+        auto handle = open_set.emplace(LowLevelNode(0, start,
           calculate_h(start), 0));
         location_to_heaphandle.insert(std::make_pair<>(start, handle));
 
-        while (!open_heap.empty())
+        while (!open_set.empty())
         {
-            LowLevelNode current = open_heap.top();
+            LowLevelNode current = open_set.top();
             num_expanded_low_level_nodes++;
 
             if (is_solution(current.time, current.location))
@@ -468,7 +468,7 @@ public:
                 return true;
             }
 
-            open_heap.pop();
+            open_set.pop();
             location_to_heaphandle.erase(current.location);
             closed_set.insert(current.location);
 
@@ -483,7 +483,7 @@ public:
                     if (iter == location_to_heaphandle.end())
                     {  // Discover a new node
                         int f_score = tentative_g_score + calculate_h(child.location);
-                        auto handle = open_heap.emplace(LowLevelNode(child.time, child.location, f_score, tentative_g_score));
+                        auto handle = open_set.emplace(LowLevelNode(child.time, child.location, f_score, tentative_g_score));
                         location_to_heaphandle.insert(std::make_pair<>(child.location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
@@ -502,7 +502,7 @@ public:
                         // update f and g_score
                         (*handle).g_score = tentative_g_score;
                         (*handle).f_score = tentative_g_score + calculate_h(child.location);
-                        open_heap.increase(handle);
+                        open_set.increase(handle);
                     }
 
                     // Best path for this node so far
