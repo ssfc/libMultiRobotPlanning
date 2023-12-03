@@ -435,8 +435,7 @@ public:
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
         auto handle = open_heap.emplace(LowLevelNode(start_time_location,
-                                                     calculate_h(start_time_location),
-                                                     0));
+             calculate_h(start_time_location), 0));
         time_location_to_heap_handle.insert(std::make_pair<>(start_time_location, handle));
 
         while (!open_heap.empty())
