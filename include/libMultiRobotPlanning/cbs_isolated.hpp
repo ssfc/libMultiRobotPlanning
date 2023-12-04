@@ -474,34 +474,57 @@ public:
             // A* LINE 10
             // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
             // current := the node in open_set having the lowest f_score[] value
-            LowLevelNode current = open_set.top();
+            auto current = open_set.top();
             num_expanded_low_level_nodes++;
 
+            // A* LINE 11
+            // if current = goal
             if (is_solution(current.time_location))
             {
                 solution.path.clear();
 
+                // A* LINE 12
+                // total_path := {current}
                 solution.path.emplace(solution.path.begin(), current.time_location);
+
+                // A* LINE 13
+                // while current in came_from.Keys:
                 auto iter = came_from.find(current.time_location);
                 while (iter != came_from.end())
                 {
+                    // A* LINE 14
+                    // current := came_from[current]
+
+                    // A* LINE 15
+                    // total_path.prepend(current)
+
                     solution.path.emplace(solution.path.begin(), std::get<0>(iter->second));
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
                 solution.cost = current.g_score;
 
+                // A* LINE 16
+                // return total_path
                 return true;
             }
 
+            // A* LINE 17
+            // open_set.Remove(current)
             open_set.pop();
             time_location_to_heap_handle.erase(current.time_location);
+            // A* LINE 18
+            // add current to closed_set.
             closed_set.insert(current.time_location);
 
+            // A* LINE 19
+            // for each neighbor of current
             // traverse neighbors
             auto neighbors = get_neighbors(current.time_location);
             for (const auto& neighbor : neighbors)
             {
+                // A* LINE 20
+                // if neighbor not in closed_set
                 if (closed_set.find(neighbor.time_location) == closed_set.end())
                 {
                     int tentative_g_score = current.g_score + 1;
