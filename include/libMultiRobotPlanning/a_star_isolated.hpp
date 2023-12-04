@@ -251,6 +251,7 @@ public:
 
                 // A* LINE 12
                 // total_path := {current}
+                solution.path.emplace(solution.path.begin(), std::make_pair<>(current.location, came_from.size()));
 
                 // A* LINE 13
                 // while current in came_from.Keys:
@@ -266,13 +267,11 @@ public:
                     // iter->first是location
                     // iter->second是std::tuple<Location,Action,int,int>
                     solution.path.emplace(solution.path.begin(),
-                        std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                        std::make_pair<>(std::get<0>(iter->second), std::get<3>(iter->second)));
                     solution.actions.emplace(solution.actions.begin(),
                         std::make_pair<>(std::get<1>(iter->second), std::get<2>(iter->second)));
                     iter = came_from.find(std::get<0>(iter->second)); // find(Location)
                 }
-
-                solution.path.emplace(solution.path.begin(), std::make_pair<>(start, 0));
 
                 // A* LINE 16
                 // return total_path
