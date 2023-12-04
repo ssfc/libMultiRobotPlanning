@@ -338,7 +338,7 @@ public:
                             // A* LINE 25
                             // cameFrom[neighbor] := current
                             came_from[neighbor.location] = std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score);
-                   
+
                             // A* LINE 26
                             // g_score[neighbor] := tentative_gScore
                             // A* LINE 27
