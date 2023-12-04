@@ -265,20 +265,18 @@ public:
 
                     // iter->first是location
                     // iter->second是std::tuple<Location,Action,int,int>
-                    solution.path.emplace_back( // pair(Location, int)
-                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                    solution.actions.emplace_back(std::make_pair<>( // pair(Location, Action)
-                            std::get<1>(iter->second), std::get<2>(iter->second)));
+                    solution.path.emplace(solution.path.begin(),
+                        std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    solution.actions.emplace(solution.actions.begin(),
+                        std::make_pair<>(std::get<1>(iter->second), std::get<2>(iter->second)));
                     iter = came_from.find(std::get<0>(iter->second)); // find(Location)
                 }
 
-                solution.path.emplace_back(std::make_pair<>(start, 0));
+                solution.path.emplace(solution.path.begin(), std::make_pair<>(start, 0));
 
                 // A* LINE 16
                 // return total_path
 
-                std::reverse(solution.path.begin(), solution.path.end());
-                std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
 
                 std::cerr << "num expanded nodes: " << num_expanded_nodes << std::endl;
