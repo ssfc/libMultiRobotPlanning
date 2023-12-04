@@ -482,15 +482,13 @@ public:
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
                         // We found this node before with a better path
-                        if (tentative_g_score >= (*handle).g_score)
+                        if (tentative_g_score < (*handle).g_score)
                         {
-                            continue;
+                            // update f and g_score
+                            (*handle).g_score = tentative_g_score;
+                            (*handle).f_score = tentative_g_score + calculate_h(neighbor.time_location);
+                            open_heap.increase(handle);
                         }
-
-                        // update f and g_score
-                        (*handle).g_score = tentative_g_score;
-                        (*handle).f_score = tentative_g_score + calculate_h(neighbor.time_location);
-                        open_heap.increase(handle);
                     }
 
                     // Best path for this node so far
