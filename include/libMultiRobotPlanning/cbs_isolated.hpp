@@ -443,13 +443,13 @@ public:
             {
                 solution.path.clear();
 
+                solution.path.emplace(solution.path.begin(), current.time_location);
                 auto iter = came_from.find(current.time_location);
                 while (iter != came_from.end())
                 {
-                    solution.path.emplace(solution.path.begin(), iter->first);
+                    solution.path.emplace(solution.path.begin(), std::get<0>(iter->second));
                     iter = came_from.find(std::get<0>(iter->second));
                 }
-                solution.path.emplace(solution.path.begin(), start_time_location);
 
                 solution.cost = current.g_score;
 
