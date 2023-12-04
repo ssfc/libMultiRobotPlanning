@@ -470,6 +470,10 @@ public:
                     auto iter = time_location_to_heap_handle.find(neighbor.time_location);
                     if (iter == time_location_to_heap_handle.end())
                     {  // Discover a new node
+                        came_from.erase(neighbor.time_location);
+                        came_from.insert(std::make_pair<>(neighbor.time_location,
+                          std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score)));
+
                         int f_score = tentative_g_score + calculate_h(neighbor.time_location);
                         auto handle = open_heap.emplace(LowLevelNode(neighbor.time_location, f_score, tentative_g_score));
                         time_location_to_heap_handle.insert(std::make_pair<>(neighbor.time_location, handle));
@@ -484,20 +488,16 @@ public:
                         // We found this node before with a better path
                         if (tentative_g_score < (*handle).g_score)
                         {
+                            came_from.erase(neighbor.time_location);
+                            came_from.insert(std::make_pair<>(neighbor.time_location,
+                              std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score)));
+
                             // update f and g_score
                             (*handle).g_score = tentative_g_score;
                             (*handle).f_score = tentative_g_score + calculate_h(neighbor.time_location);
                             open_heap.increase(handle);
                         }
                     }
-
-                    // Best path for this node so far
-                    // TODO: this is not the best way to update "came_from", but otherwise
-                    // default c'tors of TimeLocation and Action are required
-                    came_from.erase(neighbor.time_location);
-                    came_from.insert(std::make_pair<>(neighbor.time_location,
-                      std::make_tuple<>(current.time_location, neighbor.action, 1,
-                            tentative_g_score)));
                 }
             }
         }
