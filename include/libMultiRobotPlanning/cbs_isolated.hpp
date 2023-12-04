@@ -527,32 +527,65 @@ public:
                 // if neighbor not in closed_set
                 if (closed_set.find(neighbor.time_location) == closed_set.end())
                 {
+                    // A* LINE 21
+                    // d(current,neighbor) is the weight of the edge from current to neighbor
+                    // tentative_g_score is the distance from start to the neighbor through current
+                    // tentative_g_score := g_score[current] + d(current, neighbor)
                     int tentative_g_score = current.g_score + 1;
+
+                    // A* LINE 22
+                    // if neighbor not in open_set
                     auto iter = time_location_to_heap_handle.find(neighbor.time_location);
                     if (iter == time_location_to_heap_handle.end())
-                    {  // Discover a new node
+                    {
+                        // A* LINE 23
+                        // This path to neighbor is better than any previous one. Record it!
+                        // Discover a new node
                         came_from.insert(std::make_pair<>(neighbor.time_location,
                           std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score)));
 
+                        // A* LINE 24
+                        // g_score[neighbor] := tentative_g_score
+
+                        // A* LINE 25
+                        // f_score[neighbor] := tentative_g_score + h(neighbor)
+
+                        // A* LINE 26
+                        // open_set.add(neighbor)
                         int f_score = tentative_g_score + calculate_h(neighbor.time_location);
                         auto handle = open_set.emplace(LowLevelNode(neighbor.time_location, f_score, tentative_g_score));
                         time_location_to_heap_handle.insert(std::make_pair<>(neighbor.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
                     }
+                    // A* LINE 27
                     else
                     {
                         auto handle = iter->second;
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
                         // We found this node before with a better path
+
+                        // A* LINE 28
+                        // This path to neighbor is better than any previous one. Record it!
+                        // if tentative_g_score < g_score[neighbor]
                         if (tentative_g_score < (*handle).g_score)
                         {
+                            // A* LINE 29
+                            // came_from[neighbor] := current
                             came_from[neighbor.time_location] = std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score);
 
+                            // A* LINE 30
+                            // g_score[neighbor] := tentative_g_score
+
+                            // A* LINE 31
+                            // f_score[neighbor] := tentative_g_score + h(neighbor)
                             // update f and g_score
                             (*handle).g_score = tentative_g_score;
                             (*handle).f_score = tentative_g_score + calculate_h(neighbor.time_location);
+
+                            // A* LINE 32
+                            // open_set.update(neighbor)
                             open_set.increase(handle);
                         }
                     }
@@ -560,6 +593,8 @@ public:
             }
         }
 
+        // A* LINE 33
+        // Open set is empty but goal was never reached
         return false;
     }
 };
