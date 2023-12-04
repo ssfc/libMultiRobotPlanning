@@ -425,18 +425,18 @@ public:
         using OpenHeap = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
         using HeapHandle = typename OpenHeap::handle_type;
 
-        OpenHeap open_heap;
+        OpenHeap open_set;
         std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> time_location_to_heap_handle;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
-        auto handle = open_heap.emplace(LowLevelNode(start_time_location,
+        auto handle = open_set.emplace(LowLevelNode(start_time_location,
              calculate_h(start_time_location), 0));
         time_location_to_heap_handle.insert(std::make_pair<>(start_time_location, handle));
 
-        while (!open_heap.empty())
+        while (!open_set.empty())
         {
-            LowLevelNode current = open_heap.top();
+            LowLevelNode current = open_set.top();
             num_expanded_low_level_nodes++;
 
             if (is_solution(current.time_location))
@@ -456,7 +456,7 @@ public:
                 return true;
             }
 
-            open_heap.pop();
+            open_set.pop();
             time_location_to_heap_handle.erase(current.time_location);
             closed_set.insert(current.time_location);
 
@@ -475,7 +475,7 @@ public:
                           std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score)));
 
                         int f_score = tentative_g_score + calculate_h(neighbor.time_location);
-                        auto handle = open_heap.emplace(LowLevelNode(neighbor.time_location, f_score, tentative_g_score));
+                        auto handle = open_set.emplace(LowLevelNode(neighbor.time_location, f_score, tentative_g_score));
                         time_location_to_heap_handle.insert(std::make_pair<>(neighbor.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
@@ -495,7 +495,7 @@ public:
                             // update f and g_score
                             (*handle).g_score = tentative_g_score;
                             (*handle).f_score = tentative_g_score + calculate_h(neighbor.time_location);
-                            open_heap.increase(handle);
+                            open_set.increase(handle);
                         }
                     }
                 }
