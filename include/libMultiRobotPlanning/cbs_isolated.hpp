@@ -427,7 +427,14 @@ public:
         // to n currently known.
         // came_from := an empty map
         std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
-        
+
+        // A* LINE 3
+        // For node n, g_score[n] is the cost of the cheapest path from start to n currently known.
+        // g_score := map with default value of Infinity
+
+        // A* LINE 4
+        // g_score[start] := 0
+
         // 定义openSet_t和fibHeapHandle_t
         // using OpenHeap = boost::heap::fibonacci_heap<LowLevelNode>;
         // using HeapHandle = typename OpenHeap::handle_type;
@@ -437,6 +444,13 @@ public:
         OpenHeap open_set;
         std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> time_location_to_heap_handle;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
+
+        // A* LINE 5
+        // For node n, f_score[n] := g_score[n] + h(n). f_score[n] represents our current best guess as to
+        // how cheap a path could be from start to finish if it goes through n.
+        // f_score := map with default value of Infinity
+        // A* LINE 6
+        // f_score[start] := h(start)
 
         auto handle = open_set.emplace(LowLevelNode(start_time_location,
              calculate_h(start_time_location), 0));
