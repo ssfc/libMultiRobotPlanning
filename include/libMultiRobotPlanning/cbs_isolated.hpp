@@ -442,15 +442,15 @@ public:
             if (is_solution(current.time_location))
             {
                 solution.path.clear();
+
                 auto iter = came_from.find(current.time_location);
                 while (iter != came_from.end())
                 {
-                    solution.path.emplace_back(iter->first);
+                    solution.path.emplace(solution.path.begin(), iter->first);
                     iter = came_from.find(std::get<0>(iter->second));
                 }
+                solution.path.emplace(solution.path.begin(), start_time_location);
 
-                solution.path.emplace_back(start_time_location);
-                std::reverse(solution.path.begin(), solution.path.end());
                 solution.cost = current.g_score;
 
                 return true;
