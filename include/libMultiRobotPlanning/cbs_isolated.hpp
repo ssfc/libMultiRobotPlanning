@@ -443,14 +443,25 @@ public:
 
         OpenHeap open_set;
         std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> time_location_to_heap_handle;
-        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
 
         // A* LINE 5
         // For node n, f_score[n] := g_score[n] + h(n). f_score[n] represents our current best guess as to
         // how cheap a path could be from start to finish if it goes through n.
         // f_score := map with default value of Infinity
+
         // A* LINE 6
         // f_score[start] := h(start)
+
+        // A* LINE 7
+        // The set of discovered nodes that may need to be (re-)expanded.
+        // Initially, only the start node is known.
+        // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+        // open_set := {start}
+
+        // A* LINE 8
+        // node that has already been evaluated. In other words, already been poped from open_set.
+        // closed_set := the empty set
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
 
         auto handle = open_set.emplace(LowLevelNode(start_time_location,
              calculate_h(start_time_location), 0));
