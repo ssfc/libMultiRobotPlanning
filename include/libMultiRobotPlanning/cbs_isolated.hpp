@@ -467,8 +467,13 @@ public:
              calculate_h(start_time_location), 0));
         time_location_to_heap_handle.insert(std::make_pair<>(start_time_location, handle));
 
+        // A* LINE 9
+        // while open_set is not empty
         while (!open_set.empty())
         {
+            // A* LINE 10
+            // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
+            // current := the node in open_set having the lowest f_score[] value
             LowLevelNode current = open_set.top();
             num_expanded_low_level_nodes++;
 
