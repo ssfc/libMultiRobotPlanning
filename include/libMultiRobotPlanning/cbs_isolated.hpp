@@ -413,12 +413,21 @@ public:
     }
 
     // 引用传递大型计算结果
+    // A* LINE 1
+    // A* finds a path from start to goal.
+    // h is the heuristic function. h(n) estimates the cost to reach goal from node n.
     bool low_level_search(AgentPlan& solution, size_t& num_expanded_low_level_nodes)
     {
         solution.path.clear();
         solution.path.emplace_back(start_time_location);
         solution.cost = 0;
 
+        // A* LINE 2
+        // For node n, came_from[n] is the node immediately preceding it on the cheapest path from the start
+        // to n currently known.
+        // came_from := an empty map
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
+        
         // 定义openSet_t和fibHeapHandle_t
         // using OpenHeap = boost::heap::fibonacci_heap<LowLevelNode>;
         // using HeapHandle = typename OpenHeap::handle_type;
@@ -428,7 +437,6 @@ public:
         OpenHeap open_set;
         std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> time_location_to_heap_handle;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
-        std::unordered_map<TimeLocation, std::tuple<TimeLocation,Action,int,int>,std::hash<TimeLocation>> came_from;
 
         auto handle = open_set.emplace(LowLevelNode(start_time_location,
              calculate_h(start_time_location), 0));
