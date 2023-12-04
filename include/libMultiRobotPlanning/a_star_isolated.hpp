@@ -287,25 +287,25 @@ public:
                 return true;
             }
 
-            // A* LINE 13
+            // A* LINE 17
             // openSet.Remove(current)
             open_set.pop();
             location_to_heaphandle.erase(current.location);
-            // A* LINE 14
+            // A* LINE 18
             // add current to closedset.
             closed_set.insert(current.location);
 
             // traverse children
             auto children = get_neighbors(current.location);
-            // A* LINE 15
+            // A* LINE 19
             // for each neighbor of current
             for (const Child& neighbor : children)
             {
-                // A* LINE 16
+                // A* LINE 20
                 // if neighbor not in closedset
                 if (closed_set.find(neighbor.location) == closed_set.end()) // not in closed set
                 {
-                    // A* LINE 17
+                    // A* LINE 21
                     // d(current,neighbor) is the weight of the edge from current to neighbor
                     // tentative_g_score is the distance from start to the neighbor through current
                     // tentative_g_score := gScore[current] + d(current, neighbor)
@@ -313,20 +313,20 @@ public:
                     int tentative_g_score = current.g_score + neighbor.cost;
                     auto pair_found = location_to_heaphandle.find(neighbor.location);
 
-                    // A* LINE 18
+                    // A* LINE 22
                     // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
                     if (pair_found == location_to_heaphandle.end())
                     {
-                        // A* LINE 19
+                        // A* LINE 23
                         // cameFrom[neighbor] := current
                         came_from.insert(std::make_pair<>(neighbor.location,
                           std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
 
-                        // A* LINE 20
+                        // A* LINE 24
                         // g_score[neighbor] := tentative_gScore
-                        // A* LINE 21
+                        // A* LINE 25
                         // f_score[neighbor] := tentative_gScore + h(neighbor)
-                        // A* LINE 22
+                        // A* LINE 26
                         // open_set.add(neighbor)
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         auto neighbor_handle = open_set.emplace(AStarNode(neighbor.location, f_score, tentative_g_score));
@@ -335,28 +335,28 @@ public:
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
                     }
-                    // A* LINE 23
+                    // A* LINE 27
                     else // 坐标在堆中。
                     {
                         auto neighbor_handle = pair_found->second; // Location所具有的其他特征。
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
 
-                        // A* LINE 24
+                        // A* LINE 28
                         // if tentative_gScore < gScore[neighbor]
                         // meaning: This path to neighbor is better than any previous one. Record it!
                         // We found this node before with a better path
                         if (tentative_g_score < (*neighbor_handle).g_score)
                         {
-                            // A* LINE 25
+                            // A* LINE 29
                             // cameFrom[neighbor] := current
                             came_from[neighbor.location] = std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score);
 
-                            // A* LINE 26
+                            // A* LINE 30
                             // g_score[neighbor] := tentative_gScore
-                            // A* LINE 27
+                            // A* LINE 31
                             // f_score[neighbor] := tentative_gScore + h(neighbor)
-                            // A* LINE 28
+                            // A* LINE 32
                             // open_set.update(neighbor)
                             (*neighbor_handle).g_score = tentative_g_score;
                             (*neighbor_handle).f_score = tentative_g_score + calculate_h(neighbor.location);
@@ -368,7 +368,7 @@ public:
             }
         }
 
-        // A* LINE 29
+        // A* LINE 33
         // Open set is empty but goal was never reached
         return false;
     }
