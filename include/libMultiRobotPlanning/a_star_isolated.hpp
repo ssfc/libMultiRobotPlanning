@@ -248,12 +248,21 @@ public:
             {
                 solution.path.clear();
                 solution.actions.clear();
+
                 // A* LINE 12
-                // return reconstruct_path(cameFrom, current)
-                // std::unordered_map<Location, std::tuple<Location,Action,int,int>,std::hash<Location>> came_from;
+                // total_path := {current}
+
+                // A* LINE 13
+                // while current in came_from.Keys:
                 auto iter = came_from.find(current.location);
                 while (iter != came_from.end())
                 {
+                    // A* LINE 14
+                    // current := came_from[current]
+
+                    // A* LINE 15
+                    // total_path.prepend(current)
+
                     // iter->first是location
                     // iter->second是std::tuple<Location,Action,int,int>
                     solution.path.emplace_back( // pair(Location, int)
@@ -264,6 +273,10 @@ public:
                 }
 
                 solution.path.emplace_back(std::make_pair<>(start, 0));
+
+                // A* LINE 16
+                // return total_path
+
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
