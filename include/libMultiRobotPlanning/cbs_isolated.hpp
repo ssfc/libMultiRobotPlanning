@@ -470,7 +470,6 @@ public:
                     auto iter = time_location_to_heap_handle.find(neighbor.time_location);
                     if (iter == time_location_to_heap_handle.end())
                     {  // Discover a new node
-                        came_from.erase(neighbor.time_location);
                         came_from.insert(std::make_pair<>(neighbor.time_location,
                           std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score)));
 
@@ -488,9 +487,7 @@ public:
                         // We found this node before with a better path
                         if (tentative_g_score < (*handle).g_score)
                         {
-                            came_from.erase(neighbor.time_location);
-                            came_from.insert(std::make_pair<>(neighbor.time_location,
-                              std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score)));
+                            came_from[neighbor.time_location] = std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score);
 
                             // update f and g_score
                             (*handle).g_score = tentative_g_score;
