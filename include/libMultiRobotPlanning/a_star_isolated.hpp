@@ -308,7 +308,7 @@ public:
                         // cameFrom[neighbor] := current
                         came_from.erase(neighbor.location);
                         came_from.insert(std::make_pair<>(neighbor.location,
-                                                          std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
+                          std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
 
                         // A* LINE 20
                         // g_score[neighbor] := tentative_gScore
