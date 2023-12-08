@@ -438,7 +438,7 @@ public:
         using HeapHandle = typename OpenHeap::handle_type;
 
         OpenHeap open_set;
-        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> time_location_to_heap_handle;
+        std::unordered_map<TimeLocation, HeapHandle, std::hash<TimeLocation>> timelocation_to_heaphandle;
 
         // A* LINE 5
         // For node n, f_score[n] := g_score[n] + h(n). f_score[n] represents our current best guess as to
@@ -461,7 +461,7 @@ public:
 
         auto handle = open_set.emplace(LowLevelNode(start_time_location,
              calculate_h(start_time_location), 0));
-        time_location_to_heap_handle.insert(std::make_pair<>(start_time_location, handle));
+        timelocation_to_heaphandle.insert(std::make_pair<>(start_time_location, handle));
 
         // A* LINE 9
         // while open_set is not empty
@@ -508,7 +508,7 @@ public:
             // A* LINE 17
             // open_set.Remove(current)
             open_set.pop();
-            time_location_to_heap_handle.erase(current.time_location);
+            timelocation_to_heaphandle.erase(current.time_location);
             // A* LINE 18
             // add current to closed_set.
             closed_set.insert(current.time_location);
@@ -531,8 +531,8 @@ public:
 
                     // A* LINE 22
                     // if neighbor not in open_set
-                    auto iter = time_location_to_heap_handle.find(neighbor.time_location);
-                    if (iter == time_location_to_heap_handle.end())
+                    auto iter = timelocation_to_heaphandle.find(neighbor.time_location);
+                    if (iter == timelocation_to_heaphandle.end())
                     {
                         // A* LINE 23
                         // This path to neighbor is better than any previous one. Record it!
@@ -550,7 +550,7 @@ public:
                         // open_set.add(neighbor)
                         int f_score = tentative_g_score + calculate_h(neighbor.time_location);
                         auto handle = open_set.emplace(LowLevelNode(neighbor.time_location, f_score, tentative_g_score));
-                        time_location_to_heap_handle.insert(std::make_pair<>(neighbor.time_location, handle));
+                        timelocation_to_heaphandle.insert(std::make_pair<>(neighbor.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_g_score << std::endl;
                     }
