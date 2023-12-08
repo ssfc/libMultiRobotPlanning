@@ -453,15 +453,14 @@ public:
         // Initially, only the start node is known.
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
         // open_set := {start}
+        auto handle = open_set.emplace(LowLevelNode(start_time_location,
+            calculate_h(start_time_location), 0));
+        timelocation_to_heaphandle.insert(std::make_pair<>(start_time_location, handle));
 
         // A* LINE 8
         // node that has already been evaluated. In other words, already been poped from open_set.
         // closed_set := the empty set
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
-
-        auto handle = open_set.emplace(LowLevelNode(start_time_location,
-             calculate_h(start_time_location), 0));
-        timelocation_to_heaphandle.insert(std::make_pair<>(start_time_location, handle));
 
         // A* LINE 9
         // while open_set is not empty
