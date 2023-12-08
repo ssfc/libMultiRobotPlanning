@@ -418,10 +418,6 @@ public:
     // h is the heuristic function. h(n) estimates the cost to reach goal from node n.
     bool low_level_search(AgentPlan& solution, size_t& num_expanded_low_level_nodes)
     {
-        solution.path.clear();
-        solution.path.emplace_back(start_time_location);
-        solution.cost = 0;
-
         // A* LINE 2
         // For node n, came_from[n] is the node immediately preceding it on the cheapest path from the start
         // to n currently known.
