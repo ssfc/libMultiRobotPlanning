@@ -346,6 +346,7 @@ public:
     bool is_solution(const TimeLocation& time_location)
     {
         return time_location.location == goal && time_location.time > max_goal_constraint_time;
+        // 显然，max_goal_constraint_time越小越好。
     }
 
     // low level 工具函数 get_neighbors的工具函数
