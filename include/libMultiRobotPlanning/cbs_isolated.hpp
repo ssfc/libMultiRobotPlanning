@@ -181,11 +181,10 @@ namespace std
         size_t operator()(const EdgeConstraint& edge_constraint) const
         {
             size_t seed = 0;
-            boost::hash_combine(seed, edge_constraint.time);
-            boost::hash_combine(seed, edge_constraint.location_1.x);
-            boost::hash_combine(seed, edge_constraint.location_1.y);
-            boost::hash_combine(seed, edge_constraint.location_2.x);
-            boost::hash_combine(seed, edge_constraint.location_2.y);
+
+            boost::hash_combine(seed, hash<int>()(edge_constraint.time));
+            boost::hash_combine(seed, hash<Location>()(edge_constraint.location_1));
+            boost::hash_combine(seed, hash<Location>()(edge_constraint.location_2));
 
             return seed;
         }
