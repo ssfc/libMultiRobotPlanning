@@ -284,7 +284,7 @@ public:
     bool disappear_at_goal;
 
     // process var
-    int last_goal_constraint;
+    int last_goal_constraint_time;
 
 public:
     LowLevel(size_t input_num_columns,
@@ -303,12 +303,12 @@ public:
             disappear_at_goal(input_disappear_at_goal)
     {
         // assert(input_constraints);  // NOLINT
-        last_goal_constraint = -1;
+        last_goal_constraint_time = -1;
         for (const auto& vertex_constraint : low_level_constraints.vertex_constraints)
         {
             if (vertex_constraint.location.x == goal.x && vertex_constraint.location.y == goal.y)
             {
-                last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
+                last_goal_constraint_time = std::max(last_goal_constraint_time, vertex_constraint.time);
             }
         }
     }
@@ -323,12 +323,12 @@ public:
         low_level_constraints = input_constraints;
 
         // assert(input_constraints);  // NOLINT
-        last_goal_constraint = -1;
+        last_goal_constraint_time = -1;
         for (const auto& vertex_constraint : low_level_constraints.vertex_constraints)
         {
             if (vertex_constraint.location == goal)
             {
-                last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
+                last_goal_constraint_time = std::max(last_goal_constraint_time, vertex_constraint.time);
             }
         }
     }
@@ -345,7 +345,7 @@ public:
     // low level 工具函数
     bool is_solution(const TimeLocation& time_location)
     {
-        return time_location.location == goal && time_location.time > last_goal_constraint;
+        return time_location.location == goal && time_location.time > last_goal_constraint_time;
     }
 
     // low level 工具函数 get_neighbors的工具函数
