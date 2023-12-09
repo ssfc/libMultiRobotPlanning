@@ -326,7 +326,7 @@ public:
         last_goal_constraint = -1;
         for (const auto& vertex_constraint : low_level_constraints.vertex_constraints)
         {
-            if (vertex_constraint.location.x == goal.x && vertex_constraint.location.y == goal.y)
+            if (vertex_constraint.location == goal)
             {
                 last_goal_constraint = std::max(last_goal_constraint, vertex_constraint.time);
             }
