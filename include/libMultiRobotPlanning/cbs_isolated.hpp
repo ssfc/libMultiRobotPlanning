@@ -600,7 +600,6 @@ public:
     std::vector<AgentPlan> solution;
     std::vector<AgentConstraints> constraints_group;
     int cost;
-    int id;
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >::handle_type handle;
 
 public:
@@ -609,12 +608,11 @@ public:
         // if (cost != n.cost)
 
         return cost > other.cost;
-        // return id > n.id;
     }
 
     friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& high_level_node)
     {
-        os << "id: " << high_level_node.id << " cost: " << high_level_node.cost << std::endl;
+        os << " cost: " << high_level_node.cost << std::endl;
         for (size_t i = 0; i < high_level_node.solution.size(); ++i)
         {
             os << "Agent: " << i << std::endl;
@@ -848,7 +846,6 @@ public:
         // Root.low_level_constraints = ∅ // 最开始无约束
         root.constraints_group.resize(num_agents);
         root.cost = 0;
-        root.id = 0;
 
         // A1 LINE 2
         // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
@@ -876,7 +873,6 @@ public:
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > open;
         open.emplace(root);
 
-        int id = 1;
         //  A1 LINE 5
         // while OPEN not empty do
         while (!open.empty())
@@ -959,11 +955,9 @@ public:
             {
                 // std::cout << "Add HL node for " << new_constraint.first << std::endl;
                 size_t i = new_constraint.first;
-                // std::cout << "create neighbor with id " << id << std::endl;
                 // A1 LINE 12
                 // new_node ← new node
                 HighLevelNode new_node = best_node;
-                new_node.id = id;
                 // (optional) check that this new_constraint was not included already
                 // std::cout << new_node.constraints_group[i] << std::endl;
                 // std::cout << new_constraint.second << std::endl;
@@ -990,8 +984,6 @@ public:
                     // Insert new_node to OPEN
                     open.emplace(new_node);
                 }
-
-                ++id;
             }
         }
 
