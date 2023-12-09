@@ -129,9 +129,10 @@ namespace std
         size_t operator()(const VertexConstraint& vertex_constraint) const
         {
             size_t seed = 0;
-            boost::hash_combine(seed, vertex_constraint.time);
-            boost::hash_combine(seed, vertex_constraint.location.x);
-            boost::hash_combine(seed, vertex_constraint.location.y);
+
+            boost::hash_combine(seed, hash<int>()(vertex_constraint.time));
+            boost::hash_combine(seed, hash<Location>()(vertex_constraint.location));
+
             return seed;
         }
     };
