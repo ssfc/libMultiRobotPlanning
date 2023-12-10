@@ -107,7 +107,7 @@ public:
     {
         return std::tie(time, location) == std::tie(other.time, other.location);
     }
-    
+
     friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& vertex_constraint)
     {
         return os << "VC(" << vertex_constraint.time << "," << vertex_constraint.location.x << ","
