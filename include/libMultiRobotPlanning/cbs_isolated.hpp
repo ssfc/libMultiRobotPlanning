@@ -91,6 +91,49 @@ public:
     }
 };
 
+// 由于是negative constraint, 所以记录的是禁止的state.
+class NegativeConstraint
+{
+public:
+    enum Type
+    {
+        VertexConstraint,
+        EdgeConstraint,
+    };
+
+    Type constraint_type;
+
+    int agent_id; // 人物
+    int time_step; // 时间
+    std::vector<Location> locations; // 可能是1个(点冲突), 也可能是2个(边冲突)
+    // 如果发生边冲突, locations的顺序是agent的行进顺序
+
+public:
+    NegativeConstraint() = default;
+
+    NegativeConstraint(Type input_type,
+                       int input_agent_id,
+                       int input_time,
+                       std::vector<Location> input_locations) :
+            constraint_type(input_type),
+            agent_id(input_agent_id),
+            time_step(input_time),
+            locations(std::move(input_locations))
+    {}
+
+    bool operator==(const NegativeConstraint& other) const
+    {
+        return std::tie(agent_id, locations, time_step)
+               == std::tie(other.agent_id, other.locations, other.time_step);
+    }
+
+    bool operator!=(const NegativeConstraint& other) const
+    {
+        return std::tie(agent_id, locations, time_step)
+               != std::tie(other.agent_id, other.locations, other.time_step);
+    }
+};
+
 class VertexConstraint
 {
 public:
