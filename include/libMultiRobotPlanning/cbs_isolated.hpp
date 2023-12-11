@@ -376,12 +376,12 @@ public:
     }
 
     // low level 工具函数
-    int calculate_h(const TimeLocation& time_location)
+    int calculate_h(const Location& location)
     {
         // cout << "H: " <<  time_location << " " << m_heuristic[low_level_agent_index][time_location.x + num_columns *
         // time_location.y] << endl;
         // return m_heuristic[low_level_agent_index][time_location.x + num_columns * time_location.y];
-        return abs(time_location.location.x - goal.x) + abs(time_location.location.y - goal.y);
+        return abs(location.x - goal.x) + abs(location.y - goal.y);
     }
 
     // low level 工具函数
@@ -497,7 +497,7 @@ public:
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
         // open_set := {start}
         auto handle = open_set.emplace(LowLevelNode(start_time_location,
-            calculate_h(start_time_location), 0));
+            calculate_h(start_time_location.location), 0));
         timelocation_to_heaphandle.insert(std::make_pair<>(start_time_location, handle));
 
         // A* LINE 8
@@ -590,7 +590,7 @@ public:
 
                         // A* LINE 26
                         // open_set.add(neighbor)
-                        int f_score = tentative_g_score + calculate_h(neighbor.time_location);
+                        int f_score = tentative_g_score + calculate_h(neighbor.time_location.location);
                         auto handle = open_set.emplace(LowLevelNode(neighbor.time_location, f_score, tentative_g_score));
                         timelocation_to_heaphandle.insert(std::make_pair<>(neighbor.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
@@ -620,7 +620,7 @@ public:
                             // f_score[neighbor] := tentative_g_score + h(neighbor)
                             // update f and g_score
                             (*handle).g_score = tentative_g_score;
-                            (*handle).f_score = tentative_g_score + calculate_h(neighbor.time_location);
+                            (*handle).f_score = tentative_g_score + calculate_h(neighbor.time_location.location);
 
                             // A* LINE 32
                             // open_set.update(neighbor)
