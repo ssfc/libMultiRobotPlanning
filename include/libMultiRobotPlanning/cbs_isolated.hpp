@@ -67,13 +67,12 @@ public:
 
     Type conflict_type;
 
-    size_t agent1;
-    size_t agent2;
+    size_t agent_id_1;
+    size_t agent_id_2;
 
-    int time;
+    int time_step;
 
-    Location location_1;
-    Location location_2;
+    std::vector<Location> locations; // 可能是1个(点冲突), 也可能是2个(边冲突)
 
 public:
     friend std::ostream& operator<<(std::ostream& os, const Conflict& conflict)
@@ -81,10 +80,10 @@ public:
         switch (conflict.conflict_type)
         {
             case VertexConflict:
-                return os << conflict.time << ": VertexConflict(" << conflict.location_1.x << "," << conflict.location_1.y << ")";
+                return os << conflict.time_step << ": VertexConflict(" << conflict.locations[0].x << "," << conflict.locations[0].y << ")";
             case EdgeConflict:
-                return os << conflict.time << ": EdgeConflict(" << conflict.location_1.x << "," << conflict.location_1.y << ","
-                          << conflict.location_2.x << "," << conflict.location_2.y << ")";
+                return os << conflict.time_step << ": EdgeConflict(" << conflict.locations[0].x << "," << conflict.locations[0].y << ","
+                          << conflict.locations[1].x << "," << conflict.locations[1].y << ")";
         }
 
         return os;
@@ -237,12 +236,18 @@ public:
 
 public:
     // 将另一个对象中的所有元素插入到当前对象的集合中。
-    void add(const AgentConstraints& other)
+    void add(const NegativeConstraint& new_constraint)
     {
-        vertex_constraints.insert(other.vertex_constraints.begin(),
-                                  other.vertex_constraints.end());
-        edge_constraints.insert(other.edge_constraints.begin(),
-                                other.edge_constraints.end());
+        if(new_constraint.constraint_type == NegativeConstraint::VertexConstraint)
+        {
+            vertex_constraints.insert(VertexConstraint(
+                new_constraint.time_step, new_constraint.locations[0]));
+        }
+        else
+        {
+            edge_constraints.insert(EdgeConstraint(new_constraint.time_step,
+               new_constraint.locations[0], new_constraint.locations[1]));
+        }
     }
 
     friend std::ostream& operator<<(std::ostream& os, const AgentConstraints& input_constraints)
@@ -803,11 +808,11 @@ public:
                     TimeLocation state2 = get_time_location(j, solution, t);
                     if (state1.equal_except_time(state2))
                     {
-                        first_conflict.time = t;
-                        first_conflict.agent1 = i;
-                        first_conflict.agent2 = j;
+                        first_conflict.time_step = t;
+                        first_conflict.agent_id_1 = i;
+                        first_conflict.agent_id_2 = j;
                         first_conflict.conflict_type = Conflict::VertexConflict;
-                        first_conflict.location_1 = state1.location;
+                        first_conflict.locations.emplace_back(state1.location);
                         // cout << "VC " << t << "," << state1.x << "," << state1.y <<
                         // endl;
 
@@ -828,12 +833,12 @@ public:
                     TimeLocation state2b = get_time_location(j, solution, t + 1);
                     if (state1a.equal_except_time(state2b) && state1b.equal_except_time(state2a))
                     {
-                        first_conflict.time = t;
-                        first_conflict.agent1 = i;
-                        first_conflict.agent2 = j;
+                        first_conflict.time_step = t;
+                        first_conflict.agent_id_1 = i;
+                        first_conflict.agent_id_2 = j;
                         first_conflict.conflict_type = Conflict::EdgeConflict;
-                        first_conflict.location_1 = state1a.location;
-                        first_conflict.location_2 = state1b.location;
+                        first_conflict.locations.emplace_back(state1a.location);
+                        first_conflict.locations.emplace_back(state1b.location);
 
                         return true;
                     }
@@ -846,29 +851,22 @@ public:
 
     // High level 工具函数
     // Create a list of low_level_constraints for the given conflict.
-    void generate_constraints_from_conflict(const Conflict& input_conflict, std::map<size_t, AgentConstraints>& constraints_from_conflict)
+    void generate_constraints_from_conflict(const Conflict& input_conflict, std::vector<NegativeConstraint>& constraints_from_conflict)
     {
-        if (input_conflict.conflict_type == Conflict::VertexConflict)
+        if(input_conflict.conflict_type == Conflict::VertexConflict)  // vertex conflict
         {
-            AgentConstraints c1;
-            c1.vertex_constraints.emplace(VertexConstraint(
-                    input_conflict.time, Location(input_conflict.location_1)));
-            constraints_from_conflict[input_conflict.agent1] = c1;
-            constraints_from_conflict[input_conflict.agent2] = c1;
+            constraints_from_conflict.emplace_back(NegativeConstraint::VertexConstraint,
+                   input_conflict.agent_id_1, input_conflict.time_step, input_conflict.locations);
+            constraints_from_conflict.emplace_back(NegativeConstraint::VertexConstraint,
+                   input_conflict.agent_id_2, input_conflict.time_step, input_conflict.locations);
         }
-        else if (input_conflict.conflict_type == Conflict::EdgeConflict)
+        else  // Edge conflict
         {
-            AgentConstraints c1;
-            c1.edge_constraints.emplace(EdgeConstraint(
-                    input_conflict.time, input_conflict.location_1,
-                    input_conflict.location_2));
-            constraints_from_conflict[input_conflict.agent1] = c1;
-
-            AgentConstraints c2;
-            c2.edge_constraints.emplace(EdgeConstraint(
-                    input_conflict.time, input_conflict.location_2,
-                    input_conflict.location_1));
-            constraints_from_conflict[input_conflict.agent2] = c2;
+            constraints_from_conflict.emplace_back(NegativeConstraint::EdgeConstraint,
+                   input_conflict.agent_id_1, input_conflict.time_step, input_conflict.locations);
+            std::vector<Location> reversed_locations = {input_conflict.locations[1], input_conflict.locations[0]};
+            constraints_from_conflict.emplace_back(NegativeConstraint::EdgeConstraint,
+                   input_conflict.agent_id_2, input_conflict.time_step, reversed_locations);
         }
     }
 
@@ -987,12 +985,12 @@ public:
 
             // A1 LINE 11
             // for each agent ai in C do
-            std::map<size_t, AgentConstraints> new_constraints; // agent_index到constraints的映射
+            std::vector<NegativeConstraint> new_constraints;
             generate_constraints_from_conflict(conflict, new_constraints);
             for (const auto& new_constraint : new_constraints)
             {
                 // std::cout << "Add HL node for " << new_constraint.first << std::endl;
-                size_t i = new_constraint.first;
+                size_t i = new_constraint.agent_id;
                 // A1 LINE 12
                 // new_node ← new node
                 HighLevelNode new_node = best_node;
@@ -1002,7 +1000,7 @@ public:
 
                 // A1 LINE 13
                 // new_node.constraints_group ← best_node.constraints_group + (ai, s, t)
-                new_node.constraints_group[i].add(new_constraint.second);
+                new_node.constraints_group[i].add(new_constraint);
                 // 为什么这里的constraints不会和new_constraint重叠？
                 // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
 
