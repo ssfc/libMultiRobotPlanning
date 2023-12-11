@@ -134,47 +134,6 @@ public:
     }
 };
 
-class VertexConstraint
-{
-public:
-    int time;
-    Location location;
-
-public:
-    VertexConstraint(int input_time, Location input_location):
-            time(input_time),
-            location(input_location)
-    {}
-
-    bool operator==(const VertexConstraint& other) const
-    {
-        return std::tie(time, location) == std::tie(other.time, other.location);
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& vertex_constraint)
-    {
-        return os << "VC(" << vertex_constraint.time << "," << vertex_constraint.location.x << ","
-                  << vertex_constraint.location.y << ")";
-    }
-};
-
-namespace std
-{
-    template <>
-    struct hash<VertexConstraint>
-    {
-        size_t operator()(const VertexConstraint& vertex_constraint) const
-        {
-            size_t seed = 0;
-
-            boost::hash_combine(seed, hash<int>()(vertex_constraint.time));
-            boost::hash_combine(seed, hash<Location>()(vertex_constraint.location));
-
-            return seed;
-        }
-    };
-}
-
 
 class EdgeConstraint
 {
@@ -232,7 +191,7 @@ namespace std
 class AgentConstraints
 {
 public:
-    std::unordered_set<VertexConstraint> vertex_constraints;
+    std::unordered_set<TimeLocation> vertex_constraints;
     std::unordered_set<EdgeConstraint> edge_constraints;
 
 public:
@@ -241,8 +200,8 @@ public:
     {
         if(new_constraint.constraint_type == NegativeConstraint::VertexConstraint)
         {
-            vertex_constraints.insert(VertexConstraint(
-                new_constraint.time_step, new_constraint.locations[0]));
+            vertex_constraints.insert(TimeLocation(new_constraint.time_step,
+               new_constraint.locations[0]));
         }
         else
         {
@@ -401,7 +360,7 @@ public:
         return time_location.location.x >= 0 && time_location.location.x < num_columns
                && time_location.location.y >= 0 && time_location.location.y < num_rows
                && obstacles.find(time_location.location) == obstacles.end()
-               && con.find(VertexConstraint(time_location.time, time_location.location)) == con.end();
+               && con.find(time_location) == con.end();
     }
 
     // low level 工具函数 get_neighbors的工具函数
