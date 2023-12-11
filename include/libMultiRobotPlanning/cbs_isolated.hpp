@@ -80,7 +80,8 @@ public:
         switch (conflict.conflict_type)
         {
             case VertexConflict:
-                return os << conflict.time_step << ": VertexConflict(" << conflict.locations[0].x << "," << conflict.locations[0].y << ")";
+                return os << conflict.time_step << ": VertexConflict(" << conflict.locations[0].x
+                    << "," << conflict.locations[0].y << ")";
             case EdgeConflict:
                 return os << conflict.time_step << ": EdgeConflict(" << conflict.locations[0].x << "," << conflict.locations[0].y << ","
                           << conflict.locations[1].x << "," << conflict.locations[1].y << ")";
