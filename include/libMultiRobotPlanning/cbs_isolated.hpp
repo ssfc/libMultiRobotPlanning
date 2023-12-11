@@ -641,7 +641,7 @@ class HighLevelNode
 {
 public:
     std::vector<AgentPlan> solution;
-    std::vector<AgentConstraints> constraints_group;
+    std::vector<AgentConstraints> all_agents_constraints;
     int cost;
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >::handle_type handle;
 
@@ -667,7 +667,7 @@ public:
             }
 
             os << " AgentConstraints:" << std::endl;
-            os << high_level_node.constraints_group[i];
+            os << high_level_node.all_agents_constraints[i];
             os << " cost: " << high_level_node.solution[i].cost << std::endl;
         }
 
@@ -884,17 +884,17 @@ public:
         // std::cerr << "start_time_locations size: " << start_time_locations.size() << std::endl;
         // A1 LINE 1
         // Root.low_level_constraints = ∅ // 最开始无约束
-        root.constraints_group.resize(num_agents);
+        root.all_agents_constraints.resize(num_agents);
         root.cost = 0;
 
         // A1 LINE 2
         // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
         auto low_level = LowLevel(num_columns, num_rows, obstacles,
                                   start_time_locations[0], goals[0],
-                                  root.constraints_group[0], false);
+                                  root.all_agents_constraints[0], false);
         for (size_t i = 0; i < num_agents; i++)
         {
-            low_level.set_low_level_context(start_time_locations[i], goals[i], root.constraints_group[i]);
+            low_level.set_low_level_context(start_time_locations[i], goals[i], root.all_agents_constraints[i]);
             bool is_path_found = low_level.low_level_search(root.solution[i], num_expanded_low_level_nodes);
 
             if (!is_path_found)
@@ -998,12 +998,12 @@ public:
                 // new_node ← new node
                 HighLevelNode new_node = best_node;
                 // (optional) check that this new_constraint was not included already
-                // std::cout << new_node.constraints_group[i] << std::endl;
+                // std::cout << new_node.all_agents_constraints[i] << std::endl;
                 // std::cout << new_constraint.second << std::endl;
 
                 // A1 LINE 13
-                // new_node.constraints_group ← best_node.constraints_group + (ai, s, t)
-                new_node.constraints_group[i].add(new_constraint);
+                // new_node.all_agents_constraints ← best_node.all_agents_constraints + (ai, s, t)
+                new_node.all_agents_constraints[i].add(new_constraint);
                 // 为什么这里的constraints不会和new_constraint重叠？
                 // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
 
@@ -1012,7 +1012,7 @@ public:
                 // 这里是增量更新，计算前先减去，算完后再加回来。
                 new_node.cost -= new_node.solution[i].cost;
 
-                low_level.set_low_level_context(start_time_locations[i], goals[i], new_node.constraints_group[i]);
+                low_level.set_low_level_context(start_time_locations[i], goals[i], new_node.all_agents_constraints[i]);
                 bool is_path_found = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
                 if (is_path_found)
