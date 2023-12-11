@@ -851,8 +851,10 @@ public:
 
     // High level 工具函数
     // Create a list of low_level_constraints for the given conflict.
-    void generate_constraints_from_conflict(const Conflict& input_conflict, std::vector<NegativeConstraint>& constraints_from_conflict)
+    std::vector<NegativeConstraint> generate_constraints_from_conflict(const Conflict& input_conflict)
     {
+        std::vector<NegativeConstraint> constraints_from_conflict;
+
         if(input_conflict.conflict_type == Conflict::VertexConflict)  // vertex conflict
         {
             constraints_from_conflict.emplace_back(NegativeConstraint::VertexConstraint,
@@ -868,6 +870,8 @@ public:
             constraints_from_conflict.emplace_back(NegativeConstraint::EdgeConstraint,
                    input_conflict.agent_id_2, input_conflict.time_step, reversed_locations);
         }
+
+        return constraints_from_conflict;
     }
 
     // 引用传递大型计算结果
@@ -985,8 +989,7 @@ public:
 
             // A1 LINE 11
             // for each agent ai in C do
-            std::vector<NegativeConstraint> new_constraints;
-            generate_constraints_from_conflict(conflict, new_constraints);
+            auto new_constraints = generate_constraints_from_conflict(conflict);
             for (const auto& new_constraint : new_constraints)
             {
                 // std::cout << "Add HL node for " << new_constraint.first << std::endl;
