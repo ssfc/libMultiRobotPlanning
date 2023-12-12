@@ -368,9 +368,7 @@ public:
     bool is_element_of_vertex_constraints(const TimeLocation& time_location)
     {
         // assert(agent_constraints);
-        return time_location.location.x >= 0 && time_location.location.x < num_columns
-               && time_location.location.y >= 0 && time_location.location.y < num_rows
-               && obstacles.find(time_location.location) == obstacles.end()
+        return obstacles.find(time_location.location) == obstacles.end()
                && agent_constraints.vertex_constraints.find(time_location) == agent_constraints.vertex_constraints.end();
     }
 
