@@ -404,7 +404,8 @@ public:
 
         TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
         if (is_in_range(wait_neighbor.location)
-                && is_element_of_vertex_constraints(wait_neighbor)
+        && !is_obstacle(wait_neighbor.location)
+        && is_element_of_vertex_constraints(wait_neighbor)
         && !is_element_of_edge_constraints(time_location, wait_neighbor))
         {
             neighbors.emplace_back(Neighbor(wait_neighbor, Action::Wait));
@@ -412,7 +413,8 @@ public:
 
         TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
         if (is_in_range(west_neighbor.location)
-                && is_element_of_vertex_constraints(west_neighbor)
+        && !is_obstacle(west_neighbor.location)
+        && is_element_of_vertex_constraints(west_neighbor)
         && !is_element_of_edge_constraints(time_location, west_neighbor))
         {
             neighbors.emplace_back(Neighbor(west_neighbor, Action::East));
@@ -420,7 +422,8 @@ public:
 
         TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
         if (is_in_range(east_neighbor.location)
-            && is_element_of_vertex_constraints(east_neighbor)
+        && !is_obstacle(east_neighbor.location)
+        && is_element_of_vertex_constraints(east_neighbor)
         && !is_element_of_edge_constraints(time_location, east_neighbor))
         {
             neighbors.emplace_back(Neighbor(east_neighbor, Action::West));
@@ -428,7 +431,8 @@ public:
 
         TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
         if (is_in_range(north_neighbor.location)
-            && is_element_of_vertex_constraints(north_neighbor)
+        && !is_obstacle(north_neighbor.location)
+        && is_element_of_vertex_constraints(north_neighbor)
         && !is_element_of_edge_constraints(time_location, north_neighbor))
         {
             neighbors.emplace_back(Neighbor(north_neighbor, Action::North));
@@ -436,7 +440,8 @@ public:
 
         TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
         if (is_in_range(south_neighbor.location)
-            && is_element_of_vertex_constraints(south_neighbor)
+        && !is_obstacle(south_neighbor.location)
+        && is_element_of_vertex_constraints(south_neighbor)
         && !is_element_of_edge_constraints(time_location, south_neighbor))
         {
             neighbors.emplace_back(Neighbor(south_neighbor, Action::South));
