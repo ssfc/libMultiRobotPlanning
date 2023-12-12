@@ -351,6 +351,8 @@ public:
         // 显然，max_goal_constraint_time越小越好。
     }
 
+    // 函数功能
+    // 判断当前位置是否在地图范围内。
     bool is_in_range(const Location& location) const
     {
         if(location.x >= 0 && location.x < num_columns
