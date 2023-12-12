@@ -355,21 +355,16 @@ public:
     bool is_element_of_vertex_constraints(const TimeLocation& time_location)
     {
         // assert(agent_constraints);
-        const auto& con = agent_constraints.vertex_constraints;
-
         return time_location.location.x >= 0 && time_location.location.x < num_columns
                && time_location.location.y >= 0 && time_location.location.y < num_rows
                && obstacles.find(time_location.location) == obstacles.end()
-               && con.find(time_location) == con.end();
+               && agent_constraints.vertex_constraints.find(time_location) == agent_constraints.vertex_constraints.end();
     }
 
     // low level 工具函数 get_neighbors的工具函数
     bool is_element_of_edge_constraints(const TimeLocation& s1, const TimeLocation& s2)
     {
-        // assert(agent_constraints);
-        const auto& con = agent_constraints.edge_constraints;
-
-        return con.find(EdgeConstraint(s1.time, s1.location, s2.location)) == con.end();
+        return agent_constraints.edge_constraints.find(EdgeConstraint(s1.time, s1.location, s2.location)) == agent_constraints.edge_constraints.end();
     }
 
     // low level 工具函数: 引用传递计算大型结果
