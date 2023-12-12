@@ -366,6 +366,18 @@ public:
         }
     }
 
+    bool is_obstacle(const Location& location) const
+    {
+        if(obstacles.find(location) != obstacles.end())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     // low level 工具函数 get_neighbors的工具函数
     bool is_element_of_vertex_constraints(const TimeLocation& time_location)
     {
