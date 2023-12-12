@@ -298,7 +298,7 @@ public:
              bool input_disappear_at_goal):
             num_columns(input_num_columns),
             num_rows(input_num_rows),
-            obstacles(input_obstacles),
+            obstacles(std::move(input_obstacles)),
             start_time_location(input_time_location),
             goal(input_goal),
             low_level_constraints(input_constraints),
