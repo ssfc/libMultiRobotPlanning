@@ -351,6 +351,19 @@ public:
         // 显然，max_goal_constraint_time越小越好。
     }
 
+    bool is_in_range(const Location& location) const
+    {
+        if(location.x >= 0 && location.x < num_columns
+           && location.y >= 0 && location.y < num_rows)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     // low level 工具函数 get_neighbors的工具函数
     bool is_element_of_vertex_constraints(const TimeLocation& time_location)
     {
@@ -378,35 +391,40 @@ public:
         std::vector<Neighbor> neighbors;
 
         TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
-        if (is_element_of_vertex_constraints(wait_neighbor)
+        if (is_in_range(wait_neighbor.location)
+                && is_element_of_vertex_constraints(wait_neighbor)
         && is_element_of_edge_constraints(time_location, wait_neighbor))
         {
             neighbors.emplace_back(Neighbor(wait_neighbor, Action::Wait));
         }
 
         TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
-        if (is_element_of_vertex_constraints(west_neighbor)
+        if (is_in_range(west_neighbor.location)
+                && is_element_of_vertex_constraints(west_neighbor)
         && is_element_of_edge_constraints(time_location, west_neighbor))
         {
             neighbors.emplace_back(Neighbor(west_neighbor, Action::East));
         }
 
         TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
-        if (is_element_of_vertex_constraints(east_neighbor)
+        if (is_in_range(east_neighbor.location)
+            && is_element_of_vertex_constraints(east_neighbor)
         && is_element_of_edge_constraints(time_location, east_neighbor))
         {
             neighbors.emplace_back(Neighbor(east_neighbor, Action::West));
         }
 
         TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
-        if (is_element_of_vertex_constraints(north_neighbor)
+        if (is_in_range(north_neighbor.location)
+            && is_element_of_vertex_constraints(north_neighbor)
         && is_element_of_edge_constraints(time_location, north_neighbor))
         {
             neighbors.emplace_back(Neighbor(north_neighbor, Action::North));
         }
 
         TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
-        if (is_element_of_vertex_constraints(south_neighbor)
+        if (is_in_range(south_neighbor.location)
+            && is_element_of_vertex_constraints(south_neighbor)
         && is_element_of_edge_constraints(time_location, south_neighbor))
         {
             neighbors.emplace_back(Neighbor(south_neighbor, Action::South));
