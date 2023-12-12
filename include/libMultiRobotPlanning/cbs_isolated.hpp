@@ -282,7 +282,7 @@ public:
 
     TimeLocation start_time_location;
     Location goal;
-    AgentConstraints low_level_constraints;
+    AgentConstraints agent_constraints;
     bool disappear_at_goal;
 
     // process var
@@ -301,12 +301,12 @@ public:
             obstacles(std::move(input_obstacles)),
             start_time_location(input_time_location),
             goal(input_goal),
-            low_level_constraints(input_constraints),
+            agent_constraints(input_constraints),
             disappear_at_goal(input_disappear_at_goal)
     {
         // assert(input_constraints);  // NOLINT
         max_goal_constraint_time = -1;
-        for (const auto& vertex_constraint : low_level_constraints.vertex_constraints)
+        for (const auto& vertex_constraint : agent_constraints.vertex_constraints)
         {
             if (vertex_constraint.location.x == goal.x && vertex_constraint.location.y == goal.y)
             {
@@ -315,18 +315,18 @@ public:
         }
     }
 
-    // Set the current context to a particular agent with the given set of low_level_constraints
+    // Set the current context to a particular agent with the given set of agent_constraints
     void set_low_level_context(TimeLocation input_time_location,
                                Location input_goal,
                                AgentConstraints input_constraints)
     {
         start_time_location = input_time_location;
         goal = input_goal;
-        low_level_constraints = input_constraints;
+        agent_constraints = input_constraints;
 
         // assert(input_constraints);  // NOLINT
         max_goal_constraint_time = -1;
-        for (const auto& vertex_constraint : low_level_constraints.vertex_constraints)
+        for (const auto& vertex_constraint : agent_constraints.vertex_constraints)
         {
             if (vertex_constraint.location == goal)
             {
@@ -354,8 +354,8 @@ public:
     // low level 工具函数 get_neighbors的工具函数
     bool is_element_of_vertex_constraints(const TimeLocation& time_location)
     {
-        // assert(low_level_constraints);
-        const auto& con = low_level_constraints.vertex_constraints;
+        // assert(agent_constraints);
+        const auto& con = agent_constraints.vertex_constraints;
 
         return time_location.location.x >= 0 && time_location.location.x < num_columns
                && time_location.location.y >= 0 && time_location.location.y < num_rows
@@ -366,8 +366,8 @@ public:
     // low level 工具函数 get_neighbors的工具函数
     bool is_element_of_edge_constraints(const TimeLocation& s1, const TimeLocation& s2)
     {
-        // assert(low_level_constraints);
-        const auto& con = low_level_constraints.edge_constraints;
+        // assert(agent_constraints);
+        const auto& con = agent_constraints.edge_constraints;
 
         return con.find(EdgeConstraint(s1.time, s1.location, s2.location)) == con.end();
     }
@@ -375,8 +375,8 @@ public:
     // low level 工具函数: 引用传递计算大型结果
     std::vector<Neighbor> get_neighbors(const TimeLocation& time_location)
     {
-        // cout << "#VC " << low_level_constraints.vertex_constraints.size() << endl;
-        // for(const auto& vertex_constraint : low_level_constraints.vertex_constraints) {
+        // cout << "#VC " << agent_constraints.vertex_constraints.size() << endl;
+        // for(const auto& vertex_constraint : agent_constraints.vertex_constraints) {
         //   cout << "  " << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y <<
         //   endl;
         // }
@@ -672,7 +672,7 @@ public:
               num_agents(input_num_agents),
               start_time_locations(std::move(input_start_time_locations)),
               goals(std::move(input_goals)),
-            // low_level_constraints(nullptr),
+            // agent_constraints(nullptr),
               num_expanded_high_level_nodes(0),
               num_expanded_low_level_nodes(0),
               disappear_at_goal(input_disappearAtGoal),
@@ -815,7 +815,7 @@ public:
     }
 
     // High level 工具函数
-    // Create a list of low_level_constraints for the given conflict.
+    // Create a list of agent_constraints for the given conflict.
     std::vector<NegativeConstraint> generate_constraints_from_conflict(const Conflict& input_conflict)
     {
         std::vector<NegativeConstraint> constraints_from_conflict;
@@ -848,7 +848,7 @@ public:
         root.solution.resize(num_agents);
         // std::cerr << "start_time_locations size: " << start_time_locations.size() << std::endl;
         // A1 LINE 1
-        // Root.low_level_constraints = ∅ // 最开始无约束
+        // Root.agent_constraints = ∅ // 最开始无约束
         root.all_agents_constraints.resize(num_agents);
         root.cost = 0;
 
