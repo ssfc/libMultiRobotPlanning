@@ -193,6 +193,7 @@ class AgentConstraints
 public:
     std::unordered_set<TimeLocation> vertex_constraints;
     std::unordered_set<EdgeConstraint> edge_constraints;
+    int max_goal_constraint_time;
 
 public:
     // 将另一个对象中的所有元素插入到当前对象的集合中。
@@ -1003,12 +1004,18 @@ public:
                 // 为什么这里的constraints不会和new_constraint重叠？
                 // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
 
+                if (new_constraint.constraint_type == NegativeConstraint::VertexConstraint)
+                {
+                    new_node.all_agents_constraints[i].max_goal_constraint_time = std::max(
+                        new_node.all_agents_constraints[i].max_goal_constraint_time, new_constraint.time_step);
+                }
+
                 // A1 LINE 16
                 // new_node.cost = SIC(new_node.solution)
                 // 这里是增量更新，计算前先减去，算完后再加回来。
                 new_node.cost -= new_node.solution[i].cost;
 
-                low_level.set_low_level_context(start_time_locations[i], goals[i], new_node.all_agents_constraints[i], -1);
+                low_level.set_low_level_context(start_time_locations[i], goals[i], new_node.all_agents_constraints[i], new_node.all_agents_constraints[i].max_goal_constraint_time);
                 bool is_path_found = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
                 if (is_path_found)
