@@ -203,6 +203,9 @@ public:
         {
             vertex_constraints.insert(TimeLocation(new_constraint.time_step,
                new_constraint.locations[0]));
+
+            max_goal_constraint_time = std::max(max_goal_constraint_time, new_constraint.time_step);
+
         }
         else
         {
@@ -990,11 +993,6 @@ public:
                 // 为什么这里的constraints不会和new_constraint重叠？
                 // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
 
-                if (new_constraint.constraint_type == NegativeConstraint::VertexConstraint)
-                {
-                    new_node.all_agents_constraints[ai].max_goal_constraint_time = std::max(
-                        new_node.all_agents_constraints[ai].max_goal_constraint_time, new_constraint.time_step);
-                }
 
                 // A1 LINE 16
                 // new_node.cost = SIC(new_node.solution)
