@@ -307,14 +307,6 @@ public:
             max_goal_constraint_time(input_max_goal_constraint_time),
             disappear_at_goal(input_disappear_at_goal)
     {
-        // assert(input_constraints);  // NOLINT
-        for (const auto& vertex_constraint : agent_constraints.vertex_constraints)
-        {
-            if (vertex_constraint.location.x == goal.x && vertex_constraint.location.y == goal.y)
-            {
-                max_goal_constraint_time = std::max(max_goal_constraint_time, vertex_constraint.time);
-            }
-        }
     }
 
     // Set the current context to a particular agent with the given set of agent_constraints
@@ -329,13 +321,6 @@ public:
 
         // assert(input_constraints);  // NOLINT
         max_goal_constraint_time = input_max_goal_constraint_time;
-        for (const auto& vertex_constraint : agent_constraints.vertex_constraints)
-        {
-            if (vertex_constraint.location == goal)
-            {
-                max_goal_constraint_time = std::max(max_goal_constraint_time, vertex_constraint.time);
-            }
-        }
     }
 
     // low level 工具函数
@@ -1015,7 +1000,8 @@ public:
                 // 这里是增量更新，计算前先减去，算完后再加回来。
                 new_node.cost -= new_node.solution[ai].cost;
 
-                low_level.set_low_level_context(start_time_locations[ai], goals[ai], new_node.all_agents_constraints[ai], new_node.all_agents_constraints[ai].max_goal_constraint_time);
+                low_level.set_low_level_context(start_time_locations[ai],
+                    goals[ai], new_node.all_agents_constraints[ai], new_node.all_agents_constraints[ai].max_goal_constraint_time);
                 bool is_path_found = low_level.low_level_search(new_node.solution[ai], num_expanded_low_level_nodes);
 
                 if (is_path_found)
