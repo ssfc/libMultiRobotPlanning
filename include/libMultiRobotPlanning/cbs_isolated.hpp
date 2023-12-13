@@ -990,7 +990,7 @@ public:
             for (const auto& new_constraint : new_constraints)
             {
                 // std::cout << "Add HL node for " << new_constraint.first << std::endl;
-                size_t i = new_constraint.agent_id;
+                size_t ai = new_constraint.agent_id;
                 // A1 LINE 12
                 // new_node ← new node
                 HighLevelNode new_node = best_node;
@@ -1000,27 +1000,27 @@ public:
 
                 // A1 LINE 13
                 // new_node.all_agents_constraints ← best_node.all_agents_constraints + (ai, s, t)
-                new_node.all_agents_constraints[i].add(new_constraint);
+                new_node.all_agents_constraints[ai].add(new_constraint);
                 // 为什么这里的constraints不会和new_constraint重叠？
                 // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
 
                 if (new_constraint.constraint_type == NegativeConstraint::VertexConstraint)
                 {
-                    new_node.all_agents_constraints[i].max_goal_constraint_time = std::max(
-                        new_node.all_agents_constraints[i].max_goal_constraint_time, new_constraint.time_step);
+                    new_node.all_agents_constraints[ai].max_goal_constraint_time = std::max(
+                        new_node.all_agents_constraints[ai].max_goal_constraint_time, new_constraint.time_step);
                 }
 
                 // A1 LINE 16
                 // new_node.cost = SIC(new_node.solution)
                 // 这里是增量更新，计算前先减去，算完后再加回来。
-                new_node.cost -= new_node.solution[i].cost;
+                new_node.cost -= new_node.solution[ai].cost;
 
-                low_level.set_low_level_context(start_time_locations[i], goals[i], new_node.all_agents_constraints[i], new_node.all_agents_constraints[i].max_goal_constraint_time);
-                bool is_path_found = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
+                low_level.set_low_level_context(start_time_locations[ai], goals[ai], new_node.all_agents_constraints[ai], new_node.all_agents_constraints[ai].max_goal_constraint_time);
+                bool is_path_found = low_level.low_level_search(new_node.solution[ai], num_expanded_low_level_nodes);
 
                 if (is_path_found)
                 {
-                    new_node.cost += new_node.solution[i].cost;
+                    new_node.cost += new_node.solution[ai].cost;
                     // std::cout << "  is_path_found. cost: " << new_node.cost << std::endl;
                     // A1 LINE 17
                     // Insert new_node to OPEN
