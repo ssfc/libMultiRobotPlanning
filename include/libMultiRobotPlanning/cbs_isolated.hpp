@@ -295,6 +295,7 @@ public:
              TimeLocation input_time_location,
              Location input_goal,
              AgentConstraints input_constraints,
+             int input_max_goal_constraint_time,
              bool input_disappear_at_goal):
             num_columns(input_num_columns),
             num_rows(input_num_rows),
@@ -302,10 +303,10 @@ public:
             start_time_location(input_time_location),
             goal(input_goal),
             agent_constraints(input_constraints),
+            max_goal_constraint_time(input_max_goal_constraint_time),
             disappear_at_goal(input_disappear_at_goal)
     {
         // assert(input_constraints);  // NOLINT
-        max_goal_constraint_time = -1;
         for (const auto& vertex_constraint : agent_constraints.vertex_constraints)
         {
             if (vertex_constraint.location.x == goal.x && vertex_constraint.location.y == goal.y)
@@ -885,7 +886,7 @@ public:
         // Root.solution = find individual paths using the low-level() // 用低层算法计算每个智能体的path
         auto low_level = LowLevel(num_columns, num_rows, obstacles,
                                   start_time_locations[0], goals[0],
-                                  root.all_agents_constraints[0], false);
+                                  root.all_agents_constraints[0], -1, false);
         for (size_t i = 0; i < num_agents; i++)
         {
             low_level.set_low_level_context(start_time_locations[i], goals[i], root.all_agents_constraints[i]);
