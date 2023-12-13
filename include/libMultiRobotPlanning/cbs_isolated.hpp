@@ -197,7 +197,7 @@ public:
 
 public:
     // 将另一个对象中的所有元素插入到当前对象的集合中。
-    void add(const NegativeConstraint& new_constraint)
+    void add_constraint(const NegativeConstraint& new_constraint)
     {
         if(new_constraint.constraint_type == NegativeConstraint::VertexConstraint)
         {
@@ -986,7 +986,7 @@ public:
 
                 // A1 LINE 13
                 // new_node.all_agents_constraints ← best_node.all_agents_constraints + (ai, s, t)
-                new_node.all_agents_constraints[ai].add(new_constraint);
+                new_node.all_agents_constraints[ai].add_constraint(new_constraint);
                 // 为什么这里的constraints不会和new_constraint重叠？
                 // 因为low-level-search已经满足旧constraints, 所以新产生的constraint不可能和已有的constraint重叠，所以无需重叠检测。
 
