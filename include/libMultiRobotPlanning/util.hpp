@@ -72,11 +72,6 @@ public:
         return time_step == other.time_step && location == other.location;
     }
 
-    bool equal_except_time(const TimeLocation& other) const
-    {
-        return location == other.location;
-    }
-
     friend std::ostream& operator<<(std::ostream& os, const TimeLocation& s)
     {
         return os << s.time_step << ": (" << s.location.x << "," << s.location.y << ")";

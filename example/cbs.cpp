@@ -357,7 +357,7 @@ public:
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
                     TimeLocation state2 = getState(j, solution, t);
-                    if (state1.equal_except_time(state2))
+                    if (state1.location == state2.location)
                     {
                         result.time_step = t;
                         result.agent1 = i;
@@ -383,7 +383,8 @@ public:
                 {
                     TimeLocation state2a = getState(j, solution, t);
                     TimeLocation state2b = getState(j, solution, t + 1);
-                    if (state1a.equal_except_time(state2b) && state1b.equal_except_time(state2a))
+                    if ((state1a.location == state2b.location)
+                    && (state1b.location == state2a.location))
                     {
                         result.time_step = t;
                         result.agent1 = i;
