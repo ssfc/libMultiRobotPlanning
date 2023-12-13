@@ -60,7 +60,7 @@ public:
         Edge,
     };
 
-    int time;
+    int time_step;
     size_t agent1;
     size_t agent2;
     Type type;
@@ -76,9 +76,9 @@ public:
         switch (conflict.type)
         {
           case Vertex:
-            return os << conflict.time << ": Vertex(" << conflict.x1 << "," << conflict.y1 << ")";
+            return os << conflict.time_step << ": Vertex(" << conflict.x1 << "," << conflict.y1 << ")";
           case Edge:
-            return os << conflict.time << ": Edge(" << conflict.x1 << "," << conflict.y1 << ","
+            return os << conflict.time_step << ": Edge(" << conflict.x1 << "," << conflict.y1 << ","
             << conflict.x2 << "," << conflict.y2 << ")";
         }
 
@@ -89,28 +89,28 @@ public:
 class VertexConstraint
 {
 public:
-    int time;
+    int time_step;
     int x;
     int y;
 
 public:
-    VertexConstraint(int time, int x, int y)
-    : time(time), x(x), y(y)
+    VertexConstraint(int time_step, int x, int y)
+    : time_step(time_step), x(x), y(y)
     {}
 
     bool operator==(const VertexConstraint& other) const
     {
-        return tie(time, x, y) == tie(other.time, other.x, other.y);
+        return tie(time_step, x, y) == tie(other.time_step, other.x, other.y);
     }
 
     bool operator<(const VertexConstraint& other) const
     {
-        return tie(time, x, y) < tie(other.time, other.x, other.y);
+        return tie(time_step, x, y) < tie(other.time_step, other.x, other.y);
     }
 
     friend ostream& operator<<(ostream& os, const VertexConstraint& c)
     {
-        return os << "VC(" << c.time << "," << c.x << "," << c.y << ")";
+        return os << "VC(" << c.time_step << "," << c.x << "," << c.y << ")";
     }
 };
 
@@ -122,7 +122,7 @@ namespace std
         size_t operator()(const VertexConstraint& s) const
         {
             size_t seed = 0;
-            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.time_step);
             boost::hash_combine(seed, s.x);
             boost::hash_combine(seed, s.y);
             return seed;
@@ -133,31 +133,31 @@ namespace std
 class EdgeConstraint
 {
 public:
-    int time;
+    int time_step;
     int x1;
     int y1;
     int x2;
     int y2;
 
 public:
-    EdgeConstraint(int time, int x1, int y1, int x2, int y2)
-      : time(time), x1(x1), y1(y1), x2(x2), y2(y2) {}
+    EdgeConstraint(int time_step, int x1, int y1, int x2, int y2)
+      : time_step(time_step), x1(x1), y1(y1), x2(x2), y2(y2) {}
 
     bool operator<(const EdgeConstraint& other) const
     {
-        return tie(time, x1, y1, x2, y2) <
-               tie(other.time, other.x1, other.y1, other.x2, other.y2);
+        return tie(time_step, x1, y1, x2, y2) <
+               tie(other.time_step, other.x1, other.y1, other.x2, other.y2);
     }
 
     bool operator==(const EdgeConstraint& other) const
     {
-        return tie(time, x1, y1, x2, y2) ==
-               tie(other.time, other.x1, other.y1, other.x2, other.y2);
+        return tie(time_step, x1, y1, x2, y2) ==
+               tie(other.time_step, other.x1, other.y1, other.x2, other.y2);
     }
 
     friend ostream& operator<<(ostream& os, const EdgeConstraint& c)
     {
-        return os << "EC(" << c.time << "," << c.x1 << "," << c.y1 << "," << c.x2
+        return os << "EC(" << c.time_step << "," << c.x1 << "," << c.y1 << "," << c.x2
                   << "," << c.y2 << ")";
     }
 };
@@ -170,7 +170,7 @@ namespace std
         size_t operator()(const EdgeConstraint& s) const
         {
             size_t seed = 0;
-            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.time_step);
             boost::hash_combine(seed, s.x1);
             boost::hash_combine(seed, s.y1);
             boost::hash_combine(seed, s.x2);
@@ -279,7 +279,7 @@ public:
         {
             if (vc.x == m_goals[m_agentIdx].x && vc.y == m_goals[m_agentIdx].y)
             {
-                m_lastGoalConstraint = max(m_lastGoalConstraint, vc.time);
+                m_lastGoalConstraint = max(m_lastGoalConstraint, vc.time_step);
             }
         }
     }
@@ -297,43 +297,43 @@ public:
     {
         return s.location.x == m_goals[m_agentIdx].x
         && s.location.y == m_goals[m_agentIdx].y
-        && s.time > m_lastGoalConstraint;
+        && s.time_step > m_lastGoalConstraint;
     }
 
     void get_neighbors(const TimeLocation& time_location, vector<Neighbor<TimeLocation, Action, int> >& neighbors)
     {
         // cout << "#VC " << constraints.vertexConstraints.size() << endl;
         // for(const auto& vc : constraints.vertexConstraints) {
-        //   cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
+        //   cout << "  " << vc.time_step << "," << vc.x << "," << vc.y <<
         //   endl;
         // }
         neighbors.clear();
 
-        TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
+        TimeLocation wait_neighbor(time_location.time_step + 1, Location(time_location.location.x, time_location.location.y));
         if (location_valid(wait_neighbor) && transition_valid(time_location, wait_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(wait_neighbor, Action::Wait, 1));
         }
 
-        TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
+        TimeLocation west_neighbor(time_location.time_step + 1, Location(time_location.location.x - 1, time_location.location.y));
         if (location_valid(west_neighbor) && transition_valid(time_location, west_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(west_neighbor, Action::Left, 1));
         }
 
-        TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
+        TimeLocation east_neighbor(time_location.time_step + 1, Location(time_location.location.x + 1, time_location.location.y));
         if (location_valid(east_neighbor) && transition_valid(time_location, east_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(east_neighbor, Action::Right, 1));
         }
 
-        TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
+        TimeLocation north_neighbor(time_location.time_step + 1, Location(time_location.location.x, time_location.location.y + 1));
         if (location_valid(north_neighbor) && transition_valid(time_location, north_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(north_neighbor, Action::Up, 1));
         }
 
-        TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
+        TimeLocation south_neighbor(time_location.time_step + 1, Location(time_location.location.x, time_location.location.y - 1));
         if (location_valid(south_neighbor) && transition_valid(time_location, south_neighbor))
         {
             neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(south_neighbor, Action::Down, 1));
@@ -359,7 +359,7 @@ public:
                     TimeLocation state2 = getState(j, solution, t);
                     if (state1.equal_except_time(state2))
                     {
-                        result.time = t;
+                        result.time_step = t;
                         result.agent1 = i;
                         result.agent2 = j;
                         result.type = Conflict::Vertex;
@@ -385,7 +385,7 @@ public:
                     TimeLocation state2b = getState(j, solution, t + 1);
                     if (state1a.equal_except_time(state2b) && state1b.equal_except_time(state2a))
                     {
-                        result.time = t;
+                        result.time_step = t;
                         result.agent1 = i;
                         result.agent2 = j;
                         result.type = Conflict::Edge;
@@ -409,7 +409,7 @@ public:
         {
             Constraints c1;
             c1.vertexConstraints.emplace(
-              VertexConstraint(conflict.time, conflict.x1, conflict.y1));
+              VertexConstraint(conflict.time_step, conflict.x1, conflict.y1));
             constraints[conflict.agent1] = c1;
             constraints[conflict.agent2] = c1;
         }
@@ -417,11 +417,11 @@ public:
         {
             Constraints c1;
             c1.edgeConstraints.emplace(EdgeConstraint(
-              conflict.time, conflict.x1, conflict.y1, conflict.x2, conflict.y2));
+              conflict.time_step, conflict.x1, conflict.y1, conflict.x2, conflict.y2));
             constraints[conflict.agent1] = c1;
             Constraints c2;
             c2.edgeConstraints.emplace(EdgeConstraint(
-              conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
+              conflict.time_step, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
             constraints[conflict.agent2] = c2;
         }
     }
@@ -478,7 +478,7 @@ public:
         return s.location.x >= 0 && s.location.x < num_columns
         && s.location.y >= 0 && s.location.y < num_rows &&
                obstacles.find(Location(s.location.x, s.location.y)) == obstacles.end() &&
-               con.find(VertexConstraint(s.time, s.location.x, s.location.y)) == con.end();
+               con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
     }
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
@@ -486,7 +486,7 @@ public:
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
 
-        return con.find(EdgeConstraint(s1.time, s1.location.x, s1.location.y, s2.location.x, s2.location.y))
+        return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y))
         == con.end();
     }
 };

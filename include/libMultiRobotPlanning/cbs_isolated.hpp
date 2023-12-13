@@ -138,32 +138,32 @@ public:
 class EdgeConstraint
 {
 public:
-    int time;
+    int time_step;
     Location location_1;
     Location location_2;
 
 public:
     EdgeConstraint(int input_time, Location input_location_1, Location input_location_2)
-            : time(input_time),
+            : time_step(input_time),
               location_1(input_location_1),
               location_2(input_location_2)
     {}
 
     bool operator<(const EdgeConstraint& other) const
     {
-        return std::tie(time, location_1.x, location_1.y, location_2.x, location_2.y) <
-               std::tie(other.time, other.location_1.x, other.location_1.y, other.location_2.x, other.location_2.y);
+        return std::tie(time_step, location_1.x, location_1.y, location_2.x, location_2.y) <
+               std::tie(other.time_step, other.location_1.x, other.location_1.y, other.location_2.x, other.location_2.y);
     }
 
     bool operator==(const EdgeConstraint& other) const
     {
-        return std::tie(time, location_1.x, location_1.y, location_2.x, location_2.y) ==
-               std::tie(other.time, other.location_1.x, other.location_1.y, other.location_2.x, other.location_2.y);
+        return std::tie(time_step, location_1.x, location_1.y, location_2.x, location_2.y) ==
+               std::tie(other.time_step, other.location_1.x, other.location_1.y, other.location_2.x, other.location_2.y);
     }
 
     friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& edge_constraint)
     {
-        return os << "EC(" << edge_constraint.time << ","
+        return os << "EC(" << edge_constraint.time_step << ","
                   << edge_constraint.location_1.x << "," << edge_constraint.location_1.y << ","
                   << edge_constraint.location_2.x << "," << edge_constraint.location_2.y << ")";
     }
@@ -178,7 +178,7 @@ namespace std
         {
             size_t seed = 0;
 
-            boost::hash_combine(seed, hash<int>()(edge_constraint.time));
+            boost::hash_combine(seed, hash<int>()(edge_constraint.time_step));
             boost::hash_combine(seed, hash<Location>()(edge_constraint.location_1));
             boost::hash_combine(seed, hash<Location>()(edge_constraint.location_2));
 
@@ -335,7 +335,7 @@ public:
     // low level 工具函数
     bool is_solution(const TimeLocation& time_location)
     {
-        return time_location.location == goal && time_location.time > max_goal_constraint_time;
+        return time_location.location == goal && time_location.time_step > max_goal_constraint_time;
         // 显然，max_goal_constraint_time越小越好。
     }
 
@@ -376,7 +376,7 @@ public:
     // low level 工具函数 get_neighbors的工具函数
     bool is_element_of_edge_constraints(const TimeLocation& s1, const TimeLocation& s2)
     {
-        return agent_constraints.edge_constraints.find(EdgeConstraint(s1.time, s1.location, s2.location)) != agent_constraints.edge_constraints.end();
+        return agent_constraints.edge_constraints.find(EdgeConstraint(s1.time_step, s1.location, s2.location)) != agent_constraints.edge_constraints.end();
     }
 
     // low level 工具函数: 引用传递计算大型结果
@@ -384,12 +384,12 @@ public:
     {
         // cout << "#VC " << agent_constraints.vertex_constraints.size() << endl;
         // for(const auto& vertex_constraint : agent_constraints.vertex_constraints) {
-        //   cout << "  " << vertex_constraint.time << "," << vertex_constraint.x << "," << vertex_constraint.y <<
+        //   cout << "  " << vertex_constraint.time_step << "," << vertex_constraint.x << "," << vertex_constraint.y <<
         //   endl;
         // }
         std::vector<Neighbor> neighbors;
 
-        TimeLocation wait_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y));
+        TimeLocation wait_neighbor(time_location.time_step + 1, Location(time_location.location.x, time_location.location.y));
         if (is_in_range(wait_neighbor.location)
         && !is_obstacle(wait_neighbor.location)
         && !is_element_of_vertex_constraints(wait_neighbor)
@@ -398,7 +398,7 @@ public:
             neighbors.emplace_back(Neighbor(wait_neighbor, Action::Wait));
         }
 
-        TimeLocation west_neighbor(time_location.time + 1, Location(time_location.location.x - 1, time_location.location.y));
+        TimeLocation west_neighbor(time_location.time_step + 1, Location(time_location.location.x - 1, time_location.location.y));
         if (is_in_range(west_neighbor.location)
         && !is_obstacle(west_neighbor.location)
         && !is_element_of_vertex_constraints(west_neighbor)
@@ -407,7 +407,7 @@ public:
             neighbors.emplace_back(Neighbor(west_neighbor, Action::East));
         }
 
-        TimeLocation east_neighbor(time_location.time + 1, Location(time_location.location.x + 1, time_location.location.y));
+        TimeLocation east_neighbor(time_location.time_step + 1, Location(time_location.location.x + 1, time_location.location.y));
         if (is_in_range(east_neighbor.location)
         && !is_obstacle(east_neighbor.location)
         && !is_element_of_vertex_constraints(east_neighbor)
@@ -416,7 +416,7 @@ public:
             neighbors.emplace_back(Neighbor(east_neighbor, Action::West));
         }
 
-        TimeLocation north_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y + 1));
+        TimeLocation north_neighbor(time_location.time_step + 1, Location(time_location.location.x, time_location.location.y + 1));
         if (is_in_range(north_neighbor.location)
         && !is_obstacle(north_neighbor.location)
         && !is_element_of_vertex_constraints(north_neighbor)
@@ -425,7 +425,7 @@ public:
             neighbors.emplace_back(Neighbor(north_neighbor, Action::North));
         }
 
-        TimeLocation south_neighbor(time_location.time + 1, Location(time_location.location.x, time_location.location.y - 1));
+        TimeLocation south_neighbor(time_location.time_step + 1, Location(time_location.location.x, time_location.location.y - 1));
         if (is_in_range(south_neighbor.location)
         && !is_obstacle(south_neighbor.location)
         && !is_element_of_vertex_constraints(south_neighbor)
@@ -492,7 +492,7 @@ public:
         while (!open_set.empty())
         {
             // A* LINE 10
-            // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
+            // This operation can occur in O(Log(N)) time_step if open_set is a min-heap or a priority queue
             // current := the node in open_set having the lowest f_score[] value
             auto current = open_set.top();
             num_expanded_low_level_nodes++;
@@ -950,7 +950,7 @@ public:
                     {
                         fout << "    - x: " << state.location.x << std::endl
                              << "      y: " << state.location.y << std::endl
-                             << "      t: " << state.time << std::endl;
+                             << "      t: " << state.time_step << std::endl;
                     }
 
                     std::cerr << "agent " << i << ": ";
@@ -966,7 +966,7 @@ public:
 
             // create additional nodes to resolve conflict
             // std::cout << "Found conflict: " << conflict << std::endl;
-            // std::cout << "Found conflict at t=" << conflict.time << " conflict_type: " <<
+            // std::cout << "Found conflict at t=" << conflict.time_step << " conflict_type: " <<
             // conflict.conflict_type << std::endl;
 
             // A1 LINE 11

@@ -56,20 +56,20 @@ namespace std
 class TimeLocation
 {
 public:
-    int time;
+    int time_step;
     Location location;
 
 public:
     TimeLocation() = default;
 
     TimeLocation(int input_time, Location input_location) :
-            time(input_time),
+            time_step(input_time),
             location(input_location)
     {}
 
     bool operator==(const TimeLocation& other) const
     {
-        return time == other.time && location == other.location;
+        return time_step == other.time_step && location == other.location;
     }
 
     bool equal_except_time(const TimeLocation& other) const
@@ -79,7 +79,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const TimeLocation& s)
     {
-        return os << s.time << ": (" << s.location.x << "," << s.location.y << ")";
+        return os << s.time_step << ": (" << s.location.x << "," << s.location.y << ")";
         // return os << "(" << s.x << "," << s.y << ")";
     }
 };
@@ -92,7 +92,7 @@ namespace std
         size_t operator()(const TimeLocation& s) const
         {
             size_t seed = 0;
-            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.time_step);
             boost::hash_combine(seed, s.location.x);
             boost::hash_combine(seed, s.location.y);
 
