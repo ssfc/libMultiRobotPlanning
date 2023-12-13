@@ -143,8 +143,8 @@ public:
     Location location_2;
 
 public:
-    EdgeConstraint(int time, Location input_location_1, Location input_location_2)
-            : time(time),
+    EdgeConstraint(int input_time, Location input_location_1, Location input_location_2)
+            : time(input_time),
               location_1(input_location_1),
               location_2(input_location_2)
     {}
