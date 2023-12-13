@@ -379,7 +379,8 @@ public:
     // low level 工具函数 get_neighbors的工具函数
     bool is_element_of_edge_constraints(const TimeLocation& s1, const TimeLocation& s2)
     {
-        return agent_constraints.edge_constraints.find(EdgeConstraint(s1.time_step, s1.location, s2.location)) != agent_constraints.edge_constraints.end();
+        return agent_constraints.edge_constraints.find(EdgeConstraint(s1.time_step, s1.location, s2.location))
+            != agent_constraints.edge_constraints.end();
     }
 
     // low level 工具函数: 引用传递计算大型结果
