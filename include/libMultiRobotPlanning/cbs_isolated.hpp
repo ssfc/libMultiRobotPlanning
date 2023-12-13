@@ -319,14 +319,15 @@ public:
     // Set the current context to a particular agent with the given set of agent_constraints
     void set_low_level_context(TimeLocation input_time_location,
                                Location input_goal,
-                               AgentConstraints input_constraints)
+                               AgentConstraints input_constraints,
+                               int input_max_goal_constraint_time)
     {
         start_time_location = input_time_location;
         goal = input_goal;
         agent_constraints = input_constraints;
 
         // assert(input_constraints);  // NOLINT
-        max_goal_constraint_time = -1;
+        max_goal_constraint_time = input_max_goal_constraint_time;
         for (const auto& vertex_constraint : agent_constraints.vertex_constraints)
         {
             if (vertex_constraint.location == goal)
@@ -889,7 +890,7 @@ public:
                                   root.all_agents_constraints[0], -1, false);
         for (size_t i = 0; i < num_agents; i++)
         {
-            low_level.set_low_level_context(start_time_locations[i], goals[i], root.all_agents_constraints[i]);
+            low_level.set_low_level_context(start_time_locations[i], goals[i], root.all_agents_constraints[i], -1);
             bool is_path_found = low_level.low_level_search(root.solution[i], num_expanded_low_level_nodes);
 
             if (!is_path_found)
@@ -1007,7 +1008,7 @@ public:
                 // 这里是增量更新，计算前先减去，算完后再加回来。
                 new_node.cost -= new_node.solution[i].cost;
 
-                low_level.set_low_level_context(start_time_locations[i], goals[i], new_node.all_agents_constraints[i]);
+                low_level.set_low_level_context(start_time_locations[i], goals[i], new_node.all_agents_constraints[i], -1);
                 bool is_path_found = low_level.low_level_search(new_node.solution[i], num_expanded_low_level_nodes);
 
                 if (is_path_found)
