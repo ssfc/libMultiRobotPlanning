@@ -747,11 +747,11 @@ public:
     }
 
     // HighLevel 工具函数 get_all_paths_first_conflicts 的工具函数
-    TimeLocation get_location(size_t input_agent_index, const std::vector<AgentPlan>& solution, size_t t)
+    Location get_location(size_t input_agent_index, const std::vector<AgentPlan>& solution, size_t t)
     {
         if (t < solution[input_agent_index].path.size())
         {
-            return solution[input_agent_index].path[t];
+            return solution[input_agent_index].path[t].location;
         }
 
         if (disappear_at_goal)
@@ -759,10 +759,10 @@ public:
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
             // This will cause all calls to equal_except_time(.) to return false.
-            return TimeLocation(-1, Location(-1 * (input_agent_index + 1), -1));
+            return Location(-1 * (input_agent_index + 1), -1);
         }
 
-        return solution[input_agent_index].path.back();
+        return solution[input_agent_index].path.back().location;
     }
 
     // HighLevel 工具函数: 引用传递计算大型结果
@@ -782,17 +782,17 @@ public:
             // check drive-drive vertex collisions
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1 = get_location(i, solution, t);
+                auto a1_next_location = get_location(i, solution, t);
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2 = get_location(j, solution, t);
-                    if (state1.location == state2.location)
+                    auto a2_next_location = get_location(j, solution, t);
+                    if (a1_next_location == a2_next_location)
                     {
                         first_conflict.time_step = t;
                         first_conflict.agent_id_1 = i;
                         first_conflict.agent_id_2 = j;
                         first_conflict.conflict_type = Conflict::VertexConflict;
-                        first_conflict.locations.emplace_back(state1.location);
+                        first_conflict.locations.emplace_back(a1_next_location);
                         // cout << "VC " << t << "," << state1.x << "," << state1.y <<
                         // endl;
 
@@ -804,22 +804,22 @@ public:
             // drive-drive edge (swap)
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1a = get_location(i, solution, t);
-                TimeLocation state1b = get_location(i, solution, t + 1);
+                auto a1_current_location = get_location(i, solution, t);
+                auto a1_next_location = get_location(i, solution, t + 1);
 
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2a = get_location(j, solution, t);
-                    TimeLocation state2b = get_location(j, solution, t + 1);
-                    if ((state1a.location == state2b.location)
-                        && (state1b.location == state2a.location))
+                    auto a2_current_location = get_location(j, solution, t);
+                    auto a2_next_location = get_location(j, solution, t + 1);
+                    if ((a1_current_location == a2_next_location)
+                        && (a1_next_location == a2_current_location))
                     {
                         first_conflict.time_step = t;
                         first_conflict.agent_id_1 = i;
                         first_conflict.agent_id_2 = j;
                         first_conflict.conflict_type = Conflict::EdgeConflict;
-                        first_conflict.locations.emplace_back(state1a.location);
-                        first_conflict.locations.emplace_back(state1b.location);
+                        first_conflict.locations.emplace_back(a1_current_location);
+                        first_conflict.locations.emplace_back(a1_next_location);
 
                         return true;
                     }
