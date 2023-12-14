@@ -149,12 +149,6 @@ public:
               location_2(input_location_2)
     {}
 
-    bool operator<(const EdgeConstraint& other) const
-    {
-        return std::tie(time_step, location_1.x, location_1.y, location_2.x, location_2.y) <
-               std::tie(other.time_step, other.location_1.x, other.location_1.y, other.location_2.x, other.location_2.y);
-    }
-
     bool operator==(const EdgeConstraint& other) const
     {
         return std::tie(time_step, location_1.x, location_1.y, location_2.x, location_2.y) ==
