@@ -151,8 +151,8 @@ public:
 
     bool operator==(const EdgeConstraint& other) const
     {
-        return std::tie(time_step, location_1.x, location_1.y, location_2.x, location_2.y) ==
-               std::tie(other.time_step, other.location_1.x, other.location_1.y, other.location_2.x, other.location_2.y);
+        return std::tie(time_step, location_1, location_2) ==
+               std::tie(other.time_step, other.location_1, other.location_2);
     }
 
     friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& edge_constraint)
