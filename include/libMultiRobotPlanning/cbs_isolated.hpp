@@ -911,8 +911,8 @@ public:
             // if P has no conflict then
             //  A1 LINE 10
             // C ← first conflict (ai, aj , v, t) in P
-            Conflict conflict;
-            if (!get_all_paths_first_conflict(best_node.solution, conflict))
+            Conflict best_node_conflict;
+            if (!get_all_paths_first_conflict(best_node.solution, best_node_conflict))
             {
                 solution = best_node.solution;
 
@@ -970,7 +970,7 @@ public:
 
             // A1 LINE 11
             // for each agent ai in C do
-            auto new_constraints = generate_constraints_from_conflict(conflict);
+            auto new_constraints = generate_constraints_from_conflict(best_node_conflict);
             for (const auto& new_constraint : new_constraints)
             {
                 // std::cout << "Add HL node for " << new_constraint.first << std::endl;
