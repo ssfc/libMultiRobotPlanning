@@ -747,7 +747,7 @@ public:
     }
 
     // HighLevel 工具函数 get_all_paths_first_conflicts 的工具函数
-    TimeLocation get_time_location(size_t input_agent_index, const std::vector<AgentPlan>& solution, size_t t)
+    TimeLocation get_location(size_t input_agent_index, const std::vector<AgentPlan>& solution, size_t t)
     {
         if (t < solution[input_agent_index].path.size())
         {
@@ -782,10 +782,10 @@ public:
             // check drive-drive vertex collisions
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1 = get_time_location(i, solution, t);
+                TimeLocation state1 = get_location(i, solution, t);
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2 = get_time_location(j, solution, t);
+                    TimeLocation state2 = get_location(j, solution, t);
                     if (state1.location == state2.location)
                     {
                         first_conflict.time_step = t;
@@ -804,13 +804,13 @@ public:
             // drive-drive edge (swap)
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1a = get_time_location(i, solution, t);
-                TimeLocation state1b = get_time_location(i, solution, t + 1);
+                TimeLocation state1a = get_location(i, solution, t);
+                TimeLocation state1b = get_location(i, solution, t + 1);
 
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2a = get_time_location(j, solution, t);
-                    TimeLocation state2b = get_time_location(j, solution, t + 1);
+                    TimeLocation state2a = get_location(j, solution, t);
+                    TimeLocation state2b = get_location(j, solution, t + 1);
                     if ((state1a.location == state2b.location)
                         && (state1b.location == state2a.location))
                     {
