@@ -746,7 +746,7 @@ public:
 
     }
 
-    // HighLevel 工具函数 get_all_paths_first_conflicts 的工具函数
+    // HighLevel 工具函数 get_all_paths_first_conflict 的工具函数
     Location get_location(size_t input_agent_index, const std::vector<AgentPlan>& solution, size_t t)
     {
         if (t < solution[input_agent_index].path.size())
@@ -769,7 +769,7 @@ public:
     // Finds the first conflict for the given solution for each agent.
     // Return true if a conflict was found and false otherwise.
     // Comment: 这个函数有两个目标，是否有冲突，有冲突还要引用并改变冲突。
-    bool get_all_paths_first_conflicts(const std::vector<AgentPlan>& solution, Conflict& first_conflict)
+    bool get_all_paths_first_conflict(const std::vector<AgentPlan>& solution, Conflict& first_conflict)
     {
         int max_t = 0;
         for (const auto& sol : solution)
@@ -912,7 +912,7 @@ public:
             //  A1 LINE 10
             // C ← first conflict (ai, aj , v, t) in P
             Conflict conflict;
-            if (!get_all_paths_first_conflicts(best_node.solution, conflict))
+            if (!get_all_paths_first_conflict(best_node.solution, conflict))
             {
                 solution = best_node.solution;
 
