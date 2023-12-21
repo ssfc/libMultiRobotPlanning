@@ -36,7 +36,7 @@ CMake Error at C:/Program Files/JetBrains/CLion 2022.2.3/bin/cmake/win/x64/share
   Could NOT find Boost (missing: program_options) (found version "1.81.0")
 Call Stack (most recent call first):
   C:/Program Files/JetBrains/CLion 2022.2.3/bin/cmake/win/x64/share/cmake-3.27/Modules/FindPackageHandleStandardArgs.cmake:600 (_FPHSA_FAILURE_MESSAGE)
-  C:/Program Files/JetBrains/CLion 2022.2.3/bin/cmake/win/x64/share/cmake-3.27/Modules/FindBoost.cmake:2378 (find_package_handle_standard_args)
+  C:/Program Files/JetBrains/CLion 2022.2.3/bin/cmake/win/x64/share/cmake-3.27/Modules/FindBoost.cmake:2392 (find_package_handle_standard_args)
   CMakeLists.txt:5 (find_package)
 
 
