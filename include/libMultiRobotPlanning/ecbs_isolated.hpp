@@ -8,6 +8,7 @@
 #include <map>
 
 #include "a_star_epsilon.hpp"
+#include "util.hpp"
 
 namespace libMultiRobotPlanning {
 
