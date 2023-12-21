@@ -44,6 +44,7 @@ set(ALL_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/cbs_isolated.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/cbs_ta.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/ecbs.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/ecbs_isolated.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/ecbs_ta.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/neighbor.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/next_best_assignment.hpp
@@ -59,6 +60,7 @@ set(ALL_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs_isolated.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs_ta.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/ecbs.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/example/ecbs_isolated.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/ecbs_ta.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/mapf_prioritized_sipp.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/next_best_assignment.cpp
@@ -133,6 +135,10 @@ target_link_libraries(cbs_ta ${Boost_LIBRARIES} yaml-cpp)
 ## ecbs
 add_executable(ecbs example/ecbs.cpp)
 target_link_libraries(ecbs ${Boost_LIBRARIES} yaml-cpp)
+
+## ecbs_isolated
+add_executable(ecbs_isolated example/ecbs_isolated.cpp)
+target_link_libraries(ecbs_isolated ${Boost_LIBRARIES} yaml-cpp)
 
 ## ecbs_ta
 add_executable(ecbs_ta example/ecbs_ta.cpp)
