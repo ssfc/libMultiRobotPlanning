@@ -56,8 +56,7 @@ struct PlanResult
 };
 
 
-template <typename Cost, typename Environment,
-        typename LocationHasher = std::hash<TimeLocation> >
+template <typename Environment, typename LocationHasher = std::hash<TimeLocation> >
 class AStarEpsilon {
 public:
     AStarEpsilon(Environment& environment, float w)
@@ -75,9 +74,8 @@ public:
                 focalSet;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<TimeLocation, fibHeapHandle_t, LocationHasher> stateToHeap;
         std::unordered_set<TimeLocation, LocationHasher> closedSet;
-        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, Cost, Cost>,
-                LocationHasher>
-                cameFrom;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>,
+                LocationHasher> cameFrom;
 
         auto handle = openSet.push(
                 Node(startState, m_env.admissible_heuristic(startState), 0, 0));
@@ -89,7 +87,7 @@ public:
         std::vector<Neighbor> neighbors;
         neighbors.reserve(10);
 
-        Cost bestFScore = (*handle).fScore;
+        int bestFScore = (*handle).fScore;
 
         // std::cout << "new search" << std::endl;
 
@@ -98,11 +96,11 @@ public:
 #ifdef REBUILT_FOCAL_LIST
             focalSet.clear();
   const auto& top = openSet.top();
-  Cost bestVal = top.fScore;
+  int bestVal = top.fScore;
   auto iter = openSet.ordered_begin();
   auto iterEnd = openSet.ordered_end();
   for (; iter != iterEnd; ++iter) {
-    Cost val = iter->fScore;
+    int val = iter->fScore;
     if (val <= bestVal * m_w) {
       const auto& s = *iter;
       focalSet.push(s.handle);
@@ -112,7 +110,7 @@ public:
   }
 #else
             {
-                Cost oldBestFScore = bestFScore;
+                int oldBestFScore = bestFScore;
                 bestFScore = openSet.top().fScore;
                 // std::cout << "bestFScore: " << bestFScore << std::endl;
                 if (bestFScore > oldBestFScore) {
@@ -121,7 +119,7 @@ public:
                     auto iter = openSet.ordered_begin();
                     auto iterEnd = openSet.ordered_end();
                     for (; iter != iterEnd; ++iter) {
-                        Cost val = iter->fScore;
+                        int val = iter->fScore;
                         if (val > oldBestFScore * m_w && val <= bestFScore * m_w) {
                             const Node& n = *iter;
                             focalSet.push(n.handle);
@@ -139,12 +137,12 @@ public:
     // focalSet_t focalSetGolden;
     bool mismatch = false;
     const auto& top = openSet.top();
-    Cost bestVal = top.fScore;
+    int bestVal = top.fScore;
     auto iter = openSet.ordered_begin();
     auto iterEnd = openSet.ordered_end();
     for (; iter != iterEnd; ++iter) {
       const auto& s = *iter;
-      Cost val = s.fScore;
+      int val = s.fScore;
       if (val <= bestVal * m_w) {
         // std::cout << "should: " << s << std::endl;
         // focalSetGolden.push(s.handle);
@@ -202,13 +200,13 @@ public:
             m_env.get_neighbors(current.state, neighbors);
             for (const Neighbor& neighbor : neighbors) {
                 if (closedSet.find(neighbor.time_location) == closedSet.end()) {
-                    Cost tentative_gScore = current.gScore + neighbor.cost;
+                    int tentative_gScore = current.gScore + neighbor.cost;
                     auto iter = stateToHeap.find(neighbor.time_location);
                     if (iter == stateToHeap.end()) {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
-                        Cost fScore =
+                        int fScore =
                                 tentative_gScore + m_env.admissible_heuristic(neighbor.time_location);
-                        Cost focalHeuristic =
+                        int focalHeuristic =
                                 current.focalHeuristic +
                                 m_env.focalStateHeuristic(neighbor.time_location, tentative_gScore) +
                                 m_env.focalTransitionHeuristic(current.state, neighbor.time_location,
@@ -231,12 +229,12 @@ public:
                         if (tentative_gScore >= (*handle).gScore) {
                             continue;
                         }
-                        Cost last_gScore = (*handle).gScore;
-                        Cost last_fScore = (*handle).fScore;
+                        int last_gScore = (*handle).gScore;
+                        int last_fScore = (*handle).fScore;
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
                         // << last_gScore << " " << *handle << std::endl;
                         // update f and gScore
-                        Cost delta = last_gScore - tentative_gScore;
+                        int delta = last_gScore - tentative_gScore;
                         (*handle).gScore = tentative_gScore;
                         (*handle).fScore -= delta;
                         openSet.increase(handle);
@@ -283,7 +281,7 @@ typedef typename openSet_t::handle_type fibHeapHandle_t;
 #endif
 
     struct Node {
-        Node(const TimeLocation& state, Cost fScore, Cost gScore, Cost focalHeuristic)
+        Node(const TimeLocation& state, int fScore, int gScore, int focalHeuristic)
                 : state(state),
                   fScore(fScore),
                   gScore(gScore),
@@ -310,9 +308,9 @@ typedef typename openSet_t::handle_type fibHeapHandle_t;
 
         TimeLocation state;
 
-        Cost fScore;
-        Cost gScore;
-        Cost focalHeuristic;
+        int fScore;
+        int gScore;
+        int focalHeuristic;
 
         fibHeapHandle_t handle;
         // #ifdef USE_FIBONACCI_HEAP
@@ -685,7 +683,7 @@ typedef typename openSet_t::handle_type handle_t;
 private:
     Environment& m_env;
     float m_w;
-    typedef AStarEpsilon<Cost, LowLevelEnvironment> LowLevelSearch_t;
+    typedef AStarEpsilon<LowLevelEnvironment> LowLevelSearch_t;
 };
 
 
