@@ -19,7 +19,7 @@
 
 
 
-template <typename TimeLocation, typename Action, typename Cost>
+template <typename Action, typename Cost>
 struct Neighbor
 {
     //! neighboring location
@@ -80,7 +80,7 @@ public:
 
         focalSet.push(handle);
 
-        std::vector<Neighbor<State, Action, Cost> > neighbors;
+        std::vector<Neighbor<Action, Cost> > neighbors;
         neighbors.reserve(10);
 
         Cost bestFScore = (*handle).fScore;
@@ -194,7 +194,7 @@ public:
             // traverse neighbors
             neighbors.clear();
             m_env.get_neighbors(current.state, neighbors);
-            for (const Neighbor<State, Action, Cost>& neighbor : neighbors) {
+            for (const Neighbor<Action, Cost>& neighbor : neighbors) {
                 if (closedSet.find(neighbor.time_location) == closedSet.end()) {
                     Cost tentative_gScore = current.gScore + neighbor.cost;
                     auto iter = stateToHeap.find(neighbor.time_location);
@@ -652,7 +652,7 @@ typedef typename openSet_t::handle_type handle_t;
         bool is_solution(const State& s) { return m_env.is_solution(s); }
 
         void get_neighbors(const State& s,
-                           std::vector<Neighbor<State, Action, Cost> >& neighbors) {
+                           std::vector<Neighbor<Action, Cost> >& neighbors) {
             m_env.get_neighbors(s, neighbors);
         }
 
