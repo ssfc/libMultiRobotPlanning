@@ -288,7 +288,7 @@ private:
             }
         }
     };
-    
+
     // typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
     // boost::heap::mutable_<true> > openSet_t;
     // typedef typename openSet_t::handle_type fibHeapHandle_t;
@@ -352,23 +352,6 @@ public:
         int id = 1;
         while (!open.empty()) {
 // update focal list
-#ifdef REBUILT_FOCAL_LIST
-            focal.clear();
-  int LB = open.top().LB;
-
-  auto iter = open.ordered_begin();
-  auto iterEnd = open.ordered_end();
-  for (; iter != iterEnd; ++iter) {
-    float val = iter->cost;
-    // std::cout << "  cost: " << val << std::endl;
-    if (val <= LB * m_w) {
-      const HighLevelNode& node = *iter;
-      focal.push(node.handle);
-    } else {
-      break;
-    }
-  }
-#else
             {
                 int oldBestCost = bestCost;
                 bestCost = open.top().cost;
@@ -390,7 +373,7 @@ public:
                     }
                 }
             }
-#endif
+
 // check focal list/open list consistency
 #ifdef CHECK_FOCAL_LIST
             {
