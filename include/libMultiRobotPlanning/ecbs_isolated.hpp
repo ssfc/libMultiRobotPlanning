@@ -18,7 +18,6 @@
 #include "neighbor.hpp"
 #include "planresult.hpp"
 
-// #include "ecbs_low.hpp"
 #include "util.hpp"
 
 namespace libMultiRobotPlanning {
