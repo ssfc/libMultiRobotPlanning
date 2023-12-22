@@ -232,12 +232,7 @@ public:
 private:
     struct Node;
 
-#ifdef USE_FIBONACCI_HEAP
-    typedef typename boost::heap::fibonacci_heap<Node> openSet_t;
-typedef typename openSet_t::handle_type fibHeapHandle_t;
-// typedef typename boost::heap::fibonacci_heap<fibHeapHandle_t,
-// boost::heap::compare<compareFocalHeuristic> > focalSet_t;
-#else
+
     typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
     boost::heap::mutable_<true> >
     openSet_t;
@@ -245,7 +240,7 @@ typedef typename openSet_t::handle_type fibHeapHandle_t;
 // typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
 // boost::heap::arity<2>, boost::heap::mutable_<true>,
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
-#endif
+
 
     struct Node {
         Node(const TimeLocation& state, int fScore, int gScore, int focalHeuristic)
