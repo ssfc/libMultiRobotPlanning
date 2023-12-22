@@ -43,11 +43,11 @@ struct Neighbor
     {}
 };
 
-template <typename State, typename Action, typename Cost>
+template <typename TimeLocation, typename Action, typename Cost>
 struct PlanResult
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<State, Cost> > path;
+    std::vector<std::pair<TimeLocation, Cost> > path;
     //! actions and their cost
     std::vector<std::pair<Action, Cost> > actions;
     //! actual cost of the result
