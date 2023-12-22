@@ -7,9 +7,6 @@
 
 #include <map>
 
-#ifdef USE_FIBONACCI_HEAP
-#include <boost/heap/fibonacci_heap.hpp>
-#endif
 
 #include <boost/heap/d_ary_heap.hpp>
 #include <unordered_map>
@@ -259,12 +256,6 @@ private:
         int focalHeuristic;
 
         fibHeapHandle_t handle;
-        // #ifdef USE_FIBONACCI_HEAP
-        //   typename boost::heap::fibonacci_heap<Node>::handle_type handle;
-        // #else
-        //   typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
-        //   boost::heap::mutable_<true> >::handle_type handle;
-        // #endif
     };
 
     struct compareFocalHeuristic {
