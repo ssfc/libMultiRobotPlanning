@@ -292,7 +292,7 @@ public:
     }
 
     void get_neighbors(const TimeLocation& s,
-                       std::vector<Neighbor<Action, int> >& neighbors) {
+                       std::vector<Neighbor<int> >& neighbors) {
         // std::cout << "#VC " << constraints.vertexConstraints.size() << std::endl;
         // for(const auto& vc : constraints.vertexConstraints) {
         //   std::cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
@@ -303,34 +303,34 @@ public:
             TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y));
             if (location_valid(n) && transitionValid(s, n)) {
                 neighbors.emplace_back(
-                        Neighbor<Action, int>(n, Action::Wait, 1));
+                        Neighbor<int>(n, Action::Wait, 1));
             }
         }
         {
             TimeLocation n(s.time_step + 1, Location(s.location.x - 1, s.location.y));
             if (location_valid(n) && transitionValid(s, n)) {
                 neighbors.emplace_back(
-                        Neighbor<Action, int>(n, Action::Left, 1));
+                        Neighbor<int>(n, Action::Left, 1));
             }
         }
         {
             TimeLocation n(s.time_step + 1, Location(s.location.x + 1, s.location.y));
             if (location_valid(n) && transitionValid(s, n)) {
                 neighbors.emplace_back(
-                        Neighbor<Action, int>(n, Action::Right, 1));
+                        Neighbor<int>(n, Action::Right, 1));
             }
         }
         {
             TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y + 1));
             if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(Neighbor<Action, int>(n, Action::Up, 1));
+                neighbors.emplace_back(Neighbor<int>(n, Action::Up, 1));
             }
         }
         {
             TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y - 1));
             if (location_valid(n) && transitionValid(s, n)) {
                 neighbors.emplace_back(
-                        Neighbor<Action, int>(n, Action::Down, 1));
+                        Neighbor<int>(n, Action::Down, 1));
             }
         }
     }
