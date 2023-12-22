@@ -15,12 +15,29 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "neighbor.hpp"
 #include "planresult.hpp"
 
 #include "util.hpp"
 
 namespace libMultiRobotPlanning {
+
+    template <typename Location, typename Action, typename Cost>
+    struct Neighbor
+    {
+        //! neighboring location
+        Location location;
+        //! action to get to the neighboring location
+        Action action;
+        //! cost to get to the neighboring location, usually 1
+        Cost cost;
+
+        Neighbor(const Location& input_location, const Action& input_action, Cost input_cost)
+                : location(input_location),
+                  action(input_action),
+                  cost(input_cost)
+        {}
+    };
+
 
     template <typename State, typename Action, typename Cost, typename Environment,
             typename LocationHasher = std::hash<State> >
