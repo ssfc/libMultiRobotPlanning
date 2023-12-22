@@ -146,7 +146,7 @@ namespace libMultiRobotPlanning {
 
                 Conflict conflict;
                 if (!m_env.getFirstConflict(P.solution, conflict)) {
-                    std::cout << "done; cost: " << P.cost << std::endl;
+                    // std::cout << "done; cost: " << P.cost << std::endl;
                     solution = P.solution;
                     return true;
                 }
