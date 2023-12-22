@@ -13,9 +13,6 @@
 #include <libMultiRobotPlanning/ecbs_isolated.hpp>
 #include "timer.hpp"
 
-// using libMultiRobotPlanning::ECBS;
-// using libMultiRobotPlanning::Neighbor;
-// using libMultiRobotPlanning::PlanResult;
 
 struct State {
     State(int time, int x, int y) : time(time), x(x), y(y) {}
