@@ -43,7 +43,7 @@ struct Neighbor
     {}
 };
 
-template <typename Action, typename Cost>
+template <typename Cost>
 struct PlanResult
 {
     // path constructing locations and their g_score
@@ -65,7 +65,7 @@ public:
             : m_env(environment), m_w(w) {}
 
     bool search(const State& startState,
-                PlanResult<Action, Cost>& solution) {
+                PlanResult<Cost>& solution) {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(startState, 0));
         solution.actions.clear();
@@ -374,7 +374,7 @@ public:
     ECBS(Environment& environment, float w) : m_env(environment), m_w(w) {}
 
     bool search(const std::vector<State>& initialStates,
-                std::vector<PlanResult<Action, Cost> >& solution) {
+                std::vector<PlanResult<Cost> >& solution) {
         HighLevelNode start;
         start.solution.resize(initialStates.size());
         start.constraints.resize(initialStates.size());
@@ -574,7 +574,7 @@ typedef typename openSet_t::handle_type handle_t;
 #endif
 
     struct HighLevelNode {
-        std::vector<PlanResult<Action, Cost> > solution;
+        std::vector<PlanResult<Cost> > solution;
         std::vector<Constraints> constraints;
 
         Cost cost;
@@ -633,7 +633,7 @@ typedef typename openSet_t::handle_type handle_t;
     struct LowLevelEnvironment {
         LowLevelEnvironment(
                 Environment& env, size_t agentIdx, const Constraints& constraints,
-                const std::vector<PlanResult<Action, Cost> >& solution)
+                const std::vector<PlanResult<Cost> >& solution)
                 : m_env(env)
                 // , m_agentIdx(agentIdx)
                 // , m_constraints(constraints)
@@ -680,7 +680,7 @@ typedef typename openSet_t::handle_type handle_t;
         Environment& m_env;
         // size_t m_agentIdx;
         // const Constraints& m_constraints;
-        const std::vector<PlanResult<Action, Cost> >& m_solution;
+        const std::vector<PlanResult<Cost> >& m_solution;
     };
 
 private:
