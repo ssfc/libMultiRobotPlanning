@@ -590,10 +590,18 @@ int main(int argc, char* argv[]) {
         std::ofstream out(outputFile);
         out << "statistics:" << std::endl;
         out << "  cost: " << cost << std::endl;
+        std::cout << "  cost: " << cost << std::endl;
+
         out << "  makespan: " << makespan << std::endl;
         out << "  runtime: " << timer.elapsedSeconds() << std::endl;
+        std::cout << "  runtime: " << timer.elapsedSeconds() << std::endl;
+
         out << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
+        std::cout << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
+
         out << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
+        std::cout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
+
         out << "schedule:" << std::endl;
         for (size_t a = 0; a < solution.size(); ++a) {
             // std::cout << "Solution for: " << a << std::endl;
@@ -611,6 +619,15 @@ int main(int argc, char* argv[]) {
                     << "      y: " << state.first.y << std::endl
                     << "      t: " << state.second << std::endl;
             }
+
+            std::cout << "agent " << a << ": ";
+
+            for (const auto& state : solution[a].path)
+            {
+                std::cout << "(" << state.first.x << "," << state.first.y << "),";
+            }
+
+            std::cout << std::endl;
         }
     } else {
         std::cout << "Planning NOT successful!" << std::endl;
