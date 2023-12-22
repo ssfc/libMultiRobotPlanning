@@ -331,8 +331,7 @@ namespace libMultiRobotPlanning {
     private:
         Environment& m_env;
         float m_w;
-        typedef AStarEpsilon<State, Action, Cost, LowLevelEnvironment>
-                LowLevelSearch_t;
+        typedef AStarEpsilon<State, Action, Cost, LowLevelEnvironment> LowLevelSearch_t;
     };
 
 }  // namespace libMultiRobotPlanning

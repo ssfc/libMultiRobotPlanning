@@ -21,7 +21,7 @@
 // #define CHECK_FOCAL_LIST
 
 namespace libMultiRobotPlanning {
-    
+
     template <typename State, typename Action, typename Cost, typename Environment,
             typename LocationHasher = std::hash<State> >
     class AStarEpsilon {
