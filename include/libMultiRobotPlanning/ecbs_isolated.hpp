@@ -364,7 +364,7 @@ private:
     float m_w;
 };
 
-template <typename Cost, typename Conflict,
+template <typename Conflict,
         typename Constraints, typename Environment>
 class ECBS {
 public:
@@ -408,7 +408,7 @@ public:
         (*handle).handle = handle;
         focal.push(handle);
 
-        Cost bestCost = (*handle).cost;
+        int bestCost = (*handle).cost;
 
         solution.clear();
         int id = 1;
@@ -416,7 +416,7 @@ public:
 // update focal list
 #ifdef REBUILT_FOCAL_LIST
             focal.clear();
-  Cost LB = open.top().LB;
+  int LB = open.top().LB;
 
   auto iter = open.ordered_begin();
   auto iterEnd = open.ordered_end();
@@ -432,7 +432,7 @@ public:
   }
 #else
             {
-                Cost oldBestCost = bestCost;
+                int oldBestCost = bestCost;
                 bestCost = open.top().cost;
                 // std::cout << "bestFScore: " << bestFScore << std::endl;
                 if (bestCost > oldBestCost) {
@@ -441,7 +441,7 @@ public:
                     auto iter = open.ordered_begin();
                     auto iterEnd = open.ordered_end();
                     for (; iter != iterEnd; ++iter) {
-                        Cost val = iter->cost;
+                        int val = iter->cost;
                         if (val > oldBestCost * m_w && val <= bestCost * m_w) {
                             const HighLevelNode& n = *iter;
                             focal.push(n.handle);
@@ -459,12 +459,12 @@ public:
     // focalSet_t focalSetGolden;
     bool mismatch = false;
     const auto& top = open.top();
-    Cost bestCost = top.cost;
+    int bestCost = top.cost;
     auto iter = open.ordered_begin();
     auto iterEnd = open.ordered_end();
     for (; iter != iterEnd; ++iter) {
       const auto& s = *iter;
-      Cost val = s.cost;
+      int val = s.cost;
       if (val <= bestCost * m_w) {
         // std::cout << "should: " << s << std::endl;
         // focalSetGolden.push(s.handle);
@@ -574,10 +574,10 @@ typedef typename openSet_t::handle_type handle_t;
         std::vector<PlanResult> solution;
         std::vector<Constraints> constraints;
 
-        Cost cost;
-        Cost LB;  // sum of fmin of solution
+        int cost;
+        int LB;  // sum of fmin of solution
 
-        Cost focalHeuristic;
+        int focalHeuristic;
 
         int id;
 
@@ -639,16 +639,19 @@ typedef typename openSet_t::handle_type handle_t;
             m_env.setLowLevelContext(agentIdx, &constraints);
         }
 
-        Cost admissible_heuristic(const TimeLocation& s) {
+        int admissible_heuristic(const TimeLocation& s)
+        {
             return m_env.admissible_heuristic(s);
         }
 
-        Cost focalStateHeuristic(const TimeLocation& s, Cost gScore) {
+        int focalStateHeuristic(const TimeLocation& s, int gScore)
+        {
             return m_env.focalStateHeuristic(s, gScore, m_solution);
         }
 
-        Cost focalTransitionHeuristic(const TimeLocation& s1, const TimeLocation& s2,
-                                      Cost gScoreS1, Cost gScoreS2) {
+        int focalTransitionHeuristic(const TimeLocation& s1, const TimeLocation& s2,
+                                      int gScoreS1, int gScoreS2)
+        {
             return m_env.focalTransitionHeuristic(s1, s2, gScoreS1, gScoreS2,
                                                   m_solution);
         }
@@ -660,7 +663,7 @@ typedef typename openSet_t::handle_type handle_t;
             m_env.get_neighbors(s, neighbors);
         }
 
-        void onExpandNode(const TimeLocation& s, Cost fScore, Cost gScore) {
+        void onExpandNode(const TimeLocation& s, int fScore, int gScore) {
             // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
             // << gScore << std::endl;
             // m_env.onExpandLowLevelNode(s, fScore, gScore, m_agentIdx,
@@ -668,7 +671,8 @@ typedef typename openSet_t::handle_type handle_t;
             m_env.onExpandLowLevelNode(s, fScore, gScore);
         }
 
-        void onDiscover(const TimeLocation& /*s*/, Cost /*fScore*/, Cost /*gScore*/) {
+        void onDiscover(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
+        {
             // std::cout << "LL discover: " << s << std::endl;
             // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
         }
