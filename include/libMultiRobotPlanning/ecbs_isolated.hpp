@@ -56,14 +56,14 @@ struct PlanResult
 };
 
 
-template <typename State, typename Action, typename Cost, typename Environment,
-        typename LocationHasher = std::hash<State> >
+template <typename TimeLocation, typename Action, typename Cost, typename Environment,
+        typename LocationHasher = std::hash<TimeLocation> >
 class AStarEpsilon {
 public:
     AStarEpsilon(Environment& environment, float w)
             : m_env(environment), m_w(w) {}
 
-    bool search(const State& startState,
+    bool search(const TimeLocation& startState,
                 PlanResult& solution) {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(startState, 0));
@@ -73,9 +73,9 @@ public:
         openSet_t openSet;
         focalSet_t
                 focalSet;  // subset of open nodes that are within suboptimality bound
-        std::unordered_map<State, fibHeapHandle_t, LocationHasher> stateToHeap;
-        std::unordered_set<State, LocationHasher> closedSet;
-        std::unordered_map<State, std::tuple<State, Action, Cost, Cost>,
+        std::unordered_map<TimeLocation, fibHeapHandle_t, LocationHasher> stateToHeap;
+        std::unordered_set<TimeLocation, LocationHasher> closedSet;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, Cost, Cost>,
                 LocationHasher>
                 cameFrom;
 
@@ -251,7 +251,7 @@ public:
 
                     // Best path for this node so far
                     // TODO: this is not the best way to update "cameFrom", but otherwise
-                    // default c'tors of State and Action are required
+                    // default c'tors of TimeLocation and Action are required
                     cameFrom.erase(neighbor.time_location);
                     cameFrom.insert(std::make_pair<>(
                             neighbor.time_location,
@@ -283,7 +283,7 @@ typedef typename openSet_t::handle_type fibHeapHandle_t;
 #endif
 
     struct Node {
-        Node(const State& state, Cost fScore, Cost gScore, Cost focalHeuristic)
+        Node(const TimeLocation& state, Cost fScore, Cost gScore, Cost focalHeuristic)
                 : state(state),
                   fScore(fScore),
                   gScore(gScore),
@@ -308,7 +308,7 @@ typedef typename openSet_t::handle_type fibHeapHandle_t;
             return os;
         }
 
-        State state;
+        TimeLocation state;
 
         Cost fScore;
         Cost gScore;
