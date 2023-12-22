@@ -43,17 +43,16 @@ struct Neighbor
     {}
 };
 
-template <typename Cost>
 struct PlanResult
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<TimeLocation, Cost> > path;
+    std::vector<std::pair<TimeLocation, int> > path;
     //! actions and their cost
-    std::vector<std::pair<Action, Cost> > actions;
+    std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
-    Cost cost;
+    int cost;
     //! lower bound of the cost (for suboptimal solvers)
-    Cost fmin;
+    int fmin;
 };
 
 
@@ -65,7 +64,7 @@ public:
             : m_env(environment), m_w(w) {}
 
     bool search(const State& startState,
-                PlanResult<Cost>& solution) {
+                PlanResult& solution) {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(startState, 0));
         solution.actions.clear();
@@ -374,7 +373,7 @@ public:
     ECBS(Environment& environment, float w) : m_env(environment), m_w(w) {}
 
     bool search(const std::vector<State>& initialStates,
-                std::vector<PlanResult<Cost> >& solution) {
+                std::vector<PlanResult>& solution) {
         HighLevelNode start;
         start.solution.resize(initialStates.size());
         start.constraints.resize(initialStates.size());
@@ -574,7 +573,7 @@ typedef typename openSet_t::handle_type handle_t;
 #endif
 
     struct HighLevelNode {
-        std::vector<PlanResult<Cost> > solution;
+        std::vector<PlanResult> solution;
         std::vector<Constraints> constraints;
 
         Cost cost;
@@ -633,7 +632,7 @@ typedef typename openSet_t::handle_type handle_t;
     struct LowLevelEnvironment {
         LowLevelEnvironment(
                 Environment& env, size_t agentIdx, const Constraints& constraints,
-                const std::vector<PlanResult<Cost> >& solution)
+                const std::vector<PlanResult>& solution)
                 : m_env(env)
                 // , m_agentIdx(agentIdx)
                 // , m_constraints(constraints)
@@ -680,7 +679,7 @@ typedef typename openSet_t::handle_type handle_t;
         Environment& m_env;
         // size_t m_agentIdx;
         // const Constraints& m_constraints;
-        const std::vector<PlanResult<Cost> >& m_solution;
+        const std::vector<PlanResult>& m_solution;
     };
 
 private:
