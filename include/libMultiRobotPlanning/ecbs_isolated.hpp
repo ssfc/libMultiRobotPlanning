@@ -364,7 +364,7 @@ private:
     float m_w;
 };
 
-template <typename Action, typename Cost, typename Conflict,
+template <typename Cost, typename Conflict,
         typename Constraints, typename Environment>
 class ECBS {
 public:
