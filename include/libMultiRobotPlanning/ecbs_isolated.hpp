@@ -18,6 +18,14 @@
 #include "util.hpp"
 
 
+///
+enum class Action {
+    Up,
+    Down,
+    Left,
+    Right,
+    Wait,
+};
 
 template <typename Action, typename Cost>
 struct Neighbor
