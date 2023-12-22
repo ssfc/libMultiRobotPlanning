@@ -93,22 +93,6 @@ public:
 
         while (!openSet.empty()) {
 // update focal list
-#ifdef REBUILT_FOCAL_LIST
-            focalSet.clear();
-  const auto& top = openSet.top();
-  int bestVal = top.fScore;
-  auto iter = openSet.ordered_begin();
-  auto iterEnd = openSet.ordered_end();
-  for (; iter != iterEnd; ++iter) {
-    int val = iter->fScore;
-    if (val <= bestVal * m_w) {
-      const auto& s = *iter;
-      focalSet.push(s.handle);
-    } else {
-      break;
-    }
-  }
-#else
             {
                 int oldBestFScore = bestFScore;
                 bestFScore = openSet.top().fScore;
@@ -130,7 +114,7 @@ public:
                     }
                 }
             }
-#endif
+            
 // check focal list/open list consistency
 
             auto currentHandle = focalSet.top();
