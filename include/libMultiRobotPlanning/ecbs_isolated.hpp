@@ -23,14 +23,14 @@ template <typename TimeLocation, typename Action, typename Cost>
 struct Neighbor
 {
     //! neighboring location
-    TimeLocation location;
+    TimeLocation time_location;
     //! action to get to the neighboring location
     Action action;
     //! cost to get to the neighboring location, usually 1
     Cost cost;
 
-    Neighbor(const TimeLocation& input_location, const Action& input_action, Cost input_cost)
-            : location(input_location),
+    Neighbor(const TimeLocation& input_time_location, const Action& input_action, Cost input_cost)
+            : time_location(input_time_location),
               action(input_action),
               cost(input_cost)
     {}
@@ -195,28 +195,28 @@ public:
             neighbors.clear();
             m_env.get_neighbors(current.state, neighbors);
             for (const Neighbor<State, Action, Cost>& neighbor : neighbors) {
-                if (closedSet.find(neighbor.location) == closedSet.end()) {
+                if (closedSet.find(neighbor.time_location) == closedSet.end()) {
                     Cost tentative_gScore = current.gScore + neighbor.cost;
-                    auto iter = stateToHeap.find(neighbor.location);
+                    auto iter = stateToHeap.find(neighbor.time_location);
                     if (iter == stateToHeap.end()) {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         Cost fScore =
-                                tentative_gScore + m_env.admissible_heuristic(neighbor.location);
+                                tentative_gScore + m_env.admissible_heuristic(neighbor.time_location);
                         Cost focalHeuristic =
                                 current.focalHeuristic +
-                                m_env.focalStateHeuristic(neighbor.location, tentative_gScore) +
-                                m_env.focalTransitionHeuristic(current.state, neighbor.location,
+                                m_env.focalStateHeuristic(neighbor.time_location, tentative_gScore) +
+                                m_env.focalTransitionHeuristic(current.state, neighbor.time_location,
                                                                current.gScore,
                                                                tentative_gScore);
                         auto handle = openSet.push(
-                                Node(neighbor.location, fScore, tentative_gScore, focalHeuristic));
+                                Node(neighbor.time_location, fScore, tentative_gScore, focalHeuristic));
                         (*handle).handle = handle;
                         if (fScore <= bestFScore * m_w) {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focalSet.push(handle);
                         }
-                        stateToHeap.insert(std::make_pair<>(neighbor.location, handle));
-                        m_env.onDiscover(neighbor.location, fScore, tentative_gScore);
+                        stateToHeap.insert(std::make_pair<>(neighbor.time_location, handle));
+                        m_env.onDiscover(neighbor.time_location, fScore, tentative_gScore);
                         // std::cout << "  this is a new node " << fScore << "," <<
                         // tentative_gScore << std::endl;
                     } else {
@@ -234,7 +234,7 @@ public:
                         (*handle).gScore = tentative_gScore;
                         (*handle).fScore -= delta;
                         openSet.increase(handle);
-                        m_env.onDiscover(neighbor.location, (*handle).fScore,
+                        m_env.onDiscover(neighbor.time_location, (*handle).fScore,
                                          (*handle).gScore);
                         if ((*handle).fScore <= bestFScore * m_w &&
                             last_fScore > bestFScore * m_w) {
@@ -246,9 +246,9 @@ public:
                     // Best path for this node so far
                     // TODO: this is not the best way to update "cameFrom", but otherwise
                     // default c'tors of State and Action are required
-                    cameFrom.erase(neighbor.location);
+                    cameFrom.erase(neighbor.time_location);
                     cameFrom.insert(std::make_pair<>(
-                            neighbor.location,
+                            neighbor.time_location,
                             std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
                                               tentative_gScore)));
                 }
