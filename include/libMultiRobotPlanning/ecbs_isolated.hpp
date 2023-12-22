@@ -475,13 +475,7 @@ public:
 
 private:
     struct HighLevelNode;
-
-#ifdef USE_FIBONACCI_HEAP
-    typedef typename boost::heap::fibonacci_heap<HighLevelNode> openSet_t;
-typedef typename openSet_t::handle_type handle_t;
-// typedef typename boost::heap::fibonacci_heap<fibHeapHandle_t,
-// boost::heap::compare<compareFocalHeuristic> > focalSet_t;
-#else
+    
     typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
     boost::heap::mutable_<true> >
     openSet_t;
@@ -489,7 +483,6 @@ typedef typename openSet_t::handle_type handle_t;
 // typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
 // boost::heap::arity<2>, boost::heap::mutable_<true>,
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
-#endif
 
     struct HighLevelNode {
         std::vector<PlanResult> solution;
