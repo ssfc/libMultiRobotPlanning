@@ -56,7 +56,7 @@ struct PlanResult
 };
 
 
-template <typename LowLevelEnvironment, typename LocationHasher = std::hash<TimeLocation> >
+template <typename LowLevelEnvironment>
 class AStarEpsilon {
 public:
     AStarEpsilon(LowLevelEnvironment& environment, float w)
@@ -72,10 +72,10 @@ public:
         openSet_t openSet;
         focalSet_t
                 focalSet;  // subset of open nodes that are within suboptimality bound
-        std::unordered_map<TimeLocation, fibHeapHandle_t, LocationHasher> stateToHeap;
-        std::unordered_set<TimeLocation, LocationHasher> closedSet;
+        std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> stateToHeap;
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closedSet;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>,
-                LocationHasher> cameFrom;
+                std::hash<TimeLocation>> cameFrom;
 
         auto handle = openSet.push(
                 Node(startState, m_env.admissible_heuristic(startState), 0, 0));
