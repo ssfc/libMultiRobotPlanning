@@ -7,11 +7,11 @@
 
 #include <map>
 
-#include "a_star_epsilon.hpp"
+#include "ecbs_low.hpp"
 #include "util.hpp"
 
 namespace libMultiRobotPlanning {
-    
+
     template <typename State, typename Action, typename Cost, typename Conflict,
             typename Constraints, typename Environment>
     class ECBS {
