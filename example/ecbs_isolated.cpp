@@ -216,7 +216,7 @@ public:
     // low-level
     int focalStateHeuristic(
             const TimeLocation& s, int /*gScore*/,
-            const std::vector<PlanResult<TimeLocation, Action, int> >& solution) {
+            const std::vector<PlanResult<Action, int> >& solution) {
         int numConflicts = 0;
         for (size_t i = 0; i < solution.size(); ++i) {
             if (i != m_agentIdx && !solution[i].path.empty()) {
@@ -232,7 +232,7 @@ public:
     // low-level
     int focalTransitionHeuristic(
             const TimeLocation& s1a, const TimeLocation& s1b, int /*gScoreS1a*/, int /*gScoreS1b*/,
-            const std::vector<PlanResult<TimeLocation, Action, int> >& solution) {
+            const std::vector<PlanResult<Action, int> >& solution) {
         int numConflicts = 0;
         for (size_t i = 0; i < solution.size(); ++i) {
             if (i != m_agentIdx && !solution[i].path.empty()) {
@@ -249,7 +249,7 @@ public:
 
     // Count all conflicts
     int focalHeuristic(
-            const std::vector<PlanResult<TimeLocation, Action, int> >& solution) {
+            const std::vector<PlanResult<Action, int> >& solution) {
         int numConflicts = 0;
 
         int max_t = 0;
@@ -336,7 +336,7 @@ public:
     }
 
     bool getFirstConflict(
-            const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
+            const std::vector<PlanResult<Action, int> >& solution,
     Conflict& result) {
         int max_t = 0;
         for (const auto& sol : solution) {
@@ -421,7 +421,7 @@ public:
 
 private:
     TimeLocation getState(size_t agentIdx,
-                   const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
+                   const std::vector<PlanResult<Action, int> >& solution,
     size_t t) {
         assert(agentIdx < solution.size());
         if (t < solution[agentIdx].path.size()) {
@@ -532,7 +532,7 @@ int main(int argc, char* argv[]) {
 
     Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
     ECBS<TimeLocation, Action, int, Conflict, Constraints, Environment> ecbs(mapf, w);
-    std::vector<PlanResult<TimeLocation, Action, int> > solution;
+    std::vector<PlanResult<Action, int> > solution;
 
     Timer timer;
     bool success = ecbs.search(startStates, solution);
