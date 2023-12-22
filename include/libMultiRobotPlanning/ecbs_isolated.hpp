@@ -578,16 +578,10 @@ typedef typename openSet_t::handle_type handle_t;
         }
     };
 
-#ifdef USE_FIBONACCI_HEAP
-    typedef typename boost::heap::fibonacci_heap<
-  openSet_t, boost::heap::compare<compareFocalHeuristic> >
-  focalSet_t;
-#else
     typedef typename boost::heap::d_ary_heap<
             handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
     boost::heap::compare<compareFocalHeuristic> >
     focalSet_t;
-#endif
 
     struct LowLevelEnvironment {
         LowLevelEnvironment(
