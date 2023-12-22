@@ -19,17 +19,17 @@
 
 
 
-template <typename Location, typename Action, typename Cost>
+template <typename TimeLocation, typename Action, typename Cost>
 struct Neighbor
 {
     //! neighboring location
-    Location location;
+    TimeLocation location;
     //! action to get to the neighboring location
     Action action;
     //! cost to get to the neighboring location, usually 1
     Cost cost;
 
-    Neighbor(const Location& input_location, const Action& input_action, Cost input_cost)
+    Neighbor(const TimeLocation& input_location, const Action& input_action, Cost input_cost)
             : location(input_location),
               action(input_action),
               cost(input_cost)
