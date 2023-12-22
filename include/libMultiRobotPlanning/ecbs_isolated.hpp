@@ -375,39 +375,6 @@ public:
             }
 
 // check focal list/open list consistency
-#ifdef CHECK_FOCAL_LIST
-            {
-    // focalSet_t focalSetGolden;
-    bool mismatch = false;
-    const auto& top = open.top();
-    int bestCost = top.cost;
-    auto iter = open.ordered_begin();
-    auto iterEnd = open.ordered_end();
-    for (; iter != iterEnd; ++iter) {
-      const auto& s = *iter;
-      int val = s.cost;
-      if (val <= bestCost * m_w) {
-        // std::cout << "should: " << s << std::endl;
-        // focalSetGolden.push(s.handle);
-        if (std::find(focal.begin(), focal.end(), s.handle) ==
-            focal.end()) {
-          std::cout << "focal misses: " << s << std::endl;
-          mismatch = true;
-        }
-
-      } else {
-        if (std::find(focal.begin(), focal.end(), s.handle) !=
-            focal.end()) {
-          std::cout << "focalSet shouldn't have: " << s << std::endl;
-          mismatch = true;
-        }
-        // break;
-      }
-    }
-    assert(!mismatch);
-    // assert(focalSet == focalSetGolden);
-  }
-#endif
 
             auto h = focal.top();
             HighLevelNode P = *h;
@@ -475,7 +442,7 @@ public:
 
 private:
     struct HighLevelNode;
-    
+
     typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
     boost::heap::mutable_<true> >
     openSet_t;
