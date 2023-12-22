@@ -56,7 +56,7 @@ struct PlanResult
 };
 
 
-template <typename Action, typename Cost, typename Environment,
+template <typename Cost, typename Environment,
         typename LocationHasher = std::hash<TimeLocation> >
 class AStarEpsilon {
 public:
@@ -685,7 +685,7 @@ typedef typename openSet_t::handle_type handle_t;
 private:
     Environment& m_env;
     float m_w;
-    typedef AStarEpsilon<Action, Cost, LowLevelEnvironment> LowLevelSearch_t;
+    typedef AStarEpsilon<Cost, LowLevelEnvironment> LowLevelSearch_t;
 };
 
 
