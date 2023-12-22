@@ -17,7 +17,7 @@
 
 #include "util.hpp"
 
-namespace libMultiRobotPlanning {
+
 
     template <typename Location, typename Action, typename Cost>
     struct Neighbor
@@ -682,7 +682,7 @@ namespace libMultiRobotPlanning {
         typedef AStarEpsilon<State, Action, Cost, LowLevelEnvironment> LowLevelSearch_t;
     };
 
-}  // namespace libMultiRobotPlanning
+
 
 
 #endif // ECBS_ISOLATED_HPP
