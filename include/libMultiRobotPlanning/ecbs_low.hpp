@@ -2,8 +2,8 @@
 // Created by take_ on 2023/12/22.
 //
 
-#ifndef READ_FILENAME_PY_ECBS_LOW_HPP
-#define READ_FILENAME_PY_ECBS_LOW_HPP
+#ifndef ECBS_LOW_HPP
+#define ECBS_LOW_HPP
 
 
 #ifdef USE_FIBONACCI_HEAP
@@ -335,4 +335,4 @@ namespace libMultiRobotPlanning {
 }  // namespace libMultiRobotPlanning
 
 
-#endif //READ_FILENAME_PY_ECBS_LOW_HPP
+#endif //ECBS_LOW_HPP
