@@ -56,10 +56,10 @@ struct PlanResult
 };
 
 
-template <typename Environment, typename LocationHasher = std::hash<TimeLocation> >
+template <typename LowLevelEnvironment, typename LocationHasher = std::hash<TimeLocation> >
 class AStarEpsilon {
 public:
-    AStarEpsilon(Environment& environment, float w)
+    AStarEpsilon(LowLevelEnvironment& environment, float w)
             : m_env(environment), m_w(w) {}
 
     bool search(const TimeLocation& startState,
@@ -360,7 +360,7 @@ typedef typename boost::heap::fibonacci_heap<
 #endif
 
 private:
-    Environment& m_env;
+    LowLevelEnvironment& m_env;
     float m_w;
 };
 
