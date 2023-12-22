@@ -364,13 +364,13 @@ private:
     float m_w;
 };
 
-template <typename State, typename Action, typename Cost, typename Conflict,
+template <typename TimeLocation, typename Action, typename Cost, typename Conflict,
         typename Constraints, typename Environment>
 class ECBS {
 public:
     ECBS(Environment& environment, float w) : m_env(environment), m_w(w) {}
 
-    bool search(const std::vector<State>& initialStates,
+    bool search(const std::vector<TimeLocation>& initialStates,
                 std::vector<PlanResult>& solution) {
         HighLevelNode start;
         start.solution.resize(initialStates.size());
@@ -639,28 +639,28 @@ typedef typename openSet_t::handle_type handle_t;
             m_env.setLowLevelContext(agentIdx, &constraints);
         }
 
-        Cost admissible_heuristic(const State& s) {
+        Cost admissible_heuristic(const TimeLocation& s) {
             return m_env.admissible_heuristic(s);
         }
 
-        Cost focalStateHeuristic(const State& s, Cost gScore) {
+        Cost focalStateHeuristic(const TimeLocation& s, Cost gScore) {
             return m_env.focalStateHeuristic(s, gScore, m_solution);
         }
 
-        Cost focalTransitionHeuristic(const State& s1, const State& s2,
+        Cost focalTransitionHeuristic(const TimeLocation& s1, const TimeLocation& s2,
                                       Cost gScoreS1, Cost gScoreS2) {
             return m_env.focalTransitionHeuristic(s1, s2, gScoreS1, gScoreS2,
                                                   m_solution);
         }
 
-        bool is_solution(const State& s) { return m_env.is_solution(s); }
+        bool is_solution(const TimeLocation& s) { return m_env.is_solution(s); }
 
-        void get_neighbors(const State& s,
+        void get_neighbors(const TimeLocation& s,
                            std::vector<Neighbor>& neighbors) {
             m_env.get_neighbors(s, neighbors);
         }
 
-        void onExpandNode(const State& s, Cost fScore, Cost gScore) {
+        void onExpandNode(const TimeLocation& s, Cost fScore, Cost gScore) {
             // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
             // << gScore << std::endl;
             // m_env.onExpandLowLevelNode(s, fScore, gScore, m_agentIdx,
@@ -668,7 +668,7 @@ typedef typename openSet_t::handle_type handle_t;
             m_env.onExpandLowLevelNode(s, fScore, gScore);
         }
 
-        void onDiscover(const State& /*s*/, Cost /*fScore*/, Cost /*gScore*/) {
+        void onDiscover(const TimeLocation& /*s*/, Cost /*fScore*/, Cost /*gScore*/) {
             // std::cout << "LL discover: " << s << std::endl;
             // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
         }
