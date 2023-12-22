@@ -14,37 +14,6 @@
 #include "timer.hpp"
 
 
-struct State {
-    State(int time, int x, int y) : time(time), x(x), y(y) {}
-
-    bool operator==(const State& s) const {
-        return time == s.time && x == s.x && y == s.y;
-    }
-
-    bool equalExceptTime(const State& s) const { return x == s.x && y == s.y; }
-
-    friend std::ostream& operator<<(std::ostream& os, const State& s) {
-        return os << s.time << ": (" << s.x << "," << s.y << ")";
-        // return os << "(" << s.x << "," << s.y << ")";
-    }
-
-    int time;
-    int x;
-    int y;
-};
-
-namespace std {
-    template <>
-    struct hash<State> {
-        size_t operator()(const State& s) const {
-            size_t seed = 0;
-            boost::hash_combine(seed, s.time);
-            boost::hash_combine(seed, s.x);
-            boost::hash_combine(seed, s.y);
-            return seed;
-        }
-    };
-}  // namespace std
 
 ///
 enum class Action {
@@ -248,20 +217,20 @@ public:
         }
     }
 
-    int admissible_heuristic(const State& s) {
-        return std::abs(s.x - m_goals[m_agentIdx].x) +
-               std::abs(s.y - m_goals[m_agentIdx].y);
+    int admissible_heuristic(const TimeLocation& s) {
+        return std::abs(s.location.x - m_goals[m_agentIdx].x) +
+               std::abs(s.location.y - m_goals[m_agentIdx].y);
     }
 
     // low-level
     int focalStateHeuristic(
-            const State& s, int /*gScore*/,
-            const std::vector<PlanResult<State, Action, int> >& solution) {
+            const TimeLocation& s, int /*gScore*/,
+            const std::vector<PlanResult<TimeLocation, Action, int> >& solution) {
         int numConflicts = 0;
         for (size_t i = 0; i < solution.size(); ++i) {
             if (i != m_agentIdx && !solution[i].path.empty()) {
-                State state2 = getState(i, solution, s.time);
-                if (s.equalExceptTime(state2)) {
+                TimeLocation state2 = getState(i, solution, s.time_step);
+                if (s.location == state2.location) {
                     ++numConflicts;
                 }
             }
@@ -271,14 +240,15 @@ public:
 
     // low-level
     int focalTransitionHeuristic(
-            const State& s1a, const State& s1b, int /*gScoreS1a*/, int /*gScoreS1b*/,
-            const std::vector<PlanResult<State, Action, int> >& solution) {
+            const TimeLocation& s1a, const TimeLocation& s1b, int /*gScoreS1a*/, int /*gScoreS1b*/,
+            const std::vector<PlanResult<TimeLocation, Action, int> >& solution) {
         int numConflicts = 0;
         for (size_t i = 0; i < solution.size(); ++i) {
             if (i != m_agentIdx && !solution[i].path.empty()) {
-                State s2a = getState(i, solution, s1a.time);
-                State s2b = getState(i, solution, s1b.time);
-                if (s1a.equalExceptTime(s2b) && s1b.equalExceptTime(s2a)) {
+                TimeLocation s2a = getState(i, solution, s1a.time_step);
+                TimeLocation s2b = getState(i, solution, s1b.time_step);
+                if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
+                {
                     ++numConflicts;
                 }
             }
@@ -288,7 +258,7 @@ public:
 
     // Count all conflicts
     int focalHeuristic(
-            const std::vector<PlanResult<State, Action, int> >& solution) {
+            const std::vector<PlanResult<TimeLocation, Action, int> >& solution) {
         int numConflicts = 0;
 
         int max_t = 0;
@@ -299,23 +269,23 @@ public:
         for (int t = 0; t < max_t; ++t) {
             // check drive-drive vertex collisions
             for (size_t i = 0; i < solution.size(); ++i) {
-                State state1 = getState(i, solution, t);
+                TimeLocation state1 = getState(i, solution, t);
                 for (size_t j = i + 1; j < solution.size(); ++j) {
-                    State state2 = getState(j, solution, t);
-                    if (state1.equalExceptTime(state2)) {
+                    TimeLocation state2 = getState(j, solution, t);
+                    if (state1.location == state2.location) {
                         ++numConflicts;
                     }
                 }
             }
             // drive-drive edge (swap)
             for (size_t i = 0; i < solution.size(); ++i) {
-                State state1a = getState(i, solution, t);
-                State state1b = getState(i, solution, t + 1);
+                TimeLocation state1a = getState(i, solution, t);
+                TimeLocation state1b = getState(i, solution, t + 1);
                 for (size_t j = i + 1; j < solution.size(); ++j) {
-                    State state2a = getState(j, solution, t);
-                    State state2b = getState(j, solution, t + 1);
-                    if (state1a.equalExceptTime(state2b) &&
-                        state1b.equalExceptTime(state2a)) {
+                    TimeLocation state2a = getState(j, solution, t);
+                    TimeLocation state2b = getState(j, solution, t + 1);
+                    if (state1a.location == state2b.location &&
+                        state1b.location == state2a.location) {
                         ++numConflicts;
                     }
                 }
@@ -324,13 +294,14 @@ public:
         return numConflicts;
     }
 
-    bool is_solution(const State& s) {
-        return s.x == m_goals[m_agentIdx].x && s.y == m_goals[m_agentIdx].y &&
-               s.time > m_lastGoalConstraint;
+    bool is_solution(const TimeLocation& s)
+    {
+        return s.location.x == m_goals[m_agentIdx].x && s.location.y == m_goals[m_agentIdx].y &&
+               s.time_step > m_lastGoalConstraint;
     }
 
-    void get_neighbors(const State& s,
-                       std::vector<Neighbor<State, Action, int> >& neighbors) {
+    void get_neighbors(const TimeLocation& s,
+                       std::vector<Neighbor<TimeLocation, Action, int> >& neighbors) {
         // std::cout << "#VC " << constraints.vertexConstraints.size() << std::endl;
         // for(const auto& vc : constraints.vertexConstraints) {
         //   std::cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
@@ -338,43 +309,43 @@ public:
         // }
         neighbors.clear();
         {
-            State n(s.time + 1, s.x, s.y);
+            TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y));
             if (location_valid(n) && transitionValid(s, n)) {
                 neighbors.emplace_back(
-                        Neighbor<State, Action, int>(n, Action::Wait, 1));
+                        Neighbor<TimeLocation, Action, int>(n, Action::Wait, 1));
             }
         }
         {
-            State n(s.time + 1, s.x - 1, s.y);
+            TimeLocation n(s.time_step + 1, Location(s.location.x - 1, s.location.y));
             if (location_valid(n) && transitionValid(s, n)) {
                 neighbors.emplace_back(
-                        Neighbor<State, Action, int>(n, Action::Left, 1));
+                        Neighbor<TimeLocation, Action, int>(n, Action::Left, 1));
             }
         }
         {
-            State n(s.time + 1, s.x + 1, s.y);
+            TimeLocation n(s.time_step + 1, Location(s.location.x + 1, s.location.y));
             if (location_valid(n) && transitionValid(s, n)) {
                 neighbors.emplace_back(
-                        Neighbor<State, Action, int>(n, Action::Right, 1));
+                        Neighbor<TimeLocation, Action, int>(n, Action::Right, 1));
             }
         }
         {
-            State n(s.time + 1, s.x, s.y + 1);
+            TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y + 1));
             if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Up, 1));
+                neighbors.emplace_back(Neighbor<TimeLocation, Action, int>(n, Action::Up, 1));
             }
         }
         {
-            State n(s.time + 1, s.x, s.y - 1);
+            TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y - 1));
             if (location_valid(n) && transitionValid(s, n)) {
                 neighbors.emplace_back(
-                        Neighbor<State, Action, int>(n, Action::Down, 1));
+                        Neighbor<TimeLocation, Action, int>(n, Action::Down, 1));
             }
         }
     }
 
     bool getFirstConflict(
-            const std::vector<PlanResult<State, Action, int> >& solution,
+            const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
     Conflict& result) {
         int max_t = 0;
         for (const auto& sol : solution) {
@@ -384,16 +355,16 @@ public:
         for (int t = 0; t <= max_t; ++t) {
             // check drive-drive vertex collisions
             for (size_t i = 0; i < solution.size(); ++i) {
-                State state1 = getState(i, solution, t);
+                TimeLocation state1 = getState(i, solution, t);
                 for (size_t j = i + 1; j < solution.size(); ++j) {
-                    State state2 = getState(j, solution, t);
-                    if (state1.equalExceptTime(state2)) {
+                    TimeLocation state2 = getState(j, solution, t);
+                    if (state1.location == state2.location) {
                         result.time = t;
                         result.agent1 = i;
                         result.agent2 = j;
                         result.type = Conflict::Vertex;
-                        result.x1 = state1.x;
-                        result.y1 = state1.y;
+                        result.x1 = state1.location.x;
+                        result.y1 = state1.location.y;
                         // std::cout << "VC " << t << "," << state1.x << "," << state1.y <<
                         // std::endl;
                         return true;
@@ -402,21 +373,21 @@ public:
             }
             // drive-drive edge (swap)
             for (size_t i = 0; i < solution.size(); ++i) {
-                State state1a = getState(i, solution, t);
-                State state1b = getState(i, solution, t + 1);
+                TimeLocation state1a = getState(i, solution, t);
+                TimeLocation state1b = getState(i, solution, t + 1);
                 for (size_t j = i + 1; j < solution.size(); ++j) {
-                    State state2a = getState(j, solution, t);
-                    State state2b = getState(j, solution, t + 1);
-                    if (state1a.equalExceptTime(state2b) &&
-                        state1b.equalExceptTime(state2a)) {
+                    TimeLocation state2a = getState(j, solution, t);
+                    TimeLocation state2b = getState(j, solution, t + 1);
+                    if (state1a.location == state2b.location &&
+                        state1b.location == state2a.location) {
                         result.time = t;
                         result.agent1 = i;
                         result.agent2 = j;
                         result.type = Conflict::Edge;
-                        result.x1 = state1a.x;
-                        result.y1 = state1a.y;
-                        result.x2 = state1b.x;
-                        result.y2 = state1b.y;
+                        result.x1 = state1a.location.x;
+                        result.y1 = state1a.location.y;
+                        result.x2 = state1b.location.x;
+                        result.y2 = state1b.location.y;
                         return true;
                     }
                 }
@@ -448,7 +419,7 @@ public:
 
     void onExpandHighLevelNode(int /*cost*/) { m_highLevelExpanded++; }
 
-    void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/,
+    void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/,
                               int /*gScore*/) {
         m_lowLevelExpanded++;
     }
@@ -458,8 +429,8 @@ public:
     int lowLevelExpanded() const { return m_lowLevelExpanded; }
 
 private:
-    State getState(size_t agentIdx,
-                   const std::vector<PlanResult<State, Action, int> >& solution,
+    TimeLocation getState(size_t agentIdx,
+                   const std::vector<PlanResult<TimeLocation, Action, int> >& solution,
     size_t t) {
         assert(agentIdx < solution.size());
         if (t < solution[agentIdx].path.size()) {
@@ -470,23 +441,24 @@ private:
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
             // This will cause all calls to equalExceptTime(.) to return false.
-            return State(-1, -1 * (agentIdx+1), -1);
+            return TimeLocation(-1, Location(-1 * (agentIdx+1), -1));
         }
         return solution[agentIdx].path.back().first;
     }
 
-    bool location_valid(const State& s) {
+    bool location_valid(const TimeLocation& s) {
         assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
-               con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
+        return s.location.x >= 0 && s.location.x < num_columns
+            && s.location.y >= 0 && s.location.y < num_rows &&
+               obstacles.find(Location(s.location.x, s.location.y)) == obstacles.end() &&
+               con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
     }
 
-    bool transitionValid(const State& s1, const State& s2) {
+    bool transitionValid(const TimeLocation& s1, const TimeLocation& s2) {
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
-        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
+        return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
                con.end();
     }
 
@@ -539,7 +511,7 @@ int main(int argc, char* argv[]) {
 
     std::unordered_set<Location> obstacles;
     std::vector<Location> goals;
-    std::vector<State> startStates;
+    std::vector<TimeLocation> startStates;
 
     const auto& dim = config["map"]["dimensions"];
     int dimx = dim[0].as<int>();
@@ -552,13 +524,13 @@ int main(int argc, char* argv[]) {
     for (const auto& node : config["agents"]) {
         const auto& start = node["start"];
         const auto& goal = node["goal"];
-        startStates.emplace_back(State(0, start[0].as<int>(), start[1].as<int>()));
+        startStates.emplace_back(TimeLocation(0, Location(start[0].as<int>(), start[1].as<int>())));
         // std::cout << "s: " << startStates.back() << std::endl;
         goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }
 
     // sanity check: no identical start locations
-    std::unordered_set<State> startStatesSet;
+    std::unordered_set<TimeLocation> startStatesSet;
     for (const auto& s : startStates) {
         if (startStatesSet.find(s) != startStatesSet.end()) {
             std::cout << "Identical start locations detected -> no solution!" << std::endl;
@@ -568,8 +540,8 @@ int main(int argc, char* argv[]) {
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
-    ECBS<State, Action, int, Conflict, Constraints, Environment> ecbs(mapf, w);
-    std::vector<PlanResult<State, Action, int> > solution;
+    ECBS<TimeLocation, Action, int, Conflict, Constraints, Environment> ecbs(mapf, w);
+    std::vector<PlanResult<TimeLocation, Action, int> > solution;
 
     Timer timer;
     bool success = ecbs.search(startStates, solution);
@@ -612,8 +584,8 @@ int main(int argc, char* argv[]) {
 
             out << "  agent" << a << ":" << std::endl;
             for (const auto& state : solution[a].path) {
-                out << "    - x: " << state.first.x << std::endl
-                    << "      y: " << state.first.y << std::endl
+                out << "    - x: " << state.first.location.x << std::endl
+                    << "      y: " << state.first.location.y << std::endl
                     << "      t: " << state.second << std::endl;
             }
 
@@ -621,7 +593,7 @@ int main(int argc, char* argv[]) {
 
             for (const auto& state : solution[a].path)
             {
-                std::cout << "(" << state.first.x << "," << state.first.y << "),";
+                std::cout << "(" << state.first.location.x << "," << state.first.location.y << "),";
             }
 
             std::cout << std::endl;
