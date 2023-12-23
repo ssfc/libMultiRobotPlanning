@@ -743,31 +743,31 @@ public:
         std::vector<Neighbor> neighbors;
         neighbors.reserve(10);
 
-        int bestFScore = (*handle).fScore;
+        int best_f_score = (*handle).fScore;
 
         // std::cout << "new search" << std::endl;
 
         while (!open_set.empty())
         {
-            int oldBestFScore = bestFScore;
-            bestFScore = open_set.top().fScore;
-            // std::cout << "bestFScore: " << bestFScore << std::endl;
-            if (bestFScore > oldBestFScore)
+            int oldBestFScore = best_f_score;
+            best_f_score = open_set.top().fScore;
+            // std::cout << "best_f_score: " << best_f_score << std::endl;
+            if (best_f_score > oldBestFScore)
             {
                 // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
-                // " << bestFScore << std::endl;
+                // " << best_f_score << std::endl;
                 auto iter = open_set.ordered_begin();
                 auto iterEnd = open_set.ordered_end();
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->fScore;
-                    if (val > oldBestFScore * m_w && val <= bestFScore * m_w)
+                    if (val > oldBestFScore * m_w && val <= best_f_score * m_w)
                     {
                         const LowLevelNode& n = *iter;
                         focal_set.push(n.handle);
                     }
 
-                    if (val > bestFScore * m_w)
+                    if (val > best_f_score * m_w)
                     {
                         break;
                     }
@@ -834,7 +834,7 @@ public:
                                 LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focal_heuristic));
                         (*handle).handle = handle;
 
-                        if (fScore <= bestFScore * m_w)
+                        if (fScore <= best_f_score * m_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focal_set.push(handle);
@@ -864,7 +864,7 @@ public:
                         open_set.increase(handle);
                         m_env.onDiscover(neighbor.time_location, (*handle).fScore,
                                          (*handle).gScore);
-                        if ((*handle).fScore <= bestFScore * m_w && last_fScore > bestFScore * m_w)
+                        if ((*handle).fScore <= best_f_score * m_w && last_fScore > best_f_score * m_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focal_set.push(handle);
@@ -1047,7 +1047,7 @@ public:
             {
                 int oldBestCost = bestCost;
                 bestCost = open_set.top().cost;
-                // std::cout << "bestFScore: " << bestFScore << std::endl;
+                // std::cout << "best_f_score: " << best_f_score << std::endl;
                 if (bestCost > oldBestCost)
                 {
                     // std::cout << "oldBestCost: " << oldBestCost << " bestCost: " <<
