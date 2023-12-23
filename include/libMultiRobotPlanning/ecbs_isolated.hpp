@@ -310,7 +310,7 @@ public:
     }
 
     // low-level
-    int focalTransitionHeuristic(
+    int focal_transition_heuristic(
             const TimeLocation& s1a, const TimeLocation& s1b, int /*gScoreS1a*/, int /*gScoreS1b*/,
             const std::vector<PlanResult>& solution)
     {
@@ -600,10 +600,10 @@ public:
         return m_env.focal_state_heuristic(s, gScore, m_solution);
     }
 
-    int focalTransitionHeuristic(const TimeLocation& s1, const TimeLocation& s2,
+    int focal_transition_heuristic(const TimeLocation& s1, const TimeLocation& s2,
                                  int gScoreS1, int gScoreS2)
     {
-        return m_env.focalTransitionHeuristic(s1, s2, gScoreS1, gScoreS2,
+        return m_env.focal_transition_heuristic(s1, s2, gScoreS1, gScoreS2,
                                               m_solution);
     }
 
@@ -809,7 +809,7 @@ public:
                         int focalHeuristic =
                                 current.focalHeuristic +
                                 m_env.focal_state_heuristic(neighbor.time_location, tentative_gScore) +
-                                m_env.focalTransitionHeuristic(current.state, neighbor.time_location,
+                                m_env.focal_transition_heuristic(current.state, neighbor.time_location,
                                                                current.gScore,
                                                                tentative_gScore);
                         auto handle = openSet.push(
