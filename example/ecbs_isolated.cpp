@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
         startStatesSet.insert(s);
     }
 
-    Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
+    ECBSEnvironment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
     ECBS ecbs(mapf, w);
     std::vector<PlanResult> solution;
 

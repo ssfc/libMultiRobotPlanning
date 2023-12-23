@@ -204,7 +204,7 @@ struct Constraints {
 };
 
 
-class Environment
+class ECBSEnvironment
 {
 private:
     int num_columns;
@@ -219,7 +219,7 @@ private:
     bool m_disappearAtGoal;
 
 public:
-    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
+    ECBSEnvironment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
                 std::vector<Location> goals, bool disappearAtGoal = false)
             : num_columns(dimx),
               num_rows(dimy),
@@ -234,8 +234,8 @@ public:
     {
     }
 
-    Environment(const Environment&) = delete;
-    Environment& operator=(const Environment&) = delete;
+    ECBSEnvironment(const ECBSEnvironment&) = delete;
+    ECBSEnvironment& operator=(const ECBSEnvironment&) = delete;
 
     void setLowLevelContext(size_t agentIdx, const Constraints* constraints)
     {
@@ -542,14 +542,14 @@ public:
 struct LowLevelEnvironment
 {
 private:
-    Environment& m_env;
+    ECBSEnvironment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
     const std::vector<PlanResult>& m_solution;
 
 public:
     LowLevelEnvironment(
-            Environment& env, size_t agentIdx, const Constraints& constraints,
+            ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
             const std::vector<PlanResult>& solution)
             : m_env(env)
             // , m_agentIdx(agentIdx)
@@ -906,7 +906,7 @@ struct HighLevelNode
 class ECBS
 {
 public:
-    ECBS(Environment& environment, float w) : m_env(environment), m_w(w) {}
+    ECBS(ECBSEnvironment& environment, float w) : m_env(environment), m_w(w) {}
 
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
                 std::vector<PlanResult>& solution)
@@ -1081,7 +1081,7 @@ private:
     focalSet_t;
 
 private:
-    Environment& m_env;
+    ECBSEnvironment& m_env;
     float m_w;
 };
 
