@@ -293,7 +293,7 @@ public:
     int focal_state_heuristic(const TimeLocation& s, int /*gScore*/,
             const std::vector<PlanResult>& solution)
     {
-        int numConflicts = 0;
+        int num_conflicts = 0;
         for (size_t i = 0; i < solution.size(); ++i)
         {
             if (i != m_agentIdx && !solution[i].path.empty())
@@ -301,12 +301,12 @@ public:
                 TimeLocation state2 = get_time_location(i, solution, s.time_step);
                 if (s.location == state2.location)
                 {
-                    ++numConflicts;
+                    ++num_conflicts;
                 }
             }
         }
 
-        return numConflicts;
+        return num_conflicts;
     }
 
     // low-level
