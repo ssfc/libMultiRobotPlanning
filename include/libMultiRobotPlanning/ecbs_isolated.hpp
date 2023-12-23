@@ -731,7 +731,7 @@ public:
         focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> stateToHeap;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closedSet;
-        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> cameFrom;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> came_from;
 
         auto handle = open_set.push(
                 LowLevelNode(startState, m_env.admissible_heuristic(startState), 0, 0));
@@ -785,14 +785,14 @@ public:
             {
                 solution.path.clear();
                 solution.actions.clear();
-                auto iter = cameFrom.find(current.state);
-                while (iter != cameFrom.end())
+                auto iter = came_from.find(current.state);
+                while (iter != came_from.end())
                 {
                     solution.path.emplace_back(
                             std::make_pair<>(iter->first, std::get<3>(iter->second)));
                     solution.actions.emplace_back(std::make_pair<>(
                             std::get<1>(iter->second), std::get<2>(iter->second)));
-                    iter = cameFrom.find(std::get<0>(iter->second));
+                    iter = came_from.find(std::get<0>(iter->second));
                 }
 
                 solution.path.emplace_back(std::make_pair<>(startState, 0));
@@ -872,10 +872,10 @@ public:
                     }
 
                     // Best path for this node so far
-                    // TODO: this is not the best way to update "cameFrom", but otherwise
+                    // TODO: this is not the best way to update "came_from", but otherwise
                     // default c'tors of TimeLocation and Action are required
-                    cameFrom.erase(neighbor.time_location);
-                    cameFrom.insert(std::make_pair<>(
+                    came_from.erase(neighbor.time_location);
+                    came_from.insert(std::make_pair<>(
                             neighbor.time_location,
                             std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
                                               tentative_gScore)));
