@@ -55,22 +55,26 @@ struct PlanResult
 };
 
 
-struct Conflict {
+class Conflict
+{
+public:
     enum Type {
         Vertex,
         Edge,
     };
 
+    Type type;
+
     int time;
     size_t agent1;
     size_t agent2;
-    Type type;
 
     int x1;
     int y1;
     int x2;
     int y2;
 
+public:
     friend std::ostream& operator<<(std::ostream& os, const Conflict& c) {
         switch (c.type) {
             case Vertex:
