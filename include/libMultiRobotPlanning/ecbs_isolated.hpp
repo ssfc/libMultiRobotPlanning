@@ -716,6 +716,26 @@ struct compareFocalHeuristic
 
 class AStarEpsilon
 {
+private:
+    typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
+    boost::heap::mutable_<true> > openSet_t;
+    typedef typename openSet_t::handle_type fibHeapHandle_t;
+// typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
+// boost::heap::arity<2>, boost::heap::mutable_<true>,
+// boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+
+
+    // typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
+    // boost::heap::mutable_<true> > openSet_t;
+    // typedef typename openSet_t::handle_type fibHeapHandle_t;
+    typedef typename boost::heap::d_ary_heap<
+            fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
+    boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+
+private:
+    LowLevelEnvironment& m_env;
+    float factor_w;
+
 public:
     AStarEpsilon(LowLevelEnvironment& environment, float input_w)
             : m_env(environment),
@@ -887,26 +907,6 @@ public:
 
         return false;
     }
-
-private:
-    typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
-        boost::heap::mutable_<true> > openSet_t;
-    typedef typename openSet_t::handle_type fibHeapHandle_t;
-// typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
-// boost::heap::arity<2>, boost::heap::mutable_<true>,
-// boost::heap::compare<compareFocalHeuristic> > focalSet_t;
-
-
-    // typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
-    // boost::heap::mutable_<true> > openSet_t;
-    // typedef typename openSet_t::handle_type fibHeapHandle_t;
-    typedef typename boost::heap::d_ary_heap<
-            fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-    boost::heap::compare<compareFocalHeuristic> > focalSet_t;
-
-private:
-    LowLevelEnvironment& m_env;
-    float factor_w;
 };
 
 
