@@ -540,14 +540,14 @@ private:
 };
 
 
-struct Node {
-    Node(const TimeLocation& state, int fScore, int gScore, int focalHeuristic)
+struct LowLevelNode {
+    LowLevelNode(const TimeLocation& state, int fScore, int gScore, int focalHeuristic)
             : state(state),
               fScore(fScore),
               gScore(gScore),
               focalHeuristic(focalHeuristic) {}
 
-    bool operator<(const Node& other) const {
+    bool operator<(const LowLevelNode& other) const {
         // Sort order
         // 1. lowest fScore
         // 2. highest gScore
@@ -560,7 +560,7 @@ struct Node {
         }
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Node& node) {
+    friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node) {
         os << "state: " << node.state << " fScore: " << node.fScore
            << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
         return os;
@@ -572,7 +572,7 @@ struct Node {
     int gScore;
     int focalHeuristic;
 
-    typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+    typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
     boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type fibHeapHandle_t;
 
@@ -580,7 +580,7 @@ struct Node {
 };
 
 struct compareFocalHeuristic {
-    typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+    typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
     boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type fibHeapHandle_t;
 
@@ -628,7 +628,7 @@ public:
                 std::hash<TimeLocation>> cameFrom;
 
         auto handle = openSet.push(
-                Node(startState, m_env.admissible_heuristic(startState), 0, 0));
+                LowLevelNode(startState, m_env.admissible_heuristic(startState), 0, 0));
         stateToHeap.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
 
@@ -655,7 +655,7 @@ public:
                     for (; iter != iterEnd; ++iter) {
                         int val = iter->fScore;
                         if (val > oldBestFScore * m_w && val <= bestFScore * m_w) {
-                            const Node& n = *iter;
+                            const LowLevelNode& n = *iter;
                             focalSet.push(n.handle);
                         }
                         if (val > bestFScore * m_w) {
@@ -668,7 +668,7 @@ public:
 // check focal list/open list consistency
 
             auto currentHandle = focalSet.top();
-            Node current = *currentHandle;
+            LowLevelNode current = *currentHandle;
             m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
             if (m_env.is_solution(current.state)) {
@@ -714,7 +714,7 @@ public:
                                                                current.gScore,
                                                                tentative_gScore);
                         auto handle = openSet.push(
-                                Node(neighbor.time_location, fScore, tentative_gScore, focalHeuristic));
+                                LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focalHeuristic));
                         (*handle).handle = handle;
                         if (fScore <= bestFScore * m_w) {
                             // std::cout << "focalAdd: " << *handle << std::endl;
@@ -764,7 +764,7 @@ public:
     }
 
 private:
-    typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+    typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
     boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type fibHeapHandle_t;
 // typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
@@ -772,7 +772,7 @@ private:
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 
 
-    // typedef typename boost::heap::d_ary_heap<Node, boost::heap::arity<2>,
+    // typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
     // boost::heap::mutable_<true> > openSet_t;
     // typedef typename openSet_t::handle_type fibHeapHandle_t;
     typedef typename boost::heap::d_ary_heap<
