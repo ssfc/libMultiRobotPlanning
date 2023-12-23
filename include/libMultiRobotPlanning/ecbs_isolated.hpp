@@ -227,7 +227,7 @@ struct Constraints
         {
             os << ec << std::endl;
         }
-        
+
         return os;
     }
 };
@@ -239,7 +239,7 @@ private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
-    std::vector<Location> m_goals;
+    std::vector<Location> goals;
     size_t m_agentIdx;
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
@@ -249,11 +249,11 @@ private:
 
 public:
     ECBSEnvironment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-                std::vector<Location> goals, bool disappearAtGoal = false)
+                std::vector<Location> input_goals, bool disappearAtGoal = false)
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(obstacles)),
-              m_goals(std::move(goals)),
+              goals(std::move(input_goals)),
               m_agentIdx(0),
               m_constraints(nullptr),
               m_lastGoalConstraint(-1),
@@ -273,7 +273,7 @@ public:
         m_constraints = constraints;
         m_lastGoalConstraint = -1;
         for (const auto& vc : constraints->vertexConstraints) {
-            if (vc.x == m_goals[m_agentIdx].x && vc.y == m_goals[m_agentIdx].y) {
+            if (vc.x == goals[m_agentIdx].x && vc.y == goals[m_agentIdx].y) {
                 m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
             }
         }
@@ -281,8 +281,8 @@ public:
 
     int admissible_heuristic(const TimeLocation& s)
     {
-        return std::abs(s.location.x - m_goals[m_agentIdx].x) +
-               std::abs(s.location.y - m_goals[m_agentIdx].y);
+        return std::abs(s.location.x - goals[m_agentIdx].x) +
+               std::abs(s.location.y - goals[m_agentIdx].y);
     }
 
     // low-level
@@ -378,7 +378,7 @@ public:
 
     bool is_solution(const TimeLocation& s)
     {
-        return s.location.x == m_goals[m_agentIdx].x && s.location.y == m_goals[m_agentIdx].y &&
+        return s.location.x == goals[m_agentIdx].x && s.location.y == goals[m_agentIdx].y &&
                s.time_step > m_lastGoalConstraint;
     }
 
