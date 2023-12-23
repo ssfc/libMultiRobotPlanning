@@ -390,43 +390,35 @@ public:
         //   std::endl;
         // }
         neighbors.clear();
+
+        TimeLocation wait_n(s.time_step + 1, Location(s.location.x, s.location.y));
+        if (location_valid(wait_n) && transitionValid(s, wait_n))
         {
-            TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y));
-            if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(
-                        Neighbor(n, Action::Wait, 1));
-            }
+            neighbors.emplace_back(Neighbor(wait_n, Action::Wait, 1));
         }
 
+        TimeLocation west_n(s.time_step + 1, Location(s.location.x - 1, s.location.y));
+        if (location_valid(west_n) && transitionValid(s, west_n))
         {
-            TimeLocation n(s.time_step + 1, Location(s.location.x - 1, s.location.y));
-            if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(
-                        Neighbor(n, Action::Left, 1));
-            }
+            neighbors.emplace_back(Neighbor(west_n, Action::Left, 1));
         }
 
+        TimeLocation east_n(s.time_step + 1, Location(s.location.x + 1, s.location.y));
+        if (location_valid(east_n) && transitionValid(s, east_n))
         {
-            TimeLocation n(s.time_step + 1, Location(s.location.x + 1, s.location.y));
-            if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(
-                        Neighbor(n, Action::Right, 1));
-            }
+            neighbors.emplace_back(Neighbor(east_n, Action::Right, 1));
         }
 
+        TimeLocation north_n(s.time_step + 1, Location(s.location.x, s.location.y + 1));
+        if (location_valid(north_n) && transitionValid(s, north_n))
         {
-            TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y + 1));
-            if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(Neighbor(n, Action::Up, 1));
-            }
+            neighbors.emplace_back(Neighbor(north_n, Action::Up, 1));
         }
 
+        TimeLocation south_n(s.time_step + 1, Location(s.location.x, s.location.y - 1));
+        if (location_valid(south_n) && transitionValid(s, south_n))
         {
-            TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y - 1));
-            if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(
-                        Neighbor(n, Action::Down, 1));
-            }
+            neighbors.emplace_back(Neighbor(south_n, Action::Down, 1));
         }
     }
 
