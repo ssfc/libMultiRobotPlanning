@@ -607,7 +607,6 @@ struct compareFocalHeuristic {
 };
 
 
-template <typename LowLevelEnvironment>
 class AStarEpsilon {
 public:
     AStarEpsilon(LowLevelEnvironment& environment, float w)
@@ -1010,7 +1009,7 @@ private:
 private:
     Environment& m_env;
     float m_w;
-    typedef AStarEpsilon<LowLevelEnvironment> LowLevelSearch_t;
+    typedef AStarEpsilon LowLevelSearch_t;
 };
 
 
