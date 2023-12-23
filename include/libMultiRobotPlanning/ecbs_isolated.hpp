@@ -701,45 +701,52 @@ public:
 
         while (!openSet.empty())
         {
+            int oldBestFScore = bestFScore;
+            bestFScore = openSet.top().fScore;
+            // std::cout << "bestFScore: " << bestFScore << std::endl;
+            if (bestFScore > oldBestFScore)
             {
-                int oldBestFScore = bestFScore;
-                bestFScore = openSet.top().fScore;
-                // std::cout << "bestFScore: " << bestFScore << std::endl;
-                if (bestFScore > oldBestFScore) {
-                    // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
-                    // " << bestFScore << std::endl;
-                    auto iter = openSet.ordered_begin();
-                    auto iterEnd = openSet.ordered_end();
-                    for (; iter != iterEnd; ++iter) {
-                        int val = iter->fScore;
-                        if (val > oldBestFScore * m_w && val <= bestFScore * m_w) {
-                            const LowLevelNode& n = *iter;
-                            focalSet.push(n.handle);
-                        }
-                        if (val > bestFScore * m_w) {
-                            break;
-                        }
+                // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
+                // " << bestFScore << std::endl;
+                auto iter = openSet.ordered_begin();
+                auto iterEnd = openSet.ordered_end();
+                for (; iter != iterEnd; ++iter)
+                {
+                    int val = iter->fScore;
+                    if (val > oldBestFScore * m_w && val <= bestFScore * m_w)
+                    {
+                        const LowLevelNode& n = *iter;
+                        focalSet.push(n.handle);
+                    }
+
+                    if (val > bestFScore * m_w)
+                    {
+                        break;
                     }
                 }
             }
 
-// check focal list/open list consistency
+
+            // check focal list/open list consistency
 
             auto currentHandle = focalSet.top();
             LowLevelNode current = *currentHandle;
             m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
-            if (m_env.is_solution(current.state)) {
+            if (m_env.is_solution(current.state))
+            {
                 solution.path.clear();
                 solution.actions.clear();
                 auto iter = cameFrom.find(current.state);
-                while (iter != cameFrom.end()) {
+                while (iter != cameFrom.end())
+                {
                     solution.path.emplace_back(
                             std::make_pair<>(iter->first, std::get<3>(iter->second)));
                     solution.actions.emplace_back(std::make_pair<>(
                             std::get<1>(iter->second), std::get<2>(iter->second)));
                     iter = cameFrom.find(std::get<0>(iter->second));
                 }
+
                 solution.path.emplace_back(std::make_pair<>(startState, 0));
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
@@ -757,11 +764,14 @@ public:
             // traverse neighbors
             neighbors.clear();
             m_env.get_neighbors(current.state, neighbors);
-            for (const Neighbor& neighbor : neighbors) {
-                if (closedSet.find(neighbor.time_location) == closedSet.end()) {
+            for (const Neighbor& neighbor : neighbors)
+            {
+                if (closedSet.find(neighbor.time_location) == closedSet.end())
+                {
                     int tentative_gScore = current.gScore + neighbor.cost;
                     auto iter = stateToHeap.find(neighbor.time_location);
-                    if (iter == stateToHeap.end()) {  // Discover a new node
+                    if (iter == stateToHeap.end())
+                    {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         int fScore =
                                 tentative_gScore + m_env.admissible_heuristic(neighbor.time_location);
@@ -774,18 +784,24 @@ public:
                         auto handle = openSet.push(
                                 LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focalHeuristic));
                         (*handle).handle = handle;
-                        if (fScore <= bestFScore * m_w) {
+
+                        if (fScore <= bestFScore * m_w)
+                        {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focalSet.push(handle);
                         }
+
                         stateToHeap.insert(std::make_pair<>(neighbor.time_location, handle));
                         m_env.onDiscover(neighbor.time_location, fScore, tentative_gScore);
                         // std::cout << "  this is a new node " << fScore << "," <<
                         // tentative_gScore << std::endl;
-                    } else {
+                    }
+                    else
+                    {
                         auto handle = iter->second;
                         // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).gScore) {
+                        if (tentative_gScore >= (*handle).gScore)
+                        {
                             continue;
                         }
                         int last_gScore = (*handle).gScore;
@@ -799,8 +815,8 @@ public:
                         openSet.increase(handle);
                         m_env.onDiscover(neighbor.time_location, (*handle).fScore,
                                          (*handle).gScore);
-                        if ((*handle).fScore <= bestFScore * m_w &&
-                            last_fScore > bestFScore * m_w) {
+                        if ((*handle).fScore <= bestFScore * m_w && last_fScore > bestFScore * m_w)
+                        {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focalSet.push(handle);
                         }
