@@ -521,9 +521,15 @@ public:
         m_lowLevelExpanded++;
     }
 
-    int highLevelExpanded() { return m_highLevelExpanded; }
+    int highLevelExpanded()
+    {
+        return m_highLevelExpanded;
+    }
 
-    int lowLevelExpanded() const { return m_lowLevelExpanded; }
+    int lowLevelExpanded() const
+    {
+        return m_lowLevelExpanded;
+    }
 
     TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
     {
