@@ -111,7 +111,7 @@ int main(int argc, char* argv[]) {
     std::vector<PlanResult> solution;
 
     Timer timer;
-    bool success = ecbs.search(startStates, solution);
+    bool success = ecbs.high_level_search(startStates, solution);
     timer.stop();
 
     if (success) {

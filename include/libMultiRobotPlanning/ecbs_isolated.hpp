@@ -726,7 +726,7 @@ class ECBS {
 public:
     ECBS(Environment& environment, float w) : m_env(environment), m_w(w) {}
 
-    bool search(const std::vector<TimeLocation>& initialStates,
+    bool high_level_search(const std::vector<TimeLocation>& initialStates,
                 std::vector<PlanResult>& solution)
     {
         HighLevelNode start;
