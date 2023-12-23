@@ -723,13 +723,13 @@ public:
         solution.actions.clear();
         solution.cost = 0;
 
-        openSet_t openSet;
+        openSet_t open_set;
         focalSet_t focalSet;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> stateToHeap;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closedSet;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> cameFrom;
 
-        auto handle = openSet.push(
+        auto handle = open_set.push(
                 LowLevelNode(startState, m_env.admissible_heuristic(startState), 0, 0));
         stateToHeap.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
@@ -743,17 +743,17 @@ public:
 
         // std::cout << "new search" << std::endl;
 
-        while (!openSet.empty())
+        while (!open_set.empty())
         {
             int oldBestFScore = bestFScore;
-            bestFScore = openSet.top().fScore;
+            bestFScore = open_set.top().fScore;
             // std::cout << "bestFScore: " << bestFScore << std::endl;
             if (bestFScore > oldBestFScore)
             {
                 // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
                 // " << bestFScore << std::endl;
-                auto iter = openSet.ordered_begin();
-                auto iterEnd = openSet.ordered_end();
+                auto iter = open_set.ordered_begin();
+                auto iterEnd = open_set.ordered_end();
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->fScore;
@@ -795,13 +795,13 @@ public:
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.gScore;
-                solution.fmin = openSet.top().fScore;
+                solution.fmin = open_set.top().fScore;
 
                 return true;
             }
 
             focalSet.pop();
-            openSet.erase(currentHandle);
+            open_set.erase(currentHandle);
             stateToHeap.erase(current.state);
             closedSet.insert(current.state);
 
@@ -825,8 +825,8 @@ public:
                                 m_env.get_focal_transition_heuristic(current.state, neighbor.time_location,
                                                                current.gScore,
                                                                tentative_gScore);
-                        
-                        auto handle = openSet.push(
+
+                        auto handle = open_set.push(
                                 LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focalHeuristic));
                         (*handle).handle = handle;
 
@@ -857,7 +857,7 @@ public:
                         int delta = last_gScore - tentative_gScore;
                         (*handle).gScore = tentative_gScore;
                         (*handle).fScore -= delta;
-                        openSet.increase(handle);
+                        open_set.increase(handle);
                         m_env.onDiscover(neighbor.time_location, (*handle).fScore,
                                          (*handle).gScore);
                         if ((*handle).fScore <= bestFScore * m_w && last_fScore > bestFScore * m_w)
