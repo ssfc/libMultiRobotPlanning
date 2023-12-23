@@ -722,7 +722,6 @@ private:
 };
 
 
-template <typename Environment>
 class ECBS {
 public:
     ECBS(Environment& environment, float w) : m_env(environment), m_w(w) {}
