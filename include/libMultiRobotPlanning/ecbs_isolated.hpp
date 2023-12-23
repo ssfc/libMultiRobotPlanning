@@ -574,7 +574,7 @@ public:
 };
 
 
-struct LowLevelEnvironment
+class LowLevelEnvironment
 {
 private:
     ECBSEnvironment& m_env;
