@@ -247,7 +247,7 @@ private:
     size_t m_agentIdx;
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
-    int m_highLevelExpanded;
+    int num_expanded_high_level_nodes;
     int m_lowLevelExpanded;
     bool m_disappearAtGoal;
 
@@ -261,7 +261,7 @@ public:
               m_agentIdx(0),
               m_constraints(nullptr),
               m_lastGoalConstraint(-1),
-              m_highLevelExpanded(0),
+              num_expanded_high_level_nodes(0),
               m_lowLevelExpanded(0),
               m_disappearAtGoal(disappearAtGoal)
     {
@@ -516,7 +516,7 @@ public:
 
     void onExpandHighLevelNode(int /*cost*/)
     {
-        m_highLevelExpanded++;
+        num_expanded_high_level_nodes++;
     }
 
     void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
@@ -526,7 +526,7 @@ public:
 
     int highLevelExpanded()
     {
-        return m_highLevelExpanded;
+        return num_expanded_high_level_nodes;
     }
 
     int lowLevelExpanded() const
