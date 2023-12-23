@@ -672,18 +672,19 @@ struct LowLevelNode
     {
         os << "state: " << node.state << " fScore: " << node.fScore
            << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
-        
+
         return os;
     }
 };
 
-struct compareFocalHeuristic {
+struct compareFocalHeuristic
+{
     typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
     boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type fibHeapHandle_t;
 
-    bool operator()(const fibHeapHandle_t& h1,
-                    const fibHeapHandle_t& h2) const {
+    bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
+    {
         // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
         // Path Finding" by Cohen et. al.)
         // 1. lowest focalHeuristic
@@ -691,13 +692,18 @@ struct compareFocalHeuristic {
         // 3. highest gScore
 
         // Our heap is a maximum heap, so we invert the comperator function here
-        if ((*h1).focalHeuristic != (*h2).focalHeuristic) {
+        if ((*h1).focalHeuristic != (*h2).focalHeuristic)
+        {
             return (*h1).focalHeuristic > (*h2).focalHeuristic;
             // } else if ((*h1).fScore != (*h2).fScore) {
             //   return (*h1).fScore > (*h2).fScore;
-        } else if ((*h1).fScore != (*h2).fScore) {
+        }
+        else if ((*h1).fScore != (*h2).fScore)
+        {
             return (*h1).fScore > (*h2).fScore;
-        } else {
+        }
+        else
+        {
             return (*h1).gScore < (*h2).gScore;
         }
     }
