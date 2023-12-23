@@ -266,7 +266,7 @@ public:
     ECBSEnvironment(const ECBSEnvironment&) = delete;
     ECBSEnvironment& operator=(const ECBSEnvironment&) = delete;
 
-    void setLowLevelContext(size_t agentIdx, const Constraints* constraints)
+    void set_low_level_context(size_t agentIdx, const Constraints* constraints)
     {
         assert(constraints);  // NOLINT
         m_agentIdx = agentIdx;
@@ -584,8 +584,9 @@ public:
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
             ,
-              m_solution(solution) {
-        m_env.setLowLevelContext(agentIdx, &constraints);
+              m_solution(solution)
+    {
+        m_env.set_low_level_context(agentIdx, &constraints);
     }
 
     int admissible_heuristic(const TimeLocation& s)
