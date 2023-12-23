@@ -248,7 +248,7 @@ private:
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
     int num_expanded_high_level_nodes;
-    int m_lowLevelExpanded;
+    int num_expanded_low_level_nodes;
     bool m_disappearAtGoal;
 
 public:
@@ -262,7 +262,7 @@ public:
               m_constraints(nullptr),
               m_lastGoalConstraint(-1),
               num_expanded_high_level_nodes(0),
-              m_lowLevelExpanded(0),
+              num_expanded_low_level_nodes(0),
               m_disappearAtGoal(disappearAtGoal)
     {
     }
@@ -521,7 +521,7 @@ public:
 
     void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
     {
-        m_lowLevelExpanded++;
+        num_expanded_low_level_nodes++;
     }
 
     int highLevelExpanded()
@@ -531,7 +531,7 @@ public:
 
     int lowLevelExpanded() const
     {
-        return m_lowLevelExpanded;
+        return num_expanded_low_level_nodes;
     }
 
     TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
