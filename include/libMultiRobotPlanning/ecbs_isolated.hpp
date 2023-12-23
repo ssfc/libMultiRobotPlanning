@@ -331,7 +331,7 @@ public:
                 }
             }
         }
-        
+
         return numConflicts;
     }
 
@@ -341,8 +341,8 @@ public:
                s.time_step > m_lastGoalConstraint;
     }
 
-    void get_neighbors(const TimeLocation& s,
-                       std::vector<Neighbor>& neighbors) {
+    void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
+    {
         // std::cout << "#VC " << constraints.vertexConstraints.size() << std::endl;
         // for(const auto& vc : constraints.vertexConstraints) {
         //   std::cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
@@ -356,6 +356,7 @@ public:
                         Neighbor(n, Action::Wait, 1));
             }
         }
+
         {
             TimeLocation n(s.time_step + 1, Location(s.location.x - 1, s.location.y));
             if (location_valid(n) && transitionValid(s, n)) {
@@ -363,6 +364,7 @@ public:
                         Neighbor(n, Action::Left, 1));
             }
         }
+
         {
             TimeLocation n(s.time_step + 1, Location(s.location.x + 1, s.location.y));
             if (location_valid(n) && transitionValid(s, n)) {
@@ -370,12 +372,14 @@ public:
                         Neighbor(n, Action::Right, 1));
             }
         }
+
         {
             TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y + 1));
             if (location_valid(n) && transitionValid(s, n)) {
                 neighbors.emplace_back(Neighbor(n, Action::Up, 1));
             }
         }
+
         {
             TimeLocation n(s.time_step + 1, Location(s.location.x, s.location.y - 1));
             if (location_valid(n) && transitionValid(s, n)) {
@@ -385,21 +389,25 @@ public:
         }
     }
 
-    bool getFirstConflict(
-            const std::vector<PlanResult>& solution,
-            Conflict& result) {
+    bool getFirstConflict(const std::vector<PlanResult>& solution, Conflict& result)
+    {
         int max_t = 0;
-        for (const auto& sol : solution) {
+        for (const auto& sol : solution)
+        {
             max_t = std::max<int>(max_t, sol.path.size() - 1);
         }
 
-        for (int t = 0; t <= max_t; ++t) {
+        for (int t = 0; t <= max_t; ++t)
+        {
             // check drive-drive vertex collisions
-            for (size_t i = 0; i < solution.size(); ++i) {
+            for (size_t i = 0; i < solution.size(); ++i)
+            {
                 TimeLocation state1 = getState(i, solution, t);
-                for (size_t j = i + 1; j < solution.size(); ++j) {
+                for (size_t j = i + 1; j < solution.size(); ++j)
+                {
                     TimeLocation state2 = getState(j, solution, t);
-                    if (state1.location == state2.location) {
+                    if (state1.location == state2.location)
+                    {
                         result.time = t;
                         result.agent1 = i;
                         result.agent2 = j;
@@ -412,15 +420,19 @@ public:
                     }
                 }
             }
+
             // drive-drive edge (swap)
-            for (size_t i = 0; i < solution.size(); ++i) {
+            for (size_t i = 0; i < solution.size(); ++i)
+            {
                 TimeLocation state1a = getState(i, solution, t);
                 TimeLocation state1b = getState(i, solution, t + 1);
-                for (size_t j = i + 1; j < solution.size(); ++j) {
+                for (size_t j = i + 1; j < solution.size(); ++j)
+                {
                     TimeLocation state2a = getState(j, solution, t);
                     TimeLocation state2b = getState(j, solution, t + 1);
                     if (state1a.location == state2b.location &&
-                        state1b.location == state2a.location) {
+                        state1b.location == state2a.location)
+                    {
                         result.time = t;
                         result.agent1 = i;
                         result.agent2 = j;
@@ -429,6 +441,7 @@ public:
                         result.y1 = state1a.location.y;
                         result.x2 = state1b.location.x;
                         result.y2 = state1b.location.y;
+
                         return true;
                     }
                 }
@@ -439,18 +452,23 @@ public:
     }
 
     void createConstraintsFromConflict(
-            const Conflict& conflict, std::map<size_t, Constraints>& constraints) {
-        if (conflict.type == Conflict::Vertex) {
+            const Conflict& conflict, std::map<size_t, Constraints>& constraints)
+    {
+        if (conflict.type == Conflict::Vertex)
+        {
             Constraints c1;
             c1.vertexConstraints.emplace(
                     VertexConstraint(conflict.time, conflict.x1, conflict.y1));
             constraints[conflict.agent1] = c1;
             constraints[conflict.agent2] = c1;
-        } else if (conflict.type == Conflict::Edge) {
+        }
+        else if (conflict.type == Conflict::Edge)
+        {
             Constraints c1;
             c1.edgeConstraints.emplace(EdgeConstraint(
                     conflict.time, conflict.x1, conflict.y1, conflict.x2, conflict.y2));
             constraints[conflict.agent1] = c1;
+
             Constraints c2;
             c2.edgeConstraints.emplace(EdgeConstraint(
                     conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
@@ -470,24 +488,28 @@ public:
     int lowLevelExpanded() const { return m_lowLevelExpanded; }
 
 private:
-    TimeLocation getState(size_t agentIdx,
-                          const std::vector<PlanResult>& solution,
-                          size_t t) {
+    TimeLocation getState(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
+    {
         assert(agentIdx < solution.size());
-        if (t < solution[agentIdx].path.size()) {
+        if (t < solution[agentIdx].path.size())
+        {
             return solution[agentIdx].path[t].first;
         }
+
         assert(!solution[agentIdx].path.empty());
-        if (m_disappearAtGoal) {
+        if (m_disappearAtGoal)
+        {
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
             // This will cause all calls to equalExceptTime(.) to return false.
             return TimeLocation(-1, Location(-1 * (agentIdx+1), -1));
         }
+
         return solution[agentIdx].path.back().first;
     }
 
-    bool location_valid(const TimeLocation& s) {
+    bool location_valid(const TimeLocation& s)
+    {
         assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
         return s.location.x >= 0 && s.location.x < num_columns
@@ -496,7 +518,8 @@ private:
                con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
     }
 
-    bool transitionValid(const TimeLocation& s1, const TimeLocation& s2) {
+    bool transitionValid(const TimeLocation& s1, const TimeLocation& s2)
+    {
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
         return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
