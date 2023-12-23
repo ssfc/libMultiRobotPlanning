@@ -16,7 +16,8 @@
 
 
 ///
-enum class Action {
+enum class Action
+{
     Up,
     Down,
     Left,
@@ -76,14 +77,17 @@ public:
     int y2;
 
 public:
-    friend std::ostream& operator<<(std::ostream& os, const Conflict& c) {
-        switch (c.type) {
+    friend std::ostream& operator<<(std::ostream& os, const Conflict& c)
+    {
+        switch (c.type)
+        {
             case Vertex:
                 return os << c.time << ": Vertex(" << c.x1 << "," << c.y1 << ")";
             case Edge:
                 return os << c.time << ": Edge(" << c.x1 << "," << c.y1 << "," << c.x2
                           << "," << c.y2 << ")";
         }
+
         return os;
     }
 };
