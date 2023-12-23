@@ -397,31 +397,31 @@ public:
         neighbors.clear();
 
         TimeLocation wait_n(s.time_step + 1, Location(s.location.x, s.location.y));
-        if (location_valid(wait_n) && transitionValid(s, wait_n))
+        if (location_valid(wait_n) && transition_valid(s, wait_n))
         {
             neighbors.emplace_back(Neighbor(wait_n, Action::Wait, 1));
         }
 
         TimeLocation west_n(s.time_step + 1, Location(s.location.x - 1, s.location.y));
-        if (location_valid(west_n) && transitionValid(s, west_n))
+        if (location_valid(west_n) && transition_valid(s, west_n))
         {
             neighbors.emplace_back(Neighbor(west_n, Action::Left, 1));
         }
 
         TimeLocation east_n(s.time_step + 1, Location(s.location.x + 1, s.location.y));
-        if (location_valid(east_n) && transitionValid(s, east_n))
+        if (location_valid(east_n) && transition_valid(s, east_n))
         {
             neighbors.emplace_back(Neighbor(east_n, Action::Right, 1));
         }
 
         TimeLocation north_n(s.time_step + 1, Location(s.location.x, s.location.y + 1));
-        if (location_valid(north_n) && transitionValid(s, north_n))
+        if (location_valid(north_n) && transition_valid(s, north_n))
         {
             neighbors.emplace_back(Neighbor(north_n, Action::Up, 1));
         }
 
         TimeLocation south_n(s.time_step + 1, Location(s.location.x, s.location.y - 1));
-        if (location_valid(south_n) && transitionValid(s, south_n))
+        if (location_valid(south_n) && transition_valid(s, south_n))
         {
             neighbors.emplace_back(Neighbor(south_n, Action::Down, 1));
         }
@@ -561,7 +561,7 @@ public:
                con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
     }
 
-    bool transitionValid(const TimeLocation& s1, const TimeLocation& s2)
+    bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
     {
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
