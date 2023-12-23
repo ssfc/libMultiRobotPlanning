@@ -899,25 +899,32 @@ struct HighLevelNode
 
     handle_t handle;
 
-    bool operator<(const HighLevelNode& n) const {
+    bool operator<(const HighLevelNode& n) const
+    {
         // if (cost != n.cost)
         return cost > n.cost;
         // return id > n.id;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c) {
+    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
+    {
         os << "id: " << c.id << " cost: " << c.cost << " LB: " << c.LB
            << " focal: " << c.focalHeuristic << std::endl;
-        for (size_t i = 0; i < c.solution.size(); ++i) {
+        for (size_t i = 0; i < c.solution.size(); ++i)
+        {
             os << "Agent: " << i << std::endl;
             os << " States:" << std::endl;
-            for (size_t t = 0; t < c.solution[i].path.size(); ++t) {
+
+            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+            {
                 os << "  " << c.solution[i].path[t].first << std::endl;
             }
+
             os << " Constraints:" << std::endl;
             os << c.constraints[i];
             os << " cost: " << c.solution[i].cost << std::endl;
         }
+        
         return os;
     }
 };
