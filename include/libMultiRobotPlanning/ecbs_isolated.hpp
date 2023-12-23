@@ -190,6 +190,7 @@ struct Constraints {
     }
 };
 
+
 class Environment {
 public:
     Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
@@ -478,6 +479,64 @@ private:
     int m_highLevelExpanded;
     int m_lowLevelExpanded;
     bool m_disappearAtGoal;
+};
+
+
+struct LowLevelEnvironment {
+    LowLevelEnvironment(
+            Environment& env, size_t agentIdx, const Constraints& constraints,
+            const std::vector<PlanResult>& solution)
+            : m_env(env)
+            // , m_agentIdx(agentIdx)
+            // , m_constraints(constraints)
+            ,
+              m_solution(solution) {
+        m_env.setLowLevelContext(agentIdx, &constraints);
+    }
+
+    int admissible_heuristic(const TimeLocation& s)
+    {
+        return m_env.admissible_heuristic(s);
+    }
+
+    int focalStateHeuristic(const TimeLocation& s, int gScore)
+    {
+        return m_env.focalStateHeuristic(s, gScore, m_solution);
+    }
+
+    int focalTransitionHeuristic(const TimeLocation& s1, const TimeLocation& s2,
+                                 int gScoreS1, int gScoreS2)
+    {
+        return m_env.focalTransitionHeuristic(s1, s2, gScoreS1, gScoreS2,
+                                              m_solution);
+    }
+
+    bool is_solution(const TimeLocation& s) { return m_env.is_solution(s); }
+
+    void get_neighbors(const TimeLocation& s,
+                       std::vector<Neighbor>& neighbors) {
+        m_env.get_neighbors(s, neighbors);
+    }
+
+    void onExpandNode(const TimeLocation& s, int fScore, int gScore) {
+        // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
+        // << gScore << std::endl;
+        // m_env.onExpandLowLevelNode(s, fScore, gScore, m_agentIdx,
+        // m_constraints);
+        m_env.onExpandLowLevelNode(s, fScore, gScore);
+    }
+
+    void onDiscover(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
+        // std::cout << "LL discover: " << s << std::endl;
+        // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
+    }
+
+private:
+    Environment& m_env;
+    // size_t m_agentIdx;
+    // const Constraints& m_constraints;
+    const std::vector<PlanResult>& m_solution;
 };
 
 
@@ -941,63 +1000,6 @@ private:
             handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
     boost::heap::compare<compareFocalHeuristic> >
     focalSet_t;
-
-    struct LowLevelEnvironment {
-        LowLevelEnvironment(
-                Environment& env, size_t agentIdx, const Constraints& constraints,
-                const std::vector<PlanResult>& solution)
-                : m_env(env)
-                // , m_agentIdx(agentIdx)
-                // , m_constraints(constraints)
-                ,
-                  m_solution(solution) {
-            m_env.setLowLevelContext(agentIdx, &constraints);
-        }
-
-        int admissible_heuristic(const TimeLocation& s)
-        {
-            return m_env.admissible_heuristic(s);
-        }
-
-        int focalStateHeuristic(const TimeLocation& s, int gScore)
-        {
-            return m_env.focalStateHeuristic(s, gScore, m_solution);
-        }
-
-        int focalTransitionHeuristic(const TimeLocation& s1, const TimeLocation& s2,
-                                      int gScoreS1, int gScoreS2)
-        {
-            return m_env.focalTransitionHeuristic(s1, s2, gScoreS1, gScoreS2,
-                                                  m_solution);
-        }
-
-        bool is_solution(const TimeLocation& s) { return m_env.is_solution(s); }
-
-        void get_neighbors(const TimeLocation& s,
-                           std::vector<Neighbor>& neighbors) {
-            m_env.get_neighbors(s, neighbors);
-        }
-
-        void onExpandNode(const TimeLocation& s, int fScore, int gScore) {
-            // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
-            // << gScore << std::endl;
-            // m_env.onExpandLowLevelNode(s, fScore, gScore, m_agentIdx,
-            // m_constraints);
-            m_env.onExpandLowLevelNode(s, fScore, gScore);
-        }
-
-        void onDiscover(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
-        {
-            // std::cout << "LL discover: " << s << std::endl;
-            // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
-        }
-
-    private:
-        Environment& m_env;
-        // size_t m_agentIdx;
-        // const Constraints& m_constraints;
-        const std::vector<PlanResult>& m_solution;
-    };
 
 private:
     Environment& m_env;
