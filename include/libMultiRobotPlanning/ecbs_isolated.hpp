@@ -931,7 +931,9 @@ private:
         boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 
 public:
-    ECBS(ECBSEnvironment& environment, float w) : m_env(environment), m_w(w)
+    ECBS(ECBSEnvironment& environment, float w)
+    : m_env(environment),
+      m_w(w)
     {}
 
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
