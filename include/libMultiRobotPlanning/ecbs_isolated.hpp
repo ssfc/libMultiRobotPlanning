@@ -519,7 +519,7 @@ public:
         num_expanded_high_level_nodes++;
     }
 
-    void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
+    void onExpandLowLevelNode()
     {
         num_expanded_low_level_nodes++;
     }
@@ -617,12 +617,13 @@ public:
         m_env.get_neighbors(s, neighbors);
     }
 
-    void onExpandNode(const TimeLocation& s, int fScore, int gScore) {
+    void onExpandNode(const TimeLocation& s, int fScore, int gScore)
+    {
         // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
         // << gScore << std::endl;
         // m_env.onExpandLowLevelNode(s, fScore, gScore, m_agentIdx,
         // m_constraints);
-        m_env.onExpandLowLevelNode(s, fScore, gScore);
+        m_env.onExpandLowLevelNode();
     }
 
     void onDiscover(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
