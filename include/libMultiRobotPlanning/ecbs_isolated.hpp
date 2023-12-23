@@ -323,6 +323,115 @@ struct Conflict {
 };
 
 
+struct VertexConstraint {
+    VertexConstraint(int time, int x, int y) : time(time), x(x), y(y) {}
+    int time;
+    int x;
+    int y;
+
+    bool operator<(const VertexConstraint& other) const {
+        return std::tie(time, x, y) < std::tie(other.time, other.x, other.y);
+    }
+
+    bool operator==(const VertexConstraint& other) const {
+        return std::tie(time, x, y) == std::tie(other.time, other.x, other.y);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& c) {
+        return os << "VC(" << c.time << "," << c.x << "," << c.y << ")";
+    }
+};
+
+namespace std {
+    template <>
+    struct hash<VertexConstraint> {
+        size_t operator()(const VertexConstraint& s) const {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.x);
+            boost::hash_combine(seed, s.y);
+            return seed;
+        }
+    };
+}  // namespace std
+
+struct EdgeConstraint {
+    EdgeConstraint(int time, int x1, int y1, int x2, int y2)
+            : time(time), x1(x1), y1(y1), x2(x2), y2(y2) {}
+    int time;
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+
+    bool operator<(const EdgeConstraint& other) const {
+        return std::tie(time, x1, y1, x2, y2) <
+               std::tie(other.time, other.x1, other.y1, other.x2, other.y2);
+    }
+
+    bool operator==(const EdgeConstraint& other) const {
+        return std::tie(time, x1, y1, x2, y2) ==
+               std::tie(other.time, other.x1, other.y1, other.x2, other.y2);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& c) {
+        return os << "EC(" << c.time << "," << c.x1 << "," << c.y1 << "," << c.x2
+                  << "," << c.y2 << ")";
+    }
+};
+
+namespace std {
+    template <>
+    struct hash<EdgeConstraint> {
+        size_t operator()(const EdgeConstraint& s) const {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.x1);
+            boost::hash_combine(seed, s.y1);
+            boost::hash_combine(seed, s.x2);
+            boost::hash_combine(seed, s.y2);
+            return seed;
+        }
+    };
+}  // namespace std
+
+struct Constraints {
+    std::unordered_set<VertexConstraint> vertexConstraints;
+    std::unordered_set<EdgeConstraint> edgeConstraints;
+
+    void add(const Constraints& other) {
+        vertexConstraints.insert(other.vertexConstraints.begin(),
+                                 other.vertexConstraints.end());
+        edgeConstraints.insert(other.edgeConstraints.begin(),
+                               other.edgeConstraints.end());
+    }
+
+    bool overlap(const Constraints& other) const {
+        for (const auto& vc : vertexConstraints) {
+            if (other.vertexConstraints.count(vc) > 0) {
+                return true;
+            }
+        }
+        for (const auto& ec : edgeConstraints) {
+            if (other.edgeConstraints.count(ec) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Constraints& c) {
+        for (const auto& vc : c.vertexConstraints) {
+            os << vc << std::endl;
+        }
+        for (const auto& ec : c.edgeConstraints) {
+            os << ec << std::endl;
+        }
+        return os;
+    }
+};
+
+
 template <typename Constraints, typename Environment>
 class ECBS {
 public:
