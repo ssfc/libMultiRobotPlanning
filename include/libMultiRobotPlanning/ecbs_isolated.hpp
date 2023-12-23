@@ -1025,10 +1025,10 @@ public:
         start.focalHeuristic = m_env.focalHeuristic(start.solution);
 
         // std::priority_queue<HighLevelNode> open;
-        openSet_t open;
+        openSet_t open_set;
         focalSet_t focal;
 
-        auto handle = open.push(start);
+        auto handle = open_set.push(start);
         (*handle).handle = handle;
         focal.push(handle);
 
@@ -1036,19 +1036,19 @@ public:
 
         solution.clear();
         int id = 1;
-        while (!open.empty())
+        while (!open_set.empty())
         {
             // update focal list
             {
                 int oldBestCost = bestCost;
-                bestCost = open.top().cost;
+                bestCost = open_set.top().cost;
                 // std::cout << "bestFScore: " << bestFScore << std::endl;
                 if (bestCost > oldBestCost)
                 {
                     // std::cout << "oldBestCost: " << oldBestCost << " bestCost: " <<
                     // bestCost << std::endl;
-                    auto iter = open.ordered_begin();
-                    auto iterEnd = open.ordered_end();
+                    auto iter = open_set.ordered_begin();
+                    auto iterEnd = open_set.ordered_end();
                     for (; iter != iterEnd; ++iter)
                     {
                         int val = iter->cost;
@@ -1072,7 +1072,7 @@ public:
             // std::cout << "expand: " << P << std::endl;
 
             focal.pop();
-            open.erase(h);
+            open_set.erase(h);
 
             Conflict conflict;
             if (!m_env.get_all_paths_first_conflict(P.solution, conflict))
@@ -1119,7 +1119,7 @@ public:
                 if (success)
                 {
                     // std::cout << "  success. cost: " << newNode.cost << std::endl;
-                    auto handle = open.push(newNode);
+                    auto handle = open_set.push(newNode);
                     (*handle).handle = handle;
 
                     if (newNode.cost <= bestCost * m_w)
