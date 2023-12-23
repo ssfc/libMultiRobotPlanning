@@ -904,8 +904,9 @@ private:
 };
 
 
-struct HighLevelNode
+class HighLevelNode
 {
+public:
     std::vector<PlanResult> solution;
     std::vector<Constraints> constraints;
 
@@ -920,6 +921,7 @@ struct HighLevelNode
     typedef typename openSet_t::handle_type handle_t;
     handle_t handle;
 
+public:
     bool operator<(const HighLevelNode& n) const
     {
         // if (cost != n.cost)
