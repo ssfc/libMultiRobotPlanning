@@ -666,25 +666,24 @@ struct compareFocalHeuristic {
 };
 
 
-class AStarEpsilon {
+class AStarEpsilon
+{
 public:
     AStarEpsilon(LowLevelEnvironment& environment, float w)
             : m_env(environment), m_w(w) {}
 
-    bool low_level_search(const TimeLocation& startState,
-                PlanResult& solution) {
+    bool low_level_search(const TimeLocation& startState, PlanResult& solution)
+    {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(startState, 0));
         solution.actions.clear();
         solution.cost = 0;
 
         openSet_t openSet;
-        focalSet_t
-                focalSet;  // subset of open nodes that are within suboptimality bound
+        focalSet_t focalSet;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> stateToHeap;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closedSet;
-        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>,
-                std::hash<TimeLocation>> cameFrom;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> cameFrom;
 
         auto handle = openSet.push(
                 LowLevelNode(startState, m_env.admissible_heuristic(startState), 0, 0));
@@ -700,8 +699,8 @@ public:
 
         // std::cout << "new search" << std::endl;
 
-        while (!openSet.empty()) {
-// update focal list
+        while (!openSet.empty())
+        {
             {
                 int oldBestFScore = bestFScore;
                 bestFScore = openSet.top().fScore;
