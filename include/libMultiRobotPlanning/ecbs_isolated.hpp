@@ -928,7 +928,7 @@ private:
 
     typedef typename boost::heap::d_ary_heap<
             handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-    boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+        boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 
 public:
     ECBS(ECBSEnvironment& environment, float w) : m_env(environment), m_w(w)
