@@ -395,7 +395,7 @@ int main(int argc, char* argv[]) {
     }
 
     Environment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
-    ECBS<Constraints, Environment> ecbs(mapf, w);
+    ECBS<Environment> ecbs(mapf, w);
     std::vector<PlanResult> solution;
 
     Timer timer;
