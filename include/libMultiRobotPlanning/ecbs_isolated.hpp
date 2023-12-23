@@ -206,6 +206,18 @@ struct Constraints {
 
 class Environment
 {
+private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    std::vector<Location> m_goals;
+    size_t m_agentIdx;
+    const Constraints* m_constraints;
+    int m_lastGoalConstraint;
+    int m_highLevelExpanded;
+    int m_lowLevelExpanded;
+    bool m_disappearAtGoal;
+
 public:
     Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
                 std::vector<Location> goals, bool disappearAtGoal = false)
@@ -487,7 +499,6 @@ public:
 
     int lowLevelExpanded() const { return m_lowLevelExpanded; }
 
-private:
     TimeLocation getState(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
     {
         assert(agentIdx < solution.size());
@@ -525,18 +536,6 @@ private:
         return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
                con.end();
     }
-
-private:
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    std::vector<Location> m_goals;
-    size_t m_agentIdx;
-    const Constraints* m_constraints;
-    int m_lastGoalConstraint;
-    int m_highLevelExpanded;
-    int m_lowLevelExpanded;
-    bool m_disappearAtGoal;
 };
 
 
