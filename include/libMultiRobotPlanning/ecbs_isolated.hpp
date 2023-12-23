@@ -298,13 +298,14 @@ public:
         {
             if (i != m_agentIdx && !solution[i].path.empty())
             {
-                TimeLocation state2 = getState(i, solution, s.time_step);
+                TimeLocation state2 = get_time_location(i, solution, s.time_step);
                 if (s.location == state2.location)
                 {
                     ++numConflicts;
                 }
             }
         }
+
         return numConflicts;
     }
 
@@ -318,8 +319,8 @@ public:
         {
             if (i != m_agentIdx && !solution[i].path.empty())
             {
-                TimeLocation s2a = getState(i, solution, s1a.time_step);
-                TimeLocation s2b = getState(i, solution, s1b.time_step);
+                TimeLocation s2a = get_time_location(i, solution, s1a.time_step);
+                TimeLocation s2b = get_time_location(i, solution, s1b.time_step);
                 if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
                 {
                     ++numConflicts;
@@ -346,10 +347,10 @@ public:
             // check drive-drive vertex collisions
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1 = getState(i, solution, t);
+                TimeLocation state1 = get_time_location(i, solution, t);
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2 = getState(j, solution, t);
+                    TimeLocation state2 = get_time_location(j, solution, t);
                     if (state1.location == state2.location)
                     {
                         ++numConflicts;
@@ -360,13 +361,13 @@ public:
             // drive-drive edge (swap)
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1a = getState(i, solution, t);
-                TimeLocation state1b = getState(i, solution, t + 1);
+                TimeLocation state1a = get_time_location(i, solution, t);
+                TimeLocation state1b = get_time_location(i, solution, t + 1);
 
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2a = getState(j, solution, t);
-                    TimeLocation state2b = getState(j, solution, t + 1);
+                    TimeLocation state2a = get_time_location(j, solution, t);
+                    TimeLocation state2b = get_time_location(j, solution, t + 1);
 
                     if (state1a.location == state2b.location &&
                         state1b.location == state2a.location)
@@ -439,10 +440,10 @@ public:
             // check drive-drive vertex collisions
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1 = getState(i, solution, t);
+                TimeLocation state1 = get_time_location(i, solution, t);
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2 = getState(j, solution, t);
+                    TimeLocation state2 = get_time_location(j, solution, t);
                     if (state1.location == state2.location)
                     {
                         result.time = t;
@@ -461,12 +462,12 @@ public:
             // drive-drive edge (swap)
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                TimeLocation state1a = getState(i, solution, t);
-                TimeLocation state1b = getState(i, solution, t + 1);
+                TimeLocation state1a = get_time_location(i, solution, t);
+                TimeLocation state1b = get_time_location(i, solution, t + 1);
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    TimeLocation state2a = getState(j, solution, t);
-                    TimeLocation state2b = getState(j, solution, t + 1);
+                    TimeLocation state2a = get_time_location(j, solution, t);
+                    TimeLocation state2b = get_time_location(j, solution, t + 1);
                     if (state1a.location == state2b.location &&
                         state1b.location == state2a.location)
                     {
@@ -524,7 +525,7 @@ public:
 
     int lowLevelExpanded() const { return m_lowLevelExpanded; }
 
-    TimeLocation getState(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
+    TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
     {
         assert(agentIdx < solution.size());
         if (t < solution[agentIdx].path.size())
