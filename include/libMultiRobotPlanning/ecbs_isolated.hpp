@@ -905,8 +905,33 @@ struct HighLevelNode
 
 class ECBS
 {
+private:
+    ECBSEnvironment& m_env;
+    float m_w;
+
+    typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
+    typedef typename openSet_t::handle_type handle_t;
+// typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
+// boost::heap::arity<2>, boost::heap::mutable_<true>,
+// boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+
+    struct compareFocalHeuristic {
+        bool operator()(const handle_t& h1, const handle_t& h2) const {
+            // Our heap is a maximum heap, so we invert the comperator function here
+            if ((*h1).focalHeuristic != (*h2).focalHeuristic) {
+                return (*h1).focalHeuristic > (*h2).focalHeuristic;
+            }
+            return (*h1).cost > (*h2).cost;
+        }
+    };
+
+    typedef typename boost::heap::d_ary_heap<
+            handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
+    boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+
 public:
-    ECBS(ECBSEnvironment& environment, float w) : m_env(environment), m_w(w) {}
+    ECBS(ECBSEnvironment& environment, float w) : m_env(environment), m_w(w)
+    {}
 
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
                 std::vector<PlanResult>& solution)
@@ -1056,33 +1081,6 @@ public:
 
         return false;
     }
-
-private:
-
-    typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
-    typedef typename openSet_t::handle_type handle_t;
-// typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
-// boost::heap::arity<2>, boost::heap::mutable_<true>,
-// boost::heap::compare<compareFocalHeuristic> > focalSet_t;
-
-    struct compareFocalHeuristic {
-        bool operator()(const handle_t& h1, const handle_t& h2) const {
-            // Our heap is a maximum heap, so we invert the comperator function here
-            if ((*h1).focalHeuristic != (*h2).focalHeuristic) {
-                return (*h1).focalHeuristic > (*h2).focalHeuristic;
-            }
-            return (*h1).cost > (*h2).cost;
-        }
-    };
-
-    typedef typename boost::heap::d_ary_heap<
-            handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-    boost::heap::compare<compareFocalHeuristic> >
-    focalSet_t;
-
-private:
-    ECBSEnvironment& m_env;
-    float m_w;
 };
 
 
