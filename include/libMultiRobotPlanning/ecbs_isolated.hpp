@@ -724,7 +724,7 @@ public:
         solution.cost = 0;
 
         openSet_t open_set;
-        focalSet_t focalSet;  // subset of open nodes that are within suboptimality bound
+        focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> stateToHeap;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closedSet;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> cameFrom;
@@ -734,7 +734,7 @@ public:
         stateToHeap.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
 
-        focalSet.push(handle);
+        focal_set.push(handle);
 
         std::vector<Neighbor> neighbors;
         neighbors.reserve(10);
@@ -760,7 +760,7 @@ public:
                     if (val > oldBestFScore * m_w && val <= bestFScore * m_w)
                     {
                         const LowLevelNode& n = *iter;
-                        focalSet.push(n.handle);
+                        focal_set.push(n.handle);
                     }
 
                     if (val > bestFScore * m_w)
@@ -773,7 +773,7 @@ public:
 
             // check focal list/open list consistency
 
-            auto currentHandle = focalSet.top();
+            auto currentHandle = focal_set.top();
             LowLevelNode current = *currentHandle;
             m_env.onExpandNode(current.state, current.fScore, current.gScore);
 
@@ -800,7 +800,7 @@ public:
                 return true;
             }
 
-            focalSet.pop();
+            focal_set.pop();
             open_set.erase(currentHandle);
             stateToHeap.erase(current.state);
             closedSet.insert(current.state);
@@ -833,7 +833,7 @@ public:
                         if (fScore <= bestFScore * m_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
-                            focalSet.push(handle);
+                            focal_set.push(handle);
                         }
 
                         stateToHeap.insert(std::make_pair<>(neighbor.time_location, handle));
@@ -863,7 +863,7 @@ public:
                         if ((*handle).fScore <= bestFScore * m_w && last_fScore > bestFScore * m_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
-                            focalSet.push(handle);
+                            focal_set.push(handle);
                         }
                     }
 
