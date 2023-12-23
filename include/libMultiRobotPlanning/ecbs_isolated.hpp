@@ -88,11 +88,15 @@ public:
 };
 
 
-struct VertexConstraint {
-    VertexConstraint(int time, int x, int y) : time(time), x(x), y(y) {}
+class VertexConstraint
+{
+public:
     int time;
     int x;
     int y;
+
+public:
+    VertexConstraint(int time, int x, int y) : time(time), x(x), y(y) {}
 
     bool operator<(const VertexConstraint& other) const {
         return std::tie(time, x, y) < std::tie(other.time, other.x, other.y);
