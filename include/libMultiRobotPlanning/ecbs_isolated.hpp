@@ -722,7 +722,8 @@ private:
 };
 
 
-class ECBS {
+class ECBS
+{
 public:
     ECBS(Environment& environment, float w) : m_env(environment), m_w(w) {}
 
@@ -738,24 +739,30 @@ public:
 
         for (size_t i = 0; i < initialStates.size(); ++i)
         {
-            if (i < solution.size() && solution[i].path.size() > 1) {
+            if (i < solution.size() && solution[i].path.size() > 1)
+            {
                 std::cout << initialStates[i] << " " << solution[i].path.front().first
                           << std::endl;
                 assert(initialStates[i] == solution[i].path.front().first);
                 start.solution[i] = solution[i];
                 std::cout << "use existing solution for agent: " << i << std::endl;
-            } else {
+            }
+            else
+            {
                 LowLevelEnvironment llenv(m_env, i, start.constraints[i],
                                           start.solution);
                 LowLevelSearch_t lowLevel(llenv, m_w);
                 bool success = lowLevel.low_level_search(initialStates[i], start.solution[i]);
-                if (!success) {
+                if (!success)
+                {
                     return false;
                 }
             }
+
             start.cost += start.solution[i].cost;
             start.LB += start.solution[i].fmin;
         }
+
         start.focalHeuristic = m_env.focalHeuristic(start.solution);
 
         // std::priority_queue<HighLevelNode> open;
@@ -770,31 +777,35 @@ public:
 
         solution.clear();
         int id = 1;
-        while (!open.empty()) {
-// update focal list
+        while (!open.empty())
+        {
+            // update focal list
             {
                 int oldBestCost = bestCost;
                 bestCost = open.top().cost;
                 // std::cout << "bestFScore: " << bestFScore << std::endl;
-                if (bestCost > oldBestCost) {
+                if (bestCost > oldBestCost)
+                {
                     // std::cout << "oldBestCost: " << oldBestCost << " bestCost: " <<
                     // bestCost << std::endl;
                     auto iter = open.ordered_begin();
                     auto iterEnd = open.ordered_end();
-                    for (; iter != iterEnd; ++iter) {
+                    for (; iter != iterEnd; ++iter)
+                    {
                         int val = iter->cost;
-                        if (val > oldBestCost * m_w && val <= bestCost * m_w) {
+                        if (val > oldBestCost * m_w && val <= bestCost * m_w)
+                        {
                             const HighLevelNode& n = *iter;
                             focal.push(n.handle);
                         }
-                        if (val > bestCost * m_w) {
+
+                        if (val > bestCost * m_w)
+                        {
                             break;
                         }
                     }
                 }
             }
-
-// check focal list/open list consistency
 
             auto h = focal.top();
             HighLevelNode P = *h;
@@ -805,9 +816,11 @@ public:
             open.erase(h);
 
             Conflict conflict;
-            if (!m_env.getFirstConflict(P.solution, conflict)) {
+            if (!m_env.getFirstConflict(P.solution, conflict))
+            {
                 // std::cout << "done; cost: " << P.cost << std::endl;
                 solution = P.solution;
+
                 return true;
             }
 
@@ -844,11 +857,14 @@ public:
                 newNode.LB += newNode.solution[i].fmin;
                 newNode.focalHeuristic = m_env.focalHeuristic(newNode.solution);
 
-                if (success) {
+                if (success)
+                {
                     // std::cout << "  success. cost: " << newNode.cost << std::endl;
                     auto handle = open.push(newNode);
                     (*handle).handle = handle;
-                    if (newNode.cost <= bestCost * m_w) {
+
+                    if (newNode.cost <= bestCost * m_w)
+                    {
                         focal.push(handle);
                     }
                 }
@@ -871,7 +887,8 @@ private:
 // boost::heap::arity<2>, boost::heap::mutable_<true>,
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 
-    struct HighLevelNode {
+    struct HighLevelNode
+    {
         std::vector<PlanResult> solution;
         std::vector<Constraints> constraints;
 
