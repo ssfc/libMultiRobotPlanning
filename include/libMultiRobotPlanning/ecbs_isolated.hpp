@@ -1096,34 +1096,34 @@ public:
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
                 // std::cout << "create child with id " << id << std::endl;
-                HighLevelNode newNode = P;
-                newNode.id = id;
+                HighLevelNode new_node = P;
+                new_node.id = id;
                 // (optional) check that this constraint was not included already
-                // std::cout << newNode.constraints[i] << std::endl;
+                // std::cout << new_node.constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
-                assert(!newNode.constraints[i].overlap(c.second));
+                assert(!new_node.constraints[i].overlap(c.second));
 
-                newNode.constraints[i].add(c.second);
+                new_node.constraints[i].add(c.second);
 
-                newNode.cost -= newNode.solution[i].cost;
-                newNode.LB -= newNode.solution[i].fmin;
+                new_node.cost -= new_node.solution[i].cost;
+                new_node.LB -= new_node.solution[i].fmin;
 
-                LowLevelEnvironment llenv(m_env, i, newNode.constraints[i],
-                                          newNode.solution);
+                LowLevelEnvironment llenv(m_env, i, new_node.constraints[i],
+                                          new_node.solution);
                 AStarEpsilon lowLevel(llenv, m_w);
-                bool success = lowLevel.low_level_search(initialStates[i], newNode.solution[i]);
+                bool success = lowLevel.low_level_search(initialStates[i], new_node.solution[i]);
 
-                newNode.cost += newNode.solution[i].cost;
-                newNode.LB += newNode.solution[i].fmin;
-                newNode.focalHeuristic = m_env.get_focal_heuristic(newNode.solution);
+                new_node.cost += new_node.solution[i].cost;
+                new_node.LB += new_node.solution[i].fmin;
+                new_node.focalHeuristic = m_env.get_focal_heuristic(new_node.solution);
 
                 if (success)
                 {
-                    // std::cout << "  success. cost: " << newNode.cost << std::endl;
-                    auto handle = open_set.push(newNode);
+                    // std::cout << "  success. cost: " << new_node.cost << std::endl;
+                    auto handle = open_set.push(new_node);
                     (*handle).handle = handle;
 
-                    if (newNode.cost <= bestCost * m_w)
+                    if (new_node.cost <= bestCost * m_w)
                     {
                         focal.push(handle);
                     }
