@@ -323,7 +323,7 @@ struct Conflict {
 };
 
 
-template <typename Conflict, typename Constraints, typename Environment>
+template <typename Constraints, typename Environment>
 class ECBS {
 public:
     ECBS(Environment& environment, float w) : m_env(environment), m_w(w) {}
