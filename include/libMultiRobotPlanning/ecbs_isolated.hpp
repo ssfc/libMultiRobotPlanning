@@ -719,7 +719,7 @@ class AStarEpsilon
 public:
     AStarEpsilon(LowLevelEnvironment& environment, float input_w)
             : m_env(environment),
-              m_w(input_w)
+              factor_w(input_w)
             {}
 
     bool low_level_search(const TimeLocation& startState, PlanResult& solution)
@@ -763,13 +763,13 @@ public:
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->fScore;
-                    if (val > oldBestFScore * m_w && val <= best_f_score * m_w)
+                    if (val > oldBestFScore * factor_w && val <= best_f_score * factor_w)
                     {
                         const LowLevelNode& n = *iter;
                         focal_set.push(n.handle);
                     }
 
-                    if (val > best_f_score * m_w)
+                    if (val > best_f_score * factor_w)
                     {
                         break;
                     }
@@ -836,7 +836,7 @@ public:
                                 LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focal_heuristic));
                         (*handle).handle = handle;
 
-                        if (fScore <= best_f_score * m_w)
+                        if (fScore <= best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focal_set.push(handle);
@@ -866,7 +866,7 @@ public:
                         open_set.increase(handle);
                         m_env.onDiscover(neighbor.time_location, (*handle).fScore,
                                          (*handle).gScore);
-                        if ((*handle).fScore <= best_f_score * m_w && last_fScore > best_f_score * m_w)
+                        if ((*handle).fScore <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focal_set.push(handle);
@@ -906,7 +906,7 @@ private:
 
 private:
     LowLevelEnvironment& m_env;
-    float m_w;
+    float factor_w;
 };
 
 
@@ -963,7 +963,7 @@ class ECBS
 {
 private:
     ECBSEnvironment& m_env;
-    float m_w;
+    float factor_w;
 
     typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type handle_t;
@@ -989,7 +989,7 @@ private:
 public:
     ECBS(ECBSEnvironment& environment, float w)
     : m_env(environment),
-      m_w(w)
+      factor_w(w)
     {}
 
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
@@ -1016,7 +1016,7 @@ public:
             {
                 LowLevelEnvironment llenv(m_env, i, start.constraints[i],
                                           start.solution);
-                AStarEpsilon lowLevel(llenv, m_w);
+                AStarEpsilon lowLevel(llenv, factor_w);
                 bool success = lowLevel.low_level_search(initialStates[i], start.solution[i]);
                 if (!success)
                 {
@@ -1058,13 +1058,13 @@ public:
                     for (; iter != iterEnd; ++iter)
                     {
                         int val = iter->cost;
-                        if (val > oldBestCost * m_w && val <= bestCost * m_w)
+                        if (val > oldBestCost * factor_w && val <= bestCost * factor_w)
                         {
                             const HighLevelNode& n = *iter;
                             focal_set.push(n.handle);
                         }
 
-                        if (val > bestCost * m_w)
+                        if (val > bestCost * factor_w)
                         {
                             break;
                         }
@@ -1115,7 +1115,7 @@ public:
 
                 LowLevelEnvironment llenv(m_env, i, new_node.constraints[i],
                                           new_node.solution);
-                AStarEpsilon lowLevel(llenv, m_w);
+                AStarEpsilon lowLevel(llenv, factor_w);
                 bool success = lowLevel.low_level_search(initialStates[i], new_node.solution[i]);
 
                 new_node.cost += new_node.solution[i].cost;
@@ -1128,7 +1128,7 @@ public:
                     auto handle = open_set.push(new_node);
                     (*handle).handle = handle;
 
-                    if (new_node.cost <= bestCost * m_w)
+                    if (new_node.cost <= bestCost * factor_w)
                     {
                         focal_set.push(handle);
                     }
