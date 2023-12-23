@@ -487,7 +487,7 @@ public:
     AStarEpsilon(LowLevelEnvironment& environment, float w)
             : m_env(environment), m_w(w) {}
 
-    bool search(const TimeLocation& startState,
+    bool low_level_search(const TimeLocation& startState,
                 PlanResult& solution) {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(startState, 0));
@@ -727,7 +727,8 @@ public:
     ECBS(Environment& environment, float w) : m_env(environment), m_w(w) {}
 
     bool search(const std::vector<TimeLocation>& initialStates,
-                std::vector<PlanResult>& solution) {
+                std::vector<PlanResult>& solution)
+    {
         HighLevelNode start;
         start.solution.resize(initialStates.size());
         start.constraints.resize(initialStates.size());
@@ -735,7 +736,8 @@ public:
         start.LB = 0;
         start.id = 0;
 
-        for (size_t i = 0; i < initialStates.size(); ++i) {
+        for (size_t i = 0; i < initialStates.size(); ++i)
+        {
             if (i < solution.size() && solution[i].path.size() > 1) {
                 std::cout << initialStates[i] << " " << solution[i].path.front().first
                           << std::endl;
@@ -746,7 +748,7 @@ public:
                 LowLevelEnvironment llenv(m_env, i, start.constraints[i],
                                           start.solution);
                 LowLevelSearch_t lowLevel(llenv, m_w);
-                bool success = lowLevel.search(initialStates[i], start.solution[i]);
+                bool success = lowLevel.low_level_search(initialStates[i], start.solution[i]);
                 if (!success) {
                     return false;
                 }
@@ -836,7 +838,7 @@ public:
                 LowLevelEnvironment llenv(m_env, i, newNode.constraints[i],
                                           newNode.solution);
                 LowLevelSearch_t lowLevel(llenv, m_w);
-                bool success = lowLevel.search(initialStates[i], newNode.solution[i]);
+                bool success = lowLevel.low_level_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
                 newNode.LB += newNode.solution[i].fmin;
