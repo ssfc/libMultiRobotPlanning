@@ -514,10 +514,13 @@ public:
         }
     }
 
-    void onExpandHighLevelNode(int /*cost*/) { m_highLevelExpanded++; }
+    void onExpandHighLevelNode(int /*cost*/)
+    {
+        m_highLevelExpanded++;
+    }
 
-    void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/,
-                              int /*gScore*/) {
+    void onExpandLowLevelNode(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
         m_lowLevelExpanded++;
     }
 
