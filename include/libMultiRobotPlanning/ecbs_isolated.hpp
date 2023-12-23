@@ -858,7 +858,7 @@ public:
             {
                 LowLevelEnvironment llenv(m_env, i, start.constraints[i],
                                           start.solution);
-                LowLevelSearch_t lowLevel(llenv, m_w);
+                AStarEpsilon lowLevel(llenv, m_w);
                 bool success = lowLevel.low_level_search(initialStates[i], start.solution[i]);
                 if (!success)
                 {
@@ -957,7 +957,7 @@ public:
 
                 LowLevelEnvironment llenv(m_env, i, newNode.constraints[i],
                                           newNode.solution);
-                LowLevelSearch_t lowLevel(llenv, m_w);
+                AStarEpsilon lowLevel(llenv, m_w);
                 bool success = lowLevel.low_level_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
@@ -1009,7 +1009,6 @@ private:
 private:
     Environment& m_env;
     float m_w;
-    typedef AStarEpsilon LowLevelSearch_t;
 };
 
 
