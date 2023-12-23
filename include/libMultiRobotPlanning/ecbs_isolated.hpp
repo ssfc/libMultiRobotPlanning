@@ -722,6 +722,49 @@ private:
 };
 
 
+struct HighLevelNode
+{
+    std::vector<PlanResult> solution;
+    std::vector<Constraints> constraints;
+
+    int cost;
+    int LB;  // sum of fmin of solution
+
+    int focalHeuristic;
+
+    int id;
+
+    typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+    boost::heap::mutable_<true> >
+    openSet_t;
+    typedef typename openSet_t::handle_type handle_t;
+
+    handle_t handle;
+
+    bool operator<(const HighLevelNode& n) const {
+        // if (cost != n.cost)
+        return cost > n.cost;
+        // return id > n.id;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c) {
+        os << "id: " << c.id << " cost: " << c.cost << " LB: " << c.LB
+           << " focal: " << c.focalHeuristic << std::endl;
+        for (size_t i = 0; i < c.solution.size(); ++i) {
+            os << "Agent: " << i << std::endl;
+            os << " States:" << std::endl;
+            for (size_t t = 0; t < c.solution[i].path.size(); ++t) {
+                os << "  " << c.solution[i].path[t].first << std::endl;
+            }
+            os << " Constraints:" << std::endl;
+            os << c.constraints[i];
+            os << " cost: " << c.solution[i].cost << std::endl;
+        }
+        return os;
+    }
+};
+
+
 class ECBS
 {
 public:
@@ -877,7 +920,6 @@ public:
     }
 
 private:
-    struct HighLevelNode;
 
     typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
     boost::heap::mutable_<true> >
@@ -887,42 +929,6 @@ private:
 // boost::heap::arity<2>, boost::heap::mutable_<true>,
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 
-    struct HighLevelNode
-    {
-        std::vector<PlanResult> solution;
-        std::vector<Constraints> constraints;
-
-        int cost;
-        int LB;  // sum of fmin of solution
-
-        int focalHeuristic;
-
-        int id;
-
-        handle_t handle;
-
-        bool operator<(const HighLevelNode& n) const {
-            // if (cost != n.cost)
-            return cost > n.cost;
-            // return id > n.id;
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c) {
-            os << "id: " << c.id << " cost: " << c.cost << " LB: " << c.LB
-               << " focal: " << c.focalHeuristic << std::endl;
-            for (size_t i = 0; i < c.solution.size(); ++i) {
-                os << "Agent: " << i << std::endl;
-                os << " States:" << std::endl;
-                for (size_t t = 0; t < c.solution[i].path.size(); ++t) {
-                    os << "  " << c.solution[i].path[t].first << std::endl;
-                }
-                os << " Constraints:" << std::endl;
-                os << c.constraints[i];
-                os << " cost: " << c.solution[i].cost << std::endl;
-            }
-            return os;
-        }
-    };
 
     struct compareFocalHeuristic {
         bool operator()(const handle_t& h1, const handle_t& h2) const {
