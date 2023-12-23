@@ -717,8 +717,10 @@ struct compareFocalHeuristic
 class AStarEpsilon
 {
 public:
-    AStarEpsilon(LowLevelEnvironment& environment, float w)
-            : m_env(environment), m_w(w) {}
+    AStarEpsilon(LowLevelEnvironment& environment, float input_w)
+            : m_env(environment),
+              m_w(input_w)
+            {}
 
     bool low_level_search(const TimeLocation& startState, PlanResult& solution)
     {
