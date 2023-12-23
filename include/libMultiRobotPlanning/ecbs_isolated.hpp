@@ -332,7 +332,7 @@ public:
     }
 
     // Count all conflicts
-    int focalHeuristic(const std::vector<PlanResult>& solution)
+    int get_focal_heuristic(const std::vector<PlanResult>& solution)
     {
         int num_conflicts = 0;
 
@@ -1023,7 +1023,7 @@ public:
             start.LB += start.solution[i].fmin;
         }
 
-        start.focalHeuristic = m_env.focalHeuristic(start.solution);
+        start.focalHeuristic = m_env.get_focal_heuristic(start.solution);
 
         // std::priority_queue<HighLevelNode> open;
         openSet_t open_set;
@@ -1115,7 +1115,7 @@ public:
 
                 newNode.cost += newNode.solution[i].cost;
                 newNode.LB += newNode.solution[i].fmin;
-                newNode.focalHeuristic = m_env.focalHeuristic(newNode.solution);
+                newNode.focalHeuristic = m_env.get_focal_heuristic(newNode.solution);
 
                 if (success)
                 {
