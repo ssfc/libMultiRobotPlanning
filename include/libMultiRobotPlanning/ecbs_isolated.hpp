@@ -644,28 +644,35 @@ struct LowLevelNode
 
     fibHeapHandle_t handle;
 
-    LowLevelNode(const TimeLocation& state, int fScore, int gScore, int focalHeuristic)
+    LowLevelNode(const TimeLocation& state, int fScore, int gScore, int input_focalHeuristic)
             : state(state),
               fScore(fScore),
               gScore(gScore),
-              focalHeuristic(focalHeuristic) {}
+              focalHeuristic(input_focalHeuristic)
+              {}
 
-    bool operator<(const LowLevelNode& other) const {
+    bool operator<(const LowLevelNode& other) const
+    {
         // Sort order
         // 1. lowest fScore
         // 2. highest gScore
 
         // Our heap is a maximum heap, so we invert the comperator function here
-        if (fScore != other.fScore) {
+        if (fScore != other.fScore)
+        {
             return fScore > other.fScore;
-        } else {
+        }
+        else
+        {
             return gScore < other.gScore;
         }
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node) {
+    friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
+    {
         os << "state: " << node.state << " fScore: " << node.fScore
            << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
+        
         return os;
     }
 };
