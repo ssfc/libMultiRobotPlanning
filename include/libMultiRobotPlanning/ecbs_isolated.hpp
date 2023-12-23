@@ -539,7 +539,15 @@ public:
 };
 
 
-struct LowLevelEnvironment {
+struct LowLevelEnvironment
+{
+private:
+    Environment& m_env;
+    // size_t m_agentIdx;
+    // const Constraints& m_constraints;
+    const std::vector<PlanResult>& m_solution;
+
+public:
     LowLevelEnvironment(
             Environment& env, size_t agentIdx, const Constraints& constraints,
             const std::vector<PlanResult>& solution)
@@ -588,12 +596,6 @@ struct LowLevelEnvironment {
         // std::cout << "LL discover: " << s << std::endl;
         // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
     }
-
-private:
-    Environment& m_env;
-    // size_t m_agentIdx;
-    // const Constraints& m_constraints;
-    const std::vector<PlanResult>& m_solution;
 };
 
 
