@@ -24,8 +24,9 @@ enum class Action {
     Wait,
 };
 
-struct Neighbor
+class Neighbor
 {
+public:
     //! neighboring location
     TimeLocation time_location;
     //! action to get to the neighboring location
@@ -33,6 +34,7 @@ struct Neighbor
     //! cost to get to the neighboring location, usually 1
     int cost;
 
+public:
     Neighbor(const TimeLocation& input_time_location, const Action& input_action, int input_cost)
             : time_location(input_time_location),
               action(input_action),
