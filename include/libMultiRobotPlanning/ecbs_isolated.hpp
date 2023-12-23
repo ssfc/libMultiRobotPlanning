@@ -647,10 +647,10 @@ struct LowLevelNode
 
     fibHeapHandle_t handle;
 
-    LowLevelNode(const TimeLocation& state, int fScore, int gScore, int input_focalHeuristic)
-            : state(state),
-              fScore(fScore),
-              gScore(gScore),
+    LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore, int input_focalHeuristic)
+            : state(input_state),
+              fScore(input_fScore),
+              gScore(input_gScore),
               focalHeuristic(input_focalHeuristic)
               {}
 
