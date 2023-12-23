@@ -204,7 +204,8 @@ struct Constraints {
 };
 
 
-class Environment {
+class Environment
+{
 public:
     Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
                 std::vector<Location> goals, bool disappearAtGoal = false)
@@ -224,7 +225,8 @@ public:
     Environment(const Environment&) = delete;
     Environment& operator=(const Environment&) = delete;
 
-    void setLowLevelContext(size_t agentIdx, const Constraints* constraints) {
+    void setLowLevelContext(size_t agentIdx, const Constraints* constraints)
+    {
         assert(constraints);  // NOLINT
         m_agentIdx = agentIdx;
         m_constraints = constraints;
@@ -236,20 +238,24 @@ public:
         }
     }
 
-    int admissible_heuristic(const TimeLocation& s) {
+    int admissible_heuristic(const TimeLocation& s)
+    {
         return std::abs(s.location.x - m_goals[m_agentIdx].x) +
                std::abs(s.location.y - m_goals[m_agentIdx].y);
     }
 
     // low-level
-    int focalStateHeuristic(
-            const TimeLocation& s, int /*gScore*/,
-            const std::vector<PlanResult>& solution) {
+    int focalStateHeuristic(const TimeLocation& s, int /*gScore*/,
+            const std::vector<PlanResult>& solution)
+    {
         int numConflicts = 0;
-        for (size_t i = 0; i < solution.size(); ++i) {
-            if (i != m_agentIdx && !solution[i].path.empty()) {
+        for (size_t i = 0; i < solution.size(); ++i)
+        {
+            if (i != m_agentIdx && !solution[i].path.empty())
+            {
                 TimeLocation state2 = getState(i, solution, s.time_step);
-                if (s.location == state2.location) {
+                if (s.location == state2.location)
+                {
                     ++numConflicts;
                 }
             }
@@ -260,10 +266,13 @@ public:
     // low-level
     int focalTransitionHeuristic(
             const TimeLocation& s1a, const TimeLocation& s1b, int /*gScoreS1a*/, int /*gScoreS1b*/,
-            const std::vector<PlanResult>& solution) {
+            const std::vector<PlanResult>& solution)
+    {
         int numConflicts = 0;
-        for (size_t i = 0; i < solution.size(); ++i) {
-            if (i != m_agentIdx && !solution[i].path.empty()) {
+        for (size_t i = 0; i < solution.size(); ++i)
+        {
+            if (i != m_agentIdx && !solution[i].path.empty())
+            {
                 TimeLocation s2a = getState(i, solution, s1a.time_step);
                 TimeLocation s2b = getState(i, solution, s1b.time_step);
                 if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
@@ -272,44 +281,57 @@ public:
                 }
             }
         }
+
         return numConflicts;
     }
 
     // Count all conflicts
-    int focalHeuristic(
-            const std::vector<PlanResult>& solution) {
+    int focalHeuristic(const std::vector<PlanResult>& solution)
+    {
         int numConflicts = 0;
 
         int max_t = 0;
-        for (const auto& sol : solution) {
+        for (const auto& sol : solution)
+        {
             max_t = std::max<int>(max_t, sol.path.size() - 1);
         }
 
-        for (int t = 0; t < max_t; ++t) {
+        for (int t = 0; t < max_t; ++t)
+        {
             // check drive-drive vertex collisions
-            for (size_t i = 0; i < solution.size(); ++i) {
+            for (size_t i = 0; i < solution.size(); ++i)
+            {
                 TimeLocation state1 = getState(i, solution, t);
-                for (size_t j = i + 1; j < solution.size(); ++j) {
+                for (size_t j = i + 1; j < solution.size(); ++j)
+                {
                     TimeLocation state2 = getState(j, solution, t);
-                    if (state1.location == state2.location) {
+                    if (state1.location == state2.location)
+                    {
                         ++numConflicts;
                     }
                 }
             }
+
             // drive-drive edge (swap)
-            for (size_t i = 0; i < solution.size(); ++i) {
+            for (size_t i = 0; i < solution.size(); ++i)
+            {
                 TimeLocation state1a = getState(i, solution, t);
                 TimeLocation state1b = getState(i, solution, t + 1);
-                for (size_t j = i + 1; j < solution.size(); ++j) {
+
+                for (size_t j = i + 1; j < solution.size(); ++j)
+                {
                     TimeLocation state2a = getState(j, solution, t);
                     TimeLocation state2b = getState(j, solution, t + 1);
+
                     if (state1a.location == state2b.location &&
-                        state1b.location == state2a.location) {
+                        state1b.location == state2a.location)
+                    {
                         ++numConflicts;
                     }
                 }
             }
         }
+        
         return numConflicts;
     }
 
