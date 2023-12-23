@@ -892,11 +892,8 @@ struct HighLevelNode
 
     int id;
 
-    typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-    boost::heap::mutable_<true> >
-    openSet_t;
+    typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type handle_t;
-
     handle_t handle;
 
     bool operator<(const HighLevelNode& n) const
@@ -924,7 +921,7 @@ struct HighLevelNode
             os << c.constraints[i];
             os << " cost: " << c.solution[i].cost << std::endl;
         }
-        
+
         return os;
     }
 };
