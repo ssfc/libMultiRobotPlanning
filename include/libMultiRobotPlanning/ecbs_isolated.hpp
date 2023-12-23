@@ -489,7 +489,7 @@ public:
         return false;
     }
 
-    void createConstraintsFromConflict(
+    void generate_constraints_from_conflict(
             const Conflict& conflict, std::map<size_t, Constraints>& constraints)
     {
         if (conflict.type == Conflict::Vertex)
@@ -1093,7 +1093,7 @@ public:
             // conflict.type << std::endl;
 
             std::map<size_t, Constraints> constraints;
-            m_env.createConstraintsFromConflict(conflict, constraints);
+            m_env.generate_constraints_from_conflict(conflict, constraints);
             for (const auto& c : constraints)
             {
                 // std::cout << "Add HL node for " << c.first << std::endl;
