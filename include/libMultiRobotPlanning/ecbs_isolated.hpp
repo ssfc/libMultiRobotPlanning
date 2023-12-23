@@ -577,14 +577,12 @@ private:
     const std::vector<PlanResult>& m_solution;
 
 public:
-    LowLevelEnvironment(
-            ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
+    LowLevelEnvironment(ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
             const std::vector<PlanResult>& solution)
             : m_env(env)
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
-            ,
-              m_solution(solution)
+            ,m_solution(solution)
     {
         m_env.set_low_level_context(agentIdx, &constraints);
     }
