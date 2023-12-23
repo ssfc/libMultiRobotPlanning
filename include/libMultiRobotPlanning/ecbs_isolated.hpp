@@ -617,7 +617,7 @@ public:
         m_env.get_neighbors(s, neighbors);
     }
 
-    void onExpandNode(const TimeLocation& s, int fScore, int gScore)
+    void onExpandNode()
     {
         // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
         // << gScore << std::endl;
@@ -779,7 +779,7 @@ public:
 
             auto currentHandle = focal_set.top();
             LowLevelNode current = *currentHandle;
-            m_env.onExpandNode(current.state, current.fScore, current.gScore);
+            m_env.onExpandNode();
 
             if (m_env.is_solution(current.state))
             {
