@@ -911,9 +911,6 @@ private:
 
     typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type handle_t;
-// typedef typename boost::heap::d_ary_heap<fibHeapHandle_t,
-// boost::heap::arity<2>, boost::heap::mutable_<true>,
-// boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 
     struct compareFocalHeuristic
     {
@@ -924,7 +921,7 @@ private:
             {
                 return (*h1).focalHeuristic > (*h2).focalHeuristic;
             }
-            
+
             return (*h1).cost > (*h2).cost;
         }
     };
