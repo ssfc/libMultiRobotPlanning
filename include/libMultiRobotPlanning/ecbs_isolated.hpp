@@ -1030,11 +1030,11 @@ public:
 
         // std::priority_queue<HighLevelNode> open;
         openSet_t open_set;
-        focalSet_t focal;
+        focalSet_t focal_set;
 
         auto handle = open_set.push(start);
         (*handle).handle = handle;
-        focal.push(handle);
+        focal_set.push(handle);
 
         int bestCost = (*handle).cost;
 
@@ -1059,7 +1059,7 @@ public:
                         if (val > oldBestCost * m_w && val <= bestCost * m_w)
                         {
                             const HighLevelNode& n = *iter;
-                            focal.push(n.handle);
+                            focal_set.push(n.handle);
                         }
 
                         if (val > bestCost * m_w)
@@ -1070,12 +1070,12 @@ public:
                 }
             }
 
-            auto h = focal.top();
+            auto h = focal_set.top();
             HighLevelNode P = *h;
             m_env.onExpandHighLevelNode(P.cost);
             // std::cout << "expand: " << P << std::endl;
 
-            focal.pop();
+            focal_set.pop();
             open_set.erase(h);
 
             Conflict conflict;
@@ -1128,7 +1128,7 @@ public:
 
                     if (new_node.cost <= bestCost * m_w)
                     {
-                        focal.push(handle);
+                        focal_set.push(handle);
                     }
                 }
 
