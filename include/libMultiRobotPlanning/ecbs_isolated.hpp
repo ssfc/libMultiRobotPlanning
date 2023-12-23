@@ -314,7 +314,7 @@ public:
             const TimeLocation& s1a, const TimeLocation& s1b, int /*gScoreS1a*/, int /*gScoreS1b*/,
             const std::vector<PlanResult>& solution)
     {
-        int numConflicts = 0;
+        int num_conflicts = 0;
         for (size_t i = 0; i < solution.size(); ++i)
         {
             if (i != m_agentIdx && !solution[i].path.empty())
@@ -323,12 +323,12 @@ public:
                 TimeLocation s2b = get_time_location(i, solution, s1b.time_step);
                 if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
                 {
-                    ++numConflicts;
+                    ++num_conflicts;
                 }
             }
         }
 
-        return numConflicts;
+        return num_conflicts;
     }
 
     // Count all conflicts
