@@ -114,11 +114,14 @@ int main(int argc, char* argv[]) {
     bool success = ecbs.high_level_search(startStates, solution);
     timer.stop();
 
-    if (success) {
+    if (success)
+    {
         std::cout << "Planning successful! " << std::endl;
         int cost = 0;
         int makespan = 0;
-        for (const auto& s : solution) {
+
+        for (const auto& s : solution)
+        {
             cost += s.cost;
             makespan = std::max<int>(makespan, s.cost);
         }
@@ -139,7 +142,8 @@ int main(int argc, char* argv[]) {
         std::cout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
 
         out << "schedule:" << std::endl;
-        for (size_t a = 0; a < solution.size(); ++a) {
+        for (size_t a = 0; a < solution.size(); ++a)
+        {
             // std::cout << "Solution for: " << a << std::endl;
             // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
             //   std::cout << solution[a].path[i].second << ": " <<
@@ -150,7 +154,8 @@ int main(int argc, char* argv[]) {
             // solution[a].path.back().first << std::endl;
 
             out << "  agent" << a << ":" << std::endl;
-            for (const auto& state : solution[a].path) {
+            for (const auto& state : solution[a].path)
+            {
                 out << "    - x: " << state.first.location.x << std::endl
                     << "      y: " << state.first.location.y << std::endl
                     << "      t: " << state.second << std::endl;
@@ -165,7 +170,9 @@ int main(int argc, char* argv[]) {
 
             std::cout << std::endl;
         }
-    } else {
+    }
+    else
+    {
         std::cout << "Planning NOT successful!" << std::endl;
     }
 
