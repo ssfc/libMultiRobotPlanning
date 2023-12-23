@@ -639,7 +639,7 @@ struct LowLevelNode
 
     int fScore;
     int gScore;
-    int focalHeuristic;
+    int focal_heuristic;
 
     typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
     boost::heap::mutable_<true> > openSet_t;
@@ -651,7 +651,7 @@ struct LowLevelNode
             : state(input_state),
               fScore(input_fScore),
               gScore(input_gScore),
-              focalHeuristic(input_focalHeuristic)
+              focal_heuristic(input_focalHeuristic)
               {}
 
     bool operator<(const LowLevelNode& other) const
@@ -674,7 +674,7 @@ struct LowLevelNode
     friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
     {
         os << "state: " << node.state << " fScore: " << node.fScore
-           << " gScore: " << node.gScore << " focal: " << node.focalHeuristic;
+           << " gScore: " << node.gScore << " focal: " << node.focal_heuristic;
 
         return os;
     }
@@ -690,14 +690,14 @@ struct compareFocalHeuristic
     {
         // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
         // Path Finding" by Cohen et. al.)
-        // 1. lowest focalHeuristic
+        // 1. lowest focal_heuristic
         // 2. lowest fScore
         // 3. highest gScore
 
         // Our heap is a maximum heap, so we invert the comperator function here
-        if ((*h1).focalHeuristic != (*h2).focalHeuristic)
+        if ((*h1).focal_heuristic != (*h2).focal_heuristic)
         {
-            return (*h1).focalHeuristic > (*h2).focalHeuristic;
+            return (*h1).focal_heuristic > (*h2).focal_heuristic;
             // } else if ((*h1).fScore != (*h2).fScore) {
             //   return (*h1).fScore > (*h2).fScore;
         }
@@ -822,15 +822,15 @@ public:
                         // std::cout << "  this is a new node" << std::endl;
                         int fScore =
                                 tentative_gScore + m_env.admissible_heuristic(neighbor.time_location);
-                        int focalHeuristic =
-                                current.focalHeuristic +
+                        int focal_heuristic =
+                                current.focal_heuristic +
                                 m_env.get_focal_state_heuristic(neighbor.time_location, tentative_gScore) +
                                 m_env.get_focal_transition_heuristic(current.state, neighbor.time_location,
                                                                current.gScore,
                                                                tentative_gScore);
 
                         auto handle = open_set.push(
-                                LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focalHeuristic));
+                                LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focal_heuristic));
                         (*handle).handle = handle;
 
                         if (fScore <= bestFScore * m_w)
@@ -917,7 +917,7 @@ public:
     int cost;
     int LB;  // sum of fmin of solution
 
-    int focalHeuristic;
+    int focal_heuristic;
 
     int id;
 
@@ -936,7 +936,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
     {
         os << "id: " << c.id << " cost: " << c.cost << " LB: " << c.LB
-           << " focal: " << c.focalHeuristic << std::endl;
+           << " focal: " << c.focal_heuristic << std::endl;
         for (size_t i = 0; i < c.solution.size(); ++i)
         {
             os << "Agent: " << i << std::endl;
@@ -971,9 +971,9 @@ private:
         bool operator()(const handle_t& h1, const handle_t& h2) const
         {
             // Our heap is a maximum heap, so we invert the comperator function here
-            if ((*h1).focalHeuristic != (*h2).focalHeuristic)
+            if ((*h1).focal_heuristic != (*h2).focal_heuristic)
             {
-                return (*h1).focalHeuristic > (*h2).focalHeuristic;
+                return (*h1).focal_heuristic > (*h2).focal_heuristic;
             }
 
             return (*h1).cost > (*h2).cost;
@@ -1026,7 +1026,7 @@ public:
             start.LB += start.solution[i].fmin;
         }
 
-        start.focalHeuristic = m_env.get_focal_heuristic(start.solution);
+        start.focal_heuristic = m_env.get_focal_heuristic(start.solution);
 
         // std::priority_queue<HighLevelNode> open;
         openSet_t open_set;
@@ -1118,7 +1118,7 @@ public:
 
                 new_node.cost += new_node.solution[i].cost;
                 new_node.LB += new_node.solution[i].fmin;
-                new_node.focalHeuristic = m_env.get_focal_heuristic(new_node.solution);
+                new_node.focal_heuristic = m_env.get_focal_heuristic(new_node.solution);
 
                 if (success)
                 {
