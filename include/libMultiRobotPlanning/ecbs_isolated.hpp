@@ -334,7 +334,7 @@ public:
     // Count all conflicts
     int focalHeuristic(const std::vector<PlanResult>& solution)
     {
-        int numConflicts = 0;
+        int num_conflicts = 0;
 
         int max_t = 0;
         for (const auto& sol : solution)
@@ -353,7 +353,7 @@ public:
                     TimeLocation state2 = get_time_location(j, solution, t);
                     if (state1.location == state2.location)
                     {
-                        ++numConflicts;
+                        ++num_conflicts;
                     }
                 }
             }
@@ -372,13 +372,13 @@ public:
                     if (state1a.location == state2b.location &&
                         state1b.location == state2a.location)
                     {
-                        ++numConflicts;
+                        ++num_conflicts;
                     }
                 }
             }
         }
 
-        return numConflicts;
+        return num_conflicts;
     }
 
     bool is_solution(const TimeLocation& s)
