@@ -514,7 +514,7 @@ public:
         }
     }
 
-    void onExpandHighLevelNode(int /*cost*/)
+    void onExpandHighLevelNode()
     {
         num_expanded_high_level_nodes++;
     }
@@ -1072,7 +1072,7 @@ public:
 
             auto h = focal_set.top();
             HighLevelNode P = *h;
-            m_env.onExpandHighLevelNode(P.cost);
+            m_env.onExpandHighLevelNode();
             // std::cout << "expand: " << P << std::endl;
 
             focal_set.pop();
