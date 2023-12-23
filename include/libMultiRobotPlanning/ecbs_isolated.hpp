@@ -915,12 +915,16 @@ private:
 // boost::heap::arity<2>, boost::heap::mutable_<true>,
 // boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 
-    struct compareFocalHeuristic {
-        bool operator()(const handle_t& h1, const handle_t& h2) const {
+    struct compareFocalHeuristic
+    {
+        bool operator()(const handle_t& h1, const handle_t& h2) const
+        {
             // Our heap is a maximum heap, so we invert the comperator function here
-            if ((*h1).focalHeuristic != (*h2).focalHeuristic) {
+            if ((*h1).focalHeuristic != (*h2).focalHeuristic)
+            {
                 return (*h1).focalHeuristic > (*h2).focalHeuristic;
             }
+            
             return (*h1).cost > (*h2).cost;
         }
     };
