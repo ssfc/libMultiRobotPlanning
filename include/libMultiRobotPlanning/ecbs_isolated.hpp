@@ -949,16 +949,16 @@ private:
 
     struct compare_focal_heuristic
     {
-        bool operator()(const handle_t& h1, const handle_t& h2) const
+        bool operator()(const handle_t& h1, const handle_t& other) const
         {
             // Our heap is a maximum heap, so we invert the comperator function here
-            if ((*h1).focal_heuristic != (*h2).focal_heuristic)
+            if ((*h1).focal_heuristic != (*other).focal_heuristic)
             {
-                return (*h1).focal_heuristic > (*h2).focal_heuristic;
+                return (*h1).focal_heuristic > (*other).focal_heuristic;
             }
             else
             {
-                return (*h1).cost > (*h2).cost;
+                return (*h1).cost > (*other).cost;
             }
         }
     };
