@@ -1019,19 +1019,19 @@ public:
         {
             // update focal list
             {
-                int oldBestCost = bestCost;
+                int old_best_cost = bestCost;
                 bestCost = open_set.top().cost;
                 // std::cout << "best_f_score: " << best_f_score << std::endl;
-                if (bestCost > oldBestCost)
+                if (bestCost > old_best_cost)
                 {
-                    // std::cout << "oldBestCost: " << oldBestCost << " bestCost: " <<
+                    // std::cout << "old_best_cost: " << old_best_cost << " bestCost: " <<
                     // bestCost << std::endl;
                     auto iter = open_set.ordered_begin();
                     auto iterEnd = open_set.ordered_end();
                     for (; iter != iterEnd; ++iter)
                     {
                         int val = iter->cost;
-                        if (val > oldBestCost * factor_w && val <= bestCost * factor_w)
+                        if (val > old_best_cost * factor_w && val <= bestCost * factor_w)
                         {
                             const HighLevelNode& n = *iter;
                             focal_set.push(n.handle);
