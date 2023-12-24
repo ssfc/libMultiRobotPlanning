@@ -624,7 +624,7 @@ struct LowLevelNode
 };
 
 
-struct compareFocalHeuristic
+struct compare_focal_heuristic
 {
     typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
     boost::heap::mutable_<true> > openSet_t;
@@ -672,7 +672,7 @@ private:
 
     typedef typename boost::heap::d_ary_heap<
         fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-        boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+        boost::heap::compare<compare_focal_heuristic> > focalSet_t;
 
 public:
     LowLevel(ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
@@ -947,7 +947,7 @@ private:
     typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type handle_t;
 
-    struct compareFocalHeuristic
+    struct compare_focal_heuristic
     {
         bool operator()(const handle_t& h1, const handle_t& h2) const
         {
@@ -963,7 +963,7 @@ private:
 
     typedef typename boost::heap::d_ary_heap<
             handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-        boost::heap::compare<compareFocalHeuristic> > focalSet_t;
+        boost::heap::compare<compare_focal_heuristic> > focalSet_t;
 
 public:
     ECBS(ECBSEnvironment& environment, float input_w)
