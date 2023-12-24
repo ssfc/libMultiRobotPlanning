@@ -251,6 +251,8 @@ private:
     int num_expanded_low_level_nodes;
     bool m_disappearAtGoal;
 
+    std::vector<PlanResult> m_solution;
+
 public:
     ECBSEnvironment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
                 std::vector<Location> input_goals, bool disappearAtGoal = false)
@@ -610,10 +612,13 @@ public:
                                               m_solution);
     }
 
-    bool is_solution(const TimeLocation& s) { return m_env.is_solution(s); }
+    bool is_solution(const TimeLocation& s)
+    {
+        return m_env.is_solution(s);
+    }
 
-    void get_neighbors(const TimeLocation& s,
-                       std::vector<Neighbor>& neighbors) {
+    void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
+    {
         m_env.get_neighbors(s, neighbors);
     }
 
