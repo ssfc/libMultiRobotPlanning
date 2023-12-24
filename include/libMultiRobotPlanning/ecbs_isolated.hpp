@@ -252,14 +252,16 @@ private:
     bool m_disappearAtGoal;
 
     std::vector<PlanResult> m_solution;
+    float factor_w;
 
 public:
     ECBSEnvironment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-                std::vector<Location> input_goals, bool disappearAtGoal = false)
+                std::vector<Location> input_goals, float input_w, bool disappearAtGoal = false)
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(obstacles)),
               goals(std::move(input_goals)),
+              factor_w(input_w),
               m_agentIdx(0),
               m_constraints(nullptr),
               m_lastGoalConstraint(-1),

@@ -42,7 +42,8 @@ std::ostream& operator<<(std::ostream& os, const Action& a) {
 ///
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     namespace po = boost::program_options;
     // Declare the supported options.
     po::options_description desc("Allowed options");
@@ -50,16 +51,14 @@ int main(int argc, char* argv[]) {
     std::string outputFile;
     bool disappearAtGoal;
     float w;
-    desc.add_options()("help", "produce help message")(
-            "input,i", po::value<std::string>(&inputFile)->required(),
-            "input file (YAML)")("output,o",
-                                 po::value<std::string>(&outputFile)->required(),
-                                 "output file (YAML)")(
-            "suboptimality,w", po::value<float>(&w)->default_value(1.0),
-            "suboptimality bound")(
-            "disappear-at-goal", po::bool_switch(&disappearAtGoal), "make agents to disappear at goal rather than staying there");
+    desc.add_options()("help", "produce help message")
+            ("input,i", po::value<std::string>(&inputFile)->required(), "input file (YAML)")
+            ("output,o", po::value<std::string>(&outputFile)->required(), "output file (YAML)")
+            ("suboptimality,w", po::value<float>(&w)->default_value(1.0), "suboptimality bound")
+            ("disappear-at-goal", po::bool_switch(&disappearAtGoal), "make agents to disappear at goal rather than staying there");
 
-    try {
+    try
+    {
         po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, desc), vm);
         po::notify(vm);
@@ -106,7 +105,7 @@ int main(int argc, char* argv[]) {
         startStatesSet.insert(s);
     }
 
-    ECBSEnvironment mapf(dimx, dimy, obstacles, goals, disappearAtGoal);
+    ECBSEnvironment mapf(dimx, dimy, obstacles, goals, disappearAtGoal, w);
     ECBS ecbs(mapf, w);
     std::vector<PlanResult> solution;
 
