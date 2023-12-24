@@ -657,7 +657,7 @@ struct compareFocalHeuristic
 };
 
 
-class LowLevelEnvironment
+class LowLevel
 {
 private:
     ECBSEnvironment& m_env;
@@ -675,7 +675,7 @@ private:
         boost::heap::compare<compareFocalHeuristic> > focalSet_t;
 
 public:
-    LowLevelEnvironment(ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
+    LowLevel(ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
             const std::vector<PlanResult>& solution, float input_factor_w)
             : m_env(env)
             // , m_agentIdx(agentIdx)
@@ -993,7 +993,7 @@ public:
             }
             else
             {
-                LowLevelEnvironment llenv(m_env, i, start.constraints[i],
+                LowLevel llenv(m_env, i, start.constraints[i],
                                           start.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], start.solution[i]);
                 if (!success)
@@ -1091,7 +1091,7 @@ public:
                 new_node.cost -= new_node.solution[i].cost;
                 new_node.LB -= new_node.solution[i].fmin;
 
-                LowLevelEnvironment llenv(m_env, i, new_node.constraints[i],
+                LowLevel llenv(m_env, i, new_node.constraints[i],
                                           new_node.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], new_node.solution[i]);
 
