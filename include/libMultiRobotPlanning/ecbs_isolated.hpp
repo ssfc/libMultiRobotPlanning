@@ -245,6 +245,7 @@ public:
 
     int cost;
     int LB;  // sum of fmin of solution
+    // 所有agents最短路径的下界之和。
 
     int focal_heuristic;
 
