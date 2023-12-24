@@ -623,39 +623,6 @@ struct LowLevelNode
 };
 
 
-struct compare_focal_heuristic
-{
-    using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
-        boost::heap::mutable_<true> >;
-    using fibHeapHandle_t = typename openSet_t::handle_type;
-
-    bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
-    {
-        // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
-        // Path Finding" by Cohen et. al.)
-        // 1. lowest focal_heuristic
-        // 2. lowest fScore
-        // 3. highest gScore
-
-        // Our heap is a maximum heap, so we invert the comperator function here
-        if ((*h1).focal_heuristic != (*h2).focal_heuristic)
-        {
-            return (*h1).focal_heuristic > (*h2).focal_heuristic;
-            // } else if ((*h1).fScore != (*h2).fScore) {
-            //   return (*h1).fScore > (*h2).fScore;
-        }
-        else if ((*h1).fScore != (*h2).fScore)
-        {
-            return (*h1).fScore > (*h2).fScore;
-        }
-        else
-        {
-            return (*h1).gScore < (*h2).gScore;
-        }
-    }
-};
-
-
 class LowLevel
 {
 private:
@@ -664,6 +631,38 @@ private:
     // const Constraints& m_constraints;
     const std::vector<PlanResult>& m_solution;
     float factor_w;
+
+    struct compare_focal_heuristic
+    {
+        using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
+        boost::heap::mutable_<true> >;
+        using fibHeapHandle_t = typename openSet_t::handle_type;
+
+        bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
+        {
+            // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
+            // Path Finding" by Cohen et. al.)
+            // 1. lowest focal_heuristic
+            // 2. lowest fScore
+            // 3. highest gScore
+
+            // Our heap is a maximum heap, so we invert the comperator function here
+            if ((*h1).focal_heuristic != (*h2).focal_heuristic)
+            {
+                return (*h1).focal_heuristic > (*h2).focal_heuristic;
+                // } else if ((*h1).fScore != (*h2).fScore) {
+                //   return (*h1).fScore > (*h2).fScore;
+            }
+            else if ((*h1).fScore != (*h2).fScore)
+            {
+                return (*h1).fScore > (*h2).fScore;
+            }
+            else
+            {
+                return (*h1).gScore < (*h2).gScore;
+            }
+        }
+    };
 
     using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
         boost::heap::mutable_<true> >;
