@@ -584,9 +584,8 @@ struct LowLevelNode
     int gScore;
     int focal_heuristic;
 
-    typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
-    boost::heap::mutable_<true> > openSet_t;
-    typedef typename openSet_t::handle_type fibHeapHandle_t;
+    using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
+    using fibHeapHandle_t = typename openSet_t::handle_type;
 
     fibHeapHandle_t handle;
 
