@@ -627,7 +627,7 @@ struct LowLevelNode
 struct compare_focal_heuristic
 {
     typedef typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
-    boost::heap::mutable_<true> > openSet_t;
+        boost::heap::mutable_<true> > openSet_t;
     typedef typename openSet_t::handle_type fibHeapHandle_t;
 
     bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
