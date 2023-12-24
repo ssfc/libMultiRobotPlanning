@@ -745,19 +745,19 @@ public:
 
         while (!open_set.empty())
         {
-            int oldBestFScore = best_f_score;
+            int old_best_cost = best_f_score;
             best_f_score = open_set.top().fScore;
             // std::cout << "best_f_score: " << best_f_score << std::endl;
-            if (best_f_score > oldBestFScore)
+            if (best_f_score > old_best_cost)
             {
-                // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
+                // std::cout << "old_best_cost: " << old_best_cost << " newBestFScore:
                 // " << best_f_score << std::endl;
                 auto iter = open_set.ordered_begin();
                 auto iterEnd = open_set.ordered_end();
                 for (; iter != iterEnd; ++iter)
                 {
                     int val = iter->fScore;
-                    if (val > oldBestFScore * factor_w && val <= best_f_score * factor_w)
+                    if (val > old_best_cost * factor_w && val <= best_f_score * factor_w)
                     {
                         const LowLevelNode& n = *iter;
                         focal_set.push(n.handle);
