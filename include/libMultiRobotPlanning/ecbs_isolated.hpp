@@ -992,11 +992,11 @@ public:
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
                 std::vector<PlanResult>& solution)
     {
-        HighLevelNode start;
-        start.solution.resize(initialStates.size());
-        start.constraints.resize(initialStates.size());
-        start.cost = 0;
-        start.LB = 0;
+        HighLevelNode root;
+        root.solution.resize(initialStates.size());
+        root.constraints.resize(initialStates.size());
+        root.cost = 0;
+        root.LB = 0;
 
         for (size_t i = 0; i < initialStates.size(); ++i)
         {
@@ -1005,31 +1005,31 @@ public:
                 std::cout << initialStates[i] << " " << solution[i].path.front().first
                           << std::endl;
                 assert(initialStates[i] == solution[i].path.front().first);
-                start.solution[i] = solution[i];
+                root.solution[i] = solution[i];
                 std::cout << "use existing solution for agent: " << i << std::endl;
             }
             else
             {
-                LowLevel llenv(m_env, i, start.constraints[i],
-                                          start.solution, factor_w);
-                bool success = llenv.low_level_search(initialStates[i], start.solution[i]);
+                LowLevel llenv(m_env, i, root.constraints[i],
+                                          root.solution, factor_w);
+                bool success = llenv.low_level_search(initialStates[i], root.solution[i]);
                 if (!success)
                 {
                     return false;
                 }
             }
 
-            start.cost += start.solution[i].cost;
-            start.LB += start.solution[i].fmin;
+            root.cost += root.solution[i].cost;
+            root.LB += root.solution[i].fmin;
         }
 
-        start.focal_heuristic = m_env.get_focal_heuristic(start.solution);
+        root.focal_heuristic = m_env.get_focal_heuristic(root.solution);
 
         // std::priority_queue<HighLevelNode> open;
         openSet_t open_set;
         focalSet_t focal_set;
 
-        auto handle = open_set.push(start);
+        auto handle = open_set.push(root);
         (*handle).handle = handle;
         focal_set.push(handle);
 
