@@ -248,8 +248,6 @@ public:
 
     int focal_heuristic;
 
-    int id;
-
     using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
     using handle_t = typename openSet_t::handle_type;
     handle_t handle;
@@ -259,12 +257,11 @@ public:
     {
         // if (cost != n.cost)
         return cost > n.cost;
-        // return id > n.id;
     }
 
     friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
     {
-        os << "id: " << c.id << " cost: " << c.cost << " LB: " << c.LB
+        os << " cost: " << c.cost << " LB: " << c.LB
            << " focal: " << c.focal_heuristic << std::endl;
         for (size_t i = 0; i < c.solution.size(); ++i)
         {
@@ -1000,7 +997,6 @@ public:
         start.constraints.resize(initialStates.size());
         start.cost = 0;
         start.LB = 0;
-        start.id = 0;
 
         for (size_t i = 0; i < initialStates.size(); ++i)
         {
@@ -1040,7 +1036,6 @@ public:
         int best_cost = (*handle).cost;
 
         solution.clear();
-        int id = 1;
         while (!open_set.empty())
         {
             // update focal list
@@ -1099,9 +1094,7 @@ public:
             {
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
-                // std::cout << "create child with id " << id << std::endl;
                 HighLevelNode new_node = P;
-                new_node.id = id;
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
@@ -1132,7 +1125,6 @@ public:
                     }
                 }
 
-                ++id;
             }
         }
 
