@@ -944,8 +944,8 @@ private:
     ECBSEnvironment& m_env;
     float factor_w;
 
-    typedef typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> > openSet_t;
-    typedef typename openSet_t::handle_type handle_t;
+    using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
+    using handle_t = typename openSet_t::handle_type;
 
     struct compare_focal_heuristic
     {
