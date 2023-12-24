@@ -632,12 +632,13 @@ private:
     const std::vector<PlanResult>& m_solution;
     float factor_w;
 
+    using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
+    boost::heap::mutable_<true> >;
+
+    using fibHeapHandle_t = typename openSet_t::handle_type;
+
     struct compare_focal_heuristic
     {
-        using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
-        boost::heap::mutable_<true> >;
-        using fibHeapHandle_t = typename openSet_t::handle_type;
-
         bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
         {
             // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
@@ -663,10 +664,6 @@ private:
             }
         }
     };
-
-    using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
-        boost::heap::mutable_<true> >;
-    using fibHeapHandle_t = typename openSet_t::handle_type;
 
     using focalSet_t = typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
         boost::heap::compare<compare_focal_heuristic> >;
