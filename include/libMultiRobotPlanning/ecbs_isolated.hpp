@@ -1003,8 +1003,7 @@ public:
         {
             if (i < solution.size() && solution[i].path.size() > 1)
             {
-                std::cout << initialStates[i] << " " << solution[i].path.front().first
-                          << std::endl;
+                std::cout << initialStates[i] << " " << solution[i].path.front().first << std::endl;
                 assert(initialStates[i] == solution[i].path.front().first);
                 root.solution[i] = solution[i];
                 std::cout << "use existing solution for agent: " << i << std::endl;
