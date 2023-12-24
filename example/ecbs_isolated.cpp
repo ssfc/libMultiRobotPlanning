@@ -77,31 +77,36 @@ int main(int argc, char* argv[])
 
     std::unordered_set<Location> obstacles;
     std::vector<Location> goals;
-    std::vector<TimeLocation> startStates;
+    std::vector<TimeLocation> start_time_location_set;
 
     const auto& dim = config["map"]["dimensions"];
     int dimx = dim[0].as<int>();
     int dimy = dim[1].as<int>();
 
-    for (const auto& node : config["map"]["obstacles"]) {
+    for (const auto& node : config["map"]["obstacles"])
+    {
         obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
     }
 
-    for (const auto& node : config["agents"]) {
+    for (const auto& node : config["agents"])
+    {
         const auto& start = node["start"];
         const auto& goal = node["goal"];
-        startStates.emplace_back(TimeLocation(0, Location(start[0].as<int>(), start[1].as<int>())));
-        // std::cout << "s: " << startStates.back() << std::endl;
+        start_time_location_set.emplace_back(TimeLocation(0, Location(start[0].as<int>(), start[1].as<int>())));
+        // std::cout << "s: " << start_time_location_set.back() << std::endl;
         goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }
 
     // sanity check: no identical start locations
     std::unordered_set<TimeLocation> startStatesSet;
-    for (const auto& s : startStates) {
-        if (startStatesSet.find(s) != startStatesSet.end()) {
+    for (const auto& s : start_time_location_set)
+    {
+        if (startStatesSet.find(s) != startStatesSet.end())
+        {
             std::cout << "Identical start locations detected -> no solution!" << std::endl;
             return 0;
         }
+
         startStatesSet.insert(s);
     }
 
@@ -110,7 +115,7 @@ int main(int argc, char* argv[])
     std::vector<PlanResult> solution;
 
     Timer timer;
-    bool success = ecbs.high_level_search(startStates, solution);
+    bool success = ecbs.high_level_search(start_time_location_set, solution);
     timer.stop();
 
     if (success)

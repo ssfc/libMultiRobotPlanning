@@ -646,6 +646,8 @@ public:
         return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
                con.end();
     }
+
+
 };
 
 
