@@ -406,7 +406,7 @@ public:
         return num_conflicts;
     }
 
-    // Count all conflicts
+    // Count all conflicts in the solution
     int get_focal_heuristic(const std::vector<PlanResult>& solution)
     {
         int num_conflicts = 0;
