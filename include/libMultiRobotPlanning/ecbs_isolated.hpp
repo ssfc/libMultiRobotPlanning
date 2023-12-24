@@ -626,11 +626,6 @@ public:
         m_env.onExpandLowLevelNode();
     }
 
-    void onDiscover(const TimeLocation& /*s*/, int /*fScore*/, int /*gScore*/)
-    {
-        // std::cout << "LL discover: " << s << std::endl;
-        // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
-    }
 };
 
 
@@ -862,7 +857,6 @@ public:
                         }
 
                         stateToHeap.insert(std::make_pair<>(neighbor.time_location, handle));
-                        m_env.onDiscover(neighbor.time_location, fScore, tentative_gScore);
                         // std::cout << "  this is a new node " << fScore << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -883,8 +877,7 @@ public:
                         (*handle).gScore = tentative_gScore;
                         (*handle).fScore -= delta;
                         open_set.increase(handle);
-                        m_env.onDiscover(neighbor.time_location, (*handle).fScore,
-                                         (*handle).gScore);
+
                         if ((*handle).fScore <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
