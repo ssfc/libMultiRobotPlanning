@@ -956,10 +956,30 @@ private:
             {
                 return (*h1).focal_heuristic > (*h2).focal_heuristic;
             }
-
-            return (*h1).cost > (*h2).cost;
+            else
+            {
+                return (*h1).cost > (*h2).cost;
+            }
         }
     };
+
+    /*
+    bool operator<(const LowLevelNode& other) const
+    {
+        // Sort order
+        // 1. lowest f_score
+        // 2. highest g_score
+
+        // Our heap is a maximum heap, so we invert the comperator function here
+        if (focal_heuristic != other.f_score)
+        {
+            return f_score > other.f_score;
+        }
+        else
+        {
+            return g_score < other.g_score;
+        }
+    }*/
 
     typedef typename boost::heap::d_ary_heap<
             handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
