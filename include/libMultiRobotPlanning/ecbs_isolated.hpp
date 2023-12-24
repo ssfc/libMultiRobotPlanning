@@ -979,9 +979,8 @@ private:
         }
     }*/
 
-    typedef typename boost::heap::d_ary_heap<
-            handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-        boost::heap::compare<compare_focal_heuristic> > focalSet_t;
+    using focalSet_t = typename boost::heap::d_ary_heap<handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
+        boost::heap::compare<compare_focal_heuristic> > ;
 
 public:
     ECBS(ECBSEnvironment& environment, float input_w)
