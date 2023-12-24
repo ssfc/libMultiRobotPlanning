@@ -583,14 +583,16 @@ private:
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
     const std::vector<PlanResult>& m_solution;
+    float factor_w;
 
 public:
     LowLevelEnvironment(ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
-            const std::vector<PlanResult>& solution)
+            const std::vector<PlanResult>& solution, float input_factor_w)
             : m_env(env)
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
-            ,m_solution(solution)
+            ,m_solution(solution),
+            factor_w(input_factor_w)
     {
         m_env.set_low_level_context(agentIdx, &constraints);
     }
@@ -1005,7 +1007,7 @@ public:
             else
             {
                 LowLevelEnvironment llenv(m_env, i, start.constraints[i],
-                                          start.solution);
+                                          start.solution, factor_w);
                 AStarEpsilon lowLevel(llenv, factor_w);
                 bool success = lowLevel.low_level_search(initialStates[i], start.solution[i]);
                 if (!success)
@@ -1104,7 +1106,7 @@ public:
                 new_node.LB -= new_node.solution[i].fmin;
 
                 LowLevelEnvironment llenv(m_env, i, new_node.constraints[i],
-                                          new_node.solution);
+                                          new_node.solution, factor_w);
                 AStarEpsilon lowLevel(llenv, factor_w);
                 bool success = lowLevel.low_level_search(initialStates[i], new_node.solution[i]);
 
