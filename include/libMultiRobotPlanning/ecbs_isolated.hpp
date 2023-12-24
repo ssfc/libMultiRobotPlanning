@@ -722,6 +722,170 @@ public:
         m_env.onExpandLowLevelNode();
     }
 
+    bool low_level_search(const TimeLocation& startState, PlanResult& solution)
+    {
+        solution.path.clear();
+        solution.path.emplace_back(std::make_pair<>(startState, 0));
+        solution.actions.clear();
+        solution.cost = 0;
+
+        openSet_t open_set;
+        focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
+        std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> stateToHeap;
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closedSet;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> came_from;
+
+        auto handle = open_set.push(
+                LowLevelNode(startState, admissible_heuristic(startState), 0, 0));
+        stateToHeap.insert(std::make_pair<>(startState, handle));
+        (*handle).handle = handle;
+
+        focal_set.push(handle);
+
+        std::vector<Neighbor> neighbors;
+        neighbors.reserve(10);
+
+        int best_f_score = (*handle).fScore;
+
+        // std::cout << "new search" << std::endl;
+
+        while (!open_set.empty())
+        {
+            int oldBestFScore = best_f_score;
+            best_f_score = open_set.top().fScore;
+            // std::cout << "best_f_score: " << best_f_score << std::endl;
+            if (best_f_score > oldBestFScore)
+            {
+                // std::cout << "oldBestFScore: " << oldBestFScore << " newBestFScore:
+                // " << best_f_score << std::endl;
+                auto iter = open_set.ordered_begin();
+                auto iterEnd = open_set.ordered_end();
+                for (; iter != iterEnd; ++iter)
+                {
+                    int val = iter->fScore;
+                    if (val > oldBestFScore * factor_w && val <= best_f_score * factor_w)
+                    {
+                        const LowLevelNode& n = *iter;
+                        focal_set.push(n.handle);
+                    }
+
+                    if (val > best_f_score * factor_w)
+                    {
+                        break;
+                    }
+                }
+            }
+
+
+            // check focal list/open list consistency
+
+            auto currentHandle = focal_set.top();
+            LowLevelNode current = *currentHandle;
+            onExpandNode();
+
+            if (is_solution(current.state))
+            {
+                solution.path.clear();
+                solution.actions.clear();
+                auto iter = came_from.find(current.state);
+                while (iter != came_from.end())
+                {
+                    solution.path.emplace_back(
+                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    solution.actions.emplace_back(std::make_pair<>(
+                            std::get<1>(iter->second), std::get<2>(iter->second)));
+                    iter = came_from.find(std::get<0>(iter->second));
+                }
+
+                solution.path.emplace_back(std::make_pair<>(startState, 0));
+                std::reverse(solution.path.begin(), solution.path.end());
+                std::reverse(solution.actions.begin(), solution.actions.end());
+                solution.cost = current.gScore;
+                solution.fmin = open_set.top().fScore;
+
+                return true;
+            }
+
+            focal_set.pop();
+            open_set.erase(currentHandle);
+            stateToHeap.erase(current.state);
+            closedSet.insert(current.state);
+
+            // traverse neighbors
+            neighbors.clear();
+            get_neighbors(current.state, neighbors);
+            for (const Neighbor& neighbor : neighbors)
+            {
+                if (closedSet.find(neighbor.time_location) == closedSet.end())
+                {
+                    int tentative_gScore = current.gScore + neighbor.cost;
+                    auto iter = stateToHeap.find(neighbor.time_location);
+                    if (iter == stateToHeap.end())
+                    {  // Discover a new node
+                        // std::cout << "  this is a new node" << std::endl;
+                        int fScore =
+                                tentative_gScore + admissible_heuristic(neighbor.time_location);
+                        int focal_heuristic =
+                                current.focal_heuristic +
+                                get_focal_state_heuristic(neighbor.time_location, tentative_gScore) +
+                                get_focal_transition_heuristic(current.state, neighbor.time_location,
+                                                                     current.gScore,
+                                                                     tentative_gScore);
+
+                        auto handle = open_set.push(
+                                LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focal_heuristic));
+                        (*handle).handle = handle;
+
+                        if (fScore <= best_f_score * factor_w)
+                        {
+                            // std::cout << "focalAdd: " << *handle << std::endl;
+                            focal_set.push(handle);
+                        }
+
+                        stateToHeap.insert(std::make_pair<>(neighbor.time_location, handle));
+                        // std::cout << "  this is a new node " << fScore << "," <<
+                        // tentative_gScore << std::endl;
+                    }
+                    else
+                    {
+                        auto handle = iter->second;
+                        // We found this node before with a better path
+                        if (tentative_gScore >= (*handle).gScore)
+                        {
+                            continue;
+                        }
+                        int last_gScore = (*handle).gScore;
+                        int last_fScore = (*handle).fScore;
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // << last_gScore << " " << *handle << std::endl;
+                        // update f and gScore
+                        int delta = last_gScore - tentative_gScore;
+                        (*handle).gScore = tentative_gScore;
+                        (*handle).fScore -= delta;
+                        open_set.increase(handle);
+
+                        if ((*handle).fScore <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
+                        {
+                            // std::cout << "focalAdd: " << *handle << std::endl;
+                            focal_set.push(handle);
+                        }
+                    }
+
+                    // Best path for this node so far
+                    // TODO: this is not the best way to update "came_from", but otherwise
+                    // default c'tors of TimeLocation and Action are required
+                    came_from.erase(neighbor.time_location);
+                    came_from.insert(std::make_pair<>(
+                            neighbor.time_location,
+                            std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
+                                              tentative_gScore)));
+                }
+            }
+        }
+
+        return false;
+    }
+
 };
 
 
