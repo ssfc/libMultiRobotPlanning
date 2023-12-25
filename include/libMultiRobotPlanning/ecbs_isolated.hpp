@@ -264,7 +264,7 @@ public:
 
 class ECBSEnvironment
 {
-private:
+public:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
@@ -333,12 +333,7 @@ public:
             }
         }
     }
-
-    int admissible_heuristic(const TimeLocation& s)
-    {
-        return std::abs(s.location.x - goals[m_agentIdx].x) +
-               std::abs(s.location.y - goals[m_agentIdx].y);
-    }
+    
 
     // low-level
     int get_focal_state_heuristic(const TimeLocation& s, int /*gScore*/,
@@ -731,7 +726,8 @@ public:
 
     int admissible_heuristic(const TimeLocation& s)
     {
-        return m_env.admissible_heuristic(s);
+        return std::abs(s.location.x - m_env.goals[m_env.m_agentIdx].x) +
+               std::abs(s.location.y - m_env.goals[m_env.m_agentIdx].y);
     }
 
     int get_focal_state_heuristic(const TimeLocation& s, int gScore)
