@@ -539,15 +539,6 @@ public:
         return solution[agentIdx].path.back().first;
     }
 
-    bool location_valid(const TimeLocation& s)
-    {
-        const auto& con = m_constraints->vertexConstraints;
-        return s.location.x >= 0 && s.location.x < num_columns
-               && s.location.y >= 0 && s.location.y < num_rows &&
-               obstacles.find(Location(s.location.x, s.location.y)) == obstacles.end() &&
-               con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
-    }
-
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
     {
         assert(m_constraints);
