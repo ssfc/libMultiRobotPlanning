@@ -325,7 +325,7 @@ public:
     // low-level
     int get_num_vertex_conflicts(const TimeLocation& s, const std::vector<PlanResult>& solution)
     {
-        int num_conflicts = 0;
+        int num_vertex_conflicts = 0;
         for (size_t i = 0; i < solution.size(); ++i)
         {
             if (i != m_agentIdx && !solution[i].path.empty())
@@ -333,12 +333,12 @@ public:
                 TimeLocation state2 = get_time_location(i, solution, s.time_step);
                 if (s.location == state2.location)
                 {
-                    ++num_conflicts;
+                    ++num_vertex_conflicts;
                 }
             }
         }
 
-        return num_conflicts;
+        return num_vertex_conflicts;
     }
 
     // low-level
