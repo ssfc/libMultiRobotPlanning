@@ -774,13 +774,13 @@ public:
 
         openSet_t open_set;
         focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
-        std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> stateToHeap;
+        std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> timelocation_to_heaphandle;
         std::unordered_set<TimeLocation, std::hash<TimeLocation>> closedSet;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> came_from;
 
         auto handle = open_set.push(
                 LowLevelNode(startState, admissible_heuristic(startState), 0, 0));
-        stateToHeap.insert(std::make_pair<>(startState, handle));
+        timelocation_to_heaphandle.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
 
         focal_set.push(handle);
@@ -851,7 +851,7 @@ public:
 
             focal_set.pop();
             open_set.erase(currentHandle);
-            stateToHeap.erase(current.state);
+            timelocation_to_heaphandle.erase(current.state);
             closedSet.insert(current.state);
 
             // traverse neighbors
@@ -862,8 +862,8 @@ public:
                 if (closedSet.find(neighbor.time_location) == closedSet.end())
                 {
                     int tentative_gScore = current.gScore + neighbor.cost;
-                    auto iter = stateToHeap.find(neighbor.time_location);
-                    if (iter == stateToHeap.end())
+                    auto iter = timelocation_to_heaphandle.find(neighbor.time_location);
+                    if (iter == timelocation_to_heaphandle.end())
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
                         int fScore =
@@ -885,7 +885,7 @@ public:
                             focal_set.push(handle);
                         }
 
-                        stateToHeap.insert(std::make_pair<>(neighbor.time_location, handle));
+                        timelocation_to_heaphandle.insert(std::make_pair<>(neighbor.time_location, handle));
                         // std::cout << "  this is a new node " << fScore << "," <<
                         // tentative_gScore << std::endl;
                     }
