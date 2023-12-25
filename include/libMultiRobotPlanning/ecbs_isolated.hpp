@@ -890,7 +890,6 @@ public:
                     if (iter == timelocation_to_heaphandle.end())
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
-                        came_from.erase(neighbor.time_location);
                         came_from.insert(std::make_pair<>(
                                 neighbor.time_location,
                                 std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
@@ -925,11 +924,9 @@ public:
                             continue;
                         }
 
-                        came_from.erase(neighbor.time_location);
-                        came_from.insert(std::make_pair<>(
-                                neighbor.time_location,
-                                std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
-                                                  tentative_gScore)));
+
+                        came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
+                                                                              tentative_gScore);
 
                         int last_gScore = (*handle).gScore;
                         int last_fScore = (*handle).fScore;
