@@ -432,7 +432,7 @@ public:
 
         return num_conflicts;
     }
-    
+
 
     void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
     {
@@ -680,7 +680,6 @@ private:
     size_t m_agentIdx;
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
-    int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
     bool m_disappearAtGoal;
 
@@ -734,7 +733,6 @@ public:
              size_t input_m_agentIdx,
              const Constraints* input_m_constraints,
              int input_m_lastGoalConstraint,
-             int input_num_expanded_high_level_nodes,
              int input_num_expanded_low_level_nodes,
              bool input_m_disappearAtGoal,
              ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
@@ -746,7 +744,6 @@ public:
               m_agentIdx(input_m_agentIdx),
               m_constraints(input_m_constraints),
               m_lastGoalConstraint(input_m_lastGoalConstraint),
-              num_expanded_high_level_nodes(input_num_expanded_high_level_nodes),
               num_expanded_low_level_nodes(input_num_expanded_low_level_nodes),
               m_disappearAtGoal(input_m_disappearAtGoal),
             m_env(env),
@@ -1044,7 +1041,6 @@ public:
                 i,
                 m_constraints,
                 m_lastGoalConstraint,
-                num_expanded_high_level_nodes,
                 num_expanded_low_level_nodes,
                 m_disappearAtGoal,
                 m_env, i, root.constraints[i],
@@ -1148,7 +1144,6 @@ public:
                                i,
                                m_constraints,
                                m_lastGoalConstraint,
-                               num_expanded_high_level_nodes,
                                num_expanded_low_level_nodes,
                                m_disappearAtGoal,
                                m_env, i, new_node.constraints[i],
