@@ -597,7 +597,6 @@ public:
 
     bool location_valid(const TimeLocation& s)
     {
-        assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
         return s.location.x >= 0 && s.location.x < num_columns
                && s.location.y >= 0 && s.location.y < num_rows &&
@@ -607,7 +606,6 @@ public:
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
     {
-        assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
         return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
                con.end();
