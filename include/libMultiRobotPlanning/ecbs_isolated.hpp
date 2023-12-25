@@ -845,6 +845,12 @@ public:
                     auto iter = timelocation_to_heaphandle.find(neighbor.time_location);
                     if (iter == timelocation_to_heaphandle.end())
                     {  // Discover a new node
+
+                        came_from.insert(std::make_pair<>(
+                                neighbor.time_location,
+                                std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
+                                                  tentative_gScore)));
+
                         // std::cout << "  this is a new node" << std::endl;
                         int fScore =
                                 tentative_gScore + admissible_heuristic(neighbor.time_location);
@@ -875,6 +881,9 @@ public:
                         {
                             continue;
                         }
+
+                        came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_gScore);
+
                         int last_gScore = (*handle).gScore;
                         int last_fScore = (*handle).fScore;
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
@@ -892,14 +901,6 @@ public:
                         }
                     }
 
-                    // Best path for this node so far
-                    // TODO: this is not the best way to update "came_from", but otherwise
-                    // default c'tors of TimeLocation and Action are required
-                    came_from.erase(neighbor.time_location);
-                    came_from.insert(std::make_pair<>(
-                            neighbor.time_location,
-                            std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
-                                              tentative_gScore)));
                 }
             }
         }
