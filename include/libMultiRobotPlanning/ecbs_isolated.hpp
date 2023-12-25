@@ -199,27 +199,6 @@ struct Constraints
                                other.edgeConstraints.end());
     }
 
-    bool overlap(const Constraints& other) const
-    {
-        for (const auto& vc : vertexConstraints)
-        {
-            if (other.vertexConstraints.count(vc) > 0)
-            {
-                return true;
-            }
-        }
-
-        for (const auto& ec : edgeConstraints)
-        {
-            if (other.edgeConstraints.count(ec) > 0)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     friend std::ostream& operator<<(std::ostream& os, const Constraints& c)
     {
         for (const auto& vc : c.vertexConstraints)
@@ -1096,7 +1075,6 @@ public:
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
-                assert(!new_node.constraints[i].overlap(c.second));
 
                 new_node.constraints[i].add(c.second);
 
