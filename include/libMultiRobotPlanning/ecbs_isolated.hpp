@@ -321,27 +321,6 @@ public:
     ECBSEnvironment(const ECBSEnvironment&) = delete;
     ECBSEnvironment& operator=(const ECBSEnvironment&) = delete;
 
-    // low-level
-    int get_num_edge_conflicts(const TimeLocation& s1a, const TimeLocation& s1b,
-            const std::vector<PlanResult>& solution)
-    {
-        int num_conflicts = 0;
-        for (size_t i = 0; i < solution.size(); ++i)
-        {
-            if (i != m_agentIdx && !solution[i].path.empty())
-            {
-                TimeLocation s2a = get_time_location(i, solution, s1a.time_step);
-                TimeLocation s2b = get_time_location(i, solution, s1b.time_step);
-                if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
-                {
-                    ++num_conflicts;
-                }
-            }
-        }
-
-        return num_conflicts;
-    }
-
     // Count all conflicts
     int get_focal_heuristic(const std::vector<PlanResult>& solution)
     {
@@ -665,7 +644,7 @@ public:
 
     int get_num_edge_conflicts(const TimeLocation& s1a, const TimeLocation& s1b)
     {
-        int num_conflicts = 0;
+        int num_edge_conflicts = 0;
         for (size_t i = 0; i < m_solution.size(); ++i)
         {
             if (i != m_env.m_agentIdx && !m_solution[i].path.empty())
@@ -674,12 +653,12 @@ public:
                 TimeLocation s2b = m_env.get_time_location(i, m_solution, s1b.time_step);
                 if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
                 {
-                    ++num_conflicts;
+                    ++num_edge_conflicts;
                 }
             }
         }
 
-        return num_conflicts;
+        return num_edge_conflicts;
     }
 
     bool is_solution(const TimeLocation& s)
