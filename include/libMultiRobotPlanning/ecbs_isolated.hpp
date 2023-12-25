@@ -256,7 +256,7 @@ private:
 
 public:
     ECBSEnvironment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-                    std::vector<Location> input_goals, bool disappearAtGoal)
+                    std::vector<Location> input_goals, bool disappearAtGoal, float input_w)
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(obstacles)),
@@ -266,7 +266,8 @@ public:
               m_lastGoalConstraint(-1),
               num_expanded_high_level_nodes(0),
               num_expanded_low_level_nodes(0),
-              m_disappearAtGoal(disappearAtGoal)
+              m_disappearAtGoal(disappearAtGoal),
+              factor_w(input_w)
     {
     }
 
