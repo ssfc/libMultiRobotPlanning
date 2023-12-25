@@ -256,7 +256,7 @@ private:
 
 public:
     ECBSEnvironment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-                    std::vector<Location> input_goals, bool disappearAtGoal = false)
+                    std::vector<Location> input_goals, bool disappearAtGoal)
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(obstacles)),
