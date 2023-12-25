@@ -752,7 +752,7 @@ public:
                std::abs(s.location.y - goals[m_agentIdx].y);
     }
 
-    int get_focal_state_heuristic(const TimeLocation& s, int gScore)
+    int get_focal_state_heuristic(const TimeLocation& s)
     {
         return m_env.get_focal_state_heuristic(s, m_solution);
     }
@@ -896,7 +896,7 @@ public:
                                 tentative_gScore + admissible_heuristic(neighbor.time_location);
                         int focal_heuristic =
                                 current.focal_heuristic +
-                                get_focal_state_heuristic(neighbor.time_location, tentative_gScore) +
+                                get_focal_state_heuristic(neighbor.time_location) +
                                 get_focal_transition_heuristic(current.state, neighbor.time_location,
                                                                      current.gScore,
                                                                      tentative_gScore);
