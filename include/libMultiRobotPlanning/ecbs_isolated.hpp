@@ -678,6 +678,17 @@ struct LowLevelNode
 class LowLevel
 {
 private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    std::vector<Location> goals;
+    size_t m_agentIdx;
+    const Constraints* m_constraints;
+    int m_lastGoalConstraint;
+    int num_expanded_high_level_nodes;
+    int num_expanded_low_level_nodes;
+    bool m_disappearAtGoal;
+
     ECBSEnvironment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
@@ -721,12 +732,32 @@ private:
         boost::heap::compare<compare_focal_heuristic> >;
 
 public:
-    LowLevel(ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
-            const std::vector<PlanResult>& solution, float input_factor_w)
-            : m_env(env)
+    LowLevel(int input_num_columns,
+             int input_num_rows,
+             std::unordered_set<Location> input_obstacles,
+             std::vector<Location> input_goals,
+             size_t input_m_agentIdx,
+             const Constraints* input_m_constraints,
+             int input_m_lastGoalConstraint,
+             int input_num_expanded_high_level_nodes,
+             int input_num_expanded_low_level_nodes,
+             bool input_m_disappearAtGoal,
+             ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
+             const std::vector<PlanResult>& solution, float input_factor_w)
+            : num_columns(input_num_columns),
+              num_rows(input_num_rows),
+              obstacles(input_obstacles),
+              goals(input_goals),
+              m_agentIdx(input_m_agentIdx),
+              m_constraints(input_m_constraints),
+              m_lastGoalConstraint(input_m_lastGoalConstraint),
+              num_expanded_high_level_nodes(input_num_expanded_high_level_nodes),
+              num_expanded_low_level_nodes(input_num_expanded_low_level_nodes),
+              m_disappearAtGoal(input_m_disappearAtGoal),
+            m_env(env),
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
-            ,m_solution(solution),
+            m_solution(solution),
             factor_w(input_factor_w)
     {
         m_env.set_low_level_context(agentIdx, &constraints);
@@ -1010,7 +1041,17 @@ public:
             }
             else
             {
-                LowLevel llenv(m_env, i, root.constraints[i],
+                LowLevel llenv(num_columns,
+                num_rows,
+                obstacles,
+                goals,
+                m_agentIdx,
+                m_constraints,
+                m_lastGoalConstraint,
+                num_expanded_high_level_nodes,
+                num_expanded_low_level_nodes,
+                m_disappearAtGoal,
+                m_env, i, root.constraints[i],
                                           root.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], root.solution[i]);
                 if (!success)
@@ -1104,7 +1145,17 @@ public:
                 new_node.cost -= new_node.solution[i].cost;
                 new_node.LB -= new_node.solution[i].fmin;
 
-                LowLevel llenv(m_env, i, new_node.constraints[i],
+                LowLevel llenv(num_columns,
+                               num_rows,
+                               obstacles,
+                               goals,
+                               m_agentIdx,
+                               m_constraints,
+                               m_lastGoalConstraint,
+                               num_expanded_high_level_nodes,
+                               num_expanded_low_level_nodes,
+                               m_disappearAtGoal,
+                               m_env, i, new_node.constraints[i],
                                           new_node.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], new_node.solution[i]);
 
