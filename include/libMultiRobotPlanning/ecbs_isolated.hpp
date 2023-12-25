@@ -538,13 +538,6 @@ public:
 
         return solution[agentIdx].path.back().first;
     }
-
-    bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
-    {
-        const auto& con = m_constraints->edgeConstraints;
-        return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
-               con.end();
-    }
 };
 
 
