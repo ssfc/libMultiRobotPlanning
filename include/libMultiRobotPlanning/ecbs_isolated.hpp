@@ -242,12 +242,12 @@ public:
     {
         os << " cost: " << c.cost << " LB: " << c.LB
            << " focal: " << c.focal_heuristic << std::endl;
-        for (size_t i = 0; i < c.solution.size(); ++i)
+        for (size_t i = 0; i < c.solution.size(); i++)
         {
             os << "Agent: " << i << std::endl;
             os << " States:" << std::endl;
 
-            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+            for (size_t t = 0; t < c.solution[i].path.size(); t++)
             {
                 os << "  " << c.solution[i].path[t].first << std::endl;
             }
@@ -332,29 +332,29 @@ public:
             max_t = std::max<int>(max_t, sol.path.size() - 1);
         }
 
-        for (int t = 0; t < max_t; ++t)
+        for (int t = 0; t < max_t; t++)
         {
             // check drive-drive vertex collisions
-            for (size_t i = 0; i < solution.size(); ++i)
+            for (size_t i = 0; i < solution.size(); i++)
             {
                 TimeLocation state1 = get_time_location(i, solution, t);
-                for (size_t j = i + 1; j < solution.size(); ++j)
+                for (size_t j = i + 1; j < solution.size(); j++)
                 {
                     TimeLocation state2 = get_time_location(j, solution, t);
                     if (state1.location == state2.location)
                     {
-                        ++num_conflicts;
+                        num_conflicts++;
                     }
                 }
             }
 
             // drive-drive edge (swap)
-            for (size_t i = 0; i < solution.size(); ++i)
+            for (size_t i = 0; i < solution.size(); i++)
             {
                 TimeLocation state1a = get_time_location(i, solution, t);
                 TimeLocation state1b = get_time_location(i, solution, t + 1);
 
-                for (size_t j = i + 1; j < solution.size(); ++j)
+                for (size_t j = i + 1; j < solution.size(); j++)
                 {
                     TimeLocation state2a = get_time_location(j, solution, t);
                     TimeLocation state2b = get_time_location(j, solution, t + 1);
@@ -362,7 +362,7 @@ public:
                     if (state1a.location == state2b.location &&
                         state1b.location == state2a.location)
                     {
-                        ++num_conflicts;
+                        num_conflicts++;
                     }
                 }
             }
@@ -379,13 +379,13 @@ public:
             max_t = std::max<int>(max_t, sol.path.size() - 1);
         }
 
-        for (int t = 0; t <= max_t; ++t)
+        for (int t = 0; t <= max_t; t++)
         {
             // check drive-drive vertex collisions
-            for (size_t i = 0; i < solution.size(); ++i)
+            for (size_t i = 0; i < solution.size(); i++)
             {
                 TimeLocation state1 = get_time_location(i, solution, t);
-                for (size_t j = i + 1; j < solution.size(); ++j)
+                for (size_t j = i + 1; j < solution.size(); j++)
                 {
                     TimeLocation state2 = get_time_location(j, solution, t);
                     if (state1.location == state2.location)
@@ -404,11 +404,11 @@ public:
             }
 
             // drive-drive edge (swap)
-            for (size_t i = 0; i < solution.size(); ++i)
+            for (size_t i = 0; i < solution.size(); i++)
             {
                 TimeLocation state1a = get_time_location(i, solution, t);
                 TimeLocation state1b = get_time_location(i, solution, t + 1);
-                for (size_t j = i + 1; j < solution.size(); ++j)
+                for (size_t j = i + 1; j < solution.size(); j++)
                 {
                     TimeLocation state2a = get_time_location(j, solution, t);
                     TimeLocation state2b = get_time_location(j, solution, t + 1);
@@ -627,14 +627,14 @@ public:
     int get_num_vertex_conflicts(const TimeLocation& s)
     {
         int num_vertex_conflicts = 0;
-        for (size_t i = 0; i < m_solution.size(); ++i)
+        for (size_t i = 0; i < m_solution.size(); i++)
         {
             if (i != m_env.m_agentIdx && !m_solution[i].path.empty())
             {
                 TimeLocation state2 = m_env.get_time_location(i, m_solution, s.time_step);
                 if (s.location == state2.location)
                 {
-                    ++num_vertex_conflicts;
+                    num_vertex_conflicts++;
                 }
             }
         }
@@ -645,7 +645,7 @@ public:
     int get_num_edge_conflicts(const TimeLocation& s1a, const TimeLocation& s1b)
     {
         int num_edge_conflicts = 0;
-        for (size_t i = 0; i < m_solution.size(); ++i)
+        for (size_t i = 0; i < m_solution.size(); i++)
         {
             if (i != m_env.m_agentIdx && !m_solution[i].path.empty())
             {
@@ -653,7 +653,7 @@ public:
                 TimeLocation s2b = m_env.get_time_location(i, m_solution, s1b.time_step);
                 if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
                 {
-                    ++num_edge_conflicts;
+                    num_edge_conflicts++;
                 }
             }
         }
@@ -757,7 +757,7 @@ public:
                 // " << best_f_score << std::endl;
                 auto iter = open_set.ordered_begin();
                 auto iterEnd = open_set.ordered_end();
-                for (; iter != iterEnd; ++iter)
+                for (; iter != iterEnd; iter++)
                 {
                     int val = iter->fScore;
                     if (val > old_best_cost * factor_w && val <= best_f_score * factor_w)
@@ -928,7 +928,7 @@ public:
         root.cost = 0;
         root.LB = 0;
 
-        for (size_t i = 0; i < initialStates.size(); ++i)
+        for (size_t i = 0; i < initialStates.size(); i++)
         {
             if (i < solution.size() && solution[i].path.size() > 1)
             {
