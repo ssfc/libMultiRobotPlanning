@@ -333,7 +333,7 @@ public:
             }
         }
     }
-    
+
 
     // low-level
     int get_focal_state_heuristic(const TimeLocation& s, int /*gScore*/,
@@ -425,12 +425,6 @@ public:
         }
 
         return num_conflicts;
-    }
-
-    bool is_solution(const TimeLocation& s)
-    {
-        return s.location.x == goals[m_agentIdx].x && s.location.y == goals[m_agentIdx].y &&
-               s.time_step > m_lastGoalConstraint;
     }
 
     void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
@@ -744,7 +738,9 @@ public:
 
     bool is_solution(const TimeLocation& s)
     {
-        return m_env.is_solution(s);
+        return s.location.x == m_env.goals[m_env.m_agentIdx].x
+        && s.location.y == m_env.goals[m_env.m_agentIdx].y
+        && s.time_step > m_env.m_lastGoalConstraint;
     }
 
     void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
