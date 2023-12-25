@@ -663,9 +663,23 @@ public:
         return num_vertex_conflicts;
     }
 
-    int get_num_edge_conflicts(const TimeLocation& s1, const TimeLocation& s2)
+    int get_num_edge_conflicts(const TimeLocation& s1a, const TimeLocation& s1b)
     {
-        return m_env.get_num_edge_conflicts(s1, s2, m_solution);
+        int num_conflicts = 0;
+        for (size_t i = 0; i < m_solution.size(); ++i)
+        {
+            if (i != m_env.m_agentIdx && !m_solution[i].path.empty())
+            {
+                TimeLocation s2a = m_env.get_time_location(i, m_solution, s1a.time_step);
+                TimeLocation s2b = m_env.get_time_location(i, m_solution, s1b.time_step);
+                if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
+                {
+                    ++num_conflicts;
+                }
+            }
+        }
+
+        return num_conflicts;
     }
 
     bool is_solution(const TimeLocation& s)
