@@ -323,8 +323,7 @@ public:
 
 
     // low-level
-    int get_focal_state_heuristic(const TimeLocation& s, int /*gScore*/,
-                                  const std::vector<PlanResult>& solution)
+    int get_focal_state_heuristic(const TimeLocation& s, const std::vector<PlanResult>& solution)
     {
         int num_conflicts = 0;
         for (size_t i = 0; i < solution.size(); ++i)
@@ -725,9 +724,9 @@ public:
                std::abs(s.location.y - m_env.goals[m_env.m_agentIdx].y);
     }
 
-    int get_focal_state_heuristic(const TimeLocation& s, int gScore)
+    int get_focal_state_heuristic(const TimeLocation& s)
     {
-        return m_env.get_focal_state_heuristic(s, gScore, m_solution);
+        return m_env.get_focal_state_heuristic(s, m_solution);
     }
 
     int get_focal_transition_heuristic(const TimeLocation& s1, const TimeLocation& s2,
@@ -854,7 +853,7 @@ public:
                                 tentative_gScore + admissible_heuristic(neighbor.time_location);
                         int focal_heuristic =
                                 current.focal_heuristic +
-                                get_focal_state_heuristic(neighbor.time_location, tentative_gScore) +
+                                get_focal_state_heuristic(neighbor.time_location) +
                                 get_focal_transition_heuristic(current.state, neighbor.time_location,
                                                                current.gScore,
                                                                tentative_gScore);
