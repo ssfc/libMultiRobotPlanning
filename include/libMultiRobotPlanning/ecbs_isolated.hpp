@@ -355,7 +355,7 @@ public:
     }
 
     // low-level
-    int get_focal_transition_heuristic(
+    int get_num_edge_conflicts(
             const TimeLocation& s1a, const TimeLocation& s1b,
             const std::vector<PlanResult>& solution)
     {
@@ -757,9 +757,9 @@ public:
         return m_env.get_num_vertex_conflicts(s, m_solution);
     }
 
-    int get_focal_transition_heuristic(const TimeLocation& s1, const TimeLocation& s2)
+    int get_num_edge_conflicts(const TimeLocation& s1, const TimeLocation& s2)
     {
-        return m_env.get_focal_transition_heuristic(s1, s2, m_solution);
+        return m_env.get_num_edge_conflicts(s1, s2, m_solution);
     }
 
     bool is_solution(const TimeLocation& s)
@@ -890,12 +890,11 @@ public:
                     if (iter == timelocation_to_heaphandle.end())
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
-                        int fScore =
-                                tentative_gScore + admissible_heuristic(neighbor.time_location);
+                        int fScore = tentative_gScore + admissible_heuristic(neighbor.time_location);
                         int focal_heuristic =
                                 current.focal_heuristic +
                                 get_num_vertex_conflicts(neighbor.time_location) +
-                                get_focal_transition_heuristic(current.state, neighbor.time_location);
+                                get_num_edge_conflicts(current.state, neighbor.time_location);
 
                         auto handle = open_set.push(
                                 LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focal_heuristic));
