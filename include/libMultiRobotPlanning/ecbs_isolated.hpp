@@ -335,12 +335,6 @@ public:
         }
     }
 
-    int admissible_heuristic(const TimeLocation& s)
-    {
-        return std::abs(s.location.x - goals[m_agentIdx].x) +
-               std::abs(s.location.y - goals[m_agentIdx].y);
-    }
-
     // low-level
     int get_focal_state_heuristic(const TimeLocation& s, int /*gScore*/,
             const std::vector<PlanResult>& solution)
@@ -757,7 +751,8 @@ public:
 
     int admissible_heuristic(const TimeLocation& s)
     {
-        return m_env.admissible_heuristic(s);
+        return std::abs(s.location.x - goals[m_agentIdx].x) +
+               std::abs(s.location.y - goals[m_agentIdx].y);
     }
 
     int get_focal_state_heuristic(const TimeLocation& s, int gScore)
