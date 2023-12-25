@@ -432,12 +432,7 @@ public:
 
         return num_conflicts;
     }
-
-    bool is_solution(const TimeLocation& s)
-    {
-        return s.location.x == goals[m_agentIdx].x && s.location.y == goals[m_agentIdx].y &&
-               s.time_step > m_lastGoalConstraint;
-    }
+    
 
     void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
     {
@@ -782,7 +777,8 @@ public:
 
     bool is_solution(const TimeLocation& s)
     {
-        return m_env.is_solution(s);
+        return s.location.x == goals[m_agentIdx].x && s.location.y == goals[m_agentIdx].y &&
+               s.time_step > m_lastGoalConstraint;
     }
 
     void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
