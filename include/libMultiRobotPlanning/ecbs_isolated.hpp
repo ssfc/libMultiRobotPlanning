@@ -541,7 +541,6 @@ public:
 
     bool location_valid(const TimeLocation& s)
     {
-        assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
         return s.location.x >= 0 && s.location.x < num_columns
                && s.location.y >= 0 && s.location.y < num_rows &&
@@ -698,6 +697,15 @@ public:
         return s.location.x == m_env.goals[m_env.m_agentIdx].x
         && s.location.y == m_env.goals[m_env.m_agentIdx].y
         && s.time_step > m_env.m_lastGoalConstraint;
+    }
+
+    bool location_valid(const TimeLocation& s)
+    {
+        const auto& con = m_env.m_constraints->vertexConstraints;
+        return s.location.x >= 0 && s.location.x < m_env.num_columns
+            && s.location.y >= 0 && s.location.y < m_env.num_rows
+            && m_env.obstacles.find(Location(s.location.x, s.location.y)) == m_env.obstacles.end()
+            && con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
     }
 
     void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
