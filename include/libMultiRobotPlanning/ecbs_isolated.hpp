@@ -199,6 +199,27 @@ struct Constraints
                                other.edgeConstraints.end());
     }
 
+    bool overlap(const Constraints& other) const
+    {
+        for (const auto& vc : vertexConstraints)
+        {
+            if (other.vertexConstraints.count(vc) > 0)
+            {
+                return true;
+            }
+        }
+
+        for (const auto& ec : edgeConstraints)
+        {
+            if (other.edgeConstraints.count(ec) > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const Constraints& c)
     {
         for (const auto& vc : c.vertexConstraints)
@@ -209,53 +230,6 @@ struct Constraints
         for (const auto& ec : c.edgeConstraints)
         {
             os << ec << std::endl;
-        }
-
-        return os;
-    }
-};
-
-
-class HighLevelNode
-{
-public:
-    std::vector<PlanResult> solution;
-    std::vector<Constraints> constraints;
-
-    int cost;
-    int LB;  // sum of fmin of solution
-    // 所有agents最短路径的下界之和。
-
-    int focal_heuristic;
-
-    using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
-    using handle_t = typename openSet_t::handle_type;
-    handle_t handle;
-
-public:
-    bool operator<(const HighLevelNode& n) const
-    {
-        // if (cost != n.cost)
-        return cost > n.cost;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
-    {
-        os << " cost: " << c.cost << " LB: " << c.LB
-           << " focal: " << c.focal_heuristic << std::endl;
-        for (size_t i = 0; i < c.solution.size(); ++i)
-        {
-            os << "Agent: " << i << std::endl;
-            os << " States:" << std::endl;
-
-            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
-            {
-                os << "  " << c.solution[i].path[t].first << std::endl;
-            }
-
-            os << " Constraints:" << std::endl;
-            os << c.constraints[i];
-            os << " cost: " << c.solution[i].cost << std::endl;
         }
 
         return os;
@@ -280,36 +254,13 @@ private:
     std::vector<PlanResult> m_solution;
     float factor_w;
 
-    using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
-    using handle_t = typename openSet_t::handle_type;
-
-    struct compare_focal_heuristic
-    {
-        bool operator()(const handle_t& h1, const handle_t& h2) const
-        {
-            // Our heap is a maximum heap, so we invert the comperator function here
-            if ((*h1).focal_heuristic != (*h2).focal_heuristic)
-            {
-                return (*h1).focal_heuristic > (*h2).focal_heuristic;
-            }
-            else
-            {
-                return (*h1).cost > (*h2).cost;
-            }
-        }
-    };
-
-    using focalSet_t = typename boost::heap::d_ary_heap<handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-    boost::heap::compare<compare_focal_heuristic> > ;
-
 public:
     ECBSEnvironment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-                std::vector<Location> input_goals, float input_w, bool disappearAtGoal = false)
+                    std::vector<Location> input_goals, bool disappearAtGoal = false)
             : num_columns(dimx),
               num_rows(dimy),
               obstacles(std::move(obstacles)),
               goals(std::move(input_goals)),
-              factor_w(input_w),
               m_agentIdx(0),
               m_constraints(nullptr),
               m_lastGoalConstraint(-1),
@@ -335,10 +286,17 @@ public:
         }
     }
 
-    // low-level
-    int get_num_vertex_conflicts(const TimeLocation& s, const std::vector<PlanResult>& solution)
+    int admissible_heuristic(const TimeLocation& s)
     {
-        int num_vertex_conflicts = 0;
+        return std::abs(s.location.x - goals[m_agentIdx].x) +
+               std::abs(s.location.y - goals[m_agentIdx].y);
+    }
+
+    // low-level
+    int get_focal_state_heuristic(const TimeLocation& s, int /*gScore*/,
+                                  const std::vector<PlanResult>& solution)
+    {
+        int num_conflicts = 0;
         for (size_t i = 0; i < solution.size(); ++i)
         {
             if (i != m_agentIdx && !solution[i].path.empty())
@@ -346,17 +304,17 @@ public:
                 TimeLocation state2 = get_time_location(i, solution, s.time_step);
                 if (s.location == state2.location)
                 {
-                    ++num_vertex_conflicts;
+                    ++num_conflicts;
                 }
             }
         }
 
-        return num_vertex_conflicts;
+        return num_conflicts;
     }
 
     // low-level
-    int get_num_edge_conflicts(
-            const TimeLocation& s1a, const TimeLocation& s1b,
+    int get_focal_transition_heuristic(
+            const TimeLocation& s1a, const TimeLocation& s1b, int /*gScoreS1a*/, int /*gScoreS1b*/,
             const std::vector<PlanResult>& solution)
     {
         int num_conflicts = 0;
@@ -376,7 +334,7 @@ public:
         return num_conflicts;
     }
 
-    // Count all conflicts in the solution
+    // Count all conflicts
     int get_focal_heuristic(const std::vector<PlanResult>& solution)
     {
         int num_conflicts = 0;
@@ -426,6 +384,11 @@ public:
         return num_conflicts;
     }
 
+    bool is_solution(const TimeLocation& s)
+    {
+        return s.location.x == goals[m_agentIdx].x && s.location.y == goals[m_agentIdx].y &&
+               s.time_step > m_lastGoalConstraint;
+    }
 
     void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
     {
@@ -596,6 +559,7 @@ public:
 
     bool location_valid(const TimeLocation& s)
     {
+        assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
         return s.location.x >= 0 && s.location.x < num_columns
                && s.location.y >= 0 && s.location.y < num_rows &&
@@ -605,12 +569,11 @@ public:
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
     {
+        assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
         return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
                con.end();
     }
-
-
 };
 
 
@@ -664,16 +627,6 @@ struct LowLevelNode
 class LowLevel
 {
 private:
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    std::vector<Location> goals;
-    size_t m_agentIdx;
-    const Constraints* m_constraints;
-    int m_lastGoalConstraint;
-    int num_expanded_low_level_nodes;
-    bool m_disappearAtGoal;
-
     ECBSEnvironment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
@@ -714,79 +667,54 @@ private:
     };
 
     using focalSet_t = typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-        boost::heap::compare<compare_focal_heuristic> >;
+    boost::heap::compare<compare_focal_heuristic> >;
 
 public:
-    LowLevel(int input_num_columns,
-             int input_num_rows,
-             std::unordered_set<Location> input_obstacles,
-             std::vector<Location> input_goals,
-             size_t input_m_agentIdx,
-             const Constraints* input_m_constraints,
-             int input_m_lastGoalConstraint,
-             int input_num_expanded_low_level_nodes,
-             bool input_m_disappearAtGoal,
-             ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
+    LowLevel(ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
              const std::vector<PlanResult>& solution, float input_factor_w)
-            : num_columns(input_num_columns),
-              num_rows(input_num_rows),
-              obstacles(input_obstacles),
-              goals(input_goals),
-              m_agentIdx(input_m_agentIdx),
-              m_constraints(input_m_constraints),
-              m_lastGoalConstraint(input_m_lastGoalConstraint),
-              num_expanded_low_level_nodes(input_num_expanded_low_level_nodes),
-              m_disappearAtGoal(input_m_disappearAtGoal),
-            m_env(env),
+            : m_env(env)
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
-            m_solution(solution),
-            factor_w(input_factor_w)
+            ,m_solution(solution),
+              factor_w(input_factor_w)
     {
         m_env.set_low_level_context(agentIdx, &constraints);
     }
 
     int admissible_heuristic(const TimeLocation& s)
     {
-        return std::abs(s.location.x - goals[m_agentIdx].x) +
-               std::abs(s.location.y - goals[m_agentIdx].y);
+        return m_env.admissible_heuristic(s);
     }
 
-    int get_num_vertex_conflicts(const TimeLocation& s)
+    int get_focal_state_heuristic(const TimeLocation& s, int gScore)
     {
-        return m_env.get_num_vertex_conflicts(s, m_solution);
+        return m_env.get_focal_state_heuristic(s, gScore, m_solution);
     }
 
-    int get_num_edge_conflicts(const TimeLocation& s1, const TimeLocation& s2)
+    int get_focal_transition_heuristic(const TimeLocation& s1, const TimeLocation& s2,
+                                       int gScoreS1, int gScoreS2)
     {
-        return m_env.get_num_edge_conflicts(s1, s2, m_solution);
+        return m_env.get_focal_transition_heuristic(s1, s2, gScoreS1, gScoreS2,
+                                                    m_solution);
     }
 
     bool is_solution(const TimeLocation& s)
     {
-        return s.location.x == goals[m_agentIdx].x && s.location.y == goals[m_agentIdx].y &&
-               s.time_step > m_lastGoalConstraint;
-    }
-
-    bool location_valid(const TimeLocation& s)
-    {
-        const auto& con = m_constraints->vertexConstraints;
-        return s.location.x >= 0 && s.location.x < num_columns
-               && s.location.y >= 0 && s.location.y < num_rows &&
-               obstacles.find(Location(s.location.x, s.location.y)) == obstacles.end() &&
-               con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
-    }
-
-    bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
-    {
-        const auto& con = m_constraints->edgeConstraints;
-        return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
-               con.end();
+        return m_env.is_solution(s);
     }
 
     void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
     {
         m_env.get_neighbors(s, neighbors);
+    }
+
+    void onExpandNode()
+    {
+        // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
+        // << gScore << std::endl;
+        // m_env.onExpandLowLevelNode(s, fScore, gScore, m_agentIdx,
+        // m_constraints);
+        m_env.onExpandLowLevelNode();
     }
 
     bool low_level_search(const TimeLocation& startState, PlanResult& solution)
@@ -798,13 +726,13 @@ public:
 
         openSet_t open_set;
         focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
-        std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> timelocation_to_heaphandle;
-        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
+        std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> stateToHeap;
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closedSet;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> came_from;
 
         auto handle = open_set.push(
                 LowLevelNode(startState, admissible_heuristic(startState), 0, 0));
-        timelocation_to_heaphandle.insert(std::make_pair<>(startState, handle));
+        stateToHeap.insert(std::make_pair<>(startState, handle));
         (*handle).handle = handle;
 
         focal_set.push(handle);
@@ -848,7 +776,7 @@ public:
 
             auto currentHandle = focal_set.top();
             LowLevelNode current = *currentHandle;
-            m_env.onExpandLowLevelNode();
+            onExpandNode();
 
             if (is_solution(current.state))
             {
@@ -875,31 +803,29 @@ public:
 
             focal_set.pop();
             open_set.erase(currentHandle);
-            timelocation_to_heaphandle.erase(current.state);
-            closed_set.insert(current.state);
+            stateToHeap.erase(current.state);
+            closedSet.insert(current.state);
 
             // traverse neighbors
             neighbors.clear();
             get_neighbors(current.state, neighbors);
             for (const Neighbor& neighbor : neighbors)
             {
-                if (closed_set.find(neighbor.time_location) == closed_set.end())
+                if (closedSet.find(neighbor.time_location) == closedSet.end())
                 {
                     int tentative_gScore = current.gScore + neighbor.cost;
-                    auto iter = timelocation_to_heaphandle.find(neighbor.time_location);
-                    if (iter == timelocation_to_heaphandle.end())
+                    auto iter = stateToHeap.find(neighbor.time_location);
+                    if (iter == stateToHeap.end())
                     {  // Discover a new node
                         // std::cout << "  this is a new node" << std::endl;
-                        came_from.insert(std::make_pair<>(
-                                neighbor.time_location,
-                                std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
-                                                  tentative_gScore)));
-
-                        int fScore = tentative_gScore + admissible_heuristic(neighbor.time_location);
+                        int fScore =
+                                tentative_gScore + admissible_heuristic(neighbor.time_location);
                         int focal_heuristic =
                                 current.focal_heuristic +
-                                get_num_vertex_conflicts(neighbor.time_location) +
-                                get_num_edge_conflicts(current.state, neighbor.time_location);
+                                get_focal_state_heuristic(neighbor.time_location, tentative_gScore) +
+                                get_focal_transition_heuristic(current.state, neighbor.time_location,
+                                                               current.gScore,
+                                                               tentative_gScore);
 
                         auto handle = open_set.push(
                                 LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focal_heuristic));
@@ -911,7 +837,7 @@ public:
                             focal_set.push(handle);
                         }
 
-                        timelocation_to_heaphandle.insert(std::make_pair<>(neighbor.time_location, handle));
+                        stateToHeap.insert(std::make_pair<>(neighbor.time_location, handle));
                         // std::cout << "  this is a new node " << fScore << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -923,11 +849,6 @@ public:
                         {
                             continue;
                         }
-
-
-                        came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
-                                                                              tentative_gScore);
-
                         int last_gScore = (*handle).gScore;
                         int last_fScore = (*handle).fScore;
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
@@ -945,6 +866,14 @@ public:
                         }
                     }
 
+                    // Best path for this node so far
+                    // TODO: this is not the best way to update "came_from", but otherwise
+                    // default c'tors of TimeLocation and Action are required
+                    came_from.erase(neighbor.time_location);
+                    came_from.insert(std::make_pair<>(
+                            neighbor.time_location,
+                            std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
+                                              tentative_gScore)));
                 }
             }
         }
@@ -955,22 +884,58 @@ public:
 };
 
 
+class HighLevelNode
+{
+public:
+    std::vector<PlanResult> solution;
+    std::vector<Constraints> constraints;
+
+    int cost;
+    int LB;  // sum of fmin of solution
+
+    int focal_heuristic;
+
+    int id;
+
+    using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
+    using handle_t = typename openSet_t::handle_type;
+    handle_t handle;
+
+public:
+    bool operator<(const HighLevelNode& n) const
+    {
+        // if (cost != n.cost)
+        return cost > n.cost;
+        // return id > n.id;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
+    {
+        os << "id: " << c.id << " cost: " << c.cost << " LB: " << c.LB
+           << " focal: " << c.focal_heuristic << std::endl;
+        for (size_t i = 0; i < c.solution.size(); ++i)
+        {
+            os << "Agent: " << i << std::endl;
+            os << " States:" << std::endl;
+
+            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+            {
+                os << "  " << c.solution[i].path[t].first << std::endl;
+            }
+
+            os << " Constraints:" << std::endl;
+            os << c.constraints[i];
+            os << " cost: " << c.solution[i].cost << std::endl;
+        }
+
+        return os;
+    }
+};
+
+
 class ECBS
 {
 private:
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    std::vector<Location> goals;
-    size_t m_agentIdx;
-    const Constraints* m_constraints;
-    int m_lastGoalConstraint;
-    int num_expanded_high_level_nodes;
-    int num_expanded_low_level_nodes;
-    bool m_disappearAtGoal;
-
-    std::vector<PlanResult> m_solution;
-
     ECBSEnvironment& m_env;
     float factor_w;
 
@@ -994,109 +959,86 @@ private:
     };
 
     using focalSet_t = typename boost::heap::d_ary_heap<handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-        boost::heap::compare<compare_focal_heuristic> > ;
+    boost::heap::compare<compare_focal_heuristic> > ;
 
 public:
-    ECBS(int input_num_columns,
-         int input_num_rows,
-         std::unordered_set<Location> input_obstacles,
-         std::vector<Location> input_goals,
-         bool input_m_disappearAtGoal,
-         ECBSEnvironment& environment,
-         float input_w)
-    : num_columns(input_num_columns),
-      num_rows(input_num_rows),
-      obstacles(input_obstacles),
-      goals(input_goals),
-      // m_agentIdx(input_m_agentIdx),
-      // m_constraints(input_m_constraints),
-      // m_lastGoalConstraint(input_m_lastGoalConstraint),
-      num_expanded_high_level_nodes(0),
-      num_expanded_low_level_nodes(0),
-      m_disappearAtGoal(input_m_disappearAtGoal),
-      // m_solution(input_m_solution),
-      m_env(environment),
-      factor_w(input_w)
+    ECBS(ECBSEnvironment& environment, float input_w)
+            : m_env(environment),
+              factor_w(input_w)
     {}
 
     bool high_level_search(const std::vector<TimeLocation>& initialStates,
-                std::vector<PlanResult>& solution)
+                           std::vector<PlanResult>& solution)
     {
-        HighLevelNode root;
-        root.solution.resize(initialStates.size());
-        root.constraints.resize(initialStates.size());
-        root.cost = 0;
-        root.LB = 0;
+        HighLevelNode start;
+        start.solution.resize(initialStates.size());
+        start.constraints.resize(initialStates.size());
+        start.cost = 0;
+        start.LB = 0;
+        start.id = 0;
 
         for (size_t i = 0; i < initialStates.size(); ++i)
         {
             if (i < solution.size() && solution[i].path.size() > 1)
             {
-                std::cout << initialStates[i] << " " << solution[i].path.front().first << std::endl;
+                std::cout << initialStates[i] << " " << solution[i].path.front().first
+                          << std::endl;
                 assert(initialStates[i] == solution[i].path.front().first);
-                root.solution[i] = solution[i];
+                start.solution[i] = solution[i];
                 std::cout << "use existing solution for agent: " << i << std::endl;
             }
             else
             {
-                LowLevel llenv(num_columns,
-                num_rows,
-                obstacles,
-                goals,
-                i,
-                m_constraints,
-                m_lastGoalConstraint,
-                num_expanded_low_level_nodes,
-                m_disappearAtGoal,
-                m_env, i, root.constraints[i],
-                                          root.solution, factor_w);
-                bool success = llenv.low_level_search(initialStates[i], root.solution[i]);
+                LowLevel llenv(m_env, i, start.constraints[i],
+                               start.solution, factor_w);
+                bool success = llenv.low_level_search(initialStates[i], start.solution[i]);
                 if (!success)
                 {
                     return false;
                 }
             }
 
-            root.cost += root.solution[i].cost;
-            root.LB += root.solution[i].fmin;
+            start.cost += start.solution[i].cost;
+            start.LB += start.solution[i].fmin;
         }
 
-        root.focal_heuristic = m_env.get_focal_heuristic(root.solution);
+        start.focal_heuristic = m_env.get_focal_heuristic(start.solution);
 
         // std::priority_queue<HighLevelNode> open;
         openSet_t open_set;
         focalSet_t focal_set;
 
-        auto handle = open_set.push(root);
+        auto handle = open_set.push(start);
         (*handle).handle = handle;
         focal_set.push(handle);
 
-        int best_cost = (*handle).cost;
+        int bestCost = (*handle).cost;
 
         solution.clear();
+        int id = 1;
         while (!open_set.empty())
         {
             // update focal list
             {
-                int old_best_cost = best_cost;
-                best_cost = open_set.top().cost;
+                int old_best_cost = bestCost;
+                bestCost = open_set.top().cost;
                 // std::cout << "best_f_score: " << best_f_score << std::endl;
-                if (best_cost > old_best_cost)
+                if (bestCost > old_best_cost)
                 {
-                    // std::cout << "old_best_cost: " << old_best_cost << " best_cost: " <<
-                    // best_cost << std::endl;
+                    // std::cout << "old_best_cost: " << old_best_cost << " bestCost: " <<
+                    // bestCost << std::endl;
                     auto iter = open_set.ordered_begin();
                     auto iterEnd = open_set.ordered_end();
                     for (; iter != iterEnd; ++iter)
                     {
                         int val = iter->cost;
-                        if (val > old_best_cost * factor_w && val <= best_cost * factor_w)
+                        if (val > old_best_cost * factor_w && val <= bestCost * factor_w)
                         {
                             const HighLevelNode& n = *iter;
                             focal_set.push(n.handle);
                         }
 
-                        if (val > best_cost * factor_w)
+                        if (val > bestCost * factor_w)
                         {
                             break;
                         }
@@ -1132,27 +1074,21 @@ public:
             {
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
+                // std::cout << "create child with id " << id << std::endl;
                 HighLevelNode new_node = P;
+                new_node.id = id;
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
+                assert(!new_node.constraints[i].overlap(c.second));
 
                 new_node.constraints[i].add(c.second);
 
                 new_node.cost -= new_node.solution[i].cost;
                 new_node.LB -= new_node.solution[i].fmin;
 
-                LowLevel llenv(num_columns,
-                               num_rows,
-                               obstacles,
-                               goals,
-                               i,
-                               m_constraints,
-                               m_lastGoalConstraint,
-                               num_expanded_low_level_nodes,
-                               m_disappearAtGoal,
-                               m_env, i, new_node.constraints[i],
-                                          new_node.solution, factor_w);
+                LowLevel llenv(m_env, i, new_node.constraints[i],
+                               new_node.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], new_node.solution[i]);
 
                 new_node.cost += new_node.solution[i].cost;
@@ -1165,12 +1101,13 @@ public:
                     auto handle = open_set.push(new_node);
                     (*handle).handle = handle;
 
-                    if (new_node.cost <= best_cost * factor_w)
+                    if (new_node.cost <= bestCost * factor_w)
                     {
                         focal_set.push(handle);
                     }
                 }
 
+                ++id;
             }
         }
 
