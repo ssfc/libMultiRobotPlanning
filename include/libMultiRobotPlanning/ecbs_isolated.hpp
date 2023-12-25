@@ -322,7 +322,7 @@ public:
     ECBSEnvironment& operator=(const ECBSEnvironment&) = delete;
 
     // Count all conflicts
-    int get_focal_heuristic(const std::vector<PlanResult>& solution)
+    int get_num_conflicts(const std::vector<PlanResult>& solution)
     {
         int num_conflicts = 0;
 
@@ -953,7 +953,7 @@ public:
             root.LB += root.solution[i].fmin;
         }
 
-        root.focal_heuristic = m_env.get_focal_heuristic(root.solution);
+        root.focal_heuristic = m_env.get_num_conflicts(root.solution);
 
         // std::priority_queue<HighLevelNode> open;
         openSet_t open_set;
@@ -1040,7 +1040,7 @@ public:
 
                 new_node.cost += new_node.solution[i].cost;
                 new_node.LB += new_node.solution[i].fmin;
-                new_node.focal_heuristic = m_env.get_focal_heuristic(new_node.solution);
+                new_node.focal_heuristic = m_env.get_num_conflicts(new_node.solution);
 
                 if (success)
                 {
