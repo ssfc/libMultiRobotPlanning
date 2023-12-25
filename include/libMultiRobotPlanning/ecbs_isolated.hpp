@@ -321,19 +321,6 @@ public:
     ECBSEnvironment(const ECBSEnvironment&) = delete;
     ECBSEnvironment& operator=(const ECBSEnvironment&) = delete;
 
-    void set_low_level_context(size_t agentIdx, const Constraints* constraints)
-    {
-        assert(constraints);  // NOLINT
-        m_agentIdx = agentIdx;
-        m_constraints = constraints;
-        m_lastGoalConstraint = -1;
-        for (const auto& vc : constraints->vertexConstraints) {
-            if (vc.x == goals[m_agentIdx].x && vc.y == goals[m_agentIdx].y) {
-                m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
-            }
-        }
-    }
-
 
     // low-level
     int get_focal_state_heuristic(const TimeLocation& s, int /*gScore*/,
@@ -715,7 +702,21 @@ public:
             ,m_solution(solution),
               factor_w(input_factor_w)
     {
-        m_env.set_low_level_context(agentIdx, &constraints);
+        set_low_level_context(agentIdx, &constraints);
+    }
+
+    void set_low_level_context(size_t agentIdx, const Constraints* constraints)
+    {
+        m_env.m_agentIdx = agentIdx;
+        m_env.m_constraints = constraints;
+        m_env.m_lastGoalConstraint = -1;
+        for (const auto& vc : constraints->vertexConstraints)
+        {
+            if (vc.x == m_env.goals[m_env.m_agentIdx].x && vc.y == m_env.goals[m_env.m_agentIdx].y)
+            {
+                m_env.m_lastGoalConstraint = std::max(m_env.m_lastGoalConstraint, vc.time);
+            }
+        }
     }
 
     int admissible_heuristic(const TimeLocation& s)
