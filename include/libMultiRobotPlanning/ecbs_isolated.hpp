@@ -237,6 +237,55 @@ struct Constraints
 };
 
 
+class HighLevelNode
+{
+public:
+    std::vector<PlanResult> solution;
+    std::vector<Constraints> constraints;
+
+    int cost;
+    int LB;  // sum of fmin of solution
+
+    int focal_heuristic;
+
+    int id;
+
+    using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
+    using handle_t = typename openSet_t::handle_type;
+    handle_t handle;
+
+public:
+    bool operator<(const HighLevelNode& n) const
+    {
+        // if (cost != n.cost)
+        return cost > n.cost;
+        // return id > n.id;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
+    {
+        os << "id: " << c.id << " cost: " << c.cost << " LB: " << c.LB
+           << " focal: " << c.focal_heuristic << std::endl;
+        for (size_t i = 0; i < c.solution.size(); ++i)
+        {
+            os << "Agent: " << i << std::endl;
+            os << " States:" << std::endl;
+
+            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+            {
+                os << "  " << c.solution[i].path[t].first << std::endl;
+            }
+
+            os << " Constraints:" << std::endl;
+            os << c.constraints[i];
+            os << " cost: " << c.solution[i].cost << std::endl;
+        }
+
+        return os;
+    }
+};
+
+
 class ECBSEnvironment
 {
 private:
@@ -253,6 +302,28 @@ private:
 
     std::vector<PlanResult> m_solution;
     float factor_w;
+
+    using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
+    using handle_t = typename openSet_t::handle_type;
+
+    struct compare_focal_heuristic
+    {
+        bool operator()(const handle_t& h1, const handle_t& h2) const
+        {
+            // Our heap is a maximum heap, so we invert the comperator function here
+            if ((*h1).focal_heuristic != (*h2).focal_heuristic)
+            {
+                return (*h1).focal_heuristic > (*h2).focal_heuristic;
+            }
+            else
+            {
+                return (*h1).cost > (*h2).cost;
+            }
+        }
+    };
+
+    using focalSet_t = typename boost::heap::d_ary_heap<handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
+    boost::heap::compare<compare_focal_heuristic> > ;
 
 public:
     ECBSEnvironment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
@@ -882,55 +953,6 @@ public:
         return false;
     }
 
-};
-
-
-class HighLevelNode
-{
-public:
-    std::vector<PlanResult> solution;
-    std::vector<Constraints> constraints;
-
-    int cost;
-    int LB;  // sum of fmin of solution
-
-    int focal_heuristic;
-
-    int id;
-
-    using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
-    using handle_t = typename openSet_t::handle_type;
-    handle_t handle;
-
-public:
-    bool operator<(const HighLevelNode& n) const
-    {
-        // if (cost != n.cost)
-        return cost > n.cost;
-        // return id > n.id;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
-    {
-        os << "id: " << c.id << " cost: " << c.cost << " LB: " << c.LB
-           << " focal: " << c.focal_heuristic << std::endl;
-        for (size_t i = 0; i < c.solution.size(); ++i)
-        {
-            os << "Agent: " << i << std::endl;
-            os << " States:" << std::endl;
-
-            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
-            {
-                os << "  " << c.solution[i].path[t].first << std::endl;
-            }
-
-            os << " Constraints:" << std::endl;
-            os << c.constraints[i];
-            os << " cost: " << c.solution[i].cost << std::endl;
-        }
-
-        return os;
-    }
 };
 
 
