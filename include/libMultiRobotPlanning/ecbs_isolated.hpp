@@ -778,7 +778,7 @@ public:
         openSet_t open_set;
         focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
         std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> timelocation_to_heaphandle;
-        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closedSet;
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
         std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> came_from;
 
         auto handle = open_set.push(
@@ -855,14 +855,14 @@ public:
             focal_set.pop();
             open_set.erase(currentHandle);
             timelocation_to_heaphandle.erase(current.state);
-            closedSet.insert(current.state);
+            closed_set.insert(current.state);
 
             // traverse neighbors
             neighbors.clear();
             get_neighbors(current.state, neighbors);
             for (const Neighbor& neighbor : neighbors)
             {
-                if (closedSet.find(neighbor.time_location) == closedSet.end())
+                if (closed_set.find(neighbor.time_location) == closed_set.end())
                 {
                     int tentative_gScore = current.gScore + neighbor.cost;
                     auto iter = timelocation_to_heaphandle.find(neighbor.time_location);
