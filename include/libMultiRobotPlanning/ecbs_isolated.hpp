@@ -321,26 +321,6 @@ public:
     ECBSEnvironment(const ECBSEnvironment&) = delete;
     ECBSEnvironment& operator=(const ECBSEnvironment&) = delete;
 
-
-    // low-level
-    int get_num_vertex_conflicts(const TimeLocation& s, const std::vector<PlanResult>& solution)
-    {
-        int num_vertex_conflicts = 0;
-        for (size_t i = 0; i < solution.size(); ++i)
-        {
-            if (i != m_agentIdx && !solution[i].path.empty())
-            {
-                TimeLocation state2 = get_time_location(i, solution, s.time_step);
-                if (s.location == state2.location)
-                {
-                    ++num_vertex_conflicts;
-                }
-            }
-        }
-
-        return num_vertex_conflicts;
-    }
-
     // low-level
     int get_num_edge_conflicts(const TimeLocation& s1a, const TimeLocation& s1b,
             const std::vector<PlanResult>& solution)
@@ -667,7 +647,20 @@ public:
 
     int get_num_vertex_conflicts(const TimeLocation& s)
     {
-        return m_env.get_num_vertex_conflicts(s, m_solution);
+        int num_vertex_conflicts = 0;
+        for (size_t i = 0; i < m_solution.size(); ++i)
+        {
+            if (i != m_env.m_agentIdx && !m_solution[i].path.empty())
+            {
+                TimeLocation state2 = m_env.get_time_location(i, m_solution, s.time_step);
+                if (s.location == state2.location)
+                {
+                    ++num_vertex_conflicts;
+                }
+            }
+        }
+
+        return num_vertex_conflicts;
     }
 
     int get_num_edge_conflicts(const TimeLocation& s1, const TimeLocation& s2)
