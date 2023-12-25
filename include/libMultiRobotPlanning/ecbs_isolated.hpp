@@ -759,15 +759,6 @@ public:
         m_env.get_neighbors(s, neighbors);
     }
 
-    void onExpandNode()
-    {
-        // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
-        // << gScore << std::endl;
-        // m_env.onExpandLowLevelNode(s, fScore, gScore, m_agentIdx,
-        // m_constraints);
-        m_env.onExpandLowLevelNode();
-    }
-
     bool low_level_search(const TimeLocation& startState, PlanResult& solution)
     {
         solution.path.clear();
@@ -827,7 +818,7 @@ public:
 
             auto currentHandle = focal_set.top();
             LowLevelNode current = *currentHandle;
-            onExpandNode();
+            m_env.onExpandLowLevelNode();
 
             if (is_solution(current.state))
             {
