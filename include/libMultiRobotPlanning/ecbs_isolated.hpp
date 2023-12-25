@@ -1035,7 +1035,7 @@ public:
         (*handle).handle = handle;
         focal_set.push(handle);
 
-        int bestCost = (*handle).cost;
+        int best_cost = (*handle).cost;
 
         solution.clear();
         int id = 1;
@@ -1043,25 +1043,25 @@ public:
         {
             // update focal list
             {
-                int old_best_cost = bestCost;
-                bestCost = open_set.top().cost;
+                int old_best_cost = best_cost;
+                best_cost = open_set.top().cost;
                 // std::cout << "best_f_score: " << best_f_score << std::endl;
-                if (bestCost > old_best_cost)
+                if (best_cost > old_best_cost)
                 {
-                    // std::cout << "old_best_cost: " << old_best_cost << " bestCost: " <<
-                    // bestCost << std::endl;
+                    // std::cout << "old_best_cost: " << old_best_cost << " best_cost: " <<
+                    // best_cost << std::endl;
                     auto iter = open_set.ordered_begin();
                     auto iterEnd = open_set.ordered_end();
                     for (; iter != iterEnd; ++iter)
                     {
                         int val = iter->cost;
-                        if (val > old_best_cost * factor_w && val <= bestCost * factor_w)
+                        if (val > old_best_cost * factor_w && val <= best_cost * factor_w)
                         {
                             const HighLevelNode& n = *iter;
                             focal_set.push(n.handle);
                         }
 
-                        if (val > bestCost * factor_w)
+                        if (val > best_cost * factor_w)
                         {
                             break;
                         }
@@ -1124,7 +1124,7 @@ public:
                     auto handle = open_set.push(new_node);
                     (*handle).handle = handle;
 
-                    if (new_node.cost <= bestCost * factor_w)
+                    if (new_node.cost <= best_cost * factor_w)
                     {
                         focal_set.push(handle);
                     }

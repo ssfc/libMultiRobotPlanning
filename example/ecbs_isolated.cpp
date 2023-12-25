@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
         if (start_time_location_set.find(s) != start_time_location_set.end())
         {
             std::cout << "Identical start locations detected -> no solution!" << std::endl;
-            
+
             return 0;
         }
         start_time_location_set.insert(s);
