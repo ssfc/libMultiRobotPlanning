@@ -929,6 +929,19 @@ public:
 class ECBS
 {
 private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    std::vector<Location> goals;
+    size_t m_agentIdx;
+    const Constraints* m_constraints;
+    int m_lastGoalConstraint;
+    int num_expanded_high_level_nodes;
+    int num_expanded_low_level_nodes;
+    bool m_disappearAtGoal;
+
+    std::vector<PlanResult> m_solution;
+
     ECBSEnvironment& m_env;
     float factor_w;
 
@@ -955,8 +968,25 @@ private:
         boost::heap::compare<compare_focal_heuristic> > ;
 
 public:
-    ECBS(ECBSEnvironment& environment, float input_w)
-    : m_env(environment),
+    ECBS(int input_num_columns,
+         int input_num_rows,
+         std::unordered_set<Location> input_obstacles,
+         std::vector<Location> input_goals,
+         bool input_m_disappearAtGoal,
+         ECBSEnvironment& environment,
+         float input_w)
+    : num_columns(input_num_columns),
+      num_rows(input_num_rows),
+      obstacles(input_obstacles),
+      goals(input_goals),
+      // m_agentIdx(input_m_agentIdx),
+      // m_constraints(input_m_constraints),
+      // m_lastGoalConstraint(input_m_lastGoalConstraint),
+      num_expanded_high_level_nodes(0),
+      num_expanded_low_level_nodes(0),
+      m_disappearAtGoal(input_m_disappearAtGoal),
+      // m_solution(input_m_solution),
+      m_env(environment),
       factor_w(input_w)
     {}
 

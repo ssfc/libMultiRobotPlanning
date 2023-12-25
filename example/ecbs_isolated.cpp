@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
     }
 
     ECBSEnvironment mapf(dimx, dimy, obstacles, goals, disappearAtGoal, w);
-    ECBS ecbs(mapf, w);
+    ECBS ecbs(dimx, dimy, obstacles, goals, disappearAtGoal, mapf, w);
     std::vector<PlanResult> solution;
 
     Timer timer;
