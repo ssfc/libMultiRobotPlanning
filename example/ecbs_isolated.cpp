@@ -109,11 +109,10 @@ int main(int argc, char* argv[])
     }
 
     ECBSEnvironment mapf(dimx, dimy, obstacles, goals, disappearAtGoal, w);
-    ECBS ecbs(mapf, w);
     std::vector<PlanResult> solution;
 
     Timer timer;
-    bool success = ecbs.high_level_search(startStates, solution);
+    bool success = mapf.high_level_search(startStates, solution);
     timer.stop();
 
     if (success)
