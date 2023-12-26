@@ -552,6 +552,7 @@ class LowLevel
 private:
     int num_columns;
     int num_rows;
+    int m_agentIdx;
     ECBSEnvironment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
@@ -612,12 +613,12 @@ public:
 
     void set_low_level_context(size_t agentIdx, const Constraints* constraints)
     {
-        m_env.m_agentIdx = agentIdx;
+        m_agentIdx = agentIdx;
         m_env.m_constraints = constraints;
         m_env.m_lastGoalConstraint = -1;
         for (const auto& vc : constraints->vertexConstraints)
         {
-            if (vc.x == m_env.goals[m_env.m_agentIdx].x && vc.y == m_env.goals[m_env.m_agentIdx].y)
+            if (vc.x == m_env.goals[m_agentIdx].x && vc.y == m_env.goals[m_agentIdx].y)
             {
                 m_env.m_lastGoalConstraint = std::max(m_env.m_lastGoalConstraint, vc.time);
             }
@@ -626,8 +627,8 @@ public:
 
     int admissible_heuristic(const TimeLocation& s)
     {
-        return std::abs(s.location.x - m_env.goals[m_env.m_agentIdx].x) +
-               std::abs(s.location.y - m_env.goals[m_env.m_agentIdx].y);
+        return std::abs(s.location.x - m_env.goals[m_agentIdx].x) +
+               std::abs(s.location.y - m_env.goals[m_agentIdx].y);
     }
 
     int get_num_vertex_conflicts(const TimeLocation& s)
@@ -635,7 +636,7 @@ public:
         int num_vertex_conflicts = 0;
         for (size_t i = 0; i < m_solution.size(); i++)
         {
-            if (i != m_env.m_agentIdx && !m_solution[i].path.empty())
+            if (i != m_agentIdx && !m_solution[i].path.empty())
             {
                 TimeLocation state2 = m_env.get_time_location(i, m_solution, s.time_step);
                 if (s.location == state2.location)
@@ -653,7 +654,7 @@ public:
         int num_edge_conflicts = 0;
         for (size_t i = 0; i < m_solution.size(); i++)
         {
-            if (i != m_env.m_agentIdx && !m_solution[i].path.empty())
+            if (i != m_agentIdx && !m_solution[i].path.empty())
             {
                 TimeLocation s2a = m_env.get_time_location(i, m_solution, s1a.time_step);
                 TimeLocation s2b = m_env.get_time_location(i, m_solution, s1b.time_step);
@@ -669,8 +670,8 @@ public:
 
     bool is_solution(const TimeLocation& s)
     {
-        return s.location.x == m_env.goals[m_env.m_agentIdx].x
-        && s.location.y == m_env.goals[m_env.m_agentIdx].y
+        return s.location.x == m_env.goals[m_agentIdx].x
+        && s.location.y == m_env.goals[m_agentIdx].y
         && s.time_step > m_env.m_lastGoalConstraint;
     }
 
