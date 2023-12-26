@@ -480,7 +480,6 @@ public:
 
     TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
     {
-        assert(agentIdx < solution.size());
         if (t < solution[agentIdx].path.size())
         {
             return solution[agentIdx].path[t].first;
@@ -638,6 +637,24 @@ public:
                std::abs(s.location.y - goals[m_agentIdx].y);
     }
 
+    TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
+    {
+        if (t < solution[agentIdx].path.size())
+        {
+            return solution[agentIdx].path[t].first;
+        }
+
+        if (m_env.m_disappearAtGoal)
+        {
+            // This is a trick to avoid changing the rest of the code significantly
+            // After an agent disappeared, put it at a unique but invalid position
+            // This will cause all calls to equalExceptTime(.) to return false.
+            return TimeLocation(-1, Location(-1 * (agentIdx+1), -1));
+        }
+
+        return solution[agentIdx].path.back().first;
+    }
+
     int get_num_vertex_conflicts(const TimeLocation& s)
     {
         int num_vertex_conflicts = 0;
@@ -645,7 +662,7 @@ public:
         {
             if (i != m_agentIdx && !m_solution[i].path.empty())
             {
-                TimeLocation state2 = m_env.get_time_location(i, m_solution, s.time_step);
+                TimeLocation state2 = get_time_location(i, m_solution, s.time_step);
                 if (s.location == state2.location)
                 {
                     num_vertex_conflicts++;
@@ -663,8 +680,8 @@ public:
         {
             if (i != m_agentIdx && !m_solution[i].path.empty())
             {
-                TimeLocation s2a = m_env.get_time_location(i, m_solution, s1a.time_step);
-                TimeLocation s2b = m_env.get_time_location(i, m_solution, s1b.time_step);
+                TimeLocation s2a = get_time_location(i, m_solution, s1a.time_step);
+                TimeLocation s2b = get_time_location(i, m_solution, s1b.time_step);
                 if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
                 {
                     num_edge_conflicts++;
