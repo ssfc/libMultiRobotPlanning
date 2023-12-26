@@ -486,7 +486,6 @@ public:
             return solution[agentIdx].path[t].first;
         }
 
-        assert(!solution[agentIdx].path.empty());
         if (m_disappearAtGoal)
         {
             // This is a trick to avoid changing the rest of the code significantly
