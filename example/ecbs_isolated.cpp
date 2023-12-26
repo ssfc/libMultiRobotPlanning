@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
         start_time_location_set.insert(s);
     }
 
-    ECBSEnvironment mapf(dimx, dimy, obstacles, goals, disappearAtGoal, w);
+    ECBS mapf(dimx, dimy, obstacles, goals, disappearAtGoal, w);
     std::vector<PlanResult> solution;
 
     Timer timer;

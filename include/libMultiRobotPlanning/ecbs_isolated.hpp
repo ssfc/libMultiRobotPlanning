@@ -683,7 +683,7 @@ public:
 };
 
 
-class ECBSEnvironment
+class ECBS
 {
 public:
     int num_columns;
@@ -723,7 +723,7 @@ public:
     boost::heap::compare<compare_focal_heuristic> > ;
 
 public:
-    ECBSEnvironment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
+    ECBS(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
                     std::vector<Location> input_goals, bool disappearAtGoal, float input_w)
             : num_columns(dimx),
               num_rows(dimy),
@@ -739,8 +739,8 @@ public:
     {
     }
 
-    ECBSEnvironment(const ECBSEnvironment&) = delete;
-    ECBSEnvironment& operator=(const ECBSEnvironment&) = delete;
+    ECBS(const ECBS&) = delete;
+    ECBS& operator=(const ECBS&) = delete;
 
     // Count all conflicts
     int get_num_conflicts(const std::vector<PlanResult>& solution)
