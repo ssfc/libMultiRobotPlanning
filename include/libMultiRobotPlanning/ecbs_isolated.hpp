@@ -601,10 +601,10 @@ public:
              const std::vector<PlanResult>& solution, float input_factor_w)
             : num_columns(input_num_columns),
               num_rows(input_num_rows),
-            m_env(env)
+              m_env(env),
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
-            ,m_solution(solution),
+              m_solution(solution),
               factor_w(input_factor_w)
     {
         set_low_level_context(agentIdx, &constraints);
