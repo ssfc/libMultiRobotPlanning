@@ -647,7 +647,7 @@ public:
             return solution[agentIdx].path[t].first;
         }
 
-        if (m_env.m_disappearAtGoal)
+        if (m_disappearAtGoal)
         {
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
