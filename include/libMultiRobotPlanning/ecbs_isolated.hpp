@@ -552,6 +552,7 @@ class LowLevel
 private:
     int num_columns;
     int num_rows;
+    std::vector<Location> goals;
     int m_agentIdx;
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
@@ -600,10 +601,12 @@ private:
 public:
     LowLevel(int input_num_columns,
              int input_num_rows,
+             std::vector<Location> input_goals,
              ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
              const std::vector<PlanResult>& solution, float input_factor_w)
             : num_columns(input_num_columns),
               num_rows(input_num_rows),
+              goals(input_goals),
               m_env(env),
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
@@ -620,7 +623,7 @@ public:
         m_lastGoalConstraint = -1;
         for (const auto& vc : constraints->vertexConstraints)
         {
-            if (vc.x == m_env.goals[m_agentIdx].x && vc.y == m_env.goals[m_agentIdx].y)
+            if (vc.x == goals[m_agentIdx].x && vc.y == goals[m_agentIdx].y)
             {
                 m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
             }
@@ -629,8 +632,8 @@ public:
 
     int admissible_heuristic(const TimeLocation& s)
     {
-        return std::abs(s.location.x - m_env.goals[m_agentIdx].x) +
-               std::abs(s.location.y - m_env.goals[m_agentIdx].y);
+        return std::abs(s.location.x - goals[m_agentIdx].x) +
+               std::abs(s.location.y - goals[m_agentIdx].y);
     }
 
     int get_num_vertex_conflicts(const TimeLocation& s)
@@ -672,8 +675,8 @@ public:
 
     bool is_solution(const TimeLocation& s)
     {
-        return s.location.x == m_env.goals[m_agentIdx].x
-        && s.location.y == m_env.goals[m_agentIdx].y
+        return s.location.x == goals[m_agentIdx].x
+        && s.location.y == goals[m_agentIdx].y
         && s.time_step > m_lastGoalConstraint;
     }
 
@@ -951,6 +954,7 @@ public:
             {
                 LowLevel llenv(m_env.num_columns,
                                m_env.num_rows,
+                               m_env.goals,
                                m_env, i, root.constraints[i],
                                root.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], root.solution[i]);
@@ -1047,6 +1051,7 @@ public:
 
                 LowLevel llenv(m_env.num_columns,
                                m_env.num_rows,
+                               m_env.goals,
                                m_env, i, new_node.constraints[i],
                                new_node.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], new_node.solution[i]);
