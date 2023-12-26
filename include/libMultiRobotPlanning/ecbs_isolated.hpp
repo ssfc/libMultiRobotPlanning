@@ -552,6 +552,7 @@ class LowLevel
 private:
     int num_columns;
     int num_rows;
+    std::unordered_set<Location> obstacles;
     std::vector<Location> goals;
     int m_agentIdx;
     const Constraints* m_constraints;
@@ -601,11 +602,13 @@ private:
 public:
     LowLevel(int input_num_columns,
              int input_num_rows,
+             std::unordered_set<Location> input_obstacles,
              std::vector<Location> input_goals,
              ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
              const std::vector<PlanResult>& solution, float input_factor_w)
             : num_columns(input_num_columns),
               num_rows(input_num_rows),
+              obstacles(input_obstacles),
               goals(input_goals),
               m_env(env),
             // , m_agentIdx(agentIdx)
@@ -954,6 +957,7 @@ public:
             {
                 LowLevel llenv(m_env.num_columns,
                                m_env.num_rows,
+                               m_env.obstacles,
                                m_env.goals,
                                m_env, i, root.constraints[i],
                                root.solution, factor_w);
@@ -1051,6 +1055,7 @@ public:
 
                 LowLevel llenv(m_env.num_columns,
                                m_env.num_rows,
+                               m_env.obstacles,
                                m_env.goals,
                                m_env, i, new_node.constraints[i],
                                new_node.solution, factor_w);
