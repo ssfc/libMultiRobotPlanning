@@ -216,8 +216,9 @@ struct Constraints
 };
 
 
-struct LowLevelNode
+class LowLevelNode
 {
+public:
     TimeLocation state;
 
     int fScore;
@@ -229,6 +230,7 @@ struct LowLevelNode
 
     fibHeapHandle_t handle;
 
+public:
     LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore, int input_focalHeuristic)
             : state(input_state),
               fScore(input_fScore),
