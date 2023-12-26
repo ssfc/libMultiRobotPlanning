@@ -216,6 +216,425 @@ struct Constraints
 };
 
 
+struct LowLevelNode
+{
+    TimeLocation state;
+
+    int fScore;
+    int gScore;
+    int focal_heuristic;
+
+    using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
+    using fibHeapHandle_t = typename openSet_t::handle_type;
+
+    fibHeapHandle_t handle;
+
+    LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore, int input_focalHeuristic)
+            : state(input_state),
+              fScore(input_fScore),
+              gScore(input_gScore),
+              focal_heuristic(input_focalHeuristic)
+    {}
+
+    bool operator<(const LowLevelNode& other) const
+    {
+        // Sort order
+        // 1. lowest fScore
+        // 2. highest gScore
+
+        // Our heap is a maximum heap, so we invert the comperator function here
+        if (fScore != other.fScore)
+        {
+            return fScore > other.fScore;
+        }
+        else
+        {
+            return gScore < other.gScore;
+        }
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
+    {
+        os << "state: " << node.state << " fScore: " << node.fScore
+           << " gScore: " << node.gScore << " focal: " << node.focal_heuristic;
+
+        return os;
+    }
+};
+
+
+class LowLevel
+{
+private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    std::vector<Location> goals;
+    int m_agentIdx;
+    const Constraints* m_constraints;
+    int m_lastGoalConstraint;
+    bool m_disappearAtGoal;
+    // size_t m_agentIdx;
+    // const Constraints& m_constraints;
+    const std::vector<PlanResult>& m_solution;
+    float factor_w;
+
+    using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
+    boost::heap::mutable_<true> >;
+
+    using fibHeapHandle_t = typename openSet_t::handle_type;
+
+    struct compare_focal_heuristic
+    {
+        bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
+        {
+            // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
+            // Path Finding" by Cohen et. al.)
+            // 1. lowest focal_heuristic
+            // 2. lowest fScore
+            // 3. highest gScore
+
+            // Our heap is a maximum heap, so we invert the comperator function here
+            if ((*h1).focal_heuristic != (*h2).focal_heuristic)
+            {
+                return (*h1).focal_heuristic > (*h2).focal_heuristic;
+                // } else if ((*h1).fScore != (*h2).fScore) {
+                //   return (*h1).fScore > (*h2).fScore;
+            }
+            else if ((*h1).fScore != (*h2).fScore)
+            {
+                return (*h1).fScore > (*h2).fScore;
+            }
+            else
+            {
+                return (*h1).gScore < (*h2).gScore;
+            }
+        }
+    };
+
+    using focalSet_t = typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
+    boost::heap::compare<compare_focal_heuristic> >;
+
+public:
+    LowLevel(int input_num_columns,
+             int input_num_rows,
+             std::unordered_set<Location> input_obstacles,
+             std::vector<Location> input_goals,
+             bool input_m_disappearAtGoal,
+             size_t agentIdx, const Constraints& constraints,
+             const std::vector<PlanResult>& solution, float input_factor_w)
+            : num_columns(input_num_columns),
+              num_rows(input_num_rows),
+              obstacles(input_obstacles),
+              goals(input_goals),
+              m_disappearAtGoal(input_m_disappearAtGoal),
+            // , m_agentIdx(agentIdx)
+            // , m_constraints(constraints)
+              m_solution(solution),
+              factor_w(input_factor_w)
+    {
+        set_low_level_context(agentIdx, &constraints);
+    }
+
+    void set_low_level_context(size_t agentIdx, const Constraints* constraints)
+    {
+        m_agentIdx = agentIdx;
+        m_constraints = constraints;
+        m_lastGoalConstraint = -1;
+        for (const auto& vc : constraints->vertexConstraints)
+        {
+            if (vc.x == goals[m_agentIdx].x && vc.y == goals[m_agentIdx].y)
+            {
+                m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
+            }
+        }
+    }
+
+    int admissible_heuristic(const TimeLocation& s)
+    {
+        return std::abs(s.location.x - goals[m_agentIdx].x) +
+               std::abs(s.location.y - goals[m_agentIdx].y);
+    }
+
+    TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
+    {
+        if (t < solution[agentIdx].path.size())
+        {
+            return solution[agentIdx].path[t].first;
+        }
+
+        if (m_disappearAtGoal)
+        {
+            // This is a trick to avoid changing the rest of the code significantly
+            // After an agent disappeared, put it at a unique but invalid position
+            // This will cause all calls to equalExceptTime(.) to return false.
+            return TimeLocation(-1, Location(-1 * (agentIdx+1), -1));
+        }
+
+        return solution[agentIdx].path.back().first;
+    }
+
+    int get_num_vertex_conflicts(const TimeLocation& s)
+    {
+        int num_vertex_conflicts = 0;
+        for (size_t i = 0; i < m_solution.size(); i++)
+        {
+            if (i != m_agentIdx && !m_solution[i].path.empty())
+            {
+                TimeLocation state2 = get_time_location(i, m_solution, s.time_step);
+                if (s.location == state2.location)
+                {
+                    num_vertex_conflicts++;
+                }
+            }
+        }
+
+        return num_vertex_conflicts;
+    }
+
+    int get_num_edge_conflicts(const TimeLocation& s1a, const TimeLocation& s1b)
+    {
+        int num_edge_conflicts = 0;
+        for (size_t i = 0; i < m_solution.size(); i++)
+        {
+            if (i != m_agentIdx && !m_solution[i].path.empty())
+            {
+                TimeLocation s2a = get_time_location(i, m_solution, s1a.time_step);
+                TimeLocation s2b = get_time_location(i, m_solution, s1b.time_step);
+                if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
+                {
+                    num_edge_conflicts++;
+                }
+            }
+        }
+
+        return num_edge_conflicts;
+    }
+
+    bool is_solution(const TimeLocation& s)
+    {
+        return s.location.x == goals[m_agentIdx].x
+               && s.location.y == goals[m_agentIdx].y
+               && s.time_step > m_lastGoalConstraint;
+    }
+
+    bool location_valid(const TimeLocation& s)
+    {
+        const auto& con = m_constraints->vertexConstraints;
+        return s.location.x >= 0 && s.location.x < num_columns
+               && s.location.y >= 0 && s.location.y < num_rows
+               && obstacles.find(Location(s.location.x, s.location.y)) == obstacles.end()
+               && con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
+    }
+
+    bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
+    {
+        const auto& con = m_constraints->edgeConstraints;
+        return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
+               con.end();
+    }
+
+    void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
+    {
+        neighbors.clear();
+
+        TimeLocation wait_n(s.time_step + 1, Location(s.location.x, s.location.y));
+        if (location_valid(wait_n) && transition_valid(s, wait_n))
+        {
+            neighbors.emplace_back(Neighbor(wait_n, Action::Wait, 1));
+        }
+
+        TimeLocation west_n(s.time_step + 1, Location(s.location.x - 1, s.location.y));
+        if (location_valid(west_n) && transition_valid(s, west_n))
+        {
+            neighbors.emplace_back(Neighbor(west_n, Action::Left, 1));
+        }
+
+        TimeLocation east_n(s.time_step + 1, Location(s.location.x + 1, s.location.y));
+        if (location_valid(east_n) && transition_valid(s, east_n))
+        {
+            neighbors.emplace_back(Neighbor(east_n, Action::Right, 1));
+        }
+
+        TimeLocation north_n(s.time_step + 1, Location(s.location.x, s.location.y + 1));
+        if (location_valid(north_n) && transition_valid(s, north_n))
+        {
+            neighbors.emplace_back(Neighbor(north_n, Action::Up, 1));
+        }
+
+        TimeLocation south_n(s.time_step + 1, Location(s.location.x, s.location.y - 1));
+        if (location_valid(south_n) && transition_valid(s, south_n))
+        {
+            neighbors.emplace_back(Neighbor(south_n, Action::Down, 1));
+        }
+    }
+
+    bool low_level_search(const TimeLocation& startState, PlanResult& solution, int& num_expanded_low_level_nodes)
+    {
+        solution.path.clear();
+        solution.path.emplace_back(std::make_pair<>(startState, 0));
+        solution.actions.clear();
+        solution.cost = 0;
+
+        openSet_t open_set;
+        focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
+        std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> timelocation_to_heaphandle;
+        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
+        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> came_from;
+
+        auto handle = open_set.push(
+                LowLevelNode(startState, admissible_heuristic(startState), 0, 0));
+        timelocation_to_heaphandle.insert(std::make_pair<>(startState, handle));
+        (*handle).handle = handle;
+
+        focal_set.push(handle);
+
+        std::vector<Neighbor> neighbors;
+        neighbors.reserve(10);
+
+        int best_f_score = (*handle).fScore;
+
+        // std::cout << "new search" << std::endl;
+
+        while (!open_set.empty())
+        {
+            int old_best_cost = best_f_score;
+            best_f_score = open_set.top().fScore;
+            // std::cout << "best_f_score: " << best_f_score << std::endl;
+            if (best_f_score > old_best_cost)
+            {
+                // std::cout << "old_best_cost: " << old_best_cost << " newBestFScore:
+                // " << best_f_score << std::endl;
+                auto iter = open_set.ordered_begin();
+                auto iterEnd = open_set.ordered_end();
+                for (; iter != iterEnd; iter++)
+                {
+                    int val = iter->fScore;
+                    if (val > old_best_cost * factor_w && val <= best_f_score * factor_w)
+                    {
+                        const LowLevelNode& n = *iter;
+                        focal_set.push(n.handle);
+                    }
+
+                    if (val > best_f_score * factor_w)
+                    {
+                        break;
+                    }
+                }
+            }
+
+
+            // check focal list/open list consistency
+
+            auto currentHandle = focal_set.top();
+            LowLevelNode current = *currentHandle;
+            num_expanded_low_level_nodes++;
+
+            if (is_solution(current.state))
+            {
+                solution.path.clear();
+                solution.actions.clear();
+                auto iter = came_from.find(current.state);
+                while (iter != came_from.end())
+                {
+                    solution.path.emplace_back(
+                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    solution.actions.emplace_back(std::make_pair<>(
+                            std::get<1>(iter->second), std::get<2>(iter->second)));
+                    iter = came_from.find(std::get<0>(iter->second));
+                }
+
+                solution.path.emplace_back(std::make_pair<>(startState, 0));
+                std::reverse(solution.path.begin(), solution.path.end());
+                std::reverse(solution.actions.begin(), solution.actions.end());
+                solution.cost = current.gScore;
+                solution.fmin = open_set.top().fScore;
+
+                return true;
+            }
+
+            focal_set.pop();
+            open_set.erase(currentHandle);
+            timelocation_to_heaphandle.erase(current.state);
+            closed_set.insert(current.state);
+
+            // traverse neighbors
+            neighbors.clear();
+            get_neighbors(current.state, neighbors);
+            for (const Neighbor& neighbor : neighbors)
+            {
+                if (closed_set.find(neighbor.time_location) == closed_set.end())
+                {
+                    int tentative_gScore = current.gScore + neighbor.cost;
+                    auto iter = timelocation_to_heaphandle.find(neighbor.time_location);
+                    if (iter == timelocation_to_heaphandle.end())
+                    {  // Discover a new node
+
+                        came_from.insert(std::make_pair<>(
+                                neighbor.time_location,
+                                std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
+                                                  tentative_gScore)));
+
+                        // std::cout << "  this is a new node" << std::endl;
+                        int fScore =
+                                tentative_gScore + admissible_heuristic(neighbor.time_location);
+                        int focal_heuristic =
+                                current.focal_heuristic +
+                                get_num_vertex_conflicts(neighbor.time_location) +
+                                get_num_edge_conflicts(current.state, neighbor.time_location);
+
+                        auto handle = open_set.push(
+                                LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focal_heuristic));
+                        (*handle).handle = handle;
+
+                        if (fScore <= best_f_score * factor_w)
+                        {
+                            // std::cout << "focalAdd: " << *handle << std::endl;
+                            focal_set.push(handle);
+                        }
+
+                        timelocation_to_heaphandle.insert(std::make_pair<>(neighbor.time_location, handle));
+                        // std::cout << "  this is a new node " << fScore << "," <<
+                        // tentative_gScore << std::endl;
+                    }
+                    else
+                    {
+                        auto handle = iter->second;
+                        // We found this node before with a better path
+                        if (tentative_gScore >= (*handle).gScore)
+                        {
+                            continue;
+                        }
+
+                        came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_gScore);
+
+                        int last_gScore = (*handle).gScore;
+                        int last_fScore = (*handle).fScore;
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // << last_gScore << " " << *handle << std::endl;
+                        // update f and gScore
+                        int delta = last_gScore - tentative_gScore;
+                        (*handle).gScore = tentative_gScore;
+                        (*handle).fScore -= delta;
+                        open_set.increase(handle);
+
+                        if ((*handle).fScore <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
+                        {
+                            // std::cout << "focalAdd: " << *handle << std::endl;
+                            focal_set.push(handle);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return false;
+    }
+
+};
+
+
 class HighLevelNode
 {
 public:
@@ -491,425 +910,6 @@ public:
 
         return solution[agentIdx].path.back().first;
     }
-};
-
-
-struct LowLevelNode
-{
-    TimeLocation state;
-
-    int fScore;
-    int gScore;
-    int focal_heuristic;
-
-    using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
-    using fibHeapHandle_t = typename openSet_t::handle_type;
-
-    fibHeapHandle_t handle;
-
-    LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore, int input_focalHeuristic)
-            : state(input_state),
-              fScore(input_fScore),
-              gScore(input_gScore),
-              focal_heuristic(input_focalHeuristic)
-    {}
-
-    bool operator<(const LowLevelNode& other) const
-    {
-        // Sort order
-        // 1. lowest fScore
-        // 2. highest gScore
-
-        // Our heap is a maximum heap, so we invert the comperator function here
-        if (fScore != other.fScore)
-        {
-            return fScore > other.fScore;
-        }
-        else
-        {
-            return gScore < other.gScore;
-        }
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
-    {
-        os << "state: " << node.state << " fScore: " << node.fScore
-           << " gScore: " << node.gScore << " focal: " << node.focal_heuristic;
-
-        return os;
-    }
-};
-
-
-class LowLevel
-{
-private:
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    std::vector<Location> goals;
-    int m_agentIdx;
-    const Constraints* m_constraints;
-    int m_lastGoalConstraint;
-    bool m_disappearAtGoal;
-    // size_t m_agentIdx;
-    // const Constraints& m_constraints;
-    const std::vector<PlanResult>& m_solution;
-    float factor_w;
-
-    using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
-    boost::heap::mutable_<true> >;
-
-    using fibHeapHandle_t = typename openSet_t::handle_type;
-
-    struct compare_focal_heuristic
-    {
-        bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
-        {
-            // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
-            // Path Finding" by Cohen et. al.)
-            // 1. lowest focal_heuristic
-            // 2. lowest fScore
-            // 3. highest gScore
-
-            // Our heap is a maximum heap, so we invert the comperator function here
-            if ((*h1).focal_heuristic != (*h2).focal_heuristic)
-            {
-                return (*h1).focal_heuristic > (*h2).focal_heuristic;
-                // } else if ((*h1).fScore != (*h2).fScore) {
-                //   return (*h1).fScore > (*h2).fScore;
-            }
-            else if ((*h1).fScore != (*h2).fScore)
-            {
-                return (*h1).fScore > (*h2).fScore;
-            }
-            else
-            {
-                return (*h1).gScore < (*h2).gScore;
-            }
-        }
-    };
-
-    using focalSet_t = typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-    boost::heap::compare<compare_focal_heuristic> >;
-
-public:
-    LowLevel(int input_num_columns,
-             int input_num_rows,
-             std::unordered_set<Location> input_obstacles,
-             std::vector<Location> input_goals,
-             bool input_m_disappearAtGoal,
-             size_t agentIdx, const Constraints& constraints,
-             const std::vector<PlanResult>& solution, float input_factor_w)
-            : num_columns(input_num_columns),
-              num_rows(input_num_rows),
-              obstacles(input_obstacles),
-              goals(input_goals),
-              m_disappearAtGoal(input_m_disappearAtGoal),
-            // , m_agentIdx(agentIdx)
-            // , m_constraints(constraints)
-              m_solution(solution),
-              factor_w(input_factor_w)
-    {
-        set_low_level_context(agentIdx, &constraints);
-    }
-
-    void set_low_level_context(size_t agentIdx, const Constraints* constraints)
-    {
-        m_agentIdx = agentIdx;
-        m_constraints = constraints;
-        m_lastGoalConstraint = -1;
-        for (const auto& vc : constraints->vertexConstraints)
-        {
-            if (vc.x == goals[m_agentIdx].x && vc.y == goals[m_agentIdx].y)
-            {
-                m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
-            }
-        }
-    }
-
-    int admissible_heuristic(const TimeLocation& s)
-    {
-        return std::abs(s.location.x - goals[m_agentIdx].x) +
-               std::abs(s.location.y - goals[m_agentIdx].y);
-    }
-
-    TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
-    {
-        if (t < solution[agentIdx].path.size())
-        {
-            return solution[agentIdx].path[t].first;
-        }
-
-        if (m_disappearAtGoal)
-        {
-            // This is a trick to avoid changing the rest of the code significantly
-            // After an agent disappeared, put it at a unique but invalid position
-            // This will cause all calls to equalExceptTime(.) to return false.
-            return TimeLocation(-1, Location(-1 * (agentIdx+1), -1));
-        }
-
-        return solution[agentIdx].path.back().first;
-    }
-
-    int get_num_vertex_conflicts(const TimeLocation& s)
-    {
-        int num_vertex_conflicts = 0;
-        for (size_t i = 0; i < m_solution.size(); i++)
-        {
-            if (i != m_agentIdx && !m_solution[i].path.empty())
-            {
-                TimeLocation state2 = get_time_location(i, m_solution, s.time_step);
-                if (s.location == state2.location)
-                {
-                    num_vertex_conflicts++;
-                }
-            }
-        }
-
-        return num_vertex_conflicts;
-    }
-
-    int get_num_edge_conflicts(const TimeLocation& s1a, const TimeLocation& s1b)
-    {
-        int num_edge_conflicts = 0;
-        for (size_t i = 0; i < m_solution.size(); i++)
-        {
-            if (i != m_agentIdx && !m_solution[i].path.empty())
-            {
-                TimeLocation s2a = get_time_location(i, m_solution, s1a.time_step);
-                TimeLocation s2b = get_time_location(i, m_solution, s1b.time_step);
-                if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
-                {
-                    num_edge_conflicts++;
-                }
-            }
-        }
-
-        return num_edge_conflicts;
-    }
-
-    bool is_solution(const TimeLocation& s)
-    {
-        return s.location.x == goals[m_agentIdx].x
-        && s.location.y == goals[m_agentIdx].y
-        && s.time_step > m_lastGoalConstraint;
-    }
-
-    bool location_valid(const TimeLocation& s)
-    {
-        const auto& con = m_constraints->vertexConstraints;
-        return s.location.x >= 0 && s.location.x < num_columns
-            && s.location.y >= 0 && s.location.y < num_rows
-            && obstacles.find(Location(s.location.x, s.location.y)) == obstacles.end()
-            && con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
-    }
-
-    bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
-    {
-        const auto& con = m_constraints->edgeConstraints;
-        return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
-               con.end();
-    }
-
-    void get_neighbors(const TimeLocation& s, std::vector<Neighbor>& neighbors)
-    {
-        neighbors.clear();
-
-        TimeLocation wait_n(s.time_step + 1, Location(s.location.x, s.location.y));
-        if (location_valid(wait_n) && transition_valid(s, wait_n))
-        {
-            neighbors.emplace_back(Neighbor(wait_n, Action::Wait, 1));
-        }
-
-        TimeLocation west_n(s.time_step + 1, Location(s.location.x - 1, s.location.y));
-        if (location_valid(west_n) && transition_valid(s, west_n))
-        {
-            neighbors.emplace_back(Neighbor(west_n, Action::Left, 1));
-        }
-
-        TimeLocation east_n(s.time_step + 1, Location(s.location.x + 1, s.location.y));
-        if (location_valid(east_n) && transition_valid(s, east_n))
-        {
-            neighbors.emplace_back(Neighbor(east_n, Action::Right, 1));
-        }
-
-        TimeLocation north_n(s.time_step + 1, Location(s.location.x, s.location.y + 1));
-        if (location_valid(north_n) && transition_valid(s, north_n))
-        {
-            neighbors.emplace_back(Neighbor(north_n, Action::Up, 1));
-        }
-
-        TimeLocation south_n(s.time_step + 1, Location(s.location.x, s.location.y - 1));
-        if (location_valid(south_n) && transition_valid(s, south_n))
-        {
-            neighbors.emplace_back(Neighbor(south_n, Action::Down, 1));
-        }
-    }
-
-    bool low_level_search(const TimeLocation& startState, PlanResult& solution, int& num_expanded_low_level_nodes)
-    {
-        solution.path.clear();
-        solution.path.emplace_back(std::make_pair<>(startState, 0));
-        solution.actions.clear();
-        solution.cost = 0;
-
-        openSet_t open_set;
-        focalSet_t focal_set;  // subset of open nodes that are within suboptimality bound
-        std::unordered_map<TimeLocation, fibHeapHandle_t, std::hash<TimeLocation>> timelocation_to_heaphandle;
-        std::unordered_set<TimeLocation, std::hash<TimeLocation>> closed_set;
-        std::unordered_map<TimeLocation, std::tuple<TimeLocation, Action, int, int>, std::hash<TimeLocation>> came_from;
-
-        auto handle = open_set.push(
-                LowLevelNode(startState, admissible_heuristic(startState), 0, 0));
-        timelocation_to_heaphandle.insert(std::make_pair<>(startState, handle));
-        (*handle).handle = handle;
-
-        focal_set.push(handle);
-
-        std::vector<Neighbor> neighbors;
-        neighbors.reserve(10);
-
-        int best_f_score = (*handle).fScore;
-
-        // std::cout << "new search" << std::endl;
-
-        while (!open_set.empty())
-        {
-            int old_best_cost = best_f_score;
-            best_f_score = open_set.top().fScore;
-            // std::cout << "best_f_score: " << best_f_score << std::endl;
-            if (best_f_score > old_best_cost)
-            {
-                // std::cout << "old_best_cost: " << old_best_cost << " newBestFScore:
-                // " << best_f_score << std::endl;
-                auto iter = open_set.ordered_begin();
-                auto iterEnd = open_set.ordered_end();
-                for (; iter != iterEnd; iter++)
-                {
-                    int val = iter->fScore;
-                    if (val > old_best_cost * factor_w && val <= best_f_score * factor_w)
-                    {
-                        const LowLevelNode& n = *iter;
-                        focal_set.push(n.handle);
-                    }
-
-                    if (val > best_f_score * factor_w)
-                    {
-                        break;
-                    }
-                }
-            }
-
-
-            // check focal list/open list consistency
-
-            auto currentHandle = focal_set.top();
-            LowLevelNode current = *currentHandle;
-            num_expanded_low_level_nodes++;
-
-            if (is_solution(current.state))
-            {
-                solution.path.clear();
-                solution.actions.clear();
-                auto iter = came_from.find(current.state);
-                while (iter != came_from.end())
-                {
-                    solution.path.emplace_back(
-                            std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                    solution.actions.emplace_back(std::make_pair<>(
-                            std::get<1>(iter->second), std::get<2>(iter->second)));
-                    iter = came_from.find(std::get<0>(iter->second));
-                }
-
-                solution.path.emplace_back(std::make_pair<>(startState, 0));
-                std::reverse(solution.path.begin(), solution.path.end());
-                std::reverse(solution.actions.begin(), solution.actions.end());
-                solution.cost = current.gScore;
-                solution.fmin = open_set.top().fScore;
-
-                return true;
-            }
-
-            focal_set.pop();
-            open_set.erase(currentHandle);
-            timelocation_to_heaphandle.erase(current.state);
-            closed_set.insert(current.state);
-
-            // traverse neighbors
-            neighbors.clear();
-            get_neighbors(current.state, neighbors);
-            for (const Neighbor& neighbor : neighbors)
-            {
-                if (closed_set.find(neighbor.time_location) == closed_set.end())
-                {
-                    int tentative_gScore = current.gScore + neighbor.cost;
-                    auto iter = timelocation_to_heaphandle.find(neighbor.time_location);
-                    if (iter == timelocation_to_heaphandle.end())
-                    {  // Discover a new node
-
-                        came_from.insert(std::make_pair<>(
-                                neighbor.time_location,
-                                std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
-                                                  tentative_gScore)));
-
-                        // std::cout << "  this is a new node" << std::endl;
-                        int fScore =
-                                tentative_gScore + admissible_heuristic(neighbor.time_location);
-                        int focal_heuristic =
-                                current.focal_heuristic +
-                                get_num_vertex_conflicts(neighbor.time_location) +
-                                get_num_edge_conflicts(current.state, neighbor.time_location);
-
-                        auto handle = open_set.push(
-                                LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focal_heuristic));
-                        (*handle).handle = handle;
-
-                        if (fScore <= best_f_score * factor_w)
-                        {
-                            // std::cout << "focalAdd: " << *handle << std::endl;
-                            focal_set.push(handle);
-                        }
-
-                        timelocation_to_heaphandle.insert(std::make_pair<>(neighbor.time_location, handle));
-                        // std::cout << "  this is a new node " << fScore << "," <<
-                        // tentative_gScore << std::endl;
-                    }
-                    else
-                    {
-                        auto handle = iter->second;
-                        // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).gScore)
-                        {
-                            continue;
-                        }
-
-                        came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_gScore);
-
-                        int last_gScore = (*handle).gScore;
-                        int last_fScore = (*handle).fScore;
-                        // std::cout << "  this is an old node: " << tentative_gScore << ","
-                        // << last_gScore << " " << *handle << std::endl;
-                        // update f and gScore
-                        int delta = last_gScore - tentative_gScore;
-                        (*handle).gScore = tentative_gScore;
-                        (*handle).fScore -= delta;
-                        open_set.increase(handle);
-
-                        if ((*handle).fScore <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
-                        {
-                            // std::cout << "focalAdd: " << *handle << std::endl;
-                            focal_set.push(handle);
-                        }
-                    }
-
-                }
-            }
-        }
-
-        return false;
-    }
-
 };
 
 
