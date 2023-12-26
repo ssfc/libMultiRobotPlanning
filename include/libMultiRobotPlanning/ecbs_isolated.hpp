@@ -463,10 +463,6 @@ public:
         num_expanded_high_level_nodes++;
     }
 
-    void onExpandLowLevelNode()
-    {
-        num_expanded_low_level_nodes++;
-    }
 
     int highLevelExpanded()
     {
@@ -753,7 +749,7 @@ public:
         }
     }
 
-    bool low_level_search(const TimeLocation& startState, PlanResult& solution)
+    bool low_level_search(const TimeLocation& startState, PlanResult& solution, int& num_expanded_low_level_nodes)
     {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(startState, 0));
@@ -812,7 +808,7 @@ public:
 
             auto currentHandle = focal_set.top();
             LowLevelNode current = *currentHandle;
-            m_env.onExpandLowLevelNode();
+            num_expanded_low_level_nodes++;
 
             if (is_solution(current.state))
             {
@@ -981,7 +977,7 @@ public:
                                m_env.m_disappearAtGoal,
                                m_env, i, root.constraints[i],
                                root.solution, factor_w);
-                bool success = llenv.low_level_search(initialStates[i], root.solution[i]);
+                bool success = llenv.low_level_search(initialStates[i], root.solution[i], m_env.num_expanded_low_level_nodes);
                 if (!success)
                 {
                     return false;
@@ -1080,7 +1076,7 @@ public:
                                m_env.m_disappearAtGoal,
                                m_env, i, new_node.constraints[i],
                                new_node.solution, factor_w);
-                bool success = llenv.low_level_search(initialStates[i], new_node.solution[i]);
+                bool success = llenv.low_level_search(initialStates[i], new_node.solution[i], m_env.num_expanded_low_level_nodes);
 
                 new_node.cost += new_node.solution[i].cost;
                 new_node.LB += new_node.solution[i].fmin;
