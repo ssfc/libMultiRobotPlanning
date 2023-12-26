@@ -554,6 +554,7 @@ private:
     int num_rows;
     int m_agentIdx;
     const Constraints* m_constraints;
+    int m_lastGoalConstraint;
     ECBSEnvironment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
@@ -616,12 +617,12 @@ public:
     {
         m_agentIdx = agentIdx;
         m_constraints = constraints;
-        m_env.m_lastGoalConstraint = -1;
+        m_lastGoalConstraint = -1;
         for (const auto& vc : constraints->vertexConstraints)
         {
             if (vc.x == m_env.goals[m_agentIdx].x && vc.y == m_env.goals[m_agentIdx].y)
             {
-                m_env.m_lastGoalConstraint = std::max(m_env.m_lastGoalConstraint, vc.time);
+                m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
             }
         }
     }
@@ -673,7 +674,7 @@ public:
     {
         return s.location.x == m_env.goals[m_agentIdx].x
         && s.location.y == m_env.goals[m_agentIdx].y
-        && s.time_step > m_env.m_lastGoalConstraint;
+        && s.time_step > m_lastGoalConstraint;
     }
 
     bool location_valid(const TimeLocation& s)
