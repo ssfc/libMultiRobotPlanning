@@ -221,7 +221,7 @@ class LowLevelNode
 public:
     TimeLocation state;
 
-    int fScore;
+    int f_score;
     int gScore;
     int focal_heuristic;
 
@@ -233,7 +233,7 @@ public:
 public:
     LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore, int input_focalHeuristic)
             : state(input_state),
-              fScore(input_fScore),
+              f_score(input_fScore),
               gScore(input_gScore),
               focal_heuristic(input_focalHeuristic)
     {}
@@ -241,13 +241,13 @@ public:
     bool operator<(const LowLevelNode& other) const
     {
         // Sort order
-        // 1. lowest fScore
+        // 1. lowest f_score
         // 2. highest gScore
 
         // Our heap is a maximum heap, so we invert the comperator function here
-        if (fScore != other.fScore)
+        if (f_score != other.f_score)
         {
-            return fScore > other.fScore;
+            return f_score > other.f_score;
         }
         else
         {
@@ -257,7 +257,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
     {
-        os << "state: " << node.state << " fScore: " << node.fScore
+        os << "state: " << node.state << " f_score: " << node.f_score
            << " gScore: " << node.gScore << " focal: " << node.focal_heuristic;
 
         return os;
@@ -293,19 +293,19 @@ private:
             // Sort order (see "Improved Solvers for Bounded-Suboptimal Multi-Agent
             // Path Finding" by Cohen et. al.)
             // 1. lowest focal_heuristic
-            // 2. lowest fScore
+            // 2. lowest f_score
             // 3. highest gScore
 
             // Our heap is a maximum heap, so we invert the comperator function here
             if ((*h1).focal_heuristic != (*h2).focal_heuristic)
             {
                 return (*h1).focal_heuristic > (*h2).focal_heuristic;
-                // } else if ((*h1).fScore != (*h2).fScore) {
-                //   return (*h1).fScore > (*h2).fScore;
+                // } else if ((*h1).f_score != (*h2).f_score) {
+                //   return (*h1).f_score > (*h2).f_score;
             }
-            else if ((*h1).fScore != (*h2).fScore)
+            else if ((*h1).f_score != (*h2).f_score)
             {
-                return (*h1).fScore > (*h2).fScore;
+                return (*h1).f_score > (*h2).f_score;
             }
             else
             {
@@ -494,14 +494,14 @@ public:
         std::vector<Neighbor> neighbors;
         neighbors.reserve(10);
 
-        int best_f_score = (*handle).fScore;
+        int best_f_score = (*handle).f_score;
 
         // std::cout << "new search" << std::endl;
 
         while (!open_set.empty())
         {
             int old_best_cost = best_f_score;
-            best_f_score = open_set.top().fScore;
+            best_f_score = open_set.top().f_score;
             // std::cout << "best_f_score: " << best_f_score << std::endl;
             if (best_f_score > old_best_cost)
             {
@@ -511,7 +511,7 @@ public:
                 auto iterEnd = open_set.ordered_end();
                 for (; iter != iterEnd; iter++)
                 {
-                    int val = iter->fScore;
+                    int val = iter->f_score;
                     if (val > old_best_cost * factor_w && val <= best_f_score * factor_w)
                     {
                         const LowLevelNode& n = *iter;
@@ -550,7 +550,7 @@ public:
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.gScore;
-                solution.fmin = open_set.top().fScore;
+                solution.fmin = open_set.top().f_score;
 
                 return true;
             }
@@ -578,7 +578,7 @@ public:
                                                   tentative_gScore)));
 
                         // std::cout << "  this is a new node" << std::endl;
-                        int fScore =
+                        int f_score =
                                 tentative_gScore + admissible_heuristic(neighbor.time_location);
                         int focal_heuristic =
                                 current.focal_heuristic +
@@ -586,17 +586,17 @@ public:
                                 get_num_edge_conflicts(current.state, neighbor.time_location);
 
                         auto handle = open_set.push(
-                                LowLevelNode(neighbor.time_location, fScore, tentative_gScore, focal_heuristic));
+                                LowLevelNode(neighbor.time_location, f_score, tentative_gScore, focal_heuristic));
                         (*handle).handle = handle;
 
-                        if (fScore <= best_f_score * factor_w)
+                        if (f_score <= best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focal_set.push(handle);
                         }
 
                         timelocation_to_heaphandle.insert(std::make_pair<>(neighbor.time_location, handle));
-                        // std::cout << "  this is a new node " << fScore << "," <<
+                        // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
                     else
@@ -611,16 +611,16 @@ public:
                         came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_gScore);
 
                         int last_gScore = (*handle).gScore;
-                        int last_fScore = (*handle).fScore;
+                        int last_fScore = (*handle).f_score;
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
                         // << last_gScore << " " << *handle << std::endl;
                         // update f and gScore
                         int delta = last_gScore - tentative_gScore;
                         (*handle).gScore = tentative_gScore;
-                        (*handle).fScore -= delta;
+                        (*handle).f_score -= delta;
                         open_set.increase(handle);
 
-                        if ((*handle).fScore <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
+                        if ((*handle).f_score <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
                         {
                             // std::cout << "focalAdd: " << *handle << std::endl;
                             focal_set.push(handle);
