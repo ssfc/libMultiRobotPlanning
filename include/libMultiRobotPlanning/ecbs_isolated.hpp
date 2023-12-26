@@ -555,6 +555,7 @@ private:
     int m_agentIdx;
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
+    bool m_disappearAtGoal;
     ECBSEnvironment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
@@ -602,12 +603,14 @@ public:
              int input_num_rows,
              std::unordered_set<Location> input_obstacles,
              std::vector<Location> input_goals,
+             bool input_m_disappearAtGoal,
              ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
              const std::vector<PlanResult>& solution, float input_factor_w)
             : num_columns(input_num_columns),
               num_rows(input_num_rows),
               obstacles(input_obstacles),
               goals(input_goals),
+              m_disappearAtGoal(input_m_disappearAtGoal),
               m_env(env),
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
@@ -975,6 +978,7 @@ public:
                                m_env.num_rows,
                                m_env.obstacles,
                                m_env.goals,
+                               m_env.m_disappearAtGoal,
                                m_env, i, root.constraints[i],
                                root.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], root.solution[i]);
@@ -1073,6 +1077,7 @@ public:
                                m_env.num_rows,
                                m_env.obstacles,
                                m_env.goals,
+                               m_env.m_disappearAtGoal,
                                m_env, i, new_node.constraints[i],
                                new_node.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], new_node.solution[i]);
