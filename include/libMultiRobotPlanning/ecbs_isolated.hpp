@@ -912,6 +912,156 @@ public:
 
         return solution[agentIdx].path.back().first;
     }
+
+    bool high_level_search(const std::vector<TimeLocation>& initialStates,
+                           std::vector<PlanResult>& solution)
+    {
+        HighLevelNode root;
+        root.solution.resize(initialStates.size());
+        root.constraints.resize(initialStates.size());
+        root.cost = 0;
+        root.LB = 0;
+
+        for (size_t i = 0; i < initialStates.size(); i++)
+        {
+            if (i < solution.size() && solution[i].path.size() > 1)
+            {
+                std::cout << initialStates[i] << " " << solution[i].path.front().first
+                          << std::endl;
+                assert(initialStates[i] == solution[i].path.front().first);
+                root.solution[i] = solution[i];
+                std::cout << "use existing solution for agent: " << i << std::endl;
+            }
+            else
+            {
+                LowLevel llenv(num_columns,
+                               num_rows,
+                               obstacles,
+                               goals,
+                               m_disappearAtGoal,
+                               i, root.constraints[i],
+                               root.solution, factor_w);
+                bool success = llenv.low_level_search(initialStates[i], root.solution[i], num_expanded_low_level_nodes);
+                if (!success)
+                {
+                    return false;
+                }
+            }
+
+            root.cost += root.solution[i].cost;
+            root.LB += root.solution[i].fmin;
+        }
+
+        root.focal_heuristic = get_num_conflicts(root.solution);
+
+        // std::priority_queue<HighLevelNode> open;
+        openSet_t open_set;
+        focalSet_t focal_set;
+
+        auto handle = open_set.push(root);
+        (*handle).handle = handle;
+        focal_set.push(handle);
+
+        int best_cost = (*handle).cost;
+
+        solution.clear();
+        while (!open_set.empty())
+        {
+            // update focal list
+            {
+                int old_best_cost = best_cost;
+                best_cost = open_set.top().cost;
+                // std::cout << "best_f_score: " << best_f_score << std::endl;
+                if (best_cost > old_best_cost)
+                {
+                    // std::cout << "old_best_cost: " << old_best_cost << " best_cost: " <<
+                    // best_cost << std::endl;
+                    auto iter = open_set.ordered_begin();
+                    auto iterEnd = open_set.ordered_end();
+                    for (; iter != iterEnd; ++iter)
+                    {
+                        int val = iter->cost;
+                        if (val > old_best_cost * factor_w && val <= best_cost * factor_w)
+                        {
+                            const HighLevelNode& n = *iter;
+                            focal_set.push(n.handle);
+                        }
+
+                        if (val > best_cost * factor_w)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            auto h = focal_set.top();
+            HighLevelNode P = *h;
+            onExpandHighLevelNode();
+            // std::cout << "expand: " << P << std::endl;
+
+            focal_set.pop();
+            open_set.erase(h);
+
+            Conflict conflict;
+            if (!get_all_paths_first_conflict(P.solution, conflict))
+            {
+                // std::cout << "done; cost: " << P.cost << std::endl;
+                solution = P.solution;
+
+                return true;
+            }
+
+            // create additional nodes to resolve conflict
+            // std::cout << "Found conflict: " << conflict << std::endl;
+            // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
+            // conflict.type << std::endl;
+
+            std::map<size_t, Constraints> constraints;
+            generate_constraints_from_conflict(conflict, constraints);
+            for (const auto& c : constraints)
+            {
+                // std::cout << "Add HL node for " << c.first << std::endl;
+                size_t i = c.first;
+                HighLevelNode new_node = P;
+                // (optional) check that this constraint was not included already
+                // std::cout << new_node.constraints[i] << std::endl;
+                // std::cout << c.second << std::endl;
+
+                new_node.constraints[i].add(c.second);
+
+                new_node.cost -= new_node.solution[i].cost;
+                new_node.LB -= new_node.solution[i].fmin;
+
+                LowLevel llenv(num_columns,
+                               num_rows,
+                               obstacles,
+                               goals,
+                               m_disappearAtGoal,
+                               i, new_node.constraints[i],
+                               new_node.solution, factor_w);
+                bool success = llenv.low_level_search(initialStates[i], new_node.solution[i], num_expanded_low_level_nodes);
+
+                new_node.cost += new_node.solution[i].cost;
+                new_node.LB += new_node.solution[i].fmin;
+                new_node.focal_heuristic = get_num_conflicts(new_node.solution);
+
+                if (success)
+                {
+                    // std::cout << "  success. cost: " << new_node.cost << std::endl;
+                    auto handle = open_set.push(new_node);
+                    (*handle).handle = handle;
+
+                    if (new_node.cost <= best_cost * factor_w)
+                    {
+                        focal_set.push(handle);
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 };
 
 
