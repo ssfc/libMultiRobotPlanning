@@ -553,6 +553,7 @@ private:
     int num_columns;
     int num_rows;
     int m_agentIdx;
+    const Constraints* m_constraints;
     ECBSEnvironment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
@@ -614,7 +615,7 @@ public:
     void set_low_level_context(size_t agentIdx, const Constraints* constraints)
     {
         m_agentIdx = agentIdx;
-        m_env.m_constraints = constraints;
+        m_constraints = constraints;
         m_env.m_lastGoalConstraint = -1;
         for (const auto& vc : constraints->vertexConstraints)
         {
@@ -677,7 +678,7 @@ public:
 
     bool location_valid(const TimeLocation& s)
     {
-        const auto& con = m_env.m_constraints->vertexConstraints;
+        const auto& con = m_constraints->vertexConstraints;
         return s.location.x >= 0 && s.location.x < num_columns
             && s.location.y >= 0 && s.location.y < num_rows
             && m_env.obstacles.find(Location(s.location.x, s.location.y)) == m_env.obstacles.end()
@@ -686,7 +687,7 @@ public:
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
     {
-        const auto& con = m_env.m_constraints->edgeConstraints;
+        const auto& con = m_constraints->edgeConstraints;
         return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
                con.end();
     }
