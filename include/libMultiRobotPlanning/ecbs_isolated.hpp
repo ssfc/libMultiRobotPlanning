@@ -551,6 +551,7 @@ class LowLevel
 {
 private:
     int num_columns;
+    int num_rows;
     ECBSEnvironment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
@@ -595,9 +596,11 @@ private:
 
 public:
     LowLevel(int input_num_columns,
+             int input_num_rows,
              ECBSEnvironment& env, size_t agentIdx, const Constraints& constraints,
              const std::vector<PlanResult>& solution, float input_factor_w)
             : num_columns(input_num_columns),
+              num_rows(input_num_rows),
             m_env(env)
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
@@ -675,7 +678,7 @@ public:
     {
         const auto& con = m_env.m_constraints->vertexConstraints;
         return s.location.x >= 0 && s.location.x < num_columns
-            && s.location.y >= 0 && s.location.y < m_env.num_rows
+            && s.location.y >= 0 && s.location.y < num_rows
             && m_env.obstacles.find(Location(s.location.x, s.location.y)) == m_env.obstacles.end()
             && con.find(VertexConstraint(s.time_step, s.location.x, s.location.y)) == con.end();
     }
@@ -944,6 +947,7 @@ public:
             else
             {
                 LowLevel llenv(m_env.num_columns,
+                               m_env.num_rows,
                                m_env, i, root.constraints[i],
                                root.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], root.solution[i]);
@@ -1039,6 +1043,7 @@ public:
                 new_node.LB -= new_node.solution[i].fmin;
 
                 LowLevel llenv(m_env.num_columns,
+                               m_env.num_rows,
                                m_env, i, new_node.constraints[i],
                                new_node.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], new_node.solution[i]);
