@@ -286,7 +286,7 @@ private:
 
     using fibHeapHandle_t = typename openSet_t::handle_type;
 
-    struct compare_focal_heuristic
+    struct compare_low_level_focal_heuristic
     {
         bool operator()(const fibHeapHandle_t& h1, const fibHeapHandle_t& h2) const
         {
@@ -315,7 +315,7 @@ private:
     };
 
     using focalSet_t = typename boost::heap::d_ary_heap<fibHeapHandle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-    boost::heap::compare<compare_focal_heuristic> >;
+        boost::heap::compare<compare_low_level_focal_heuristic> >;
 
 public:
     LowLevel(int input_num_columns,
