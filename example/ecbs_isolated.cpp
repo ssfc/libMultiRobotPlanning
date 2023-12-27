@@ -179,3 +179,8 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+// (3) debug on ubuntu by cmake:
+// cmake .. ; make
+// ./ecbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml -w 1
+// ./ecbs_isolated -i ../benchmark/8x8_obst12/map_8by8_obst12_agents8_ex10.yaml -o output.yaml -w 1.5
