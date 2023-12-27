@@ -508,8 +508,8 @@ public:
                 // std::cout << "old_best_cost: " << old_best_cost << " newBestFScore:
                 // " << best_f_score << std::endl;
                 auto iter = open_set.ordered_begin();
-                auto iterEnd = open_set.ordered_end();
-                for (; iter != iterEnd; iter++)
+                auto iter_end = open_set.ordered_end();
+                for (; iter != iter_end; iter++)
                 {
                     int val = iter->f_score;
                     if (val > old_best_cost * factor_w && val <= best_f_score * factor_w)
@@ -970,8 +970,8 @@ public:
                     // std::cout << "old_best_cost: " << old_best_cost << " best_cost: " <<
                     // best_cost << std::endl;
                     auto iter = open_set.ordered_begin();
-                    auto iterEnd = open_set.ordered_end();
-                    for (; iter != iterEnd; ++iter)
+                    auto iter_end = open_set.ordered_end();
+                    for (; iter != iter_end; iter++)
                     {
                         int val = iter->cost;
                         if (val > old_best_cost * factor_w && val <= best_cost * factor_w)
