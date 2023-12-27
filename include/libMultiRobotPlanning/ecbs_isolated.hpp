@@ -274,7 +274,7 @@ private:
     std::vector<Location> goals;
     int m_agentIdx;
     const Constraints* m_constraints;
-    int m_lastGoalConstraint;
+    int max_goal_constraint_time;
     bool m_disappearAtGoal;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
@@ -342,12 +342,12 @@ public:
     {
         m_agentIdx = agentIdx;
         m_constraints = constraints;
-        m_lastGoalConstraint = -1;
+        max_goal_constraint_time = -1;
         for (const auto& vc : constraints->vertexConstraints)
         {
             if (vc.x == goals[m_agentIdx].x && vc.y == goals[m_agentIdx].y)
             {
-                m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
+                max_goal_constraint_time = std::max(max_goal_constraint_time, vc.time);
             }
         }
     }
@@ -417,7 +417,7 @@ public:
     {
         return s.location.x == goals[m_agentIdx].x
                && s.location.y == goals[m_agentIdx].y
-               && s.time_step > m_lastGoalConstraint;
+               && s.time_step > max_goal_constraint_time;
     }
 
     bool location_valid(const TimeLocation& s)
@@ -691,7 +691,7 @@ public:
     std::unordered_set<Location> obstacles;
     std::vector<Location> goals;
     const Constraints* m_constraints;
-    int m_lastGoalConstraint;
+    int max_goal_constraint_time;
     int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
     bool m_disappearAtGoal;
@@ -729,7 +729,7 @@ public:
               obstacles(std::move(obstacles)),
               goals(std::move(input_goals)),
               m_constraints(nullptr),
-              m_lastGoalConstraint(-1),
+              max_goal_constraint_time(-1),
               num_expanded_high_level_nodes(0),
               num_expanded_low_level_nodes(0),
               m_disappearAtGoal(disappearAtGoal),
