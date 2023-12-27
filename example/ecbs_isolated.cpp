@@ -139,8 +139,8 @@ int main(int argc, char* argv[])
         out << "  highLevelExpanded: " << mapf.get_num_expanded_high_level_nodes() << std::endl;
         std::cout << "  highLevelExpanded: " << mapf.get_num_expanded_high_level_nodes() << std::endl;
 
-        out << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
-        std::cout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
+        out << "  lowLevelExpanded: " << mapf.get_num_expanded_low_level_nodes() << std::endl;
+        std::cout << "  lowLevelExpanded: " << mapf.get_num_expanded_low_level_nodes() << std::endl;
 
         out << "schedule:" << std::endl;
         for (size_t a = 0; a < solution.size(); ++a)
