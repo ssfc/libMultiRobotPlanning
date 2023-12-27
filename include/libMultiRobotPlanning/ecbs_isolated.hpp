@@ -878,12 +878,7 @@ public:
             constraints[conflict.agent2] = c2;
         }
     }
-
-    void onExpandHighLevelNode()
-    {
-        num_expanded_high_level_nodes++;
-    }
-
+    
 
     int highLevelExpanded()
     {
@@ -997,7 +992,7 @@ public:
 
             auto h = focal_set.top();
             HighLevelNode P = *h;
-            onExpandHighLevelNode();
+            num_expanded_high_level_nodes++;
             // std::cout << "expand: " << P << std::endl;
 
             focal_set.pop();
