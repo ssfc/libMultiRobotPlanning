@@ -878,9 +878,9 @@ public:
             constraints[conflict.agent2] = c2;
         }
     }
-    
 
-    int highLevelExpanded()
+
+    int get_num_expanded_high_level_nodes()
     {
         return num_expanded_high_level_nodes;
     }

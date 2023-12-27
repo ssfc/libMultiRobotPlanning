@@ -136,8 +136,8 @@ int main(int argc, char* argv[])
         out << "  runtime: " << timer.elapsedSeconds() << std::endl;
         std::cout << "  runtime: " << timer.elapsedSeconds() << std::endl;
 
-        out << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
-        std::cout << "  highLevelExpanded: " << mapf.highLevelExpanded() << std::endl;
+        out << "  highLevelExpanded: " << mapf.get_num_expanded_high_level_nodes() << std::endl;
+        std::cout << "  highLevelExpanded: " << mapf.get_num_expanded_high_level_nodes() << std::endl;
 
         out << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
         std::cout << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
