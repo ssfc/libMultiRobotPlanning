@@ -703,7 +703,7 @@ public:
     using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
     using handle_t = typename openSet_t::handle_type;
 
-    struct compare_focal_heuristic
+    struct compare_high_level_focal_heuristic
     {
         bool operator()(const handle_t& h1, const handle_t& h2) const
         {
@@ -720,7 +720,7 @@ public:
     };
 
     using focalSet_t = typename boost::heap::d_ary_heap<handle_t, boost::heap::arity<2>, boost::heap::mutable_<true>,
-    boost::heap::compare<compare_focal_heuristic> > ;
+    boost::heap::compare<compare_high_level_focal_heuristic> > ;
 
 public:
     ECBS(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
