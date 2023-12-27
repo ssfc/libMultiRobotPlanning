@@ -690,7 +690,6 @@ public:
     int num_rows;
     std::unordered_set<Location> obstacles;
     std::vector<Location> goals;
-    size_t m_agentIdx;
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
     int num_expanded_high_level_nodes;
@@ -729,7 +728,6 @@ public:
               num_rows(dimy),
               obstacles(std::move(obstacles)),
               goals(std::move(input_goals)),
-              m_agentIdx(0),
               m_constraints(nullptr),
               m_lastGoalConstraint(-1),
               num_expanded_high_level_nodes(0),
