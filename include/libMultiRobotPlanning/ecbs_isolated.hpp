@@ -567,7 +567,7 @@ public:
             {
                 if (closed_set.find(neighbor.time_location) == closed_set.end())
                 {
-                    int tentative_gScore = current.g_score + neighbor.cost;
+                    int tentative_g_score = current.g_score + neighbor.cost;
                     auto iter = timelocation_to_heaphandle.find(neighbor.time_location);
                     if (iter == timelocation_to_heaphandle.end())
                     {  // Discover a new node
@@ -575,18 +575,18 @@ public:
                         came_from.insert(std::make_pair<>(
                                 neighbor.time_location,
                                 std::make_tuple<>(current.state, neighbor.action, neighbor.cost,
-                                                  tentative_gScore)));
+                                                  tentative_g_score)));
 
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score =
-                                tentative_gScore + admissible_heuristic(neighbor.time_location);
+                                tentative_g_score + admissible_heuristic(neighbor.time_location);
                         int focal_heuristic =
                                 current.focal_heuristic +
                                 get_num_vertex_conflicts(neighbor.time_location) +
                                 get_num_edge_conflicts(current.state, neighbor.time_location);
 
                         auto handle = open_set.push(
-                                LowLevelNode(neighbor.time_location, f_score, tentative_gScore, focal_heuristic));
+                                LowLevelNode(neighbor.time_location, f_score, tentative_g_score, focal_heuristic));
                         (*handle).handle = handle;
 
                         if (f_score <= best_f_score * factor_w)
@@ -597,23 +597,23 @@ public:
 
                         timelocation_to_heaphandle.insert(std::make_pair<>(neighbor.time_location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
-                        // tentative_gScore << std::endl;
+                        // tentative_g_score << std::endl;
                     }
                     else
                     {
                         auto handle = iter->second;
                         // We found this node before with a better path
-                        if (tentative_gScore < (*handle).g_score)
+                        if (tentative_g_score < (*handle).g_score)
                         {
-                            came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_gScore);
+                            came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_g_score);
 
                             int last_gScore = (*handle).g_score;
                             int last_f_score = (*handle).f_score;
-                            // std::cout << "  this is an old node: " << tentative_gScore << ","
+                            // std::cout << "  this is an old node: " << tentative_g_score << ","
                             // << last_gScore << " " << *handle << std::endl;
                             // update f and g_score
-                            int delta = last_gScore - tentative_gScore;
-                            (*handle).g_score = tentative_gScore;
+                            int delta = last_gScore - tentative_g_score;
+                            (*handle).g_score = tentative_g_score;
                             (*handle).f_score -= delta;
                             open_set.increase(handle);
 
