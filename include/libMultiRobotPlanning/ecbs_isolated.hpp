@@ -608,7 +608,7 @@ public:
                             came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_gScore);
 
                             int last_gScore = (*handle).g_score;
-                            int last_fScore = (*handle).f_score;
+                            int last_f_score = (*handle).f_score;
                             // std::cout << "  this is an old node: " << tentative_gScore << ","
                             // << last_gScore << " " << *handle << std::endl;
                             // update f and g_score
@@ -617,7 +617,7 @@ public:
                             (*handle).f_score -= delta;
                             open_set.increase(handle);
 
-                            if ((*handle).f_score <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
+                            if ((*handle).f_score <= best_f_score * factor_w && last_f_score > best_f_score * factor_w)
                             {
                                 // std::cout << "focalAdd: " << *handle << std::endl;
                                 focal_set.push(handle);
