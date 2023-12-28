@@ -422,7 +422,7 @@ public:
                         {
                             came_from[neighbor.location] = std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score);
 
-                            int last_fScore = (*child_handle).f_score;
+                            int last_f_score = (*child_handle).f_score;
                             // std::cout << "  this is an old node: " << tentative_g_score << ","
                             // << last_gScore << " " << *child_handle << std::endl;
                             // update f and g_score
@@ -431,7 +431,7 @@ public:
                             open_set.increase(child_handle);
                             num_generated_nodes++;
 
-                            if ((*child_handle).f_score <= best_f_score * factor_w && last_fScore > best_f_score * factor_w)
+                            if ((*child_handle).f_score <= best_f_score * factor_w && last_f_score > best_f_score * factor_w)
                             {
                                 // std::cout << "focalAdd: " << *child_handle << std::endl;
                                 // FOCAL是OPEN的子列表，仅包含那些与最低f值的节点相差不超过(1 + e)倍的节点
