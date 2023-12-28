@@ -420,9 +420,7 @@ public:
                         // We found this node before with a better path
                         if (tentative_g_score < (*child_handle).g_score)
                         {
-                            came_from.erase(neighbor.location);
-                            came_from.insert(std::make_pair<>(neighbor.location,
-                                                              std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
+                            came_from[neighbor.location] = std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score);
 
                             int last_fScore = (*child_handle).f_score;
                             // std::cout << "  this is an old node: " << tentative_g_score << ","
