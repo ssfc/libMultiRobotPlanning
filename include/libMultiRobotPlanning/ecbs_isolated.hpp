@@ -222,7 +222,7 @@ public:
     TimeLocation state;
 
     int f_score;
-    int gScore;
+    int g_score;
     int focal_heuristic;
 
     using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
@@ -234,7 +234,7 @@ public:
     LowLevelNode(const TimeLocation& input_state, int input_fScore, int input_gScore, int input_focalHeuristic)
             : state(input_state),
               f_score(input_fScore),
-              gScore(input_gScore),
+              g_score(input_gScore),
               focal_heuristic(input_focalHeuristic)
     {}
 
@@ -242,7 +242,7 @@ public:
     {
         // Sort order
         // 1. lowest f_score
-        // 2. highest gScore
+        // 2. highest g_score
 
         // Our heap is a maximum heap, so we invert the comperator function here
         if (f_score != other.f_score)
@@ -251,14 +251,14 @@ public:
         }
         else
         {
-            return gScore < other.gScore;
+            return g_score < other.g_score;
         }
     }
 
     friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
     {
         os << "state: " << node.state << " f_score: " << node.f_score
-           << " gScore: " << node.gScore << " focal: " << node.focal_heuristic;
+           << " g_score: " << node.g_score << " focal: " << node.focal_heuristic;
 
         return os;
     }
@@ -294,7 +294,7 @@ private:
             // Path Finding" by Cohen et. al.)
             // 1. lowest focal_heuristic
             // 2. lowest f_score
-            // 3. highest gScore
+            // 3. highest g_score
 
             // Our heap is a maximum heap, so we invert the comperator function here
             if ((*h1).focal_heuristic != (*h2).focal_heuristic)
@@ -309,7 +309,7 @@ private:
             }
             else
             {
-                return (*h1).gScore < (*h2).gScore;
+                return (*h1).g_score < (*h2).g_score;
             }
         }
     };
@@ -549,7 +549,7 @@ public:
                 solution.path.emplace_back(std::make_pair<>(startState, 0));
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
-                solution.cost = current.gScore;
+                solution.cost = current.g_score;
                 solution.fmin = open_set.top().f_score;
 
                 return true;
@@ -567,7 +567,7 @@ public:
             {
                 if (closed_set.find(neighbor.time_location) == closed_set.end())
                 {
-                    int tentative_gScore = current.gScore + neighbor.cost;
+                    int tentative_gScore = current.g_score + neighbor.cost;
                     auto iter = timelocation_to_heaphandle.find(neighbor.time_location);
                     if (iter == timelocation_to_heaphandle.end())
                     {  // Discover a new node
@@ -603,20 +603,20 @@ public:
                     {
                         auto handle = iter->second;
                         // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).gScore)
+                        if (tentative_gScore >= (*handle).g_score)
                         {
                             continue;
                         }
 
                         came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_gScore);
 
-                        int last_gScore = (*handle).gScore;
+                        int last_gScore = (*handle).g_score;
                         int last_fScore = (*handle).f_score;
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
                         // << last_gScore << " " << *handle << std::endl;
-                        // update f and gScore
+                        // update f and g_score
                         int delta = last_gScore - tentative_gScore;
-                        (*handle).gScore = tentative_gScore;
+                        (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
 
