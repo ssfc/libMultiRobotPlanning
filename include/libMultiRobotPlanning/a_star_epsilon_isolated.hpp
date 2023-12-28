@@ -390,6 +390,8 @@ public:
                     auto iter = location_to_heaphandle.find(neighbor.location);
                     if (iter == location_to_heaphandle.end()) // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
                     {  // Discover a new node
+                        came_from.insert(std::make_pair<>(neighbor.location,
+                                                          std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score = tentative_g_score + calculate_h(neighbor.location);
                         // focal_heuristic只在插入新节点时更新？
@@ -418,6 +420,10 @@ public:
                         // We found this node before with a better path
                         if (tentative_g_score < (*child_handle).g_score)
                         {
+                            came_from.erase(neighbor.location);
+                            came_from.insert(std::make_pair<>(neighbor.location,
+                                                              std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
+
                             int last_fScore = (*child_handle).f_score;
                             // std::cout << "  this is an old node: " << tentative_g_score << ","
                             // << last_gScore << " " << *child_handle << std::endl;
@@ -435,13 +441,6 @@ public:
                             }
                         }
                     }
-
-                    // Best path for this node so far
-                    // TODO: this is not the best way to update "came_from", but otherwise
-                    // default c'tors of Location and Action are required
-                    came_from.erase(neighbor.location);
-                    came_from.insert(std::make_pair<>(neighbor.location,
-                     std::make_tuple<>(current.location, neighbor.action, neighbor.cost, tentative_g_score)));
                 }
             }
 
