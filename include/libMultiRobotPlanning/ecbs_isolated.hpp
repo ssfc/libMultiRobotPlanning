@@ -607,12 +607,12 @@ public:
                         {
                             came_from[neighbor.time_location] = std::make_tuple<>(current.state, neighbor.action, neighbor.cost, tentative_g_score);
 
-                            int last_gScore = (*handle).g_score;
+                            int last_g_score = (*handle).g_score;
                             int last_f_score = (*handle).f_score;
                             // std::cout << "  this is an old node: " << tentative_g_score << ","
-                            // << last_gScore << " " << *handle << std::endl;
+                            // << last_g_score << " " << *handle << std::endl;
                             // update f and g_score
-                            int delta = last_gScore - tentative_g_score;
+                            int delta = last_g_score - tentative_g_score;
                             (*handle).g_score = tentative_g_score;
                             (*handle).f_score -= delta;
                             open_set.increase(handle);
