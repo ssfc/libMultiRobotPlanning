@@ -32,9 +32,9 @@ public:
     size_t interval;
 
 public:
-    SIPPState(const Location& state, size_t interval)
-        : state(state),
-          interval(interval)
+    SIPPState(const Location& input_state, size_t input_interval)
+        : state(input_state),
+          interval(input_interval)
     {}
 
     bool operator==(const SIPPState& other) const
