@@ -39,6 +39,12 @@ std::ostream& operator<<(std::ostream& os, const Action& a)
 
 class Environment
 {
+private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    Location m_goal;
+
 public:
     Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles, Location goal)
         : num_columns(dimx),
@@ -46,6 +52,12 @@ public:
           obstacles(std::move(obstacles)),
           m_goal(goal)
     {}
+
+    bool location_valid(const Location& s)
+    {
+        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
+               obstacles.find(s) == obstacles.end();
+    }
 
     float admissible_heuristic(const Location& s)
     {
@@ -116,19 +128,6 @@ public:
         // return t - 1 <= latestStartTime;
         return true;
     }
-
-private:
-    bool location_valid(const Location& s)
-    {
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(s) == obstacles.end();
-    }
-
-private:
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    Location m_goal;
 };
 
 int main(int argc, char* argv[]) {
