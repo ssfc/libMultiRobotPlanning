@@ -130,34 +130,39 @@ public:
     }
 };
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     namespace po = boost::program_options;
     // Declare the supported options.
     po::options_description desc("Allowed options");
     std::string inputFile;
     std::string outputFile;
-    desc.add_options()("help", "produce help message")(
-        "input,i", po::value<std::string>(&inputFile)->required(),
-        "input file (YAML)")("output,o",
-                             po::value<std::string>(&outputFile)->required(),
-                             "output file (YAML)")
+    desc.add_options()("help", "produce help message")
+        ("input,i", po::value<std::string>(&inputFile)->required(), "input file (YAML)")
+        ("output,o", po::value<std::string>(&outputFile)->required(), "output file (YAML)")
         // ("url",
         // po::value<std::string>(&url)->default_value("http://0.0.0.0:8080"),
         // "server URL")
         ;
 
-    try {
+    try
+    {
         po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, desc), vm);
         po::notify(vm);
 
-        if (vm.count("help") != 0u) {
+        if (vm.count("help") != 0u)
+        {
             std::cout << desc << "\n";
+
             return 0;
         }
-    } catch (po::error& e) {
+    }
+    catch (po::error& e)
+    {
         std::cerr << e.what() << std::endl << std::endl;
         std::cerr << desc << std::endl;
+
         return 1;
     }
 
@@ -168,24 +173,28 @@ int main(int argc, char* argv[]) {
     Location start(config["start"][0].as<int>(), config["start"][1].as<int>());
 
     std::unordered_set<Location> obstacles;
-    for (const auto& node : config["environment"]["obstacles"]) {
+    for (const auto& node : config["environment"]["obstacles"])
+    {
         obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
     }
+
     Environment env(config["environment"]["size"][0].as<int>(),
                     config["environment"]["size"][1].as<int>(), obstacles, goal);
 
     typedef SIPP<Location, Location, Action, int, Environment> sipp_t;
     sipp_t sipp(env);
 
-    for (const auto& node : config["environment"]["collisionIntervals"]) {
+    for (const auto& node : config["environment"]["collisionIntervals"])
+    {
         Location state(node["location"][0].as<int>(), node["location"][1].as<int>());
 
         std::vector<sipp_t::interval> collisionIntervals;
 
-        for (const auto& interval : node["intervals"]) {
-            collisionIntervals.emplace_back(
-                sipp_t::interval(interval[0].as<int>(), interval[1].as<int>()));
+        for (const auto& interval : node["intervals"])
+        {
+            collisionIntervals.emplace_back(sipp_t::interval(interval[0].as<int>(), interval[1].as<int>()));
         }
+
         sipp.setCollisionIntervals(state, collisionIntervals);
     }
 
@@ -193,26 +202,32 @@ int main(int argc, char* argv[]) {
     PlanResult<Location, Action, int> solution;
     bool success = sipp.search(start, Action::Wait, solution);
 
-    if (success) {
+    if (success)
+    {
         std::cout << "Planning successful! Total cost: " << solution.cost
                   << std::endl;
-        for (size_t i = 0; i < solution.actions.size(); ++i) {
+        for (size_t i = 0; i < solution.actions.size(); ++i)
+        {
             std::cout << solution.path[i].second << ": " << solution.path[i].first
                       << "->" << solution.actions[i].first
                       << "(cost: " << solution.actions[i].second << ")" << std::endl;
         }
+
         std::cout << solution.path.back().second << ": "
                   << solution.path.back().first << std::endl;
 
         std::ofstream out(outputFile);
         out << "schedule:" << std::endl;
         out << "  agent1:" << std::endl;
-        for (size_t i = 0; i < solution.path.size(); ++i) {
+        for (size_t i = 0; i < solution.path.size(); ++i)
+        {
             out << "    - x: " << solution.path[i].first.x << std::endl
                 << "      y: " << solution.path[i].first.y << std::endl
                 << "      t: " << solution.path[i].second << std::endl;
         }
-    } else {
+    }
+    else
+    {
         std::cout << "Planning NOT successful!" << std::endl;
     }
 
