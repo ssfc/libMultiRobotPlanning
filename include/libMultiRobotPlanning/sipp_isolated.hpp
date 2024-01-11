@@ -31,7 +31,7 @@ enum class Action
     Wait,
 };
 
-template <typename Location, typename Action, typename Cost>
+template <typename Location, typename Action>
 struct Neighbor
 {
     //! neighboring location
@@ -39,9 +39,9 @@ struct Neighbor
     //! action to get to the neighboring location
     Action action;
     //! cost to get to the neighboring location, usually 1
-    Cost cost;
+    int cost;
 
-    Neighbor(const Location& input_location, const Action& input_action, Cost input_cost)
+    Neighbor(const Location& input_location, const Action& input_action, int input_cost)
         : location(input_location),
           action(input_action),
           cost(input_cost)
@@ -100,7 +100,7 @@ class AStar
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Neighbor<Location, Action, int> > neighbors;
+        std::vector<Neighbor<Location, Action> > neighbors;
         neighbors.reserve(10);
 
         while (!open_set.empty())
@@ -139,7 +139,7 @@ class AStar
             // traverse neighbors
             neighbors.clear();
             environment.get_neighbors(current.location, neighbors);
-            for (const Neighbor<Location, Action, int>& neighbor : neighbors)
+            for (const Neighbor<Location, Action>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
@@ -401,9 +401,9 @@ private:
                        std::numeric_limits<Cost>::max();
         }
 
-        void get_neighbors(const SIPPState& s, std::vector<Neighbor<SIPPState, SIPPAction, Cost> >& neighbors)
+        void get_neighbors(const SIPPState& s, std::vector<Neighbor<SIPPState, SIPPAction> >& neighbors)
         {
-            std::vector<Neighbor<State, Action, Cost> > motions;
+            std::vector<Neighbor<State, Action> > motions;
             m_env.get_neighbors(s.state, motions);
             for (const auto& m : motions)
             {
@@ -429,7 +429,7 @@ private:
                                              end_t, si.start, si.end, t)) {
                         // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
                         // << m_lastGScore << std::endl;
-                        neighbors.emplace_back(Neighbor<SIPPState, SIPPAction, Cost>(
+                        neighbors.emplace_back(Neighbor<SIPPState, SIPPAction>(
                             SIPPState(m.location, i), SIPPAction(m.action, m.cost), t - m_lastGScore));
                     }
                 }
