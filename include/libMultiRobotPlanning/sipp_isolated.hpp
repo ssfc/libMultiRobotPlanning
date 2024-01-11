@@ -16,8 +16,6 @@
 #include <unordered_set>
 
 // #include "util.hpp"
-// #include "neighbor.hpp"
-// #include "planresult.hpp"
 #include "a_star.hpp"
 
 namespace libMultiRobotPlanning {
