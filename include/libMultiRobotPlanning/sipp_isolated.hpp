@@ -95,7 +95,7 @@ struct PlanResult
     int fmin;
 };
 
-template <typename Environment, typename LocationHasher = std::hash<SIPPState> >
+template <typename SIPPEnvironment, typename LocationHasher = std::hash<SIPPState> >
 class AStar
 {
 private:
@@ -103,7 +103,7 @@ private:
     class AStarNode;
 
     // member vars
-    Environment& environment; // include map size, obstacle position, agent goal.
+    SIPPEnvironment& environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -112,7 +112,7 @@ private:
 
 public:
     // member funcs
-    AStar(Environment& input_environment) : environment(input_environment)
+    AStar(SIPPEnvironment& input_environment) : environment(input_environment)
     {}
 
     bool a_star_search(const SIPPState& start_location, PlanResult<SIPPState, SIPPAction>& solution,
@@ -223,8 +223,8 @@ public:
 };
 
 // inner class definition
-template <typename Environment, typename StateHasher>
-class AStar<Environment, StateHasher>::AStarNode
+template <typename SIPPEnvironment, typename StateHasher>
+class AStar<SIPPEnvironment, StateHasher>::AStarNode
 {
    public:
     SIPPState location;
