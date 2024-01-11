@@ -254,17 +254,19 @@ International Conference on Robotics and Automation (ICRA), 2011\n
 https://doi.org/10.1109/ICRA.2011.5980306
 */
 
-template <typename Cost, typename Environment>
+template <typename Environment>
 class SIPP
 {
-   public:
+public:
     struct interval
     {
-        interval(Cost start, Cost end) : start(start), end(end)
+        interval(int start, int end)
+            : start(start),
+              end(end)
         {}
 
-        Cost start;
-        Cost end;
+        int start;
+        int end;
 
         friend bool operator<(const interval& a, const interval& b)
         {
@@ -287,7 +289,7 @@ public:
     }
 
     bool search(const Location& startState, const Action& waitAction,
-                PlanResult<Location, Action>& solution, Cost startTime = 0)
+                PlanResult<Location, Action>& solution, int startTime = 0)
     {
         PlanResult<SIPPState, SIPPAction> astarsolution;
         solution.cost = 0;
@@ -306,7 +308,7 @@ public:
 
         for (size_t i = 0; i < astarsolution.actions.size(); ++i)
         {
-            Cost waitTime = astarsolution.actions[i].second - astarsolution.actions[i].first.time;
+            int waitTime = astarsolution.actions[i].second - astarsolution.actions[i].first.time;
             if (waitTime == 0)
             {
                 solution.path.emplace_back(
@@ -369,10 +371,10 @@ private:
 
     struct SIPPAction
     {
-        SIPPAction(const Action& action, Cost time) : action(action), time(time) {}
+        SIPPAction(const Action& action, int time) : action(action), time(time) {}
 
         Action action;
-        Cost time;
+        int time;
     };
 
     // private:
@@ -381,7 +383,7 @@ private:
         SIPPEnvironment(Environment& env) : m_env(env)
         {}
 
-        Cost admissible_heuristic(const SIPPState& s)
+        int admissible_heuristic(const SIPPState& s)
         {
             return m_env.admissible_heuristic(s.state);
         }
@@ -391,14 +393,14 @@ private:
             const auto& si = safeIntervals(m_env.getLocation(goal));
             return m_env.is_solution(goal) &&
                    !si.empty() &&
-                   si.back().end == std::numeric_limits<Cost>::max();
+                   si.back().end == std::numeric_limits<int>::max();
         }
 
         bool is_solution(const SIPPState& s)
         {
             return m_env.is_solution(s.state) &&
                    safeIntervals(m_env.getLocation(s.state)).at(s.interval).end ==
-                       std::numeric_limits<Cost>::max();
+                       std::numeric_limits<int>::max();
         }
 
         void get_neighbors(const SIPPState& s, std::vector<Neighbor<SIPPState, SIPPAction> >& neighbors)
@@ -408,10 +410,10 @@ private:
             for (const auto& m : motions)
             {
                 // std::cout << "gN " << m.state << std::endl;
-                Cost m_time = m.cost;
+                int m_time = m.cost;
                 // std::cout << m_lastGScore;
-                Cost start_t = m_lastGScore + m_time;
-                Cost end_t = safeIntervals(m_env.getLocation(s.state)).at(s.interval).end;
+                int start_t = m_lastGScore + m_time;
+                int end_t = safeIntervals(m_env.getLocation(s.state)).at(s.interval).end;
 
                 const auto& sis = safeIntervals(m_env.getLocation(m.location));
                 for (size_t i = 0; i < sis.size(); ++i)
@@ -436,7 +438,7 @@ private:
             }
         }
 
-        void onExpandNode(const SIPPState& s, Cost fScore, Cost gScore)
+        void onExpandNode(const SIPPState& s, int fScore, int gScore)
         {
             // const auto& interval =
             // safeIntervals(m_env.getLocation(s.state)).at(s.interval);
@@ -449,7 +451,7 @@ private:
             m_env.onExpandNode(s.state, fScore, gScore);
         }
 
-        void onDiscover(const SIPPState& s, Cost fScore, Cost gScore)
+        void onDiscover(const SIPPState& s, int fScore, int gScore)
         {
             // const auto& interval =
             // safeIntervals(m_env.getLocation(s.state)).at(s.interval);
@@ -502,7 +504,7 @@ private:
             // }
         }
 
-        bool findSafeInterval(const Location& state, Cost time, size_t& interval)
+        bool findSafeInterval(const Location& state, int time, size_t& interval)
         {
             const auto& si = safeIntervals(m_env.getLocation(state));
             for (size_t idx = 0; idx < si.size(); ++idx)
@@ -521,7 +523,7 @@ private:
     private:
         const std::vector<interval>& safeIntervals(const Location& location)
         {
-            static std::vector<interval> defaultInterval(1, {0, std::numeric_limits<Cost>::max()});
+            static std::vector<interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
             const auto iter = m_safeIntervals.find(location);
 
             if (iter == m_safeIntervals.end())
@@ -534,7 +536,7 @@ private:
 
     private:
         Environment& m_env;
-        Cost m_lastGScore;
+        int m_lastGScore;
         std::unordered_map<Location, std::vector<interval> > m_safeIntervals;
     };
 
