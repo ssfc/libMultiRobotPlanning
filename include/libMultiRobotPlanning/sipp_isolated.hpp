@@ -95,7 +95,7 @@ struct PlanResult
     int fmin;
 };
 
-template <typename Action, typename Environment, typename LocationHasher = std::hash<SIPPState> >
+template <typename SIPPAction, typename Environment, typename LocationHasher = std::hash<SIPPState> >
 class AStar
 {
 private:
@@ -115,7 +115,7 @@ public:
     AStar(Environment& input_environment) : environment(input_environment)
     {}
 
-    bool a_star_search(const SIPPState& start_location, PlanResult<SIPPState, Action>& solution,
+    bool a_star_search(const SIPPState& start_location, PlanResult<SIPPState, SIPPAction>& solution,
                        int initialCost = 0)
     {
         solution.path.clear();
@@ -126,14 +126,14 @@ public:
         OpenSet open_set;
         std::unordered_map<SIPPState, HeapHandle, LocationHasher> location_to_heap;
         std::unordered_set<SIPPState, LocationHasher> closed_set;
-        std::unordered_map<SIPPState, std::tuple<SIPPState,Action,int,int>,LocationHasher> came_from;
+        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,LocationHasher> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
                                               environment.admissible_heuristic(start_location), initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Neighbor<SIPPState, Action> > neighbors;
+        std::vector<Neighbor<SIPPState, SIPPAction> > neighbors;
         neighbors.reserve(10);
 
         while (!open_set.empty())
@@ -172,7 +172,7 @@ public:
             // traverse neighbors
             neighbors.clear();
             environment.get_sipp_neighbors(current.location, neighbors);
-            for (const Neighbor<SIPPState, Action>& neighbor : neighbors)
+            for (const Neighbor<SIPPState, SIPPAction>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
@@ -223,9 +223,9 @@ public:
 };
 
 // inner class definition
-template <typename Action, typename Environment,
+template <typename SIPPAction, typename Environment,
           typename StateHasher>
-class AStar<Action, Environment, StateHasher>::AStarNode
+class AStar<SIPPAction, Environment, StateHasher>::AStarNode
 {
    public:
     SIPPState location;
