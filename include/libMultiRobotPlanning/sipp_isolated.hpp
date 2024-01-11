@@ -351,9 +351,9 @@ public:
         int end;
 
     public:
-        interval(int start, int end)
-            : start(start),
-              end(end)
+        interval(int input_start, int input_end)
+            : start(input_start),
+              end(input_end)
         {}
 
         friend bool operator<(const interval& a, const interval& b)
