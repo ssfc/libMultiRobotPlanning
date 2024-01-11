@@ -344,15 +344,17 @@ private:
 class SIPP
 {
 public:
-    struct interval
+    class interval
     {
+    public:
+        int start;
+        int end;
+
+    public:
         interval(int start, int end)
             : start(start),
               end(end)
         {}
-
-        int start;
-        int end;
 
         friend bool operator<(const interval& a, const interval& b)
         {
