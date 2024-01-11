@@ -48,11 +48,11 @@ struct Neighbor
     {}
 };
 
-template <typename State, typename Action, typename Cost>
+template <typename Location, typename Action, typename Cost>
 struct PlanResult
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<State, Cost> > path;
+    std::vector<std::pair<Location, Cost> > path;
     //! actions and their cost
     std::vector<std::pair<Action, Cost> > actions;
     //! actual cost of the result
@@ -272,7 +272,7 @@ class SIPP
         }
     };
 
-   public:
+public:
     SIPP(Environment& environment) : m_env(environment), m_astar(m_env)
     {}
 
