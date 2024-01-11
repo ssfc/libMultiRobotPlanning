@@ -95,8 +95,7 @@ struct PlanResult
     int fmin;
 };
 
-template <typename Action, typename Environment,
-          typename LocationHasher = std::hash<SIPPState> >
+template <typename Action, typename Environment, typename LocationHasher = std::hash<SIPPState> >
 class AStar
 {
 private:
