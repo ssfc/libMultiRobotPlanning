@@ -254,7 +254,7 @@ International Conference on Robotics and Automation (ICRA), 2011\n
 https://doi.org/10.1109/ICRA.2011.5980306
 */
 
-template <typename State, typename Location, typename Action, typename Cost, typename Environment>
+template <typename Location, typename Action, typename Cost, typename Environment>
 class SIPP
 {
    public:
@@ -281,13 +281,13 @@ public:
         m_env.setCollisionIntervals(location, intervals);
     }
 
-    bool mightHaveSolution(const State& goal)
+    bool mightHaveSolution(const Location& goal)
     {
         return m_env.mightHaveSolution(goal);
     }
 
-    bool search(const State& startState, const Action& waitAction,
-                PlanResult<State, Action>& solution, Cost startTime = 0)
+    bool search(const Location& startState, const Action& waitAction,
+                PlanResult<Location, Action>& solution, Cost startTime = 0)
     {
         PlanResult<SIPPState, SIPPAction> astarsolution;
         solution.cost = 0;
@@ -337,7 +337,7 @@ private:
     // public:
     struct SIPPState
     {
-        SIPPState(const State& state, size_t interval)
+        SIPPState(const Location& state, size_t interval)
             : state(state), interval(interval)
         {}
 
@@ -351,7 +351,7 @@ private:
             return os << "(" << s.state << "," << s.interval << ")";
         }
 
-        State state;
+        Location state;
         size_t interval;
     };
 
@@ -360,7 +360,7 @@ private:
         size_t operator()(const SIPPState& s) const
         {
             size_t seed = 0;
-            boost::hash_combine(seed, std::hash<State>()(s.state));
+            boost::hash_combine(seed, std::hash<Location>()(s.state));
             boost::hash_combine(seed, s.interval);
 
             return seed;
@@ -386,7 +386,7 @@ private:
             return m_env.admissible_heuristic(s.state);
         }
 
-        bool mightHaveSolution(const State& goal)
+        bool mightHaveSolution(const Location& goal)
         {
             const auto& si = safeIntervals(m_env.getLocation(goal));
             return m_env.is_solution(goal) &&
@@ -403,7 +403,7 @@ private:
 
         void get_neighbors(const SIPPState& s, std::vector<Neighbor<SIPPState, SIPPAction> >& neighbors)
         {
-            std::vector<Neighbor<State, Action> > motions;
+            std::vector<Neighbor<Location, Action> > motions;
             m_env.get_neighbors(s.state, motions);
             for (const auto& m : motions)
             {
@@ -502,7 +502,7 @@ private:
             // }
         }
 
-        bool findSafeInterval(const State& state, Cost time, size_t& interval)
+        bool findSafeInterval(const Location& state, Cost time, size_t& interval)
         {
             const auto& si = safeIntervals(m_env.getLocation(state));
             for (size_t idx = 0; idx < si.size(); ++idx)
