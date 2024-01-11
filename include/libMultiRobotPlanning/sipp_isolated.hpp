@@ -69,15 +69,17 @@ struct SIPPAction
 };
 
 template <typename Location, typename Action>
-struct Neighbor
+class Neighbor
 {
+public:
     //! neighboring location
     Location location;
     //! action to get to the neighboring location
     Action action;
     //! cost to get to the neighboring location, usually 1
     int cost;
-
+    
+public:
     Neighbor(const Location& input_location, const Action& input_action, int input_cost)
         : location(input_location),
           action(input_action),
