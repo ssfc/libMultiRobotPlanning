@@ -333,7 +333,7 @@ class SIPP
         return success;
     }
 
-   private:
+private:
     // public:
     struct SIPPState
     {
@@ -538,7 +538,7 @@ class SIPP
         std::unordered_map<Location, std::vector<interval> > m_safeIntervals;
     };
 
-   private:
+private:
     SIPPEnvironment m_env;
     AStar<SIPPState, SIPPAction, SIPPEnvironment, SIPPStateHasher> m_astar;
 };
