@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
     Environment env(config["environment"]["size"][0].as<int>(),
                     config["environment"]["size"][1].as<int>(), obstacles, goal);
 
-    typedef SIPP<Environment> sipp_t;
+    typedef SIPP sipp_t;
     sipp_t sipp(env);
 
     for (const auto& node : config["environment"]["collisionIntervals"])

@@ -341,7 +341,6 @@ private:
     }
 };
 
-template <typename Environment>
 class SIPP
 {
 public:
