@@ -16,32 +16,6 @@ using libMultiRobotPlanning::SIPP;
 using libMultiRobotPlanning::Neighbor;
 using libMultiRobotPlanning::PlanResult;
 
-struct State {
-    State(int x, int y) : x(x), y(y) {}
-
-    bool operator==(const State& other) const {
-        return std::tie(x, y) == std::tie(other.x, other.y);
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const State& s) {
-        return os << "(" << s.x << "," << s.y << ")";
-    }
-
-    int x;
-    int y;
-};
-
-namespace std {
-template <>
-struct hash<State> {
-    size_t operator()(const State& s) const {
-        size_t seed = 0;
-        boost::hash_combine(seed, s.x);
-        boost::hash_combine(seed, s.y);
-        return seed;
-    }
-};
-}  // namespace std
 
 enum class Action {
     Up,
@@ -74,56 +48,56 @@ std::ostream& operator<<(std::ostream& os, const Action& a) {
 
 class Environment {
    public:
-    Environment(size_t dimx, size_t dimy, std::unordered_set<State> obstacles,
-                State goal)
+    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
+                Location goal)
         : num_columns(dimx),
           num_rows(dimy),
           obstacles(std::move(obstacles)),
           m_goal(goal) {}
 
-    float admissible_heuristic(const State& s) {
+    float admissible_heuristic(const Location& s) {
         return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
     }
 
-    bool is_solution(const State& s) { return s == m_goal; }
+    bool is_solution(const Location& s) { return s == m_goal; }
 
-    State getLocation(const State& s) { return s; }
+    Location getLocation(const Location& s) { return s; }
 
-    void get_neighbors(const State& s,
-                       std::vector<Neighbor<State, Action, int> >& neighbors) {
+    void get_neighbors(const Location& s,
+                       std::vector<Neighbor<Location, Action, int> >& neighbors) {
         neighbors.clear();
 
-        State up(s.x, s.y + 1);
+        Location up(s.x, s.y + 1);
         if (location_valid(up)) {
-            neighbors.emplace_back(Neighbor<State, Action, int>(up, Action::Up, 1));
+            neighbors.emplace_back(Neighbor<Location, Action, int>(up, Action::Up, 1));
         }
-        State down(s.x, s.y - 1);
+        Location down(s.x, s.y - 1);
         if (location_valid(down)) {
             neighbors.emplace_back(
-                Neighbor<State, Action, int>(down, Action::Down, 1));
+                Neighbor<Location, Action, int>(down, Action::Down, 1));
         }
-        State left(s.x - 1, s.y);
+        Location left(s.x - 1, s.y);
         if (location_valid(left)) {
             neighbors.emplace_back(
-                Neighbor<State, Action, int>(left, Action::Left, 1));
+                Neighbor<Location, Action, int>(left, Action::Left, 1));
         }
-        State right(s.x + 1, s.y);
+        Location right(s.x + 1, s.y);
         if (location_valid(right)) {
             neighbors.emplace_back(
-                Neighbor<State, Action, int>(right, Action::Right, 1));
+                Neighbor<Location, Action, int>(right, Action::Right, 1));
         }
     }
 
-    void onExpandNode(const State& /*s*/, int /*fScore*/, int /*gScore*/) {
+    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {
         // std::cout << "expand: " << s << "g: " << gScore << std::endl;
     }
 
-    void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {
+    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {
         // std::cout << "  discover: " << s << std::endl;
     }
 
     bool isCommandValid(
-        const State& /*s1*/, const State& /*s2*/, const Action& /*a*/,
+        const Location& /*s1*/, const Location& /*s2*/, const Action& /*a*/,
         int earliestStartTime,      // can start motion at this time
         int /*latestStartTime*/,    // must have left s by this time
         int earliestArrivalTime,    // can only arrive at (s+cmd)
@@ -138,7 +112,7 @@ class Environment {
     }
 
    private:
-    bool location_valid(const State& s) {
+    bool location_valid(const Location& s) {
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(s) == obstacles.end();
     }
@@ -146,8 +120,8 @@ class Environment {
    private:
     int num_columns;
     int num_rows;
-    std::unordered_set<State> obstacles;
-    State m_goal;
+    std::unordered_set<Location> obstacles;
+    Location m_goal;
 };
 
 int main(int argc, char* argv[]) {
@@ -184,21 +158,21 @@ int main(int argc, char* argv[]) {
     // Configure SIPP based on config file
     YAML::Node config = YAML::LoadFile(inputFile);
 
-    State goal(config["goal"][0].as<int>(), config["goal"][1].as<int>());
-    State start(config["start"][0].as<int>(), config["start"][1].as<int>());
+    Location goal(config["goal"][0].as<int>(), config["goal"][1].as<int>());
+    Location start(config["start"][0].as<int>(), config["start"][1].as<int>());
 
-    std::unordered_set<State> obstacles;
+    std::unordered_set<Location> obstacles;
     for (const auto& node : config["environment"]["obstacles"]) {
-        obstacles.insert(State(node[0].as<int>(), node[1].as<int>()));
+        obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
     }
     Environment env(config["environment"]["size"][0].as<int>(),
                     config["environment"]["size"][1].as<int>(), obstacles, goal);
 
-    typedef SIPP<State, State, Action, int, Environment> sipp_t;
+    typedef SIPP<Location, Location, Action, int, Environment> sipp_t;
     sipp_t sipp(env);
 
     for (const auto& node : config["environment"]["collisionIntervals"]) {
-        State state(node["location"][0].as<int>(), node["location"][1].as<int>());
+        Location state(node["location"][0].as<int>(), node["location"][1].as<int>());
 
         std::vector<sipp_t::interval> collisionIntervals;
 
@@ -210,7 +184,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Plan
-    PlanResult<State, Action, int> solution;
+    PlanResult<Location, Action, int> solution;
     bool success = sipp.search(start, Action::Wait, solution);
 
     if (success) {
