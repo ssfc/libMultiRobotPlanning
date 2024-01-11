@@ -50,6 +50,7 @@ set(ALL_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/next_best_assignment.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/planresult.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/sipp.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/sipp_isolated.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/util.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star_isolated.cpp
@@ -67,6 +68,7 @@ set(ALL_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/example/shortest_path_heuristic.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/shortest_path_heuristic.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/sipp.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/example/sipp_isolated.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/example/timer.hpp
 )
 
@@ -151,6 +153,10 @@ target_link_libraries(next_best_assignment ${Boost_LIBRARIES} yaml-cpp)
 ## sipp
 add_executable(sipp example/sipp.cpp)
 target_link_libraries(sipp ${Boost_LIBRARIES} yaml-cpp)
+
+## sipp_isolated
+add_executable(sipp_isolated example/sipp_isolated.cpp)
+target_link_libraries(sipp_isolated ${Boost_LIBRARIES} yaml-cpp)
 
 ## mapf_prioritized_sipp
 add_executable(mapf_prioritized_sipp example/mapf_prioritized_sipp.cpp)
