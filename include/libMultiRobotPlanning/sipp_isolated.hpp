@@ -78,7 +78,7 @@ public:
     Action action;
     //! cost to get to the neighboring location, usually 1
     int cost;
-    
+
 public:
     Neighbor(const Location& input_location, const Action& input_action, int input_cost)
         : location(input_location),
@@ -419,7 +419,7 @@ public:
         return m_env.mightHaveSolution(goal);
     }
 
-    bool search(const Location& startState, const Action& waitAction,
+    bool sipp_search(const Location& startState, const Action& waitAction,
                 PlanResult<Location, Action>& solution, int startTime = 0)
     {
         PlanResult<SIPPState, SIPPAction> astarsolution;

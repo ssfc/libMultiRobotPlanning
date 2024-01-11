@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
 
     // Plan
     PlanResult<Location, Action> solution;
-    bool success = sipp.search(start, Action::Wait, solution);
+    bool success = sipp.sipp_search(start, Action::Wait, solution);
 
     if (success)
     {
