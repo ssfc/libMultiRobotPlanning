@@ -22,10 +22,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "planresult.hpp"
 #include "util.hpp"
 
-using libMultiRobotPlanning::PlanResult;
 
 template <typename Location, typename Action, typename Cost>
 struct Neighbor
@@ -42,6 +40,19 @@ struct Neighbor
           action(input_action),
           cost(input_cost)
     {}
+};
+
+template <typename State, typename Action, typename Cost>
+struct PlanResult
+{
+    // path constructing locations and their g_score
+    std::vector<std::pair<State, Cost> > path;
+    //! actions and their cost
+    std::vector<std::pair<Action, Cost> > actions;
+    //! actual cost of the result
+    Cost cost;
+    //! lower bound of the cost (for suboptimal solvers)
+    Cost fmin;
 };
 
 template <typename Location, typename Action, typename Environment,
