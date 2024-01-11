@@ -2,8 +2,8 @@
 // Created by take_ on 2023/11/5.
 //
 
-#ifndef LIBMULTIROBOTPLANNING_UTIL_HPP
-#define LIBMULTIROBOTPLANNING_UTIL_HPP
+#ifndef UTIL_HPP
+#define UTIL_HPP
 
 class Location  // 模板类Location实例化
 {
@@ -96,4 +96,4 @@ namespace std
     };
 }
 
-#endif //LIBMULTIROBOTPLANNING_UTIL_HPP
+#endif // UTIL_HPP
