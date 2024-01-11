@@ -25,10 +25,16 @@ enum class Action
     Wait,
 };
 
-struct SIPPState
+class SIPPState
 {
+public:
+    Location state;
+    size_t interval;
+
+public:
     SIPPState(const Location& state, size_t interval)
-        : state(state), interval(interval)
+        : state(state),
+          interval(interval)
     {}
 
     bool operator==(const SIPPState& other) const
@@ -40,9 +46,6 @@ struct SIPPState
     {
         return os << "(" << s.state << "," << s.interval << ")";
     }
-
-    Location state;
-    size_t interval;
 };
 
 struct SIPPStateHasher
