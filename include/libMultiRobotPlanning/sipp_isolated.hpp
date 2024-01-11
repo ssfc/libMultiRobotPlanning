@@ -384,19 +384,19 @@ public:
          int time;
      };
 
-    class interval
+    class Interval
     {
     public:
         int start;
         int end;
 
     public:
-        interval(int input_start, int input_end)
+        Interval(int input_start, int input_end)
             : start(input_start),
               end(input_end)
         {}
 
-        friend bool operator<(const interval& a, const interval& b)
+        friend bool operator<(const Interval& a, const Interval& b)
         {
             return a.start < b.start;
         }
@@ -406,7 +406,7 @@ public:
     SIPP(Environment& environment) : m_env(environment), m_astar(m_env)
     {}
 
-    void setCollisionIntervals(const Location& location, const std::vector<interval>& intervals)
+    void setCollisionIntervals(const Location& location, const std::vector<Interval>& intervals)
     {
         m_env.setCollisionIntervals(location, intervals);
     }
@@ -505,7 +505,7 @@ private:
                 const auto& sis = safeIntervals(m_env.getLocation(m.location));
                 for (size_t i = 0; i < sis.size(); ++i)
                 {
-                    const interval& si = sis[i];
+                    const Interval& si = sis[i];
                     // std::cout << "  i " << i << ": " << si.start << "," << si.end <<
                     // std::endl;
                     if (si.start - m_time > end_t || si.end < start_t)
@@ -547,10 +547,10 @@ private:
             m_env.onDiscover(s.state, fScore, gScore);
         }
 
-        void setCollisionIntervals(const Location& location, const std::vector<interval>& intervals)
+        void setCollisionIntervals(const Location& location, const std::vector<Interval>& intervals)
         {
             m_safeIntervals.erase(location);
-            std::vector<interval> sortedIntervals(intervals);
+            std::vector<Interval> sortedIntervals(intervals);
             std::sort(sortedIntervals.begin(), sortedIntervals.end());
 
             // std::cout << location << ": " << std::endl;
@@ -608,9 +608,9 @@ private:
         }
 
     private:
-        const std::vector<interval>& safeIntervals(const Location& location)
+        const std::vector<Interval>& safeIntervals(const Location& location)
         {
-            static std::vector<interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
+            static std::vector<Interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
             const auto iter = m_safeIntervals.find(location);
 
             if (iter == m_safeIntervals.end())
@@ -624,7 +624,7 @@ private:
     private:
         Environment& m_env;
         int m_lastGScore;
-        std::unordered_map<Location, std::vector<interval> > m_safeIntervals;
+        std::unordered_map<Location, std::vector<Interval> > m_safeIntervals;
     };
 
 private:
