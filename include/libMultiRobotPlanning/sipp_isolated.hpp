@@ -22,6 +22,14 @@
 #include "util.hpp"
 
 
+enum class Action {
+    Up,
+    Down,
+    Left,
+    Right,
+    Wait,
+};
+
 template <typename Location, typename Action, typename Cost>
 struct Neighbor
 {
@@ -372,9 +380,8 @@ class SIPP {
                        std::numeric_limits<Cost>::max();
         }
 
-        void get_neighbors(
-            const SIPPState& s,
-            std::vector<Neighbor<SIPPState, SIPPAction, Cost> >& neighbors) {
+        void get_neighbors(const SIPPState& s, std::vector<Neighbor<SIPPState, SIPPAction, Cost> >& neighbors)
+        {
             std::vector<Neighbor<State, Action, Cost> > motions;
             m_env.get_neighbors(s.state, motions);
             for (const auto& m : motions) {

@@ -13,14 +13,6 @@
 #include <libMultiRobotPlanning/sipp_isolated.hpp>
 
 
-enum class Action {
-    Up,
-    Down,
-    Left,
-    Right,
-    Wait,
-};
-
 std::ostream& operator<<(std::ostream& os, const Action& a) {
     switch (a) {
         case Action::Up:
