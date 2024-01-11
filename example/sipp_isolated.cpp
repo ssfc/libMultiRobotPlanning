@@ -89,18 +89,17 @@ int main(int argc, char* argv[])
     Environment env(config["environment"]["size"][0].as<int>(),
                     config["environment"]["size"][1].as<int>(), obstacles, goal);
 
-    typedef SIPP sipp_t;
-    sipp_t sipp(env);
+    SIPP sipp(env);
 
     for (const auto& node : config["environment"]["collisionIntervals"])
     {
         Location state(node["location"][0].as<int>(), node["location"][1].as<int>());
 
-        std::vector<sipp_t::interval> collisionIntervals;
+        std::vector<SIPP::interval> collisionIntervals;
 
         for (const auto& interval : node["intervals"])
         {
-            collisionIntervals.emplace_back(sipp_t::interval(interval[0].as<int>(), interval[1].as<int>()));
+            collisionIntervals.emplace_back(SIPP::interval(interval[0].as<int>(), interval[1].as<int>()));
         }
 
         sipp.setCollisionIntervals(state, collisionIntervals);
