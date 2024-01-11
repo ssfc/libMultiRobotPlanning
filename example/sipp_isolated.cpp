@@ -199,7 +199,7 @@ int main(int argc, char* argv[])
     }
 
     // Plan
-    PlanResult<Location, Action, int> solution;
+    PlanResult<Location, Action> solution;
     bool success = sipp.search(start, Action::Wait, solution);
 
     if (success)

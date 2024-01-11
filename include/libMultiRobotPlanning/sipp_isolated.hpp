@@ -48,17 +48,17 @@ struct Neighbor
     {}
 };
 
-template <typename Location, typename Action, typename Cost>
+template <typename Location, typename Action>
 struct PlanResult
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<Location, Cost> > path;
+    std::vector<std::pair<Location, int> > path;
     //! actions and their cost
-    std::vector<std::pair<Action, Cost> > actions;
+    std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
-    Cost cost;
+    int cost;
     //! lower bound of the cost (for suboptimal solvers)
-    Cost fmin;
+    int fmin;
 };
 
 template <typename Location, typename Action, typename Environment,
@@ -82,7 +82,7 @@ class AStar
     AStar(Environment& input_environment) : environment(input_environment)
     {}
 
-    bool a_star_search(const Location& start_location, PlanResult<Location, Action, int>& solution,
+    bool a_star_search(const Location& start_location, PlanResult<Location, Action>& solution,
                        int initialCost = 0)
     {
         solution.path.clear();
@@ -287,9 +287,9 @@ public:
     }
 
     bool search(const State& startState, const Action& waitAction,
-                PlanResult<State, Action, Cost>& solution, Cost startTime = 0)
+                PlanResult<State, Action>& solution, Cost startTime = 0)
     {
-        PlanResult<SIPPState, SIPPAction, Cost> astarsolution;
+        PlanResult<SIPPState, SIPPAction> astarsolution;
         solution.cost = 0;
         solution.fmin = 0;
         solution.actions.clear();
