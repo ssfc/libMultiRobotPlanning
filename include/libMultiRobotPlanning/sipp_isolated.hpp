@@ -25,6 +25,38 @@ enum class Action
     Wait,
 };
 
+struct SIPPState
+{
+    SIPPState(const Location& state, size_t interval)
+        : state(state), interval(interval)
+    {}
+
+    bool operator==(const SIPPState& other) const
+    {
+        return std::tie(state, interval) == std::tie(other.state, other.interval);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const SIPPState& s)
+    {
+        return os << "(" << s.state << "," << s.interval << ")";
+    }
+
+    Location state;
+    size_t interval;
+};
+
+struct SIPPStateHasher
+{
+    size_t operator()(const SIPPState& s) const
+    {
+        size_t seed = 0;
+        boost::hash_combine(seed, std::hash<Location>()(s.state));
+        boost::hash_combine(seed, s.interval);
+
+        return seed;
+    }
+};
+
 template <typename Location, typename Action>
 struct Neighbor
 {
@@ -344,38 +376,6 @@ private:
 class SIPP
 {
 public:
-     struct SIPPState
-     {
-         SIPPState(const Location& state, size_t interval)
-             : state(state), interval(interval)
-         {}
-
-         bool operator==(const SIPPState& other) const
-         {
-             return std::tie(state, interval) == std::tie(other.state, other.interval);
-         }
-
-         friend std::ostream& operator<<(std::ostream& os, const SIPPState& s)
-         {
-             return os << "(" << s.state << "," << s.interval << ")";
-         }
-
-         Location state;
-         size_t interval;
-     };
-
-     struct SIPPStateHasher
-     {
-         size_t operator()(const SIPPState& s) const
-         {
-             size_t seed = 0;
-             boost::hash_combine(seed, std::hash<Location>()(s.state));
-             boost::hash_combine(seed, s.interval);
-
-             return seed;
-         }
-     };
-
      struct SIPPAction
      {
          SIPPAction(const Action& action, int time) : action(action), time(time) {}
