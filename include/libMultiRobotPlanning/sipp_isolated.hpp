@@ -505,23 +505,30 @@ class SIPP
         bool findSafeInterval(const State& state, Cost time, size_t& interval)
         {
             const auto& si = safeIntervals(m_env.getLocation(state));
-            for (size_t idx = 0; idx < si.size(); ++idx) {
-                if (si[idx].start <= time && si[idx].end >= time) {
+            for (size_t idx = 0; idx < si.size(); ++idx)
+            {
+                if (si[idx].start <= time && si[idx].end >= time)
+                {
                     interval = idx;
+
                     return true;
                 }
             }
+
             return false;
         }
 
        private:
-        const std::vector<interval>& safeIntervals(const Location& location) {
-            static std::vector<interval> defaultInterval(
-                1, {0, std::numeric_limits<Cost>::max()});
+        const std::vector<interval>& safeIntervals(const Location& location)
+        {
+            static std::vector<interval> defaultInterval(1, {0, std::numeric_limits<Cost>::max()});
             const auto iter = m_safeIntervals.find(location);
-            if (iter == m_safeIntervals.end()) {
+
+            if (iter == m_safeIntervals.end())
+            {
                 return defaultInterval;
             }
+
             return iter->second;
         }
 
