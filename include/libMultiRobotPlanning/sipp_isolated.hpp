@@ -95,7 +95,7 @@ struct PlanResult
     int fmin;
 };
 
-template <typename SIPPAction, typename Environment, typename LocationHasher = std::hash<SIPPState> >
+template <typename Environment, typename LocationHasher = std::hash<SIPPState> >
 class AStar
 {
 private:
@@ -223,9 +223,8 @@ public:
 };
 
 // inner class definition
-template <typename SIPPAction, typename Environment,
-          typename StateHasher>
-class AStar<SIPPAction, Environment, StateHasher>::AStarNode
+template <typename Environment, typename StateHasher>
+class AStar<Environment, StateHasher>::AStarNode
 {
    public:
     SIPPState location;
@@ -628,7 +627,7 @@ private:
 
 private:
     SIPPEnvironment m_env;
-    AStar<SIPPAction, SIPPEnvironment, SIPPStateHasher> m_astar;
+    AStar<SIPPEnvironment, SIPPStateHasher> m_astar;
 };
 
 #endif  // SIPP_ISOLATED_HPP
