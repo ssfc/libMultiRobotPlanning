@@ -120,13 +120,13 @@ public:
     AStar(SIPPEnvironment& input_environment) : environment(input_environment)
     {}
 
-    bool a_star_search(const SIPPState& start_location, PlanResult<SIPPState, SIPPAction>& solution,
+    bool a_star_search(const SIPPState& start_location, PlanResult<SIPPState, SIPPAction>& sipp_solution,
                        int initialCost = 0)
     {
-        solution.path.clear();
-        solution.path.emplace_back(std::make_pair<>(start_location, 0));
-        solution.actions.clear();
-        solution.cost = 0;
+        sipp_solution.path.clear();
+        sipp_solution.path.emplace_back(std::make_pair<>(start_location, 0));
+        sipp_solution.actions.clear();
+        sipp_solution.cost = 0;
 
         OpenSet open_set;
         std::unordered_map<SIPPState, HeapHandle, LocationHasher> location_to_heap;
@@ -148,24 +148,24 @@ public:
 
             if (environment.is_solution(current.location))
             {
-                solution.path.clear();
-                solution.actions.clear();
+                sipp_solution.path.clear();
+                sipp_solution.actions.clear();
                 auto iter = came_from.find(current.location);
                 while (iter != came_from.end())
                 {
-                    solution.path.emplace_back(
+                    sipp_solution.path.emplace_back(
                         std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                    solution.actions.emplace_back(std::make_pair<>(
+                    sipp_solution.actions.emplace_back(std::make_pair<>(
                         std::get<1>(iter->second), std::get<2>(iter->second)));
                     iter = came_from.find(std::get<0>(iter->second));
                 }
 
-                solution.path.emplace_back(std::make_pair<>
+                sipp_solution.path.emplace_back(std::make_pair<>
                                            (start_location, initialCost));
-                std::reverse(solution.path.begin(), solution.path.end());
-                std::reverse(solution.actions.begin(), solution.actions.end());
-                solution.cost = current.g_score;
-                solution.fmin = current.f_score;
+                std::reverse(sipp_solution.path.begin(), sipp_solution.path.end());
+                std::reverse(sipp_solution.actions.begin(), sipp_solution.actions.end());
+                sipp_solution.cost = current.g_score;
+                sipp_solution.fmin = current.f_score;
 
                 return true;
             }
