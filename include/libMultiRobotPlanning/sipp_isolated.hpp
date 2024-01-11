@@ -16,7 +16,7 @@
 #include <unordered_set>
 
 // #include "util.hpp"
-#include "a_star.hpp"
+#include "sipp_low.hpp"
 
 namespace libMultiRobotPlanning {
 
