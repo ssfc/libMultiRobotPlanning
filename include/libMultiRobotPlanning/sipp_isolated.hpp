@@ -248,6 +248,99 @@ International Conference on Robotics and Automation (ICRA), 2011\n
 https://doi.org/10.1109/ICRA.2011.5980306
 */
 
+class Environment
+{
+private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    Location m_goal;
+
+   public:
+    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles, Location goal)
+        : num_columns(dimx),
+          num_rows(dimy),
+          obstacles(std::move(obstacles)),
+          m_goal(goal)
+    {}
+
+    bool location_valid(const Location& s)
+    {
+        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
+               obstacles.find(s) == obstacles.end();
+    }
+
+    float admissible_heuristic(const Location& s)
+    {
+        return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
+    }
+
+    bool is_solution(const Location& s)
+    {
+        return s == m_goal;
+    }
+
+    Location getLocation(const Location& s)
+    {
+        return s;
+    }
+
+    void get_neighbors(const Location& s, std::vector<Neighbor<Location, Action> >& neighbors)
+    {
+        neighbors.clear();
+
+        Location up(s.x, s.y + 1);
+        if (location_valid(up))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action>(up, Action::Up, 1));
+        }
+
+        Location down(s.x, s.y - 1);
+        if (location_valid(down))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action>(down, Action::Down, 1));
+        }
+
+        Location left(s.x - 1, s.y);
+        if (location_valid(left))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action>(left, Action::Left, 1));
+        }
+
+        Location right(s.x + 1, s.y);
+        if (location_valid(right))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action>(right, Action::Right, 1));
+        }
+    }
+
+    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
+        // std::cout << "expand: " << s << "g: " << gScore << std::endl;
+    }
+
+    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
+        // std::cout << "  discover: " << s << std::endl;
+    }
+
+    bool isCommandValid(
+        const Location& /*s1*/, const Location& /*s2*/, const Action& /*a*/,
+        int earliestStartTime,      // can start motion at this time
+        int /*latestStartTime*/,    // must have left s by this time
+        int earliestArrivalTime,    // can only arrive at (s+cmd)
+        int /*latestArrivalTime*/,  // needs to arrive by this time at (s+cmd)
+        int& t)
+    {
+        t = std::max<int>(earliestArrivalTime, earliestStartTime + 1);
+
+        // TODO(whoenig): need to check for swaps here...
+
+        // return t - 1 <= latestStartTime;
+        return true;
+    }
+};
+
 template <typename Environment>
 class SIPP
 {
