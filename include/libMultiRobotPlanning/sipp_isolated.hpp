@@ -254,7 +254,7 @@ International Conference on Robotics and Automation (ICRA), 2011\n
 https://doi.org/10.1109/ICRA.2011.5980306
 */
 
-template <typename Location, typename Action, typename Cost, typename Environment>
+template <typename Action, typename Cost, typename Environment>
 class SIPP
 {
    public:
