@@ -430,14 +430,14 @@ class SIPP
                         // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
                         // << m_lastGScore << std::endl;
                         neighbors.emplace_back(Neighbor<SIPPState, SIPPAction, Cost>(
-                            SIPPState(m.location, i), SIPPAction(m.action, m.cost),
-                            t - m_lastGScore));
+                            SIPPState(m.location, i), SIPPAction(m.action, m.cost), t - m_lastGScore));
                     }
                 }
             }
         }
 
-        void onExpandNode(const SIPPState& s, Cost fScore, Cost gScore) {
+        void onExpandNode(const SIPPState& s, Cost fScore, Cost gScore)
+        {
             // const auto& interval =
             // safeIntervals(m_env.getLocation(s.state)).at(s.interval);
             // std::cout << "expand: " << s.state << "," << interval.start << " to "
@@ -449,7 +449,8 @@ class SIPP
             m_env.onExpandNode(s.state, fScore, gScore);
         }
 
-        void onDiscover(const SIPPState& s, Cost fScore, Cost gScore) {
+        void onDiscover(const SIPPState& s, Cost fScore, Cost gScore)
+        {
             // const auto& interval =
             // safeIntervals(m_env.getLocation(s.state)).at(s.interval);
             // std::cout << "discover: " << s.state << "," << interval.start << " to "
@@ -457,18 +458,20 @@ class SIPP
             m_env.onDiscover(s.state, fScore, gScore);
         }
 
-        void setCollisionIntervals(const Location& location,
-                                   const std::vector<interval>& intervals) {
+        void setCollisionIntervals(const Location& location, const std::vector<interval>& intervals)
+        {
             m_safeIntervals.erase(location);
             std::vector<interval> sortedIntervals(intervals);
             std::sort(sortedIntervals.begin(), sortedIntervals.end());
 
             // std::cout << location << ": " << std::endl;
-            if (intervals.size() > 0) {
+            if (intervals.size() > 0)
+            {
                 m_safeIntervals[location]; // create empty safe interval
                 int start = 0;
                 int lastEnd = 0;
-                for (const auto& interval : sortedIntervals) {
+                for (const auto& interval : sortedIntervals)
+                {
                     // std::cout << "  ci: " << interval.start << " - " << interval.end <<
                     // std::endl;
                     assert(interval.start <= interval.end);
@@ -476,17 +479,18 @@ class SIPP
                     // if (start + 1 != interval.start - 1) {
                     // std::cout << start << "," << interval.start << std::endl;
                     // assert(start + 1 < interval.start - 1);
-                    if (start <= interval.start - 1) {
+                    if (start <= interval.start - 1)
+                    {
                         m_safeIntervals[location].push_back({start, interval.start - 1});
                     }
                     // }
                     start = interval.end + 1;
                     lastEnd = interval.end;
                 }
-                if (lastEnd < std::numeric_limits<int>::max()) {
+                if (lastEnd < std::numeric_limits<int>::max())
+                {
                     // assert(start < std::numeric_limits<int>::max());
-                    m_safeIntervals[location].push_back(
-                        {start, std::numeric_limits<int>::max()});
+                    m_safeIntervals[location].push_back({start, std::numeric_limits<int>::max()});
                 }
             }
 
