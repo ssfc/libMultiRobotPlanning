@@ -59,7 +59,7 @@ template <typename Location, typename Action, typename Environment,
           typename LocationHasher = std::hash<Location> >
 class AStar
 {
-   private:
+private:
     // inner class declaration.
     class AStarNode;
 
@@ -71,7 +71,7 @@ class AStar
     // using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
     // using HeapHandle = typename OpenSet::handle_type;
 
-   public:
+public:
     // member funcs
     AStar(Environment& input_environment) : environment(input_environment)
     {}
@@ -132,7 +132,7 @@ class AStar
 
             // traverse neighbors
             neighbors.clear();
-            environment.get_neighbors(current.location, neighbors);
+            environment.get_sipp_neighbors(current.location, neighbors);
             for (const Neighbor<Location, Action>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
@@ -491,7 +491,7 @@ private:
                        std::numeric_limits<int>::max();
         }
 
-        void get_neighbors(const SIPPState& s, std::vector<Neighbor<SIPPState, SIPPAction> >& neighbors)
+        void get_sipp_neighbors(const SIPPState& s, std::vector<Neighbor<SIPPState, SIPPAction> >& neighbors)
         {
             std::vector<Neighbor<Location, Action> > motions;
             m_env.get_neighbors(s.state, motions);
