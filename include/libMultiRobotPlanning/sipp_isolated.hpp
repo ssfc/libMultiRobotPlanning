@@ -414,9 +414,9 @@ public:
         m_env.set_collision_intervals(location, intervals);
     }
 
-    bool mightHaveSolution(const Location& goal)
+    bool might_have_solution(const Location& goal)
     {
-        return m_env.mightHaveSolution(goal);
+        return m_env.might_have_solution(goal);
     }
 
     bool sipp_search(const Location& startState, const Action& waitAction,
@@ -478,11 +478,10 @@ private:
             return m_env.admissible_heuristic(s.state);
         }
 
-        bool mightHaveSolution(const Location& goal)
+        bool might_have_solution(const Location& goal)
         {
             const auto& si = safeIntervals(m_env.getLocation(goal));
-            return m_env.is_solution(goal) &&
-                   !si.empty() &&
+            return m_env.is_solution(goal) && !si.empty() &&
                    si.back().end == std::numeric_limits<int>::max();
         }
 
