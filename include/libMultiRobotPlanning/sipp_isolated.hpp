@@ -57,6 +57,14 @@ struct SIPPStateHasher
     }
 };
 
+struct SIPPAction
+{
+    SIPPAction(const Action& action, int time) : action(action), time(time) {}
+
+    Action action;
+    int time;
+};
+
 template <typename Location, typename Action>
 struct Neighbor
 {
@@ -376,14 +384,6 @@ private:
 class SIPP
 {
 public:
-     struct SIPPAction
-     {
-         SIPPAction(const Action& action, int time) : action(action), time(time) {}
-
-         Action action;
-         int time;
-     };
-
     class Interval
     {
     public:
