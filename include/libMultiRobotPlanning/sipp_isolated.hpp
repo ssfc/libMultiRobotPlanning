@@ -12,9 +12,6 @@
 #include <boost/functional/hash.hpp>
 #include <boost/heap/d_ary_heap.hpp>
 
-#include <unordered_map>
-#include <unordered_set>
-
 #include <boost/heap/fibonacci_heap.hpp>
 #include <boost/heap/d_ary_heap.hpp>
 #include <fstream>
