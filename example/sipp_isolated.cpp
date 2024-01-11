@@ -10,11 +10,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include <libMultiRobotPlanning/sipp.hpp>
-
-using libMultiRobotPlanning::SIPP;
-using libMultiRobotPlanning::Neighbor;
-using libMultiRobotPlanning::PlanResult;
+#include <libMultiRobotPlanning/sipp_isolated.hpp>
 
 
 enum class Action {

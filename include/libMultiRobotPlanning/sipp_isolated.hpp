@@ -234,7 +234,6 @@ class AStar<Location, Action, Environment, StateHasher>::AStarNode
 // #include "util.hpp"
 // #include "sipp_low.hpp"
 
-namespace libMultiRobotPlanning {
 
 /*! \brief SIPP Algorithm to find the shortest path with dynamic obstacles
 
@@ -504,7 +503,5 @@ class SIPP {
     SIPPEnvironment m_env;
     AStar<SIPPState, SIPPAction, SIPPEnvironment, SIPPStateHasher> m_astar;
 };
-
-}  // namespace libMultiRobotPlanning
 
 #endif  // SIPP_ISOLATED_HPP
