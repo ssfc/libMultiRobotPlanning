@@ -22,7 +22,8 @@
 #include "util.hpp"
 
 
-enum class Action {
+enum class Action
+{
     Up,
     Down,
     Left,
@@ -78,7 +79,8 @@ class AStar
 
    public:
     // member funcs
-    AStar(Environment& input_environment) : environment(input_environment) {}
+    AStar(Environment& input_environment) : environment(input_environment)
+    {}
 
     bool a_star_search(const Location& start_location, PlanResult<Location, Action, int>& solution,
                        int initialCost = 0)
@@ -169,8 +171,7 @@ class AStar
                         (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
-                        environment.onDiscover(neighbor.location, (*handle).f_score,
-                                               (*handle).g_score);
+                        environment.onDiscover(neighbor.location, (*handle).f_score, (*handle).g_score);
                     }
 
                     // Best path for this node so far
@@ -253,58 +254,69 @@ International Conference on Robotics and Automation (ICRA), 2011\n
 https://doi.org/10.1109/ICRA.2011.5980306
 */
 
-template <typename State, typename Location, typename Action, typename Cost,
-          typename Environment>
-class SIPP {
+template <typename State, typename Location, typename Action, typename Cost, typename Environment>
+class SIPP
+{
    public:
-    struct interval {
-        interval(Cost start, Cost end) : start(start), end(end) {}
+    struct interval
+    {
+        interval(Cost start, Cost end) : start(start), end(end)
+        {}
 
         Cost start;
         Cost end;
 
-        friend bool operator<(const interval& a, const interval& b) {
+        friend bool operator<(const interval& a, const interval& b)
+        {
             return a.start < b.start;
         }
     };
 
    public:
-    SIPP(Environment& environment) : m_env(environment), m_astar(m_env) {}
+    SIPP(Environment& environment) : m_env(environment), m_astar(m_env)
+    {}
 
-    void setCollisionIntervals(const Location& location,
-                               const std::vector<interval>& intervals) {
+    void setCollisionIntervals(const Location& location, const std::vector<interval>& intervals)
+    {
         m_env.setCollisionIntervals(location, intervals);
     }
 
-    bool mightHaveSolution(const State& goal) {
+    bool mightHaveSolution(const State& goal)
+    {
         return m_env.mightHaveSolution(goal);
     }
 
     bool search(const State& startState, const Action& waitAction,
-                PlanResult<State, Action, Cost>& solution, Cost startTime = 0) {
+                PlanResult<State, Action, Cost>& solution, Cost startTime = 0)
+    {
         PlanResult<SIPPState, SIPPAction, Cost> astarsolution;
         solution.cost = 0;
         solution.fmin = 0;
         solution.actions.clear();
         solution.path.clear();
         size_t interval;
-        if (!m_env.findSafeInterval(startState, startTime, interval)) {
+        if (!m_env.findSafeInterval(startState, startTime, interval))
+        {
             return false;
         }
+
         bool success = m_astar.a_star_search(SIPPState(startState, interval), astarsolution, startTime);
         solution.cost = astarsolution.cost - startTime;
         solution.fmin = astarsolution.fmin;
-        for (size_t i = 0; i < astarsolution.actions.size(); ++i) {
-            Cost waitTime =
-                astarsolution.actions[i].second - astarsolution.actions[i].first.time;
-            if (waitTime == 0) {
+
+        for (size_t i = 0; i < astarsolution.actions.size(); ++i)
+        {
+            Cost waitTime = astarsolution.actions[i].second - astarsolution.actions[i].first.time;
+            if (waitTime == 0)
+            {
                 solution.path.emplace_back(
                     std::make_pair<>(astarsolution.path[i].first.state,
                                      astarsolution.path[i].second));
                 solution.actions.emplace_back(
                     std::make_pair<>(astarsolution.actions[i].first.action,
                                      astarsolution.actions[i].second));
-            } else {
+            }
+            else {
                 // additional wait action before
                 solution.path.emplace_back(
                     std::make_pair<>(astarsolution.path[i].first.state,
