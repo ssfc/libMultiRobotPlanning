@@ -22,51 +22,19 @@
 
 namespace libMultiRobotPlanning {
 
-/*!
-  \example sipp.cpp Simple example using a 2D grid world and
-  up/down/left/right
-  actions
-*/
-
 /*! \brief SIPP Algorithm to find the shortest path with dynamic obstacles
 
 This class implements the SIPP algorithm. SIPP is an informed search algorithm
 that finds the shortest path for a given map and dynamic a-priori known
-obstacles.
-It can use a heuristic that needs to be admissible.
+obstacles. It can use a heuristic that needs to be admissible.
 
 Details of the algorithm can be found in the following paper:\n
 Mike Phillips and Maxim Likhachev:\n
 "SIPP:  Safe  Interval  Path  Planning  for  Dynamic  Environments". IEEE
 International Conference on Robotics and Automation (ICRA), 2011\n
 https://doi.org/10.1109/ICRA.2011.5980306
-
-This class can either use a fibonacci heap, or a d-ary heap. The latter is the
-default. Define "USE_FIBONACCI_HEAP" to use the fibonacci heap instead.
-
-\tparam State Custom state for the search. Needs to be copy'able
-\tparam Location Custom location type for the search. Needs to be copy'able
-\tparam Cost Custom Cost type (integer or floating point types)
-\tparam Environment This class needs to provide the custom A* logic. In
-    particular, it needs to support the following functions:
-  - `Cost admissible_heuristic(const State& s)`\n
-    This function can return 0 if no suitable heuristic is available.
-
-  - `bool is_solution(const State& s)`\n
-    Return true if the given state is a goal state.
-
-  - `void get_neighbors(const State& s, std::vector<Neighbor<State, Action,
-   int> >& neighbors)`\n
-    Fill the list of neighboring state for the given state s.
-
-  - `void onExpandNode(const State& s, int fScore, int gScore)`\n
-    This function is called on every expansion and can be used for statistical
-purposes.
-
-  - `void onDiscover(const State& s, int fScore, int gScore)`\n
-    This function is called on every node discovery and can be used for
-   statistical purposes.
 */
+
 template <typename State, typename Location, typename Action, typename Cost,
           typename Environment>
 class SIPP {
