@@ -310,44 +310,44 @@ class SIPP
             if (waitTime == 0)
             {
                 solution.path.emplace_back(
-                    std::make_pair<>(astarsolution.path[i].first.state,
-                                     astarsolution.path[i].second));
+                    std::make_pair<>(astarsolution.path[i].first.state, astarsolution.path[i].second));
                 solution.actions.emplace_back(
-                    std::make_pair<>(astarsolution.actions[i].first.action,
-                                     astarsolution.actions[i].second));
+                    std::make_pair<>(astarsolution.actions[i].first.action, astarsolution.actions[i].second));
             }
-            else {
+            else
+            {
                 // additional wait action before
                 solution.path.emplace_back(
-                    std::make_pair<>(astarsolution.path[i].first.state,
-                                     astarsolution.path[i].second));
+                    std::make_pair<>(astarsolution.path[i].first.state, astarsolution.path[i].second));
                 solution.actions.emplace_back(std::make_pair<>(waitAction, waitTime));
                 solution.path.emplace_back(
-                    std::make_pair<>(astarsolution.path[i].first.state,
-                                     astarsolution.path[i].second + waitTime));
+                    std::make_pair<>(astarsolution.path[i].first.state, astarsolution.path[i].second + waitTime));
                 solution.actions.emplace_back(
-                    std::make_pair<>(astarsolution.actions[i].first.action,
-                                     astarsolution.actions[i].first.time));
+                    std::make_pair<>(astarsolution.actions[i].first.action, astarsolution.actions[i].first.time));
             }
         }
+
         solution.path.emplace_back(
-            std::make_pair<>(astarsolution.path.back().first.state,
-                             astarsolution.path.back().second));
+            std::make_pair<>(astarsolution.path.back().first.state, astarsolution.path.back().second));
 
         return success;
     }
 
    private:
     // public:
-    struct SIPPState {
+    struct SIPPState
+    {
         SIPPState(const State& state, size_t interval)
-            : state(state), interval(interval) {}
+            : state(state), interval(interval)
+        {}
 
-        bool operator==(const SIPPState& other) const {
+        bool operator==(const SIPPState& other) const
+        {
             return std::tie(state, interval) == std::tie(other.state, other.interval);
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const SIPPState& s) {
+        friend std::ostream& operator<<(std::ostream& os, const SIPPState& s)
+        {
             return os << "(" << s.state << "," << s.interval << ")";
         }
 
@@ -355,16 +355,20 @@ class SIPP
         size_t interval;
     };
 
-    struct SIPPStateHasher {
-        size_t operator()(const SIPPState& s) const {
+    struct SIPPStateHasher
+    {
+        size_t operator()(const SIPPState& s) const
+        {
             size_t seed = 0;
             boost::hash_combine(seed, std::hash<State>()(s.state));
             boost::hash_combine(seed, s.interval);
+
             return seed;
         }
     };
 
-    struct SIPPAction {
+    struct SIPPAction
+    {
         SIPPAction(const Action& action, Cost time) : action(action), time(time) {}
 
         Action action;
@@ -372,21 +376,26 @@ class SIPP
     };
 
     // private:
-    struct SIPPEnvironment {
-        SIPPEnvironment(Environment& env) : m_env(env) {}
+    struct SIPPEnvironment
+    {
+        SIPPEnvironment(Environment& env) : m_env(env)
+        {}
 
-        Cost admissible_heuristic(const SIPPState& s) {
+        Cost admissible_heuristic(const SIPPState& s)
+        {
             return m_env.admissible_heuristic(s.state);
         }
 
-        bool mightHaveSolution(const State& goal) {
+        bool mightHaveSolution(const State& goal)
+        {
             const auto& si = safeIntervals(m_env.getLocation(goal));
             return m_env.is_solution(goal) &&
                    !si.empty() &&
                    si.back().end == std::numeric_limits<Cost>::max();
         }
 
-        bool is_solution(const SIPPState& s) {
+        bool is_solution(const SIPPState& s)
+        {
             return m_env.is_solution(s.state) &&
                    safeIntervals(m_env.getLocation(s.state)).at(s.interval).end ==
                        std::numeric_limits<Cost>::max();
@@ -396,22 +405,25 @@ class SIPP
         {
             std::vector<Neighbor<State, Action, Cost> > motions;
             m_env.get_neighbors(s.state, motions);
-            for (const auto& m : motions) {
+            for (const auto& m : motions)
+            {
                 // std::cout << "gN " << m.state << std::endl;
                 Cost m_time = m.cost;
                 // std::cout << m_lastGScore;
                 Cost start_t = m_lastGScore + m_time;
-                Cost end_t =
-                    safeIntervals(m_env.getLocation(s.state)).at(s.interval).end;
+                Cost end_t = safeIntervals(m_env.getLocation(s.state)).at(s.interval).end;
 
                 const auto& sis = safeIntervals(m_env.getLocation(m.location));
-                for (size_t i = 0; i < sis.size(); ++i) {
+                for (size_t i = 0; i < sis.size(); ++i)
+                {
                     const interval& si = sis[i];
                     // std::cout << "  i " << i << ": " << si.start << "," << si.end <<
                     // std::endl;
-                    if (si.start - m_time > end_t || si.end < start_t) {
+                    if (si.start - m_time > end_t || si.end < start_t)
+                    {
                         continue;
                     }
+
                     int t;
                     if (m_env.isCommandValid(s.state, m.location, m.action, m_lastGScore,
                                              end_t, si.start, si.end, t)) {
