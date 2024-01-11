@@ -5,13 +5,7 @@
 #ifndef SIPP_ISOLATED_HPP
 #define SIPP_ISOLATED_HPP
 
-#ifdef USE_FIBONACCI_HEAP
-#include <boost/heap/fibonacci_heap.hpp>
-#endif
-
 #include <boost/functional/hash.hpp>
-#include <boost/heap/d_ary_heap.hpp>
-
 #include <boost/heap/fibonacci_heap.hpp>
 #include <boost/heap/d_ary_heap.hpp>
 #include <fstream>
