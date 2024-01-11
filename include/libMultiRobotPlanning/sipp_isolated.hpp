@@ -409,9 +409,9 @@ public:
     SIPP(Environment& environment) : m_env(environment), m_astar(m_env)
     {}
 
-    void setCollisionIntervals(const Location& location, const std::vector<Interval>& intervals)
+    void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
     {
-        m_env.setCollisionIntervals(location, intervals);
+        m_env.set_collision_intervals(location, intervals);
     }
 
     bool mightHaveSolution(const Location& goal)
@@ -550,7 +550,7 @@ private:
             m_env.onDiscover(s.state, fScore, gScore);
         }
 
-        void setCollisionIntervals(const Location& location, const std::vector<Interval>& intervals)
+        void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
         {
             m_safeIntervals.erase(location);
             std::vector<Interval> sortedIntervals(intervals);

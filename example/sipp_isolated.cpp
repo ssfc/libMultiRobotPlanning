@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
             collisionIntervals.emplace_back(SIPP::Interval(Interval[0].as<int>(), Interval[1].as<int>()));
         }
 
-        sipp.setCollisionIntervals(state, collisionIntervals);
+        sipp.set_collision_intervals(state, collisionIntervals);
     }
 
     // Plan
