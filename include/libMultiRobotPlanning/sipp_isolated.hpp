@@ -518,7 +518,7 @@ private:
             return false;
         }
 
-       private:
+    private:
         const std::vector<interval>& safeIntervals(const Location& location)
         {
             static std::vector<interval> defaultInterval(1, {0, std::numeric_limits<Cost>::max()});
@@ -532,7 +532,7 @@ private:
             return iter->second;
         }
 
-       private:
+    private:
         Environment& m_env;
         Cost m_lastGScore;
         std::unordered_map<Location, std::vector<interval> > m_safeIntervals;
