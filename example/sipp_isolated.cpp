@@ -13,8 +13,10 @@
 #include <libMultiRobotPlanning/sipp_isolated.hpp>
 
 
-std::ostream& operator<<(std::ostream& os, const Action& a) {
-    switch (a) {
+std::ostream& operator<<(std::ostream& os, const Action& a)
+{
+    switch (a)
+    {
         case Action::Up:
             os << "Up";
             break;
@@ -31,56 +33,71 @@ std::ostream& operator<<(std::ostream& os, const Action& a) {
             os << "Wait";
             break;
     }
+
     return os;
 }
 
-class Environment {
-   public:
-    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles,
-                Location goal)
+class Environment
+{
+public:
+    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles, Location goal)
         : num_columns(dimx),
           num_rows(dimy),
           obstacles(std::move(obstacles)),
-          m_goal(goal) {}
+          m_goal(goal)
+    {}
 
-    float admissible_heuristic(const Location& s) {
+    float admissible_heuristic(const Location& s)
+    {
         return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
     }
 
-    bool is_solution(const Location& s) { return s == m_goal; }
+    bool is_solution(const Location& s)
+    {
+        return s == m_goal;
+    }
 
-    Location getLocation(const Location& s) { return s; }
+    Location getLocation(const Location& s)
+    {
+        return s;
+    }
 
-    void get_neighbors(const Location& s,
-                       std::vector<Neighbor<Location, Action, int> >& neighbors) {
+    void get_neighbors(const Location& s, std::vector<Neighbor<Location, Action, int> >& neighbors)
+    {
         neighbors.clear();
 
         Location up(s.x, s.y + 1);
-        if (location_valid(up)) {
+        if (location_valid(up))
+        {
             neighbors.emplace_back(Neighbor<Location, Action, int>(up, Action::Up, 1));
         }
+
         Location down(s.x, s.y - 1);
-        if (location_valid(down)) {
-            neighbors.emplace_back(
-                Neighbor<Location, Action, int>(down, Action::Down, 1));
+        if (location_valid(down))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(down, Action::Down, 1));
         }
+
         Location left(s.x - 1, s.y);
-        if (location_valid(left)) {
-            neighbors.emplace_back(
-                Neighbor<Location, Action, int>(left, Action::Left, 1));
+        if (location_valid(left))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(left, Action::Left, 1));
         }
+
         Location right(s.x + 1, s.y);
-        if (location_valid(right)) {
-            neighbors.emplace_back(
-                Neighbor<Location, Action, int>(right, Action::Right, 1));
+        if (location_valid(right))
+        {
+            neighbors.emplace_back(Neighbor<Location, Action, int>(right, Action::Right, 1));
         }
     }
 
-    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {
+    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
         // std::cout << "expand: " << s << "g: " << gScore << std::endl;
     }
 
-    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/) {
+    void onDiscover(const Location& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
         // std::cout << "  discover: " << s << std::endl;
     }
 
@@ -90,7 +107,8 @@ class Environment {
         int /*latestStartTime*/,    // must have left s by this time
         int earliestArrivalTime,    // can only arrive at (s+cmd)
         int /*latestArrivalTime*/,  // needs to arrive by this time at (s+cmd)
-        int& t) {
+        int& t)
+    {
         t = std::max<int>(earliestArrivalTime, earliestStartTime + 1);
 
         // TODO(whoenig): need to check for swaps here...
@@ -99,13 +117,14 @@ class Environment {
         return true;
     }
 
-   private:
-    bool location_valid(const Location& s) {
+private:
+    bool location_valid(const Location& s)
+    {
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(s) == obstacles.end();
     }
 
-   private:
+private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
