@@ -100,6 +100,19 @@ struct PlanResult
     int fmin;
 };
 
+template <typename Location, typename Action>
+struct SIPPPlanResult
+{
+    // path constructing locations and their g_score
+    std::vector<std::pair<Location, int> > path;
+    //! actions and their cost
+    std::vector<std::pair<Action, int> > actions;
+    //! actual cost of the result
+    int cost;
+    //! lower bound of the cost (for suboptimal solvers)
+    int fmin;
+};
+
 template <typename SIPPEnvironment, typename LocationHasher = std::hash<SIPPState> >
 class AStar
 {
@@ -120,7 +133,7 @@ public:
     AStar(SIPPEnvironment& input_environment) : environment(input_environment)
     {}
 
-    bool a_star_search(const SIPPState& start_location, PlanResult<SIPPState, SIPPAction>& sipp_solution,
+    bool a_star_search(const SIPPState& start_location, SIPPPlanResult<SIPPState, SIPPAction>& sipp_solution,
                        int initialCost = 0)
     {
         sipp_solution.path.clear();
@@ -422,7 +435,7 @@ public:
     bool sipp_search(const Location& startState, const Action& waitAction,
                 PlanResult<Location, Action>& solution, int startTime = 0)
     {
-        PlanResult<SIPPState, SIPPAction> astar_solution;
+        SIPPPlanResult<SIPPState, SIPPAction> astar_solution;
         solution.cost = 0;
         solution.fmin = 0;
         solution.actions.clear();
