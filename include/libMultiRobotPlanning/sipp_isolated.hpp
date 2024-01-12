@@ -99,7 +99,7 @@ struct PlanResult
     int fmin;
 };
 
-template <typename SIPPState, typename Action>
+template <typename Action>
 struct SIPPPlanResult
 {
     // path constructing locations and their g_score
@@ -132,7 +132,7 @@ public:
     AStar(SIPPEnvironment& input_environment) : environment(input_environment)
     {}
 
-    bool a_star_search(const SIPPState& start_location, SIPPPlanResult<SIPPState, SIPPAction>& sipp_solution,
+    bool a_star_search(const SIPPState& start_location, SIPPPlanResult<SIPPAction>& sipp_solution,
                        int initialCost = 0)
     {
         sipp_solution.path.clear();
@@ -434,7 +434,7 @@ public:
     bool sipp_search(const Location& startState, const Action& waitAction,
                 PlanResult& solution, int startTime = 0)
     {
-        SIPPPlanResult<SIPPState, SIPPAction> astar_solution;
+        SIPPPlanResult<SIPPAction> astar_solution;
         solution.cost = 0;
         solution.fmin = 0;
         solution.actions.clear();
