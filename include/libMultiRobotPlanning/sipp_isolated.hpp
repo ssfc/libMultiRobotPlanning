@@ -86,19 +86,19 @@ public:
     {}
 };
 
-template <typename Action>
+template <typename SIPPAction>
 class SIPPNeighbor
 {
 public:
     //! neighboring location
     SIPPState location;
     //! action to get to the neighboring location
-    Action action;
+    SIPPAction action;
     //! cost to get to the neighboring location, usually 1
     int cost;
 
 public:
-    SIPPNeighbor(const SIPPState& input_location, const Action& input_action, int input_cost)
+    SIPPNeighbor(const SIPPState& input_location, const SIPPAction& input_action, int input_cost)
         : location(input_location),
           action(input_action),
           cost(input_cost)
