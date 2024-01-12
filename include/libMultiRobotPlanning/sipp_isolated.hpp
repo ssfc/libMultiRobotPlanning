@@ -99,11 +99,11 @@ struct PlanResult
     int fmin;
 };
 
-template <typename Location, typename Action>
+template <typename SIPPState, typename Action>
 struct SIPPPlanResult
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<Location, int> > path;
+    std::vector<std::pair<SIPPState, int> > path;
     //! actions and their cost
     std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
