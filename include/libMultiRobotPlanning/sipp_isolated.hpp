@@ -128,13 +128,57 @@ struct SIPPPlanResult
     int fmin;
 };
 
+// inner class definition
+class AStarNode
+{
+   public:
+    SIPPState location;
+    int f_score;
+    int g_score;
+
+    // 定义 handle: 就是上面那个HeapHandle
+    typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
+    // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+
+   public:
+    AStarNode(const SIPPState& input_state, int input_fScore, int input_gScore)
+        : location(input_state),
+          f_score(input_fScore),
+          g_score(input_gScore)
+    {}
+
+    bool operator<(const AStarNode& other) const
+    {
+        // Sort order
+        // 1. lowest f_score
+        // 2. highest g_score
+
+        // Our heap is a maximum heap, so we invert the comperator function here
+        if (f_score != other.f_score)
+        {
+            return f_score > other.f_score;
+        }
+        else
+        {
+            return g_score < other.g_score;
+        }
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
+    {
+        os << "location: " << node.location << " f_score: " << node.f_score
+           << " g_score: " << node.g_score;
+
+        return os;
+    }
+
+};
+
 template <typename SIPPEnvironment, typename StateHasher = std::hash<SIPPState> >
 class AStar
 {
 private:
     // inner class declaration.
-    class AStarNode;
-
     // member vars
     SIPPEnvironment& environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
@@ -255,52 +299,7 @@ public:
     }
 };
 
-// inner class definition
-template <typename SIPPEnvironment, typename StateHasher>
-class AStar<SIPPEnvironment, StateHasher>::AStarNode
-{
-public:
-    SIPPState location;
-    int f_score;
-    int g_score;
 
-    // 定义 handle: 就是上面那个HeapHandle
-    typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
-    // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
-
-public:
-    AStarNode(const SIPPState& input_state, int input_fScore, int input_gScore)
-        : location(input_state),
-          f_score(input_fScore),
-          g_score(input_gScore)
-    {}
-
-    bool operator<(const AStarNode& other) const
-    {
-        // Sort order
-        // 1. lowest f_score
-        // 2. highest g_score
-
-        // Our heap is a maximum heap, so we invert the comperator function here
-        if (f_score != other.f_score)
-        {
-            return f_score > other.f_score;
-        }
-        else
-        {
-            return g_score < other.g_score;
-        }
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
-    {
-        os << "location: " << node.location << " f_score: " << node.f_score
-           << " g_score: " << node.g_score;
-
-        return os;
-    }
-
-};
 
 // #include "util.hpp"
 // #include "sipp_low.hpp"
