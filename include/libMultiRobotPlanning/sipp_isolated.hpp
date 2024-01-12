@@ -411,27 +411,26 @@ private:
     }
 };
 
+class Interval
+{
+   public:
+    int start;
+    int end;
+
+   public:
+    Interval(int input_start, int input_end)
+        : start(input_start),
+          end(input_end)
+    {}
+
+    friend bool operator<(const Interval& a, const Interval& b)
+    {
+        return a.start < b.start;
+    }
+};
+
 class SIPP
 {
-public:
-    class Interval
-    {
-    public:
-        int start;
-        int end;
-
-    public:
-        Interval(int input_start, int input_end)
-            : start(input_start),
-              end(input_end)
-        {}
-
-        friend bool operator<(const Interval& a, const Interval& b)
-        {
-            return a.start < b.start;
-        }
-    };
-
 public:
     SIPP(Environment& environment) : m_env(environment), m_astar(m_env)
     {}

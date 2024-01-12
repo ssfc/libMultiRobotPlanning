@@ -95,11 +95,11 @@ int main(int argc, char* argv[])
     {
         Location state(node["location"][0].as<int>(), node["location"][1].as<int>());
 
-        std::vector<SIPP::Interval> collisionIntervals;
+        std::vector<Interval> collisionIntervals;
 
         for (const auto& interval : node["intervals"])
         {
-            collisionIntervals.emplace_back(SIPP::Interval(interval[0].as<int>(), interval[1].as<int>()));
+            collisionIntervals.emplace_back(Interval(interval[0].as<int>(), interval[1].as<int>()));
         }
 
         sipp.set_collision_intervals(state, collisionIntervals);
