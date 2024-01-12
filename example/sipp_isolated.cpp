@@ -97,9 +97,9 @@ int main(int argc, char* argv[])
 
         std::vector<SIPP::Interval> collisionIntervals;
 
-        for (const auto& Interval : node["intervals"])
+        for (const auto& interval : node["intervals"])
         {
-            collisionIntervals.emplace_back(SIPP::Interval(Interval[0].as<int>(), Interval[1].as<int>()));
+            collisionIntervals.emplace_back(SIPP::Interval(interval[0].as<int>(), interval[1].as<int>()));
         }
 
         sipp.set_collision_intervals(state, collisionIntervals);
