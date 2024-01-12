@@ -86,7 +86,6 @@ public:
     {}
 };
 
-template <typename SIPPAction>
 class SIPPNeighbor
 {
 public:
@@ -167,7 +166,7 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<SIPPNeighbor<SIPPAction> > neighbors;
+        std::vector<SIPPNeighbor> neighbors;
         neighbors.reserve(10);
 
         while (!open_set.empty())
@@ -206,7 +205,7 @@ public:
             // traverse neighbors
             neighbors.clear();
             environment.get_sipp_neighbors(current.location, neighbors);
-            for (const SIPPNeighbor<SIPPAction>& neighbor : neighbors)
+            for (const SIPPNeighbor& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
@@ -527,7 +526,7 @@ private:
                        std::numeric_limits<int>::max();
         }
 
-        void get_sipp_neighbors(const SIPPState& s, std::vector<SIPPNeighbor<SIPPAction> >& neighbors)
+        void get_sipp_neighbors(const SIPPState& s, std::vector<SIPPNeighbor>& neighbors)
         {
             std::vector<Neighbor> motions;
             m_env.get_neighbors(s.state, motions);
@@ -555,7 +554,7 @@ private:
                                              end_t, si.start, si.end, t)) {
                         // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
                         // << m_lastGScore << std::endl;
-                        neighbors.emplace_back(SIPPNeighbor<SIPPAction>(
+                        neighbors.emplace_back(SIPPNeighbor(
                             SIPPState(m.location, i), SIPPAction(m.action, m.cost), t - m_lastGScore));
                     }
                 }
