@@ -87,7 +87,7 @@ public:
     {}
 };
 
-template <typename Location, typename Action>
+template <typename Action>
 struct PlanResult
 {
     // path constructing locations and their g_score
@@ -433,7 +433,7 @@ public:
     }
 
     bool sipp_search(const Location& startState, const Action& waitAction,
-                PlanResult<Location, Action>& solution, int startTime = 0)
+                PlanResult<Action>& solution, int startTime = 0)
     {
         SIPPPlanResult<SIPPState, SIPPAction> astar_solution;
         solution.cost = 0;
