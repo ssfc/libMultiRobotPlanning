@@ -87,6 +87,25 @@ public:
     {}
 };
 
+template <typename Location, typename Action>
+class SIPPNeighbor
+{
+public:
+    //! neighboring location
+    Location location;
+    //! action to get to the neighboring location
+    Action action;
+    //! cost to get to the neighboring location, usually 1
+    int cost;
+
+public:
+    SIPPNeighbor(const Location& input_location, const Action& input_action, int input_cost)
+        : location(input_location),
+          action(input_action),
+          cost(input_cost)
+    {}
+};
+
 struct PlanResult
 {
     // path constructing locations and their g_score
@@ -149,7 +168,7 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Neighbor<SIPPState, SIPPAction> > neighbors;
+        std::vector<SIPPNeighbor<SIPPState, SIPPAction> > neighbors;
         neighbors.reserve(10);
 
         while (!open_set.empty())
@@ -188,7 +207,7 @@ public:
             // traverse neighbors
             neighbors.clear();
             environment.get_sipp_neighbors(current.location, neighbors);
-            for (const Neighbor<SIPPState, SIPPAction>& neighbor : neighbors)
+            for (const SIPPNeighbor<SIPPState, SIPPAction>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
@@ -509,7 +528,7 @@ private:
                        std::numeric_limits<int>::max();
         }
 
-        void get_sipp_neighbors(const SIPPState& s, std::vector<Neighbor<SIPPState, SIPPAction> >& neighbors)
+        void get_sipp_neighbors(const SIPPState& s, std::vector<SIPPNeighbor<SIPPState, SIPPAction> >& neighbors)
         {
             std::vector<Neighbor<Location, Action> > motions;
             m_env.get_neighbors(s.state, motions);
@@ -537,7 +556,7 @@ private:
                                              end_t, si.start, si.end, t)) {
                         // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
                         // << m_lastGScore << std::endl;
-                        neighbors.emplace_back(Neighbor<SIPPState, SIPPAction>(
+                        neighbors.emplace_back(SIPPNeighbor<SIPPState, SIPPAction>(
                             SIPPState(m.location, i), SIPPAction(m.action, m.cost), t - m_lastGScore));
                     }
                 }
