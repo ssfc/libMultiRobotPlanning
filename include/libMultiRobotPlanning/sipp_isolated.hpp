@@ -481,6 +481,12 @@ private:
     // private:
     struct SIPPEnvironment
     {
+    private:
+        Environment& m_env;
+        int m_lastGScore;
+        std::unordered_map<Location, std::vector<Interval> > m_safeIntervals;
+
+    public:
         SIPPEnvironment(Environment& env) : m_env(env)
         {}
 
@@ -620,7 +626,6 @@ private:
             return false;
         }
 
-    private:
         const std::vector<Interval>& safeIntervals(const Location& location)
         {
             static std::vector<Interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
@@ -633,11 +638,6 @@ private:
 
             return iter->second;
         }
-
-    private:
-        Environment& m_env;
-        int m_lastGScore;
-        std::unordered_map<Location, std::vector<Interval> > m_safeIntervals;
     };
 
 private:
