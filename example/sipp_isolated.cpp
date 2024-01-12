@@ -140,3 +140,7 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+// (3) debug on ubuntu by cmake:
+// cmake .. ; make
+// ./sipp_isolated -i ../test/sipp_1.yaml -o output.yaml
