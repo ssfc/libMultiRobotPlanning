@@ -68,7 +68,6 @@ struct SIPPAction
     int time;
 };
 
-template <typename Action>
 class Neighbor
 {
 public:
@@ -358,32 +357,32 @@ private:
         return s;
     }
 
-    void get_neighbors(const Location& s, std::vector<Neighbor<Action> >& neighbors)
+    void get_neighbors(const Location& s, std::vector<Neighbor>& neighbors)
     {
         neighbors.clear();
 
         Location up(s.x, s.y + 1);
         if (location_valid(up))
         {
-            neighbors.emplace_back(Neighbor<Action>(up, Action::Up, 1));
+            neighbors.emplace_back(Neighbor(up, Action::Up, 1));
         }
 
         Location down(s.x, s.y - 1);
         if (location_valid(down))
         {
-            neighbors.emplace_back(Neighbor<Action>(down, Action::Down, 1));
+            neighbors.emplace_back(Neighbor(down, Action::Down, 1));
         }
 
         Location left(s.x - 1, s.y);
         if (location_valid(left))
         {
-            neighbors.emplace_back(Neighbor<Action>(left, Action::Left, 1));
+            neighbors.emplace_back(Neighbor(left, Action::Left, 1));
         }
 
         Location right(s.x + 1, s.y);
         if (location_valid(right))
         {
-            neighbors.emplace_back(Neighbor<Action>(right, Action::Right, 1));
+            neighbors.emplace_back(Neighbor(right, Action::Right, 1));
         }
     }
 
@@ -530,7 +529,7 @@ private:
 
         void get_sipp_neighbors(const SIPPState& s, std::vector<SIPPNeighbor<SIPPState, SIPPAction> >& neighbors)
         {
-            std::vector<Neighbor<Action> > motions;
+            std::vector<Neighbor> motions;
             m_env.get_neighbors(s.state, motions);
             for (const auto& m : motions)
             {
