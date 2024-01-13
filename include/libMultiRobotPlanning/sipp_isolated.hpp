@@ -130,13 +130,13 @@ struct SIPPPlanResult
 
 class Environment
 {
-   private:
+private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
     Location m_goal;
 
-   public:
+public:
     Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles, Location goal)
         : num_columns(dimx),
           num_rows(dimy),
@@ -223,11 +223,11 @@ class Environment
 
 class Interval
 {
-   public:
+public:
     int start;
     int end;
 
-   public:
+public:
     Interval(int input_start, int input_end)
         : start(input_start),
           end(input_end)
@@ -241,12 +241,12 @@ class Interval
 
 struct SIPPEnvironment
 {
-   private:
+private:
     Environment& m_env;
     int m_lastGScore;
     std::unordered_map<Location, std::vector<Interval> > m_safeIntervals;
 
-   public:
+public:
     SIPPEnvironment(Environment& env) : m_env(env)
     {}
 
