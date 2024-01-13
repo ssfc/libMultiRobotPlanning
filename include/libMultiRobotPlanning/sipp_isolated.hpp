@@ -447,7 +447,7 @@ class AStarNode
 
 };
 
-template <typename SIPPEnvironment, typename StateHasher = std::hash<SIPPState> >
+template <typename StateHasher = std::hash<SIPPState> >
 class AStar
 {
 private:
@@ -595,7 +595,7 @@ class SIPP
 {
 private:
     SIPPEnvironment m_env;
-    AStar<SIPPEnvironment, SIPPStateHasher> m_astar;
+    AStar<SIPPStateHasher> m_astar;
 
 public:
     SIPP(Environment& environment) : m_env(environment), m_astar(m_env)
