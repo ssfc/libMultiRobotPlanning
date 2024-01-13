@@ -128,199 +128,9 @@ struct SIPPPlanResult
     int fmin;
 };
 
-// inner class definition
-class AStarNode
-{
-   public:
-    SIPPState location;
-    int f_score;
-    int g_score;
-
-    // 定义 handle: 就是上面那个HeapHandle
-    typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
-    // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
-
-   public:
-    AStarNode(const SIPPState& input_state, int input_fScore, int input_gScore)
-        : location(input_state),
-          f_score(input_fScore),
-          g_score(input_gScore)
-    {}
-
-    bool operator<(const AStarNode& other) const
-    {
-        // Sort order
-        // 1. lowest f_score
-        // 2. highest g_score
-
-        // Our heap is a maximum heap, so we invert the comperator function here
-        if (f_score != other.f_score)
-        {
-            return f_score > other.f_score;
-        }
-        else
-        {
-            return g_score < other.g_score;
-        }
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
-    {
-        os << "location: " << node.location << " f_score: " << node.f_score
-           << " g_score: " << node.g_score;
-
-        return os;
-    }
-
-};
-
-template <typename SIPPEnvironment, typename StateHasher = std::hash<SIPPState> >
-class AStar
-{
-private:
-    // inner class declaration.
-    // member vars
-    SIPPEnvironment& environment; // include map size, obstacle position, agent goal.
-    // 定义openSet_t和fibHeapHandle_t
-    using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
-    using HeapHandle = typename OpenSet::handle_type;
-    // using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
-    // using HeapHandle = typename OpenSet::handle_type;
-
-public:
-    // member funcs
-    AStar(SIPPEnvironment& input_environment) : environment(input_environment)
-    {}
-
-    bool a_star_search(const SIPPState& start_location, SIPPPlanResult& sipp_solution,
-                       int initialCost = 0)
-    {
-        sipp_solution.path.clear();
-        sipp_solution.path.emplace_back(std::make_pair<>(start_location, 0));
-        sipp_solution.actions.clear();
-        sipp_solution.cost = 0;
-
-        OpenSet open_set;
-        std::unordered_map<SIPPState, HeapHandle, StateHasher> location_to_heap;
-        std::unordered_set<SIPPState, StateHasher> closed_set;
-        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,StateHasher> came_from;
-
-        auto handle = open_set.push(AStarNode(start_location,
-                                              environment.admissible_heuristic(start_location), initialCost));
-        location_to_heap.insert(std::make_pair<>(start_location, handle));
-        (*handle).handle = handle;
-
-        std::vector<SIPPNeighbor> neighbors;
-        neighbors.reserve(10);
-
-        while (!open_set.empty())
-        {
-            AStarNode current = open_set.top();
-            environment.onExpandNode(current.location, current.f_score, current.g_score);
-
-            if (environment.is_solution(current.location))
-            {
-                sipp_solution.path.clear();
-                sipp_solution.actions.clear();
-                auto iter = came_from.find(current.location);
-                while (iter != came_from.end())
-                {
-                    sipp_solution.path.emplace_back(
-                        std::make_pair<>(iter->first, std::get<3>(iter->second)));
-                    sipp_solution.actions.emplace_back(std::make_pair<>(
-                        std::get<1>(iter->second), std::get<2>(iter->second)));
-                    iter = came_from.find(std::get<0>(iter->second));
-                }
-
-                sipp_solution.path.emplace_back(std::make_pair<>
-                                           (start_location, initialCost));
-                std::reverse(sipp_solution.path.begin(), sipp_solution.path.end());
-                std::reverse(sipp_solution.actions.begin(), sipp_solution.actions.end());
-                sipp_solution.cost = current.g_score;
-                sipp_solution.fmin = current.f_score;
-
-                return true;
-            }
-
-            open_set.pop();
-            location_to_heap.erase(current.location);
-            closed_set.insert(current.location);
-
-            // traverse neighbors
-            neighbors.clear();
-            environment.get_sipp_neighbors(current.location, neighbors);
-            for (const SIPPNeighbor& neighbor : neighbors)
-            {
-                if (closed_set.find(neighbor.location) == closed_set.end())
-                {
-                    int tentative_gScore = current.g_score + neighbor.cost;
-                    auto iter = location_to_heap.find(neighbor.location);
-                    if (iter == location_to_heap.end())
-                    {  // Discover a new node
-                        int f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
-                        auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
-                        (*handle).handle = handle;
-                        location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
-                        environment.onDiscover(neighbor.location, f_score, tentative_gScore);
-                        // std::cout << "  this is a new node " << f_score << "," <<
-                        // tentative_gScore << std::endl;
-                    }
-                    else
-                    {
-                        auto handle = iter->second;
-                        // std::cout << "  this is an old node: " << tentative_gScore << ","
-                        // << (*handle).g_score << std::endl;
-                        // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).g_score)
-                        {
-                            continue;
-                        }
-
-                        // update f and g_score
-                        int delta = (*handle).g_score - tentative_gScore;
-                        (*handle).g_score = tentative_gScore;
-                        (*handle).f_score -= delta;
-                        open_set.increase(handle);
-                        environment.onDiscover(neighbor.location, (*handle).f_score, (*handle).g_score);
-                    }
-
-                    // Best path for this node so far
-                    // TODO: this is not the best way to update "came_from", but otherwise
-                    // default c'tors of SIPPState and Action are required
-                    came_from.erase(neighbor.location);
-                    came_from.insert(std::make_pair<>(neighbor.location,
-                                                      std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
-                                                                        tentative_gScore)));
-                }
-            }
-        }
-
-        return false;
-    }
-};
-
-
-
-// #include "util.hpp"
-// #include "sipp_low.hpp"
-
-
-/*! \brief SIPP Algorithm to find the shortest path with dynamic obstacles
-
-This class implements the SIPP algorithm. SIPP is an informed search algorithm
-that finds the shortest path for a given map and dynamic a-priori known
-obstacles. It can use a heuristic that needs to be admissible.
-
-Details of the algorithm can be found in the following paper:\n
-Mike Phillips and Maxim Likhachev:\n
-"SIPP:  Safe  Interval  Path  Planning  for  Dynamic  Environments". IEEE
-International Conference on Robotics and Automation (ICRA), 2011\n
-https://doi.org/10.1109/ICRA.2011.5980306
-*/
-
 class Environment
 {
-private:
+   private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
@@ -589,6 +399,197 @@ struct SIPPEnvironment
         return iter->second;
     }
 };
+
+
+// inner class definition
+class AStarNode
+{
+   public:
+    SIPPState location;
+    int f_score;
+    int g_score;
+
+    // 定义 handle: 就是上面那个HeapHandle
+    typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
+    // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+
+   public:
+    AStarNode(const SIPPState& input_state, int input_fScore, int input_gScore)
+        : location(input_state),
+          f_score(input_fScore),
+          g_score(input_gScore)
+    {}
+
+    bool operator<(const AStarNode& other) const
+    {
+        // Sort order
+        // 1. lowest f_score
+        // 2. highest g_score
+
+        // Our heap is a maximum heap, so we invert the comperator function here
+        if (f_score != other.f_score)
+        {
+            return f_score > other.f_score;
+        }
+        else
+        {
+            return g_score < other.g_score;
+        }
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
+    {
+        os << "location: " << node.location << " f_score: " << node.f_score
+           << " g_score: " << node.g_score;
+
+        return os;
+    }
+
+};
+
+template <typename SIPPEnvironment, typename StateHasher = std::hash<SIPPState> >
+class AStar
+{
+private:
+    // inner class declaration.
+    // member vars
+    SIPPEnvironment& environment; // include map size, obstacle position, agent goal.
+    // 定义openSet_t和fibHeapHandle_t
+    using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
+    using HeapHandle = typename OpenSet::handle_type;
+    // using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+    // using HeapHandle = typename OpenSet::handle_type;
+
+public:
+    // member funcs
+    AStar(SIPPEnvironment& input_environment) : environment(input_environment)
+    {}
+
+    bool a_star_search(const SIPPState& start_location, SIPPPlanResult& sipp_solution,
+                       int initialCost = 0)
+    {
+        sipp_solution.path.clear();
+        sipp_solution.path.emplace_back(std::make_pair<>(start_location, 0));
+        sipp_solution.actions.clear();
+        sipp_solution.cost = 0;
+
+        OpenSet open_set;
+        std::unordered_map<SIPPState, HeapHandle, StateHasher> location_to_heap;
+        std::unordered_set<SIPPState, StateHasher> closed_set;
+        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,StateHasher> came_from;
+
+        auto handle = open_set.push(AStarNode(start_location,
+                                              environment.admissible_heuristic(start_location), initialCost));
+        location_to_heap.insert(std::make_pair<>(start_location, handle));
+        (*handle).handle = handle;
+
+        std::vector<SIPPNeighbor> neighbors;
+        neighbors.reserve(10);
+
+        while (!open_set.empty())
+        {
+            AStarNode current = open_set.top();
+            environment.onExpandNode(current.location, current.f_score, current.g_score);
+
+            if (environment.is_solution(current.location))
+            {
+                sipp_solution.path.clear();
+                sipp_solution.actions.clear();
+                auto iter = came_from.find(current.location);
+                while (iter != came_from.end())
+                {
+                    sipp_solution.path.emplace_back(
+                        std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    sipp_solution.actions.emplace_back(std::make_pair<>(
+                        std::get<1>(iter->second), std::get<2>(iter->second)));
+                    iter = came_from.find(std::get<0>(iter->second));
+                }
+
+                sipp_solution.path.emplace_back(std::make_pair<>
+                                           (start_location, initialCost));
+                std::reverse(sipp_solution.path.begin(), sipp_solution.path.end());
+                std::reverse(sipp_solution.actions.begin(), sipp_solution.actions.end());
+                sipp_solution.cost = current.g_score;
+                sipp_solution.fmin = current.f_score;
+
+                return true;
+            }
+
+            open_set.pop();
+            location_to_heap.erase(current.location);
+            closed_set.insert(current.location);
+
+            // traverse neighbors
+            neighbors.clear();
+            environment.get_sipp_neighbors(current.location, neighbors);
+            for (const SIPPNeighbor& neighbor : neighbors)
+            {
+                if (closed_set.find(neighbor.location) == closed_set.end())
+                {
+                    int tentative_gScore = current.g_score + neighbor.cost;
+                    auto iter = location_to_heap.find(neighbor.location);
+                    if (iter == location_to_heap.end())
+                    {  // Discover a new node
+                        int f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
+                        auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
+                        (*handle).handle = handle;
+                        location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
+                        environment.onDiscover(neighbor.location, f_score, tentative_gScore);
+                        // std::cout << "  this is a new node " << f_score << "," <<
+                        // tentative_gScore << std::endl;
+                    }
+                    else
+                    {
+                        auto handle = iter->second;
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // << (*handle).g_score << std::endl;
+                        // We found this node before with a better path
+                        if (tentative_gScore >= (*handle).g_score)
+                        {
+                            continue;
+                        }
+
+                        // update f and g_score
+                        int delta = (*handle).g_score - tentative_gScore;
+                        (*handle).g_score = tentative_gScore;
+                        (*handle).f_score -= delta;
+                        open_set.increase(handle);
+                        environment.onDiscover(neighbor.location, (*handle).f_score, (*handle).g_score);
+                    }
+
+                    // Best path for this node so far
+                    // TODO: this is not the best way to update "came_from", but otherwise
+                    // default c'tors of SIPPState and Action are required
+                    came_from.erase(neighbor.location);
+                    came_from.insert(std::make_pair<>(neighbor.location,
+                                                      std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
+                                                                        tentative_gScore)));
+                }
+            }
+        }
+
+        return false;
+    }
+};
+
+
+
+// #include "util.hpp"
+// #include "sipp_low.hpp"
+
+
+/*! \brief SIPP Algorithm to find the shortest path with dynamic obstacles
+
+This class implements the SIPP algorithm. SIPP is an informed search algorithm
+that finds the shortest path for a given map and dynamic a-priori known
+obstacles. It can use a heuristic that needs to be admissible.
+
+Details of the algorithm can be found in the following paper:\n
+Mike Phillips and Maxim Likhachev:\n
+"SIPP:  Safe  Interval  Path  Planning  for  Dynamic  Environments". IEEE
+International Conference on Robotics and Automation (ICRA), 2011\n
+https://doi.org/10.1109/ICRA.2011.5980306
+*/
 
 class SIPP
 {
