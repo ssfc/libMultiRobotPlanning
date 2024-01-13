@@ -448,7 +448,6 @@ struct SIPPStateHasher
     }
 };
 
-template <typename SIPPStateHasher>
 class AStar
 {
 private:
@@ -596,7 +595,7 @@ class SIPP
 {
 private:
     SIPPEnvironment m_env;
-    AStar<SIPPStateHasher> m_astar;
+    AStar m_astar;
 
 public:
     SIPP(Environment& environment) : m_env(environment), m_astar(m_env)
