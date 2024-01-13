@@ -48,18 +48,6 @@ public:
     }
 };
 
-struct SIPPStateHasher
-{
-    size_t operator()(const SIPPState& s) const
-    {
-        size_t seed = 0;
-        boost::hash_combine(seed, std::hash<Location>()(s.state));
-        boost::hash_combine(seed, s.interval);
-
-        return seed;
-    }
-};
-
 struct SIPPAction
 {
     SIPPAction(const Action& action, int time) : action(action), time(time) {}
@@ -446,6 +434,18 @@ class AStarNode
         return os;
     }
 
+};
+
+struct SIPPStateHasher
+{
+    size_t operator()(const SIPPState& s) const
+    {
+        size_t seed = 0;
+        boost::hash_combine(seed, std::hash<Location>()(s.state));
+        boost::hash_combine(seed, s.interval);
+
+        return seed;
+    }
 };
 
 template <typename StateHasher = std::hash<SIPPState> >
