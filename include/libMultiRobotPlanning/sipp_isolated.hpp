@@ -448,7 +448,7 @@ struct SIPPStateHasher
     }
 };
 
-template <typename StateHasher = std::hash<SIPPState> >
+template <typename StateHasher>
 class AStar
 {
 private:
