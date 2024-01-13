@@ -89,6 +89,7 @@ int main(int argc, char* argv[])
     Environment env(config["environment"]["size"][0].as<int>(),
                     config["environment"]["size"][1].as<int>(), obstacles, goal);
 
+    // AStar a_star(env);
     SIPP sipp(env);
 
     for (const auto& node : config["environment"]["collisionIntervals"])

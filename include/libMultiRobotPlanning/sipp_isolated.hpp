@@ -228,7 +228,7 @@ public:
     }
 };
 
-struct SIPPEnvironment
+class SIPPEnvironment
 {
 private:
     Environment& m_env;
@@ -599,7 +599,9 @@ private:
     AStar m_astar;
 
 public:
-    SIPP(Environment& environment) : m_env(environment), m_astar(m_env)
+    SIPP(Environment& environment) :
+      m_env(environment),
+      m_astar(m_env)
     {}
 
     void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
