@@ -307,7 +307,8 @@ public:
 
                 int t;
                 if (m_env.isCommandValid(s.state, m.location, m.action, m_lastGScore,
-                                         end_t, si.start, si.end, t)) {
+                                         end_t, si.start, si.end, t))
+                {
                     // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
                     // << m_lastGScore << std::endl;
                     neighbors.emplace_back(SIPPNeighbor(
