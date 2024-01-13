@@ -370,7 +370,7 @@ public:
         // }
     }
 
-    bool findSafeInterval(const Location& state, int time, size_t& interval)
+    bool find_safe_interval(const Location& state, int time, size_t& interval)
     {
         const auto& si = safeIntervals(m_env.getLocation(state));
         for (size_t idx = 0; idx < si.size(); ++idx)
@@ -620,7 +620,7 @@ public:
         solution.actions.clear();
         solution.path.clear();
         size_t interval;
-        if (!m_env.findSafeInterval(startState, startTime, interval))
+        if (!m_env.find_safe_interval(startState, startTime, interval))
         {
             return false;
         }
