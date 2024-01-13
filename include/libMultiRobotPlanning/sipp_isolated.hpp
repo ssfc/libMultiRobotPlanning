@@ -370,6 +370,19 @@ public:
         // }
     }
 
+    const std::vector<Interval>& safeIntervals(const Location& location)
+    {
+        static std::vector<Interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
+        const auto iter = m_safeIntervals.find(location);
+
+        if (iter == m_safeIntervals.end())
+        {
+            return defaultInterval;
+        }
+
+        return iter->second;
+    }
+    
     bool find_safe_interval(const Location& state, int time, size_t& interval)
     {
         const auto& si = safeIntervals(m_env.getLocation(state));
@@ -384,19 +397,6 @@ public:
         }
 
         return false;
-    }
-
-    const std::vector<Interval>& safeIntervals(const Location& location)
-    {
-        static std::vector<Interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
-        const auto iter = m_safeIntervals.find(location);
-
-        if (iter == m_safeIntervals.end())
-        {
-            return defaultInterval;
-        }
-
-        return iter->second;
     }
 };
 
