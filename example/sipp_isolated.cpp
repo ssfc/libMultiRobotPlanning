@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
     SIPPEnvironment sipp_env(env);
 
     // AStar a_star(env);
-    SIPP sipp(env);
+    SIPP sipp(sipp_env);
 
     for (const auto& node : config["environment"]["collisionIntervals"])
     {
