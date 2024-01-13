@@ -89,6 +89,8 @@ int main(int argc, char* argv[])
     Environment env(config["environment"]["size"][0].as<int>(),
                     config["environment"]["size"][1].as<int>(), obstacles, goal);
 
+    SIPPEnvironment sipp_env(env);
+
     // AStar a_star(env);
     SIPP sipp(env);
 

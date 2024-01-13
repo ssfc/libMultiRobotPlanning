@@ -599,7 +599,7 @@ private:
     AStar m_astar;
 
 public:
-    SIPP(Environment environment) :
+    SIPP(SIPPEnvironment environment) :
       m_env(environment),
       m_astar(m_env)
     {}
