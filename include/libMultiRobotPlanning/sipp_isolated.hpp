@@ -231,12 +231,12 @@ public:
 class SIPPEnvironment
 {
 private:
-    Environment& m_env;
+    Environment m_env;
     int m_lastGScore;
     std::unordered_map<Location, std::vector<Interval> > m_safeIntervals;
 
 public:
-    SIPPEnvironment(Environment& env) : m_env(env)
+    SIPPEnvironment(Environment env) : m_env(env)
     {}
 
     int admissible_heuristic(const SIPPState& s)
@@ -599,7 +599,7 @@ private:
     AStar m_astar;
 
 public:
-    SIPP(Environment& environment) :
+    SIPP(Environment environment) :
       m_env(environment),
       m_astar(m_env)
     {}
