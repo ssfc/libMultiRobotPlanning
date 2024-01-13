@@ -125,11 +125,12 @@ private:
     Location m_goal;
 
 public:
-    Environment(size_t dimx, size_t dimy, std::unordered_set<Location> obstacles, Location goal)
-        : num_columns(dimx),
-          num_rows(dimy),
-          obstacles(std::move(obstacles)),
-          m_goal(goal)
+    Environment(size_t input_dimx, size_t input_dimy,
+             std::unordered_set<Location> input_obstacles, Location input_goal)
+        : num_columns(input_dimx),
+          num_rows(input_dimy),
+          obstacles(std::move(input_obstacles)),
+          m_goal(input_goal)
     {}
 
     bool location_valid(const Location& s)
