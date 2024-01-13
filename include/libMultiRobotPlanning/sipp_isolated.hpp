@@ -448,7 +448,7 @@ struct SIPPStateHasher
     }
 };
 
-template <typename StateHasher>
+template <typename SIPPStateHasher>
 class AStar
 {
 private:
@@ -475,9 +475,9 @@ public:
         sipp_solution.cost = 0;
 
         OpenSet open_set;
-        std::unordered_map<SIPPState, HeapHandle, StateHasher> location_to_heap;
-        std::unordered_set<SIPPState, StateHasher> closed_set;
-        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,StateHasher> came_from;
+        std::unordered_map<SIPPState, HeapHandle, SIPPStateHasher> location_to_heap;
+        std::unordered_set<SIPPState, SIPPStateHasher> closed_set;
+        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,SIPPStateHasher> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
                                               environment.admissible_heuristic(start_location), initialCost));
