@@ -122,7 +122,7 @@ private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
-    Location m_goal;
+    Location goal;
 
 public:
     Environment(size_t input_dimx, size_t input_dimy,
@@ -130,7 +130,7 @@ public:
         : num_columns(input_dimx),
           num_rows(input_dimy),
           obstacles(std::move(input_obstacles)),
-          m_goal(input_goal)
+          goal(input_goal)
     {}
 
     bool location_valid(const Location& s)
@@ -141,12 +141,12 @@ public:
 
     float admissible_heuristic(const Location& s)
     {
-        return std::abs(s.x - m_goal.x) + std::abs(s.y - m_goal.y);
+        return std::abs(s.x - goal.x) + std::abs(s.y - goal.y);
     }
 
     bool is_solution(const Location& s)
     {
-        return s == m_goal;
+        return s == goal;
     }
 
     Location getLocation(const Location& s)
