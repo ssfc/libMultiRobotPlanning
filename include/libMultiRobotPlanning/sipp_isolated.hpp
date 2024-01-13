@@ -429,8 +429,173 @@ class Interval
     }
 };
 
+struct SIPPEnvironment
+{
+   private:
+    Environment& m_env;
+    int m_lastGScore;
+    std::unordered_map<Location, std::vector<Interval> > m_safeIntervals;
+
+   public:
+    SIPPEnvironment(Environment& env) : m_env(env)
+    {}
+
+    int admissible_heuristic(const SIPPState& s)
+    {
+        return m_env.admissible_heuristic(s.state);
+    }
+
+    bool might_have_solution(const Location& goal)
+    {
+        const auto& si = safeIntervals(m_env.getLocation(goal));
+        return m_env.is_solution(goal) && !si.empty() &&
+               si.back().end == std::numeric_limits<int>::max();
+    }
+
+    bool is_solution(const SIPPState& s)
+    {
+        return m_env.is_solution(s.state) &&
+               safeIntervals(m_env.getLocation(s.state)).at(s.interval).end ==
+                   std::numeric_limits<int>::max();
+    }
+
+    void get_sipp_neighbors(const SIPPState& s, std::vector<SIPPNeighbor>& neighbors)
+    {
+        std::vector<Neighbor> motions;
+        m_env.get_neighbors(s.state, motions);
+        for (const auto& m : motions)
+        {
+            // std::cout << "gN " << m.state << std::endl;
+            int m_time = m.cost;
+            // std::cout << m_lastGScore;
+            int start_t = m_lastGScore + m_time;
+            int end_t = safeIntervals(m_env.getLocation(s.state)).at(s.interval).end;
+
+            const auto& sis = safeIntervals(m_env.getLocation(m.location));
+            for (size_t i = 0; i < sis.size(); ++i)
+            {
+                const Interval& si = sis[i];
+                // std::cout << "  i " << i << ": " << si.start << "," << si.end <<
+                // std::endl;
+                if (si.start - m_time > end_t || si.end < start_t)
+                {
+                    continue;
+                }
+
+                int t;
+                if (m_env.isCommandValid(s.state, m.location, m.action, m_lastGScore,
+                                         end_t, si.start, si.end, t)) {
+                    // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
+                    // << m_lastGScore << std::endl;
+                    neighbors.emplace_back(SIPPNeighbor(
+                        SIPPState(m.location, i), SIPPAction(m.action, m.cost), t - m_lastGScore));
+                }
+            }
+        }
+    }
+
+    void onExpandNode(const SIPPState& s, int fScore, int gScore)
+    {
+        // const auto& interval =
+        // safeIntervals(m_env.getLocation(s.state)).at(s.interval);
+        // std::cout << "expand: " << s.state << "," << interval.start << " to "
+        // << interval.end << "(g: " << gScore << " f: " << fScore << ")" <<
+        // std::endl;
+        // This is called before get_neighbors(). We use the callback to find the
+        // current cost (=time) of the expanded node
+        m_lastGScore = gScore;
+        m_env.onExpandNode(s.state, fScore, gScore);
+    }
+
+    void onDiscover(const SIPPState& s, int fScore, int gScore)
+    {
+        // const auto& interval =
+        // safeIntervals(m_env.getLocation(s.state)).at(s.interval);
+        // std::cout << "discover: " << s.state << "," << interval.start << " to "
+        // << interval.end << std::endl;
+        m_env.onDiscover(s.state, fScore, gScore);
+    }
+
+    void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
+    {
+        m_safeIntervals.erase(location);
+        std::vector<Interval> sortedIntervals(intervals);
+        std::sort(sortedIntervals.begin(), sortedIntervals.end());
+
+        // std::cout << location << ": " << std::endl;
+        if (intervals.size() > 0)
+        {
+            m_safeIntervals[location]; // create empty safe interval
+            int start = 0;
+            int lastEnd = 0;
+            for (const auto& interval : sortedIntervals)
+            {
+                // std::cout << "  ci: " << interval.start << " - " << interval.end <<
+                // std::endl;
+                assert(interval.start <= interval.end);
+                assert(start <= interval.start);
+                // if (start + 1 != interval.start - 1) {
+                // std::cout << start << "," << interval.start << std::endl;
+                // assert(start + 1 < interval.start - 1);
+                if (start <= interval.start - 1)
+                {
+                    m_safeIntervals[location].push_back({start, interval.start - 1});
+                }
+                // }
+                start = interval.end + 1;
+                lastEnd = interval.end;
+            }
+            if (lastEnd < std::numeric_limits<int>::max())
+            {
+                // assert(start < std::numeric_limits<int>::max());
+                m_safeIntervals[location].push_back({start, std::numeric_limits<int>::max()});
+            }
+        }
+
+        // auto iter = m_safeIntervals.find(location);
+        // if (iter != m_safeIntervals.end()) {
+        //   for (const auto& si : iter->second) {
+        //     std::cout << "  si: " << si.start << " - " << si.end << std::endl;
+        //   }
+        // }
+    }
+
+    bool findSafeInterval(const Location& state, int time, size_t& interval)
+    {
+        const auto& si = safeIntervals(m_env.getLocation(state));
+        for (size_t idx = 0; idx < si.size(); ++idx)
+        {
+            if (si[idx].start <= time && si[idx].end >= time)
+            {
+                interval = idx;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    const std::vector<Interval>& safeIntervals(const Location& location)
+    {
+        static std::vector<Interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
+        const auto iter = m_safeIntervals.find(location);
+
+        if (iter == m_safeIntervals.end())
+        {
+            return defaultInterval;
+        }
+
+        return iter->second;
+    }
+};
+
 class SIPP
 {
+private:
+    SIPPEnvironment m_env;
+    AStar<SIPPEnvironment, SIPPStateHasher> m_astar;
+
 public:
     SIPP(Environment& environment) : m_env(environment), m_astar(m_env)
     {}
@@ -491,173 +656,6 @@ public:
 
         return success;
     }
-
-private:
-    // private:
-    struct SIPPEnvironment
-    {
-    private:
-        Environment& m_env;
-        int m_lastGScore;
-        std::unordered_map<Location, std::vector<Interval> > m_safeIntervals;
-
-    public:
-        SIPPEnvironment(Environment& env) : m_env(env)
-        {}
-
-        int admissible_heuristic(const SIPPState& s)
-        {
-            return m_env.admissible_heuristic(s.state);
-        }
-
-        bool might_have_solution(const Location& goal)
-        {
-            const auto& si = safeIntervals(m_env.getLocation(goal));
-            return m_env.is_solution(goal) && !si.empty() &&
-                   si.back().end == std::numeric_limits<int>::max();
-        }
-
-        bool is_solution(const SIPPState& s)
-        {
-            return m_env.is_solution(s.state) &&
-                   safeIntervals(m_env.getLocation(s.state)).at(s.interval).end ==
-                       std::numeric_limits<int>::max();
-        }
-
-        void get_sipp_neighbors(const SIPPState& s, std::vector<SIPPNeighbor>& neighbors)
-        {
-            std::vector<Neighbor> motions;
-            m_env.get_neighbors(s.state, motions);
-            for (const auto& m : motions)
-            {
-                // std::cout << "gN " << m.state << std::endl;
-                int m_time = m.cost;
-                // std::cout << m_lastGScore;
-                int start_t = m_lastGScore + m_time;
-                int end_t = safeIntervals(m_env.getLocation(s.state)).at(s.interval).end;
-
-                const auto& sis = safeIntervals(m_env.getLocation(m.location));
-                for (size_t i = 0; i < sis.size(); ++i)
-                {
-                    const Interval& si = sis[i];
-                    // std::cout << "  i " << i << ": " << si.start << "," << si.end <<
-                    // std::endl;
-                    if (si.start - m_time > end_t || si.end < start_t)
-                    {
-                        continue;
-                    }
-
-                    int t;
-                    if (m_env.isCommandValid(s.state, m.location, m.action, m_lastGScore,
-                                             end_t, si.start, si.end, t)) {
-                        // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
-                        // << m_lastGScore << std::endl;
-                        neighbors.emplace_back(SIPPNeighbor(
-                            SIPPState(m.location, i), SIPPAction(m.action, m.cost), t - m_lastGScore));
-                    }
-                }
-            }
-        }
-
-        void onExpandNode(const SIPPState& s, int fScore, int gScore)
-        {
-            // const auto& interval =
-            // safeIntervals(m_env.getLocation(s.state)).at(s.interval);
-            // std::cout << "expand: " << s.state << "," << interval.start << " to "
-            // << interval.end << "(g: " << gScore << " f: " << fScore << ")" <<
-            // std::endl;
-            // This is called before get_neighbors(). We use the callback to find the
-            // current cost (=time) of the expanded node
-            m_lastGScore = gScore;
-            m_env.onExpandNode(s.state, fScore, gScore);
-        }
-
-        void onDiscover(const SIPPState& s, int fScore, int gScore)
-        {
-            // const auto& interval =
-            // safeIntervals(m_env.getLocation(s.state)).at(s.interval);
-            // std::cout << "discover: " << s.state << "," << interval.start << " to "
-            // << interval.end << std::endl;
-            m_env.onDiscover(s.state, fScore, gScore);
-        }
-
-        void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
-        {
-            m_safeIntervals.erase(location);
-            std::vector<Interval> sortedIntervals(intervals);
-            std::sort(sortedIntervals.begin(), sortedIntervals.end());
-
-            // std::cout << location << ": " << std::endl;
-            if (intervals.size() > 0)
-            {
-                m_safeIntervals[location]; // create empty safe interval
-                int start = 0;
-                int lastEnd = 0;
-                for (const auto& interval : sortedIntervals)
-                {
-                    // std::cout << "  ci: " << interval.start << " - " << interval.end <<
-                    // std::endl;
-                    assert(interval.start <= interval.end);
-                    assert(start <= interval.start);
-                    // if (start + 1 != interval.start - 1) {
-                    // std::cout << start << "," << interval.start << std::endl;
-                    // assert(start + 1 < interval.start - 1);
-                    if (start <= interval.start - 1)
-                    {
-                        m_safeIntervals[location].push_back({start, interval.start - 1});
-                    }
-                    // }
-                    start = interval.end + 1;
-                    lastEnd = interval.end;
-                }
-                if (lastEnd < std::numeric_limits<int>::max())
-                {
-                    // assert(start < std::numeric_limits<int>::max());
-                    m_safeIntervals[location].push_back({start, std::numeric_limits<int>::max()});
-                }
-            }
-
-            // auto iter = m_safeIntervals.find(location);
-            // if (iter != m_safeIntervals.end()) {
-            //   for (const auto& si : iter->second) {
-            //     std::cout << "  si: " << si.start << " - " << si.end << std::endl;
-            //   }
-            // }
-        }
-
-        bool findSafeInterval(const Location& state, int time, size_t& interval)
-        {
-            const auto& si = safeIntervals(m_env.getLocation(state));
-            for (size_t idx = 0; idx < si.size(); ++idx)
-            {
-                if (si[idx].start <= time && si[idx].end >= time)
-                {
-                    interval = idx;
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        const std::vector<Interval>& safeIntervals(const Location& location)
-        {
-            static std::vector<Interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
-            const auto iter = m_safeIntervals.find(location);
-
-            if (iter == m_safeIntervals.end())
-            {
-                return defaultInterval;
-            }
-
-            return iter->second;
-        }
-    };
-
-private:
-    SIPPEnvironment m_env;
-    AStar<SIPPEnvironment, SIPPStateHasher> m_astar;
 };
 
 #endif  // SIPP_ISOLATED_HPP
