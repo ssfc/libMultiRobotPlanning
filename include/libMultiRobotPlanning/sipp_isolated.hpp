@@ -145,9 +145,9 @@ public:
         return std::abs(location.x - goal.x) + std::abs(location.y - goal.y);
     }
 
-    bool is_solution(const Location& s)
+    bool is_solution(const Location& location)
     {
-        return s == goal;
+        return location == goal;
     }
 
     std::vector<Neighbor> get_neighbors(const Location& s)
