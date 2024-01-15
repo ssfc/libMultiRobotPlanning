@@ -254,9 +254,9 @@ public:
 
     bool might_have_solution(const Location& goal)
     {
-        const auto& si = get_safe_intervals(goal);
-        return m_env.is_solution(goal) && !si.empty() &&
-               si.back().end == std::numeric_limits<int>::max();
+        const auto& safe_intervals = get_safe_intervals(goal);
+        return m_env.is_solution(goal) && !safe_intervals.empty() &&
+               safe_intervals.back().end == std::numeric_limits<int>::max();
     }
 
     bool is_solution(const SIPPState& sipp_state)
