@@ -232,7 +232,7 @@ public:
     SIPPEnvironment(Environment env) : m_env(env)
     {}
 
-    int admissible_heuristic(const SIPPState& sipp_state)
+    int admissible_heuristic(const SIPPState& sipp_state) // 和之前的没有区别嘛
     {
         return m_env.admissible_heuristic(sipp_state.location);
     }
@@ -255,6 +255,8 @@ public:
     bool might_have_solution(const Location& goal)
     {
         const auto& safe_intervals = get_safe_intervals(goal);
+
+        // 终点在安全区间内
         return m_env.is_solution(goal) && !safe_intervals.empty() &&
                safe_intervals.back().end == std::numeric_limits<int>::max();
     }
@@ -346,7 +348,7 @@ public:
                 start = interval.end + 1;
                 last_interval_end = interval.end;
             }
-            
+
             if (last_interval_end < std::numeric_limits<int>::max())
             {
                 // assert(start < std::numeric_limits<int>::max());
