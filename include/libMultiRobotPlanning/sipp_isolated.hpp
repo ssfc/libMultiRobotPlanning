@@ -204,12 +204,12 @@ class Interval
 {
 public:
     int interval_start;
-    int end;
+    int interval_end;
 
 public:
     Interval(int input_start, int input_end)
         : interval_start(input_start),
-          end(input_end)
+          interval_end(input_end)
     {}
 
     friend bool operator<(const Interval& a, const Interval& b)
@@ -252,7 +252,7 @@ public:
     bool is_solution(const SIPPState& sipp_state)
     {
         return m_env.is_solution(sipp_state.location) &&
-               get_safe_intervals(sipp_state.location).at(sipp_state.interval).end ==
+               get_safe_intervals(sipp_state.location).at(sipp_state.interval).interval_end ==
                    std::numeric_limits<int>::max(); // 为什么goal安全区间必须是无限大的右开区间？假设goal安全区间是[4, 10], 所有智能体的行动在时刻9终结，那么不可能安全区间直到10，而必然向右延伸到无穷大。所以goal安全区间必须是无限大的右开区间。
     }
 
@@ -264,22 +264,22 @@ public:
             // std::cout << "gN " << motion.location << std::endl;
             // std::cout << last_g_score;
             int start_t = last_g_score + 1;
-            int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval).end;
+            int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval).interval_end;
 
             const auto& safe_intervals = get_safe_intervals(motion.location);
             for (size_t i = 0; i < safe_intervals.size(); ++i)
             {
                 const Interval& si = safe_intervals[i];
-                // std::cout << "  i " << i << ": " << si.interval_start << "," << si.end <<
+                // std::cout << "  i " << i << ": " << si.interval_start << "," << si.interval_end <<
                 // std::endl;
-                if (si.interval_start - 1 > end_t || si.end < start_t)
+                if (si.interval_start - 1 > end_t || si.interval_end < start_t)
                 {
                     continue;
                 }
 
                 int t;
                 if (m_env.is_command_valid(sipp_state.location, motion.location, motion.action, last_g_score,
-                                         end_t, si.interval_start, si.end, t))
+                                         end_t, si.interval_start, si.interval_end, t))
                 {
                     // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
                     // << last_g_score << std::endl;
@@ -296,7 +296,7 @@ public:
         // const auto& interval =
         // get_safe_intervals(sipp_state.location).at(sipp_state.interval);
         // std::cout << "expand: " << sipp_state.location << "," << interval.interval_start << " to "
-        // << interval.end << "(g: " << gScore << " f: " << fScore << ")" <<
+        // << interval.interval_end << "(g: " << gScore << " f: " << fScore << ")" <<
         // std::endl;
         // This is called before get_neighbors(). We use the callback to find the
         // current cost (=time) of the expanded node
@@ -322,7 +322,7 @@ public:
             {
                 // std::cout << "  ci: " << interval.interval_start << " - " << interval.end <<
                 // std::endl;
-                assert(interval.interval_start <= interval.end);
+                assert(interval.interval_start <= interval.interval_end);
                 assert(start <= interval.interval_start);
                 // if (start + 1 != interval.start - 1) {
                 // std::cout << start << "," << interval.start << std::endl;
@@ -332,8 +332,8 @@ public:
                     location_to_safe_intervals[location].push_back({start, interval.interval_start - 1});
                 }
                 // }
-                start = interval.end + 1;
-                last_interval_end = interval.end;
+                start = interval.interval_end + 1;
+                last_interval_end = interval.interval_end;
             }
 
             if (last_interval_end < std::numeric_limits<int>::max())
@@ -344,9 +344,9 @@ public:
         }
 
         // auto iter = location_to_safe_intervals.find(location);
-        // if (iter != location_to_safe_intervals.end()) {
+        // if (iter != location_to_safe_intervals.interval_end()) {
         //   for (const auto& si : iter->second) {
-        //     std::cout << "  si: " << si.start << " - " << si.end << std::endl;
+        //     std::cout << "  si: " << si.start << " - " << si.interval_end << std::endl;
         //   }
         // }
     }
@@ -356,7 +356,7 @@ public:
         const auto& safe_intervals = get_safe_intervals(location);
         for (size_t idx = 0; idx < safe_intervals.size(); ++idx)
         {
-            if (safe_intervals[idx].interval_start <= time && safe_intervals[idx].end >= time)
+            if (safe_intervals[idx].interval_start <= time && safe_intervals[idx].interval_end >= time)
             {
                 interval_index = idx;
 
