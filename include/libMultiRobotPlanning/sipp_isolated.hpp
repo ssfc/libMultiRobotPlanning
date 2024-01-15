@@ -133,10 +133,11 @@ public:
           goal(input_goal)
     {}
 
-    bool location_valid(const Location& s)
+    bool location_valid(const Location& location)
     {
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(s) == obstacles.end();
+        return location.x >= 0 && location.x < num_columns &&
+               location.y >= 0 && location.y < num_rows &&
+               obstacles.find(location) == obstacles.end();
     }
 
     float admissible_heuristic(const Location& s)
