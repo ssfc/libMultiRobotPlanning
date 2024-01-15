@@ -234,6 +234,7 @@ public:
         return m_env.admissible_heuristic(s.state);
     }
 
+    // 从location_to_safe_intervals中找到对应location的safe_intervals
     const std::vector<Interval>& get_safe_intervals(const Location& location)
     {
         // [0, +inf)
