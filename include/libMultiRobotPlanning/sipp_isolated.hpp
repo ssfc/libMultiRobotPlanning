@@ -239,7 +239,7 @@ public:
         return m_env.admissible_heuristic(s.state);
     }
 
-    const std::vector<Interval>& safe_interval(const Location& location)
+    const std::vector<Interval>& get_safe_intervals(const Location& location)
     {
         static std::vector<Interval> default_interval(1, {0, std::numeric_limits<int>::max()});
         const auto iter = safe_intervals.find(location);
@@ -254,7 +254,7 @@ public:
 
     bool might_have_solution(const Location& goal)
     {
-        const auto& si = safe_interval(m_env.getLocation(goal));
+        const auto& si = get_safe_intervals(m_env.getLocation(goal));
         return m_env.is_solution(goal) && !si.empty() &&
                si.back().end == std::numeric_limits<int>::max();
     }
@@ -262,7 +262,7 @@ public:
     bool is_solution(const SIPPState& s)
     {
         return m_env.is_solution(s.state) &&
-               safe_interval(m_env.getLocation(s.state)).at(s.interval).end ==
+               get_safe_intervals(m_env.getLocation(s.state)).at(s.interval).end ==
                    std::numeric_limits<int>::max();
     }
 
@@ -276,9 +276,9 @@ public:
             int m_time = m.cost;
             // std::cout << m_lastGScore;
             int start_t = m_lastGScore + m_time;
-            int end_t = safe_interval(m_env.getLocation(s.state)).at(s.interval).end;
+            int end_t = get_safe_intervals(m_env.getLocation(s.state)).at(s.interval).end;
 
-            const auto& sis = safe_interval(m_env.getLocation(m.location));
+            const auto& sis = get_safe_intervals(m_env.getLocation(m.location));
             for (size_t i = 0; i < sis.size(); ++i)
             {
                 const Interval& si = sis[i];
@@ -305,7 +305,7 @@ public:
     void onExpandNode(const SIPPState& s, int fScore, int gScore)
     {
         // const auto& interval =
-        // safe_interval(m_env.getLocation(s.state)).at(s.interval);
+        // get_safe_intervals(m_env.getLocation(s.state)).at(s.interval);
         // std::cout << "expand: " << s.state << "," << interval.start << " to "
         // << interval.end << "(g: " << gScore << " f: " << fScore << ")" <<
         // std::endl;
@@ -362,7 +362,7 @@ public:
 
     bool find_safe_interval(const Location& state, int time, size_t& interval)
     {
-        const auto& si = safe_interval(m_env.getLocation(state));
+        const auto& si = get_safe_intervals(m_env.getLocation(state));
         for (size_t idx = 0; idx < si.size(); ++idx)
         {
             if (si[idx].start <= time && si[idx].end >= time)
