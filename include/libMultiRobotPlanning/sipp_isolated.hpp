@@ -462,8 +462,8 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<SIPPNeighbor> neighbors;
-        neighbors.reserve(10);
+        std::vector<SIPPNeighbor> sipp_neighbors;
+        sipp_neighbors.reserve(10);
 
         while (!open_set.empty())
         {
@@ -498,10 +498,10 @@ public:
             location_to_heap.erase(current.location);
             closed_set.insert(current.location);
 
-            // traverse neighbors
-            neighbors.clear();
-            environment.get_sipp_neighbors(current.location, neighbors);
-            for (const SIPPNeighbor& neighbor : neighbors)
+            // traverse sipp_neighbors
+            sipp_neighbors.clear();
+            environment.get_sipp_neighbors(current.location, sipp_neighbors);
+            for (const SIPPNeighbor& neighbor : sipp_neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
