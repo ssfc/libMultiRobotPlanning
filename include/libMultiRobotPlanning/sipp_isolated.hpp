@@ -183,7 +183,7 @@ public:
         // std::cout << "expand: " << s << "g: " << gScore << std::endl;
     }
 
-    bool isCommandValid(
+    bool is_command_valid(
         const Location& /*s1*/, const Location& /*s2*/, const Action& /*a*/,
         int earliestStartTime,      // can start motion at this time
         int /*latestStartTime*/,    // must have left s by this time
@@ -287,7 +287,7 @@ public:
                 }
 
                 int t;
-                if (m_env.isCommandValid(s.state, m.location, m.action, last_g_score,
+                if (m_env.is_command_valid(s.state, m.location, m.action, last_g_score,
                                          end_t, si.start, si.end, t))
                 {
                     // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
