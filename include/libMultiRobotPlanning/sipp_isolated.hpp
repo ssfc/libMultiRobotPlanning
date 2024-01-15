@@ -256,6 +256,7 @@ public:
                    std::numeric_limits<int>::max(); // 为什么goal安全区间必须是无限大的右开区间？假设goal安全区间是[4, 10], 所有智能体的行动在时刻9终结，那么不可能安全区间直到10，而必然向右延伸到无穷大。所以goal安全区间必须是无限大的右开区间。
     }
 
+    // 这个函数对应的就是论文中的get_successors(state)
     void get_sipp_neighbors(const SIPPState& sipp_state, std::vector<SIPPNeighbor>& neighbors)
     {
         std::vector<Neighbor> motions = m_env.get_neighbors(sipp_state.location);
