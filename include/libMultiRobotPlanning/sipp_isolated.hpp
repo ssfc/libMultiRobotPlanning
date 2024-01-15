@@ -232,9 +232,9 @@ public:
     SIPPEnvironment(Environment env) : m_env(env)
     {}
 
-    int admissible_heuristic(const SIPPState& s)
+    int admissible_heuristic(const SIPPState& sipp_state)
     {
-        return m_env.admissible_heuristic(s.location);
+        return m_env.admissible_heuristic(sipp_state.location);
     }
 
     // 从location_to_safe_intervals中找到对应location的safe_intervals
@@ -259,23 +259,23 @@ public:
                si.back().end == std::numeric_limits<int>::max();
     }
 
-    bool is_solution(const SIPPState& s)
+    bool is_solution(const SIPPState& sipp_state)
     {
-        return m_env.is_solution(s.location) &&
-               get_safe_intervals(s.location).at(s.interval).end ==
+        return m_env.is_solution(sipp_state.location) &&
+               get_safe_intervals(sipp_state.location).at(sipp_state.interval).end ==
                    std::numeric_limits<int>::max();
     }
 
-    void get_sipp_neighbors(const SIPPState& s, std::vector<SIPPNeighbor>& neighbors)
+    void get_sipp_neighbors(const SIPPState& sipp_state, std::vector<SIPPNeighbor>& neighbors)
     {
-        std::vector<Neighbor> motions = m_env.get_neighbors(s.location);
+        std::vector<Neighbor> motions = m_env.get_neighbors(sipp_state.location);
         for (const auto& motion : motions)
         {
             // std::cout << "gN " << motion.location << std::endl;
             int m_time = motion.cost;
             // std::cout << last_g_score;
             int start_t = last_g_score + m_time;
-            int end_t = get_safe_intervals(s.location).at(s.interval).end;
+            int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval).end;
 
             const auto& sis = get_safe_intervals(motion.location);
             for (size_t i = 0; i < sis.size(); ++i)
@@ -289,7 +289,7 @@ public:
                 }
 
                 int t;
-                if (m_env.is_command_valid(s.location, motion.location, motion.action, last_g_score,
+                if (m_env.is_command_valid(sipp_state.location, motion.location, motion.action, last_g_score,
                                          end_t, si.start, si.end, t))
                 {
                     // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
@@ -302,17 +302,17 @@ public:
         }
     }
 
-    void onExpandNode(const SIPPState& s, int fScore, int gScore)
+    void onExpandNode(const SIPPState& sipp_state, int fScore, int gScore)
     {
         // const auto& interval =
-        // get_safe_intervals(s.location).at(s.interval);
-        // std::cout << "expand: " << s.location << "," << interval.start << " to "
+        // get_safe_intervals(sipp_state.location).at(sipp_state.interval);
+        // std::cout << "expand: " << sipp_state.location << "," << interval.start << " to "
         // << interval.end << "(g: " << gScore << " f: " << fScore << ")" <<
         // std::endl;
         // This is called before get_neighbors(). We use the callback to find the
         // current cost (=time) of the expanded node
         last_g_score = gScore;
-        m_env.onExpandNode(s.location, fScore, gScore);
+        m_env.onExpandNode(sipp_state.location, fScore, gScore);
     }
 
 
@@ -427,11 +427,11 @@ class AStarNode
 
 struct SIPPStateHasher
 {
-    size_t operator()(const SIPPState& s) const
+    size_t operator()(const SIPPState& sipp_state) const
     {
         size_t seed = 0;
-        boost::hash_combine(seed, std::hash<Location>()(s.location));
-        boost::hash_combine(seed, s.interval);
+        boost::hash_combine(seed, std::hash<Location>()(sipp_state.location));
+        boost::hash_combine(seed, sipp_state.interval);
 
         return seed;
     }
