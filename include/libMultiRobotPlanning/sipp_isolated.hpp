@@ -269,17 +269,17 @@ public:
             const auto& safe_intervals = get_safe_intervals(motion.location);
             for (size_t i = 0; i < safe_intervals.size(); ++i)
             {
-                const Interval& si = safe_intervals[i];
-                // std::cout << "  i " << i << ": " << si.interval_start << "," << si.interval_end <<
+                const Interval& safe_interval = safe_intervals[i];
+                // std::cout << "  i " << i << ": " << safe_interval.interval_start << "," << safe_interval.interval_end <<
                 // std::endl;
-                if (si.interval_start - 1 > end_t || si.interval_end < start_t)
+                if (safe_interval.interval_start - 1 > end_t || safe_interval.interval_end < start_t)
                 {
                     continue;
                 }
 
                 int t;
                 if (m_env.is_command_valid(sipp_state.location, motion.location, motion.action, last_g_score,
-                                         end_t, si.interval_start, si.interval_end, t))
+                                         end_t, safe_interval.interval_start, safe_interval.interval_end, t))
                 {
                     // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
                     // << last_g_score << std::endl;
@@ -345,8 +345,8 @@ public:
 
         // auto iter = location_to_safe_intervals.find(location);
         // if (iter != location_to_safe_intervals.interval_end()) {
-        //   for (const auto& si : iter->second) {
-        //     std::cout << "  si: " << si.start << " - " << si.interval_end << std::endl;
+        //   for (const auto& safe_interval : iter->second) {
+        //     std::cout << "  safe_interval: " << safe_interval.start << " - " << safe_interval.interval_end << std::endl;
         //   }
         // }
     }
