@@ -150,29 +150,29 @@ public:
         return location == goal;
     }
 
-    std::vector<Neighbor> get_neighbors(const Location& s)
+    std::vector<Neighbor> get_neighbors(const Location& location)
     {
         std::vector<Neighbor> neighbors;
 
-        Location up(s.x, s.y + 1);
+        Location up(location.x, location.y + 1);
         if (location_valid(up))
         {
             neighbors.emplace_back(Neighbor(up, Action::Up, 1));
         }
 
-        Location down(s.x, s.y - 1);
+        Location down(location.x, location.y - 1);
         if (location_valid(down))
         {
             neighbors.emplace_back(Neighbor(down, Action::Down, 1));
         }
 
-        Location left(s.x - 1, s.y);
+        Location left(location.x - 1, location.y);
         if (location_valid(left))
         {
             neighbors.emplace_back(Neighbor(left, Action::Left, 1));
         }
 
-        Location right(s.x + 1, s.y);
+        Location right(location.x + 1, location.y);
         if (location_valid(right))
         {
             neighbors.emplace_back(Neighbor(right, Action::Right, 1));
