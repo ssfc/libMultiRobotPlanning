@@ -327,7 +327,7 @@ public:
         {
             location_to_safe_intervals[location]; // create empty safe interval
             int start = 0;
-            int lastEnd = 0;
+            int last_interval_end = 0;
 
             for (const auto& interval : sorted_intervals)
             {
@@ -344,9 +344,10 @@ public:
                 }
                 // }
                 start = interval.end + 1;
-                lastEnd = interval.end;
+                last_interval_end = interval.end;
             }
-            if (lastEnd < std::numeric_limits<int>::max())
+            
+            if (last_interval_end < std::numeric_limits<int>::max())
             {
                 // assert(start < std::numeric_limits<int>::max());
                 location_to_safe_intervals[location].push_back({start, std::numeric_limits<int>::max()});
