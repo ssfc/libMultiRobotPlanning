@@ -149,9 +149,9 @@ public:
         return s == goal;
     }
 
-    void get_neighbors(const Location& s, std::vector<Neighbor>& neighbors)
+    std::vector<Neighbor> get_neighbors(const Location& s)
     {
-        neighbors.clear();
+        std::vector<Neighbor> neighbors;
 
         Location up(s.x, s.y + 1);
         if (location_valid(up))
@@ -176,6 +176,8 @@ public:
         {
             neighbors.emplace_back(Neighbor(right, Action::Right, 1));
         }
+
+        return neighbors;
     }
 
     void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/)
@@ -265,8 +267,7 @@ public:
 
     void get_sipp_neighbors(const SIPPState& s, std::vector<SIPPNeighbor>& neighbors)
     {
-        std::vector<Neighbor> motions;
-        m_env.get_neighbors(s.state, motions);
+        std::vector<Neighbor> motions = m_env.get_neighbors(s.state);
         for (const auto& motion : motions)
         {
             // std::cout << "gN " << motion.state << std::endl;
