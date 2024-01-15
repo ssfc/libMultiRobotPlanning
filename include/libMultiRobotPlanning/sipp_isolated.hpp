@@ -277,10 +277,10 @@ public:
             int start_t = last_g_score + m_time;
             int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval).end;
 
-            const auto& sis = get_safe_intervals(motion.location);
-            for (size_t i = 0; i < sis.size(); ++i)
+            const auto& safe_intervals = get_safe_intervals(motion.location);
+            for (size_t i = 0; i < safe_intervals.size(); ++i)
             {
-                const Interval& si = sis[i];
+                const Interval& si = safe_intervals[i];
                 // std::cout << "  i " << i << ": " << si.start << "," << si.end <<
                 // std::endl;
                 if (si.start - m_time > end_t || si.end < start_t)
