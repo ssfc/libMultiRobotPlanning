@@ -236,10 +236,11 @@ public:
 
     const std::vector<Interval>& get_safe_intervals(const Location& location)
     {
+        // [0, +inf)
         static std::vector<Interval> default_interval(1, {0, std::numeric_limits<int>::max()});
         const auto iter = location_to_safe_intervals.find(location);
 
-        if (iter == location_to_safe_intervals.end())
+        if (iter == location_to_safe_intervals.end()) // not found
         {
             return default_interval;
         }
