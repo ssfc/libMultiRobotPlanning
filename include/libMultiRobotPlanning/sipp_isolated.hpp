@@ -28,23 +28,23 @@ enum class Action
 class SIPPState
 {
 public:
-    Location state;
+    Location location;
     size_t interval;
 
 public:
     SIPPState(const Location& input_state, size_t input_interval)
-        : state(input_state),
+        : location(input_state),
           interval(input_interval)
     {}
 
     bool operator==(const SIPPState& other) const
     {
-        return std::tie(state, interval) == std::tie(other.state, other.interval);
+        return std::tie(location, interval) == std::tie(other.location, other.interval);
     }
 
     friend std::ostream& operator<<(std::ostream& os, const SIPPState& s)
     {
-        return os << "(" << s.state << "," << s.interval << ")";
+        return os << "(" << s.location << "," << s.interval << ")";
     }
 };
 
@@ -233,7 +233,7 @@ public:
 
     int admissible_heuristic(const SIPPState& s)
     {
-        return m_env.admissible_heuristic(s.state);
+        return m_env.admissible_heuristic(s.location);
     }
 
     // 从location_to_safe_intervals中找到对应location的safe_intervals
@@ -260,21 +260,21 @@ public:
 
     bool is_solution(const SIPPState& s)
     {
-        return m_env.is_solution(s.state) &&
-               get_safe_intervals(s.state).at(s.interval).end ==
+        return m_env.is_solution(s.location) &&
+               get_safe_intervals(s.location).at(s.interval).end ==
                    std::numeric_limits<int>::max();
     }
 
     void get_sipp_neighbors(const SIPPState& s, std::vector<SIPPNeighbor>& neighbors)
     {
-        std::vector<Neighbor> motions = m_env.get_neighbors(s.state);
+        std::vector<Neighbor> motions = m_env.get_neighbors(s.location);
         for (const auto& motion : motions)
         {
-            // std::cout << "gN " << motion.state << std::endl;
+            // std::cout << "gN " << motion.location << std::endl;
             int m_time = motion.cost;
             // std::cout << last_g_score;
             int start_t = last_g_score + m_time;
-            int end_t = get_safe_intervals(s.state).at(s.interval).end;
+            int end_t = get_safe_intervals(s.location).at(s.interval).end;
 
             const auto& sis = get_safe_intervals(motion.location);
             for (size_t i = 0; i < sis.size(); ++i)
@@ -288,10 +288,10 @@ public:
                 }
 
                 int t;
-                if (m_env.is_command_valid(s.state, motion.location, motion.action, last_g_score,
+                if (m_env.is_command_valid(s.location, motion.location, motion.action, last_g_score,
                                          end_t, si.start, si.end, t))
                 {
-                    // std::cout << "  gN: " << motion.state << "," << i << "," << t << ","
+                    // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
                     // << last_g_score << std::endl;
                     neighbors.emplace_back(SIPPNeighbor(
                         SIPPState(motion.location, i),
@@ -304,14 +304,14 @@ public:
     void onExpandNode(const SIPPState& s, int fScore, int gScore)
     {
         // const auto& interval =
-        // get_safe_intervals(s.state).at(s.interval);
-        // std::cout << "expand: " << s.state << "," << interval.start << " to "
+        // get_safe_intervals(s.location).at(s.interval);
+        // std::cout << "expand: " << s.location << "," << interval.start << " to "
         // << interval.end << "(g: " << gScore << " f: " << fScore << ")" <<
         // std::endl;
         // This is called before get_neighbors(). We use the callback to find the
         // current cost (=time) of the expanded node
         last_g_score = gScore;
-        m_env.onExpandNode(s.state, fScore, gScore);
+        m_env.onExpandNode(s.location, fScore, gScore);
     }
 
 
@@ -360,9 +360,9 @@ public:
         // }
     }
 
-    bool find_safe_interval(const Location& state, int time, size_t& interval)
+    bool find_safe_interval(const Location& location, int time, size_t& interval)
     {
-        const auto& si = get_safe_intervals(state);
+        const auto& si = get_safe_intervals(location);
         for (size_t idx = 0; idx < si.size(); ++idx)
         {
             if (si[idx].start <= time && si[idx].end >= time)
@@ -429,7 +429,7 @@ struct SIPPStateHasher
     size_t operator()(const SIPPState& s) const
     {
         size_t seed = 0;
-        boost::hash_combine(seed, std::hash<Location>()(s.state));
+        boost::hash_combine(seed, std::hash<Location>()(s.location));
         boost::hash_combine(seed, s.interval);
 
         return seed;
@@ -623,7 +623,7 @@ public:
             if (waitTime == 0)
             {
                 solution.path.emplace_back(
-                    std::make_pair<>(astar_solution.path[i].first.state, astar_solution.path[i].second));
+                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second));
                 solution.actions.emplace_back(
                     std::make_pair<>(astar_solution.actions[i].first.action, astar_solution.actions[i].second));
             }
@@ -631,17 +631,17 @@ public:
             {
                 // additional wait action before
                 solution.path.emplace_back(
-                    std::make_pair<>(astar_solution.path[i].first.state, astar_solution.path[i].second));
+                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second));
                 solution.actions.emplace_back(std::make_pair<>(waitAction, waitTime));
                 solution.path.emplace_back(
-                    std::make_pair<>(astar_solution.path[i].first.state, astar_solution.path[i].second + waitTime));
+                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second + waitTime));
                 solution.actions.emplace_back(
                     std::make_pair<>(astar_solution.actions[i].first.action, astar_solution.actions[i].first.time));
             }
         }
 
         solution.path.emplace_back(
-            std::make_pair<>(astar_solution.path.back().first.state, astar_solution.path.back().second));
+            std::make_pair<>(astar_solution.path.back().first.location, astar_solution.path.back().second));
 
         return success;
     }
