@@ -222,7 +222,7 @@ class SIPPEnvironment
 {
 private:
     Environment m_env;
-    int m_lastGScore;
+    int last_g_score;
     std::unordered_map<Location, std::vector<Interval> > location_to_safe_intervals;
 
 public:
@@ -269,8 +269,8 @@ public:
         {
             // std::cout << "gN " << m.state << std::endl;
             int m_time = m.cost;
-            // std::cout << m_lastGScore;
-            int start_t = m_lastGScore + m_time;
+            // std::cout << last_g_score;
+            int start_t = last_g_score + m_time;
             int end_t = get_safe_intervals(s.state).at(s.interval).end;
 
             const auto& sis = get_safe_intervals(m.location);
@@ -285,13 +285,13 @@ public:
                 }
 
                 int t;
-                if (m_env.isCommandValid(s.state, m.location, m.action, m_lastGScore,
+                if (m_env.isCommandValid(s.state, m.location, m.action, last_g_score,
                                          end_t, si.start, si.end, t))
                 {
                     // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
-                    // << m_lastGScore << std::endl;
+                    // << last_g_score << std::endl;
                     neighbors.emplace_back(SIPPNeighbor(
-                        SIPPState(m.location, i), SIPPAction(m.action, m.cost), t - m_lastGScore));
+                        SIPPState(m.location, i), SIPPAction(m.action, m.cost), t - last_g_score));
                 }
             }
         }
@@ -306,7 +306,7 @@ public:
         // std::endl;
         // This is called before get_neighbors(). We use the callback to find the
         // current cost (=time) of the expanded node
-        m_lastGScore = gScore;
+        last_g_score = gScore;
         m_env.onExpandNode(s.state, fScore, gScore);
     }
 
@@ -323,7 +323,7 @@ public:
             location_to_safe_intervals[location]; // create empty safe interval
             int start = 0;
             int lastEnd = 0;
-            
+
             for (const auto& interval : sorted_intervals)
             {
                 // std::cout << "  ci: " << interval.start << " - " << interval.end <<
