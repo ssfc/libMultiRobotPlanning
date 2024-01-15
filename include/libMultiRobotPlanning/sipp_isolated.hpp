@@ -256,7 +256,7 @@ public:
     {
         return m_env.is_solution(sipp_state.location) &&
                get_safe_intervals(sipp_state.location).at(sipp_state.interval).end ==
-                   std::numeric_limits<int>::max();
+                   std::numeric_limits<int>::max(); // 为什么无限大？不是也有可能对吧。
     }
 
     void get_sipp_neighbors(const SIPPState& sipp_state, std::vector<SIPPNeighbor>& neighbors)
