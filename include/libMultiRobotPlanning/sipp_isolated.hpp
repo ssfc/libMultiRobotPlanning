@@ -363,10 +363,10 @@ public:
 
     bool find_safe_interval(const Location& location, int time, size_t& interval)
     {
-        const auto& si = get_safe_intervals(location);
-        for (size_t idx = 0; idx < si.size(); ++idx)
+        const auto& safe_intervals = get_safe_intervals(location);
+        for (size_t idx = 0; idx < safe_intervals.size(); ++idx)
         {
-            if (si[idx].start <= time && si[idx].end >= time)
+            if (safe_intervals[idx].start <= time && safe_intervals[idx].end >= time)
             {
                 interval = idx;
 
