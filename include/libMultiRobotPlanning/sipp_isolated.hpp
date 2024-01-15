@@ -233,7 +233,7 @@ class SIPPEnvironment
 private:
     Environment m_env;
     int m_lastGScore;
-    std::unordered_map<Location, std::vector<Interval> > m_safeIntervals;
+    std::unordered_map<Location, std::vector<Interval> > safe_intervals;
 
 public:
     SIPPEnvironment(Environment env) : m_env(env)
@@ -247,9 +247,9 @@ public:
     const std::vector<Interval>& safe_interval(const Location& location)
     {
         static std::vector<Interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
-        const auto iter = m_safeIntervals.find(location);
+        const auto iter = safe_intervals.find(location);
 
-        if (iter == m_safeIntervals.end())
+        if (iter == safe_intervals.end())
         {
             return defaultInterval;
         }
@@ -331,14 +331,14 @@ public:
 
     void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
     {
-        m_safeIntervals.erase(location);
+        safe_intervals.erase(location);
         std::vector<Interval> sortedIntervals(intervals);
         std::sort(sortedIntervals.begin(), sortedIntervals.end());
 
         // std::cout << location << ": " << std::endl;
         if (intervals.size() > 0)
         {
-            m_safeIntervals[location]; // create empty safe interval
+            safe_intervals[location]; // create empty safe interval
             int start = 0;
             int lastEnd = 0;
             for (const auto& interval : sortedIntervals)
@@ -352,7 +352,7 @@ public:
                 // assert(start + 1 < interval.start - 1);
                 if (start <= interval.start - 1)
                 {
-                    m_safeIntervals[location].push_back({start, interval.start - 1});
+                    safe_intervals[location].push_back({start, interval.start - 1});
                 }
                 // }
                 start = interval.end + 1;
@@ -361,12 +361,12 @@ public:
             if (lastEnd < std::numeric_limits<int>::max())
             {
                 // assert(start < std::numeric_limits<int>::max());
-                m_safeIntervals[location].push_back({start, std::numeric_limits<int>::max()});
+                safe_intervals[location].push_back({start, std::numeric_limits<int>::max()});
             }
         }
 
-        // auto iter = m_safeIntervals.find(location);
-        // if (iter != m_safeIntervals.end()) {
+        // auto iter = safe_intervals.find(location);
+        // if (iter != safe_intervals.end()) {
         //   for (const auto& si : iter->second) {
         //     std::cout << "  si: " << si.start << " - " << si.end << std::endl;
         //   }
