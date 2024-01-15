@@ -140,9 +140,9 @@ public:
                obstacles.find(location) == obstacles.end();
     }
 
-    float admissible_heuristic(const Location& s)
+    float admissible_heuristic(const Location& location)
     {
-        return std::abs(s.x - goal.x) + std::abs(s.y - goal.y);
+        return std::abs(location.x - goal.x) + std::abs(location.y - goal.y);
     }
 
     bool is_solution(const Location& s)
