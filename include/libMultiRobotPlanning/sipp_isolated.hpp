@@ -257,8 +257,10 @@ public:
     }
 
     // 这个函数对应的就是论文中的get_successors(state)
-    void get_sipp_neighbors(const SIPPState& sipp_state, std::vector<SIPPNeighbor>& sipp_neighbors)
+    std::vector<SIPPNeighbor> get_sipp_neighbors(const SIPPState& sipp_state)
     {
+        std::vector<SIPPNeighbor> sipp_neighbors;
+
         std::vector<Neighbor> motions = m_env.get_neighbors(sipp_state.location);
         for (const auto& motion : motions)
         {
@@ -290,6 +292,8 @@ public:
                 }
             }
         }
+
+        return sipp_neighbors;
     }
 
     void onExpandNode(const SIPPState& sipp_state, int fScore, int gScore)
@@ -500,8 +504,7 @@ public:
             closed_set.insert(current.location);
 
             // traverse sipp_neighbors
-            sipp_neighbors.clear();
-            environment.get_sipp_neighbors(current.location, sipp_neighbors);
+            sipp_neighbors = environment.get_sipp_neighbors(current.location);
             for (const SIPPNeighbor& sipp_neighbor : sipp_neighbors)
             {
                 if (closed_set.find(sipp_neighbor.location) == closed_set.end())
