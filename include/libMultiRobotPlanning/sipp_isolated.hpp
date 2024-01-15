@@ -181,17 +181,17 @@ public:
         return neighbors;
     }
 
-    void onExpandNode(const Location& /*s*/, int /*fScore*/, int /*gScore*/)
+    void onExpandNode(const Location& /*location*/, int /*fScore*/, int /*gScore*/)
     {
-        // std::cout << "expand: " << s << "g: " << gScore << std::endl;
+        // std::cout << "expand: " << location << "g: " << gScore << std::endl;
     }
 
     bool is_command_valid(
         const Location& /*s1*/, const Location& /*s2*/, const Action& /*a*/,
         int earliest_start_time,      // can start motion at this time
-        int /*latestStartTime*/,    // must have left s by this time
-        int earliest_arrival_time,    // can only arrive at (s+cmd)
-        int /*latestArrivalTime*/,  // needs to arrive by this time at (s+cmd)
+        int /*latestStartTime*/,    // must have left location by this time
+        int earliest_arrival_time,    // can only arrive at (location+cmd)
+        int /*latestArrivalTime*/,  // needs to arrive by this time at (location+cmd)
         int& t)
     {
         t = std::max<int>(earliest_arrival_time, earliest_start_time + 1);
