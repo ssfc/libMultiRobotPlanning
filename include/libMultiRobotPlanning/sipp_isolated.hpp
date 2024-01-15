@@ -252,15 +252,6 @@ public:
         return iter->second;
     }
 
-    bool might_have_solution(const Location& goal)
-    {
-        const auto& safe_intervals = get_safe_intervals(goal);
-
-        // 终点在安全区间内
-        return m_env.is_solution(goal) && !safe_intervals.empty() &&
-               safe_intervals.back().end == std::numeric_limits<int>::max();
-    }
-
     bool is_solution(const SIPPState& sipp_state)
     {
         return m_env.is_solution(sipp_state.location) &&
@@ -596,11 +587,6 @@ public:
     void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
     {
         m_env.set_collision_intervals(location, intervals);
-    }
-
-    bool might_have_solution(const Location& goal)
-    {
-        return m_env.might_have_solution(goal);
     }
 
     bool sipp_search(const Location& startState, const Action& waitAction,
