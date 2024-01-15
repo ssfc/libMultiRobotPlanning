@@ -188,11 +188,6 @@ public:
         // std::cout << "expand: " << s << "g: " << gScore << std::endl;
     }
 
-    void onDiscover()
-    {
-        // std::cout << "  discover: " << s << std::endl;
-    }
-
     bool isCommandValid(
         const Location& /*s1*/, const Location& /*s2*/, const Action& /*a*/,
         int earliestStartTime,      // can start motion at this time
@@ -320,14 +315,6 @@ public:
         m_env.onExpandNode(s.state, fScore, gScore);
     }
 
-    void onDiscover()
-    {
-        // const auto& interval =
-        // safe_interval(m_env.getLocation(s.state)).at(s.interval);
-        // std::cout << "discover: " << s.state << "," << interval.start << " to "
-        // << interval.end << std::endl;
-        m_env.onDiscover();
-    }
 
     void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
     {
@@ -535,7 +522,6 @@ public:
                         auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
-                        environment.onDiscover();
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -555,7 +541,6 @@ public:
                         (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
-                        environment.onDiscover();
                     }
 
                     // Best path for this node so far
