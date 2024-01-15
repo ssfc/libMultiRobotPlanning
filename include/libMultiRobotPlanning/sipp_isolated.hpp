@@ -203,18 +203,18 @@ public:
 class Interval
 {
 public:
-    int start;
+    int interval_start;
     int end;
 
 public:
     Interval(int input_start, int input_end)
-        : start(input_start),
+        : interval_start(input_start),
           end(input_end)
     {}
 
     friend bool operator<(const Interval& a, const Interval& b)
     {
-        return a.start < b.start;
+        return a.interval_start < b.interval_start;
     }
 };
 
@@ -270,16 +270,16 @@ public:
             for (size_t i = 0; i < safe_intervals.size(); ++i)
             {
                 const Interval& si = safe_intervals[i];
-                // std::cout << "  i " << i << ": " << si.start << "," << si.end <<
+                // std::cout << "  i " << i << ": " << si.interval_start << "," << si.end <<
                 // std::endl;
-                if (si.start - 1 > end_t || si.end < start_t)
+                if (si.interval_start - 1 > end_t || si.end < start_t)
                 {
                     continue;
                 }
 
                 int t;
                 if (m_env.is_command_valid(sipp_state.location, motion.location, motion.action, last_g_score,
-                                         end_t, si.start, si.end, t))
+                                         end_t, si.interval_start, si.end, t))
                 {
                     // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
                     // << last_g_score << std::endl;
@@ -295,7 +295,7 @@ public:
     {
         // const auto& interval =
         // get_safe_intervals(sipp_state.location).at(sipp_state.interval);
-        // std::cout << "expand: " << sipp_state.location << "," << interval.start << " to "
+        // std::cout << "expand: " << sipp_state.location << "," << interval.interval_start << " to "
         // << interval.end << "(g: " << gScore << " f: " << fScore << ")" <<
         // std::endl;
         // This is called before get_neighbors(). We use the callback to find the
@@ -320,16 +320,16 @@ public:
 
             for (const auto& interval : sorted_intervals)
             {
-                // std::cout << "  ci: " << interval.start << " - " << interval.end <<
+                // std::cout << "  ci: " << interval.interval_start << " - " << interval.end <<
                 // std::endl;
-                assert(interval.start <= interval.end);
-                assert(start <= interval.start);
+                assert(interval.interval_start <= interval.end);
+                assert(start <= interval.interval_start);
                 // if (start + 1 != interval.start - 1) {
                 // std::cout << start << "," << interval.start << std::endl;
                 // assert(start + 1 < interval.start - 1);
-                if (start <= interval.start - 1)
+                if (start <= interval.interval_start - 1)
                 {
-                    location_to_safe_intervals[location].push_back({start, interval.start - 1});
+                    location_to_safe_intervals[location].push_back({start, interval.interval_start - 1});
                 }
                 // }
                 start = interval.end + 1;
@@ -356,7 +356,7 @@ public:
         const auto& safe_intervals = get_safe_intervals(location);
         for (size_t idx = 0; idx < safe_intervals.size(); ++idx)
         {
-            if (safe_intervals[idx].start <= time && safe_intervals[idx].end >= time)
+            if (safe_intervals[idx].interval_start <= time && safe_intervals[idx].end >= time)
             {
                 interval_index = idx;
 
