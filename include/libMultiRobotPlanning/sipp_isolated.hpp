@@ -241,12 +241,12 @@ public:
 
     const std::vector<Interval>& safe_interval(const Location& location)
     {
-        static std::vector<Interval> defaultInterval(1, {0, std::numeric_limits<int>::max()});
+        static std::vector<Interval> default_interval(1, {0, std::numeric_limits<int>::max()});
         const auto iter = safe_intervals.find(location);
 
         if (iter == safe_intervals.end())
         {
-            return defaultInterval;
+            return default_interval;
         }
 
         return iter->second;
