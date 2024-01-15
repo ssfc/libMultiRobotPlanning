@@ -314,8 +314,8 @@ public:
     void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
     {
         location_to_safe_intervals.erase(location);
-        std::vector<Interval> sortedIntervals(intervals);
-        std::sort(sortedIntervals.begin(), sortedIntervals.end());
+        std::vector<Interval> sorted_intervals(intervals);
+        std::sort(sorted_intervals.begin(), sorted_intervals.end());
 
         // std::cout << location << ": " << std::endl;
         if (intervals.size() > 0)
@@ -323,7 +323,8 @@ public:
             location_to_safe_intervals[location]; // create empty safe interval
             int start = 0;
             int lastEnd = 0;
-            for (const auto& interval : sortedIntervals)
+            
+            for (const auto& interval : sorted_intervals)
             {
                 // std::cout << "  ci: " << interval.start << " - " << interval.end <<
                 // std::endl;
