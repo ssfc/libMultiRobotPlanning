@@ -257,7 +257,7 @@ public:
     }
 
     // 这个函数对应的就是论文中的get_successors(state)
-    void get_sipp_neighbors(const SIPPState& sipp_state, std::vector<SIPPNeighbor>& neighbors)
+    void get_sipp_neighbors(const SIPPState& sipp_state, std::vector<SIPPNeighbor>& sipp_neighbors)
     {
         std::vector<Neighbor> motions = m_env.get_neighbors(sipp_state.location);
         for (const auto& motion : motions)
@@ -284,7 +284,7 @@ public:
                 {
                     // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
                     // << last_g_score << std::endl;
-                    neighbors.emplace_back(SIPPNeighbor(
+                    sipp_neighbors.emplace_back(SIPPNeighbor(
                         SIPPState(motion.location, i),
                         SIPPAction(motion.action, 1), t - last_g_score));
                 }
