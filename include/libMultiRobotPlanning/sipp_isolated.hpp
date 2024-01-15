@@ -267,15 +267,15 @@ public:
     {
         std::vector<Neighbor> motions;
         m_env.get_neighbors(s.state, motions);
-        for (const auto& m : motions)
+        for (const auto& motion : motions)
         {
-            // std::cout << "gN " << m.state << std::endl;
-            int m_time = m.cost;
+            // std::cout << "gN " << motion.state << std::endl;
+            int m_time = motion.cost;
             // std::cout << last_g_score;
             int start_t = last_g_score + m_time;
             int end_t = get_safe_intervals(s.state).at(s.interval).end;
 
-            const auto& sis = get_safe_intervals(m.location);
+            const auto& sis = get_safe_intervals(motion.location);
             for (size_t i = 0; i < sis.size(); ++i)
             {
                 const Interval& si = sis[i];
@@ -287,13 +287,14 @@ public:
                 }
 
                 int t;
-                if (m_env.is_command_valid(s.state, m.location, m.action, last_g_score,
+                if (m_env.is_command_valid(s.state, motion.location, motion.action, last_g_score,
                                          end_t, si.start, si.end, t))
                 {
-                    // std::cout << "  gN: " << m.state << "," << i << "," << t << ","
+                    // std::cout << "  gN: " << motion.state << "," << i << "," << t << ","
                     // << last_g_score << std::endl;
                     neighbors.emplace_back(SIPPNeighbor(
-                        SIPPState(m.location, i), SIPPAction(m.action, m.cost), t - last_g_score));
+                        SIPPState(motion.location, i),
+                        SIPPAction(motion.action, motion.cost), t - last_g_score));
                 }
             }
         }
