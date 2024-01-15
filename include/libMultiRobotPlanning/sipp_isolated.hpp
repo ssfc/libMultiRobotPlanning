@@ -361,14 +361,14 @@ public:
         // }
     }
 
-    bool find_safe_interval(const Location& location, int time, size_t& interval)
+    bool find_safe_interval(const Location& location, int time, size_t& interval_index)
     {
         const auto& safe_intervals = get_safe_intervals(location);
         for (size_t idx = 0; idx < safe_intervals.size(); ++idx)
         {
             if (safe_intervals[idx].start <= time && safe_intervals[idx].end >= time)
             {
-                interval = idx;
+                interval_index = idx;
 
                 return true;
             }
