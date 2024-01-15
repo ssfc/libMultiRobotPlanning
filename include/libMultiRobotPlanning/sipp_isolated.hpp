@@ -185,13 +185,13 @@ public:
 
     bool is_command_valid(
         const Location& /*s1*/, const Location& /*s2*/, const Action& /*a*/,
-        int earliestStartTime,      // can start motion at this time
+        int earliest_start_time,      // can start motion at this time
         int /*latestStartTime*/,    // must have left s by this time
         int earliestArrivalTime,    // can only arrive at (s+cmd)
         int /*latestArrivalTime*/,  // needs to arrive by this time at (s+cmd)
         int& t)
     {
-        t = std::max<int>(earliestArrivalTime, earliestStartTime + 1);
+        t = std::max<int>(earliestArrivalTime, earliest_start_time + 1);
 
         // TODO(whoenig): need to check for swaps here...
 
