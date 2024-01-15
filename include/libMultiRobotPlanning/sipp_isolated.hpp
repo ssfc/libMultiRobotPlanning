@@ -63,14 +63,11 @@ public:
     Location location;
     //! action to get to the neighboring location
     Action action;
-    //! cost to get to the neighboring location, usually 1
-    int cost;
 
 public:
-    Neighbor(const Location& input_location, const Action& input_action, int input_cost)
+    Neighbor(const Location& input_location, const Action& input_action)
         : location(input_location),
-          action(input_action),
-          cost(input_cost)
+          action(input_action)
     {}
 };
 
@@ -157,25 +154,25 @@ public:
         Location up(location.x, location.y + 1);
         if (location_valid(up))
         {
-            neighbors.emplace_back(Neighbor(up, Action::Up, 1));
+            neighbors.emplace_back(Neighbor(up, Action::Up));
         }
 
         Location down(location.x, location.y - 1);
         if (location_valid(down))
         {
-            neighbors.emplace_back(Neighbor(down, Action::Down, 1));
+            neighbors.emplace_back(Neighbor(down, Action::Down));
         }
 
         Location left(location.x - 1, location.y);
         if (location_valid(left))
         {
-            neighbors.emplace_back(Neighbor(left, Action::Left, 1));
+            neighbors.emplace_back(Neighbor(left, Action::Left));
         }
 
         Location right(location.x + 1, location.y);
         if (location_valid(right))
         {
-            neighbors.emplace_back(Neighbor(right, Action::Right, 1));
+            neighbors.emplace_back(Neighbor(right, Action::Right));
         }
 
         return neighbors;
@@ -265,9 +262,8 @@ public:
         for (const auto& motion : motions)
         {
             // std::cout << "gN " << motion.location << std::endl;
-            int m_time = motion.cost;
             // std::cout << last_g_score;
-            int start_t = last_g_score + m_time;
+            int start_t = last_g_score + 1;
             int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval).end;
 
             const auto& safe_intervals = get_safe_intervals(motion.location);
@@ -276,7 +272,7 @@ public:
                 const Interval& si = safe_intervals[i];
                 // std::cout << "  i " << i << ": " << si.start << "," << si.end <<
                 // std::endl;
-                if (si.start - m_time > end_t || si.end < start_t)
+                if (si.start - 1 > end_t || si.end < start_t)
                 {
                     continue;
                 }
@@ -289,7 +285,7 @@ public:
                     // << last_g_score << std::endl;
                     neighbors.emplace_back(SIPPNeighbor(
                         SIPPState(motion.location, i),
-                        SIPPAction(motion.action, motion.cost), t - last_g_score));
+                        SIPPAction(motion.action, 1), t - last_g_score));
                 }
             }
         }
