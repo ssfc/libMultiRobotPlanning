@@ -42,9 +42,9 @@ public:
         return std::tie(location, interval) == std::tie(other.location, other.interval);
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const SIPPState& s)
+    friend std::ostream& operator<<(std::ostream& os, const SIPPState& sipp_state)
     {
-        return os << "(" << s.location << "," << s.interval << ")";
+        return os << "(" << sipp_state.location << "," << sipp_state.interval << ")";
     }
 };
 
