@@ -467,9 +467,6 @@ public:
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<SIPPNeighbor> sipp_neighbors;
-        sipp_neighbors.reserve(10);
-
         while (!open_set.empty())
         {
             AStarNode current = open_set.top();
@@ -504,7 +501,7 @@ public:
             closed_set.insert(current.location);
 
             // traverse sipp_neighbors
-            sipp_neighbors = environment.get_sipp_neighbors(current.location);
+            std::vector<SIPPNeighbor> sipp_neighbors = environment.get_sipp_neighbors(current.location);
             for (const SIPPNeighbor& sipp_neighbor : sipp_neighbors)
             {
                 if (closed_set.find(sipp_neighbor.location) == closed_set.end())
