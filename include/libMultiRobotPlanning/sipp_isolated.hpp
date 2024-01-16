@@ -532,6 +532,9 @@ public:
                     sipp_solution.actions.emplace_back(std::make_pair<>(
                         std::get<1>(iter->second), std::get<2>(iter->second)));
                     iter = came_from.find(std::get<0>(iter->second));
+
+                    // A* LINE 16
+                    // return total_path
                 }
 
                 sipp_solution.path.emplace_back(std::make_pair<>
@@ -544,6 +547,8 @@ public:
                 return true;
             }
 
+            // A* LINE 17
+            // open_set.Remove(current)
             open_set.pop();
             sippstate_to_heaphandle.erase(current.location);
             closed_set.insert(current.location);
