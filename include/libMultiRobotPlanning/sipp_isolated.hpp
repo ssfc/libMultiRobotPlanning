@@ -49,6 +49,18 @@ public:
     }
 };
 
+struct SIPPStateHasher
+{
+    size_t operator()(const SIPPState& sipp_state) const
+    {
+        size_t seed = 0;
+        boost::hash_combine(seed, std::hash<Location>()(sipp_state.location));
+        boost::hash_combine(seed, sipp_state.interval_index);
+
+        return seed;
+    }
+};
+
 struct SIPPAction
 {
     SIPPAction(const Action& action, int time) : action(action), time(time) {}
@@ -419,18 +431,6 @@ class AStarNode
 
 };
 
-struct SIPPStateHasher
-{
-    size_t operator()(const SIPPState& sipp_state) const
-    {
-        size_t seed = 0;
-        boost::hash_combine(seed, std::hash<Location>()(sipp_state.location));
-        boost::hash_combine(seed, sipp_state.interval_index);
-
-        return seed;
-    }
-};
-
 class AStar
 {
 private:
@@ -600,8 +600,7 @@ public:
                         {
                             came_from.erase(sipp_neighbor.sipp_state);
                             came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
-                                                              std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
-                                                                                tentative_gScore)));
+                              std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore)));
                             // came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
                             //                                                        tentative_gScore);
 
