@@ -457,13 +457,13 @@ public:
         sipp_solution.cost = 0;
 
         OpenSet open_set;
-        std::unordered_map<SIPPState, HeapHandle, SIPPStateHasher> location_to_heap;
+        std::unordered_map<SIPPState, HeapHandle, SIPPStateHasher> sippstate_to_heap;
         std::unordered_set<SIPPState, SIPPStateHasher> closed_set;
         std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,SIPPStateHasher> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
           environment.admissible_heuristic(start_location), initialCost));
-        location_to_heap.insert(std::make_pair<>(start_location, handle));
+        sippstate_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
         while (!open_set.empty())
@@ -496,7 +496,7 @@ public:
             }
 
             open_set.pop();
-            location_to_heap.erase(current.location);
+            sippstate_to_heap.erase(current.location);
             closed_set.insert(current.location);
 
             // traverse sipp_neighbors
@@ -506,13 +506,13 @@ public:
                 if (closed_set.find(sipp_neighbor.sipp_state) == closed_set.end())
                 {
                     int tentative_gScore = current.g_score + sipp_neighbor.cost;
-                    auto iter = location_to_heap.find(sipp_neighbor.sipp_state);
-                    if (iter == location_to_heap.end())
+                    auto iter = sippstate_to_heap.find(sipp_neighbor.sipp_state);
+                    if (iter == sippstate_to_heap.end())
                     {  // Discover a new node
                         int f_score = tentative_gScore + environment.admissible_heuristic(sipp_neighbor.sipp_state);
                         auto handle = open_set.push(AStarNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
                         (*handle).handle = handle;
-                        location_to_heap.insert(std::make_pair<>(sipp_neighbor.sipp_state, handle));
+                        sippstate_to_heap.insert(std::make_pair<>(sipp_neighbor.sipp_state, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
