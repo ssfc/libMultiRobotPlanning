@@ -481,8 +481,9 @@ public:
         // A* LINE 6
         // f_score[start] := h(start)
 
-        auto handle = open_set.push(AStarNode(start_location,
-          environment.admissible_heuristic(start_location), initialCost));
+        auto root = AStarNode(start_location,
+          environment.admissible_heuristic(start_location), initialCost);
+        auto handle = open_set.push(root);
         sippstate_to_heaphandle.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
