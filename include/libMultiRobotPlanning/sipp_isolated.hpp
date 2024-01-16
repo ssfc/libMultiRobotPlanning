@@ -29,22 +29,22 @@ class SIPPState
 {
 public:
     Location location;
-    size_t interval;
+    size_t interval_index;
 
 public:
     SIPPState(const Location& input_state, size_t input_interval)
         : location(input_state),
-          interval(input_interval)
+          interval_index(input_interval)
     {}
 
     bool operator==(const SIPPState& other) const
     {
-        return std::tie(location, interval) == std::tie(other.location, other.interval);
+        return std::tie(location, interval_index) == std::tie(other.location, other.interval_index);
     }
 
     friend std::ostream& operator<<(std::ostream& os, const SIPPState& sipp_state)
     {
-        return os << "(" << sipp_state.location << "," << sipp_state.interval << ")";
+        return os << "(" << sipp_state.location << "," << sipp_state.interval_index << ")";
     }
 };
 
@@ -250,7 +250,7 @@ public:
     bool is_solution(const SIPPState& sipp_state)
     {
         return m_env.is_solution(sipp_state.location) &&
-               get_safe_intervals(sipp_state.location).at(sipp_state.interval).interval_end ==
+               get_safe_intervals(sipp_state.location).at(sipp_state.interval_index).interval_end ==
                    std::numeric_limits<int>::max(); // 为什么goal安全区间必须是无限大的右开区间？假设goal安全区间是[4, 10], 所有智能体的行动在时刻9终结，那么不可能安全区间直到10，而必然向右延伸到无穷大。所以goal安全区间必须是无限大的右开区间。
     }
 
@@ -265,7 +265,7 @@ public:
             // std::cout << "gN " << motion.location << std::endl;
             // std::cout << last_g_score;
             int start_t = last_g_score + 1;
-            int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval).interval_end;
+            int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval_index).interval_end;
 
             const auto& safe_intervals = get_safe_intervals(motion.location);
             for (size_t i = 0; i < safe_intervals.size(); ++i)
@@ -296,10 +296,10 @@ public:
 
     void onExpandNode(const SIPPState& sipp_state, int fScore, int gScore)
     {
-        // const auto& interval =
-        // get_safe_intervals(sipp_state.location).at(sipp_state.interval);
-        // std::cout << "expand: " << sipp_state.location << "," << interval.interval_start << " to "
-        // << interval.interval_end << "(g: " << gScore << " f: " << fScore << ")" <<
+        // const auto& interval_index =
+        // get_safe_intervals(sipp_state.location).at(sipp_state.interval_index);
+        // std::cout << "expand: " << sipp_state.location << "," << interval_index.interval_start << " to "
+        // << interval_index.interval_end << "(g: " << gScore << " f: " << fScore << ")" <<
         // std::endl;
         // This is called before get_neighbors(). We use the callback to find the
         // current cost (=time) of the expanded node
@@ -424,7 +424,7 @@ struct SIPPStateHasher
     {
         size_t seed = 0;
         boost::hash_combine(seed, std::hash<Location>()(sipp_state.location));
-        boost::hash_combine(seed, sipp_state.interval);
+        boost::hash_combine(seed, sipp_state.interval_index);
 
         return seed;
     }
