@@ -551,18 +551,38 @@ public:
             // open_set.Remove(current)
             open_set.pop();
             sippstate_to_heaphandle.erase(current.location);
+
+            // A* LINE 18
+            // add current to closed_set.
             closed_set.insert(current.location);
 
+            // A* LINE 19
+            // for each neighbor of current
             // traverse sipp_neighbors
             std::vector<SIPPNeighbor> sipp_neighbors = environment.get_sipp_neighbors(current.location);
             for (const SIPPNeighbor& sipp_neighbor : sipp_neighbors)
             {
+                // A* LINE 20
+                // if neighbor not in closed_set
+                // 不在closed_set中
                 if (closed_set.find(sipp_neighbor.sipp_state) == closed_set.end())
                 {
+                    // A* LINE 21
+                    // d(current,neighbor) is the weight of the edge from current to neighbor
+                    // tentative_g_score is the distance from start to the neighbor through current
+                    // tentative_g_score := g_score[current] + d(current, neighbor)
                     int tentative_gScore = current.g_score + sipp_neighbor.cost;
+
+                    // A* LINE 22
+                    // if neighbor not in open_set
                     auto iter = sippstate_to_heaphandle.find(sipp_neighbor.sipp_state);
                     if (iter == sippstate_to_heaphandle.end())
                     {  // Discover a new node
+
+                        came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
+                                                          std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
+                                                                            tentative_gScore)));
+
                         int f_score = tentative_gScore + environment.admissible_heuristic(sipp_neighbor.sipp_state);
                         auto handle = open_set.push(AStarNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
                         (*handle).handle = handle;
@@ -576,25 +596,23 @@ public:
                         // std::cout << "  this is an old node: " << tentative_gScore << ","
                         // << (*handle).g_score << std::endl;
                         // We found this node before with a better path
-                        if (tentative_gScore >= (*handle).g_score)
+                        if (tentative_gScore < (*handle).g_score)
                         {
-                            continue;
-                        }
+                            came_from.erase(sipp_neighbor.sipp_state);
+                            came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
+                                                              std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
+                                                                                tentative_gScore)));
+                            // came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
+                            //                                                        tentative_gScore);
 
-                        // update f and g_score
-                        int delta = (*handle).g_score - tentative_gScore;
-                        (*handle).g_score = tentative_gScore;
-                        (*handle).f_score -= delta;
-                        open_set.increase(handle);
+                            // update f and g_score
+                            int delta = (*handle).g_score - tentative_gScore;
+                            (*handle).g_score = tentative_gScore;
+                            (*handle).f_score -= delta;
+                            open_set.increase(handle);
+                        }
                     }
 
-                    // Best path for this node so far
-                    // TODO: this is not the best way to update "came_from", but otherwise
-                    // default c'tors of SIPPState and Action are required
-                    came_from.erase(sipp_neighbor.sipp_state);
-                    came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
-                      std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
-                                            tentative_gScore)));
                 }
             }
         }
