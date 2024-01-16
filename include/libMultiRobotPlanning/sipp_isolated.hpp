@@ -25,6 +25,7 @@ enum class Action
     Wait,
 };
 
+// 多了interval_index
 class SIPPState
 {
 public:
@@ -75,7 +76,7 @@ class SIPPNeighbor
 {
 public:
     //! neighboring location
-    SIPPState location;
+    SIPPState sipp_state;
     //! action to get to the neighboring location
     SIPPAction action;
     //! cost to get to the neighboring location, usually 1
@@ -83,7 +84,7 @@ public:
 
 public:
     SIPPNeighbor(const SIPPState& input_location, const SIPPAction& input_action, int input_cost)
-        : location(input_location),
+        : sipp_state(input_location),
           action(input_action),
           cost(input_cost)
     {}
@@ -502,16 +503,16 @@ public:
             std::vector<SIPPNeighbor> sipp_neighbors = environment.get_sipp_neighbors(current.location);
             for (const SIPPNeighbor& sipp_neighbor : sipp_neighbors)
             {
-                if (closed_set.find(sipp_neighbor.location) == closed_set.end())
+                if (closed_set.find(sipp_neighbor.sipp_state) == closed_set.end())
                 {
                     int tentative_gScore = current.g_score + sipp_neighbor.cost;
-                    auto iter = location_to_heap.find(sipp_neighbor.location);
+                    auto iter = location_to_heap.find(sipp_neighbor.sipp_state);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + environment.admissible_heuristic(sipp_neighbor.location);
-                        auto handle = open_set.push(AStarNode(sipp_neighbor.location, f_score, tentative_gScore));
+                        int f_score = tentative_gScore + environment.admissible_heuristic(sipp_neighbor.sipp_state);
+                        auto handle = open_set.push(AStarNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
                         (*handle).handle = handle;
-                        location_to_heap.insert(std::make_pair<>(sipp_neighbor.location, handle));
+                        location_to_heap.insert(std::make_pair<>(sipp_neighbor.sipp_state, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -536,8 +537,8 @@ public:
                     // Best path for this node so far
                     // TODO: this is not the best way to update "came_from", but otherwise
                     // default c'tors of SIPPState and Action are required
-                    came_from.erase(sipp_neighbor.location);
-                    came_from.insert(std::make_pair<>(sipp_neighbor.location,
+                    came_from.erase(sipp_neighbor.sipp_state);
+                    came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
                       std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
                                             tentative_gScore)));
                 }
