@@ -281,6 +281,8 @@ public:
             int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval_index).interval_end; // 当前位置安全区间的右边界
 
             const auto& safe_intervals = get_safe_intervals(motion.location); // 地理邻居的safe_intervals
+
+            // 遍历了该地理邻居的所有safe_interval
             for (size_t i = 0; i < safe_intervals.size(); ++i)
             {
                 const Interval& safe_interval = safe_intervals[i];
@@ -294,8 +296,7 @@ public:
                     {
                         // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
                         // << last_g_score << std::endl;
-                        sipp_neighbors.emplace_back(SIPPNeighbor(
-                            SIPPState(motion.location, i),
+                        sipp_neighbors.emplace_back(SIPPNeighbor(SIPPState(motion.location, i),
                             SIPPAction(motion.action, 1), t - last_g_score)); // 可能这个就是update time
                     }
                 }
