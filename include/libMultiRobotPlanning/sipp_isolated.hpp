@@ -496,11 +496,19 @@ public:
         // closed_set := the empty set
         std::unordered_set<SIPPState, SIPPStateHasher> closed_set;
 
+        // A* LINE 9
+        // while open_set is not empty
+        // int iter_low_level = 0;
         while (!open_set.empty())
         {
+            // A* LINE 10
+            // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
+            // current := the node in open_set having the lowest f_score[] value
             AStarNode current = open_set.top();
             environment.onExpandNode(current.location, current.f_score, current.g_score);
 
+            // A* LINE 11
+            // if current = goal
             if (environment.is_solution(current.location))
             {
                 sipp_solution.path.clear();
