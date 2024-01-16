@@ -463,9 +463,23 @@ public:
         // came_from_list := an empty map
         std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,SIPPStateHasher> came_from;
 
+        // A* LINE 3
+        // For node n, g_score[n] is the cost of the cheapest path from start to n currently known.
+        // g_score := map with default value of Infinity
         OpenSet open_set;
         std::unordered_map<SIPPState, HeapHandle, SIPPStateHasher> sippstate_to_heaphandle;
         std::unordered_set<SIPPState, SIPPStateHasher> closed_set;
+
+        // A* LINE 4
+        // g_score[start] := 0
+
+        // A* LINE 5
+        // For node n, f_score[n] := g_score[n] + h(n). f_score[n] represents our current best guess as to
+        // how cheap a path could be from start to finish if it goes through n.
+        // f_score := map with default value of Infinity
+
+        // A* LINE 6
+        // f_score[start] := h(start)
 
         auto handle = open_set.push(AStarNode(start_location,
           environment.admissible_heuristic(start_location), initialCost));
