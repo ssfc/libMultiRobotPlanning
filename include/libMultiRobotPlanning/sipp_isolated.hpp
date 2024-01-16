@@ -584,7 +584,7 @@ public:
         m_env.set_collision_intervals(location, intervals);
     }
 
-    bool sipp_search(const Location& startState, const Action& waitAction,
+    bool sipp_search(const Location& start, const Action& waitAction,
                 PlanResult& solution, int startTime = 0)
     {
         SIPPPlanResult astar_solution;
@@ -593,12 +593,12 @@ public:
         solution.actions.clear();
         solution.path.clear();
         size_t interval;
-        if (!m_env.find_safe_interval(startState, startTime, interval))
+        if (!m_env.find_safe_interval(start, startTime, interval))
         {
             return false;
         }
 
-        bool success = m_astar.a_star_search(SIPPState(startState, interval), astar_solution, startTime);
+        bool success = m_astar.a_star_search(SIPPState(start, interval), astar_solution, startTime);
         solution.cost = astar_solution.cost - startTime;
         solution.fmin = astar_solution.fmin;
 
