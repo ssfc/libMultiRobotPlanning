@@ -481,6 +481,11 @@ public:
         // A* LINE 6
         // f_score[start] := h(start)
 
+        // A* LINE 7
+        // The set of discovered nodes that may need to be (re-)expanded.
+        // Initially, only the start node is known.
+        // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+        // open_set := {start}
         auto root = AStarNode(start_location,
           environment.admissible_heuristic(start_location), initialCost);
         auto handle = open_set.push(root);
