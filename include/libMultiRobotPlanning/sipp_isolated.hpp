@@ -604,8 +604,8 @@ public:
 
         for (size_t i = 0; i < astar_solution.actions.size(); ++i)
         {
-            int waitTime = astar_solution.actions[i].second - astar_solution.actions[i].first.time;
-            if (waitTime == 0)
+            int wait_time = astar_solution.actions[i].second - astar_solution.actions[i].first.time;
+            if (wait_time == 0)
             {
                 solution.path.emplace_back(
                     std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second));
@@ -617,9 +617,9 @@ public:
                 // additional wait action before
                 solution.path.emplace_back(
                     std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second));
-                solution.actions.emplace_back(std::make_pair<>(waitAction, waitTime));
+                solution.actions.emplace_back(std::make_pair<>(waitAction, wait_time));
                 solution.path.emplace_back(
-                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second + waitTime));
+                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second + wait_time));
                 solution.actions.emplace_back(
                     std::make_pair<>(astar_solution.actions[i].first.action, astar_solution.actions[i].first.time));
             }
