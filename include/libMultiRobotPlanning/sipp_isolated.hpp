@@ -468,7 +468,6 @@ public:
         // g_score := map with default value of Infinity
         OpenSet open_set;
         std::unordered_map<SIPPState, HeapHandle, SIPPStateHasher> sippstate_to_heaphandle;
-        std::unordered_set<SIPPState, SIPPStateHasher> closed_set;
 
         // A* LINE 4
         // g_score[start] := 0
@@ -491,6 +490,11 @@ public:
         auto root_handle = open_set.push(root);
         sippstate_to_heaphandle.insert(std::make_pair<>(start_location, root_handle));
         (*root_handle).handle = root_handle;
+
+        // A* LINE 8
+        // node that has already been evaluated. In other words, already been poped from open_set.
+        // closed_set := the empty set
+        std::unordered_set<SIPPState, SIPPStateHasher> closed_set;
 
         while (!open_set.empty())
         {
