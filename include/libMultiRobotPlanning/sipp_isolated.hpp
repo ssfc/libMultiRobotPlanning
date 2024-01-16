@@ -488,9 +488,9 @@ public:
         // open_set := {start}
         auto root = AStarNode(start_location,
           environment.admissible_heuristic(start_location), initialCost);
-        auto handle = open_set.push(root);
-        sippstate_to_heaphandle.insert(std::make_pair<>(start_location, handle));
-        (*handle).handle = handle;
+        auto root_handle = open_set.push(root);
+        sippstate_to_heaphandle.insert(std::make_pair<>(start_location, root_handle));
+        (*root_handle).handle = root_handle;
 
         while (!open_set.empty())
         {
