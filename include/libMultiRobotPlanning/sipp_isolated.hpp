@@ -457,10 +457,15 @@ public:
         sipp_solution.actions.clear();
         sipp_solution.cost = 0;
 
+        // A* LINE 2
+        // For node n, came_from_list[n] is the node immediately preceding it on the cheapest path from the start
+        // to n currently known.
+        // came_from_list := an empty map
+        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,SIPPStateHasher> came_from;
+
         OpenSet open_set;
         std::unordered_map<SIPPState, HeapHandle, SIPPStateHasher> sippstate_to_heap;
         std::unordered_set<SIPPState, SIPPStateHasher> closed_set;
-        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,SIPPStateHasher> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
           environment.admissible_heuristic(start_location), initialCost));
