@@ -511,11 +511,22 @@ public:
             // if current = goal
             if (environment.is_solution(current.location))
             {
+                // A* LINE 12
+                // total_path := {current}
+
                 sipp_solution.path.clear();
                 sipp_solution.actions.clear();
                 auto iter = came_from.find(current.location);
+                // A* LINE 13
+                // while current in cameFrom.Keys:
                 while (iter != came_from.end())
                 {
+                    // A* LINE 14
+                    // current := came_from[current]
+
+                    // A* LINE 15
+                    // total_path.prepend(current)
+
                     sipp_solution.path.emplace_back(
                         std::make_pair<>(iter->first, std::get<3>(iter->second)));
                     sipp_solution.actions.emplace_back(std::make_pair<>(
