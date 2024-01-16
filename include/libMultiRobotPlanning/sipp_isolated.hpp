@@ -448,6 +448,8 @@ public:
     AStar(SIPPEnvironment& input_environment) : environment(input_environment)
     {}
 
+    // A* LINE 1
+    // A* finds a path from start to goal.
     bool a_star_search(const SIPPState& start_location, SIPPPlanResult& sipp_solution, int initialCost = 0)
     {
         sipp_solution.path.clear();
