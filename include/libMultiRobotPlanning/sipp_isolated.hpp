@@ -272,34 +272,32 @@ public:
     {
         std::vector<SIPPNeighbor> sipp_neighbors;
 
-        std::vector<Neighbor> motions = m_env.get_neighbors(sipp_state.location);
+        std::vector<Neighbor> motions = m_env.get_neighbors(sipp_state.location); // 地理上的邻居
         for (const auto& motion : motions)
         {
             // std::cout << "gN " << motion.location << std::endl;
             // std::cout << last_g_score;
             int start_t = last_g_score + 1;
-            int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval_index).interval_end;
+            int end_t = get_safe_intervals(sipp_state.location).at(sipp_state.interval_index).interval_end; // 当前位置安全区间的右边界
 
-            const auto& safe_intervals = get_safe_intervals(motion.location);
+            const auto& safe_intervals = get_safe_intervals(motion.location); // 地理邻居的safe_intervals
             for (size_t i = 0; i < safe_intervals.size(); ++i)
             {
                 const Interval& safe_interval = safe_intervals[i];
                 // std::cout << "  i " << i << ": " << safe_interval.interval_start << "," << safe_interval.interval_end <<
                 // std::endl;
-                if (safe_interval.interval_start - 1 > end_t || safe_interval.interval_end < start_t)
+                if (safe_interval.interval_end >= start_t && safe_interval.interval_start - 1 <= end_t)
                 {
-                    continue;
-                }
-
-                int t;
-                if (m_env.is_command_valid(sipp_state.location, motion.location, motion.action, last_g_score,
-                                         safe_interval.interval_start, t))
-                {
-                    // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
-                    // << last_g_score << std::endl;
-                    sipp_neighbors.emplace_back(SIPPNeighbor(
-                        SIPPState(motion.location, i),
-                        SIPPAction(motion.action, 1), t - last_g_score));
+                    int t;
+                    if (m_env.is_command_valid(sipp_state.location, motion.location, motion.action, last_g_score,
+                                               safe_interval.interval_start, t))
+                    {
+                        // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
+                        // << last_g_score << std::endl;
+                        sipp_neighbors.emplace_back(SIPPNeighbor(
+                            SIPPState(motion.location, i),
+                            SIPPAction(motion.action, 1), t - last_g_score)); // 可能这个就是update time
+                    }
                 }
             }
         }
@@ -580,7 +578,7 @@ public:
                     {  // Discover a new node
 
                         came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
-                                                          std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
+                          std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
                                                                             tentative_gScore)));
 
                         int f_score = tentative_gScore + environment.admissible_heuristic(sipp_neighbor.sipp_state);
