@@ -188,7 +188,6 @@ public:
         int earliest_start_time,      // can start motion at this time
         int /*latestStartTime*/,    // must have left location by this time
         int earliest_arrival_time,    // can only arrive at (location+cmd)
-        int /*latestArrivalTime*/,  // needs to arrive by this time at (location+cmd)
         int& t)
     {
         t = std::max<int>(earliest_arrival_time, earliest_start_time + 1);
@@ -282,7 +281,7 @@ public:
 
                 int t;
                 if (m_env.is_command_valid(sipp_state.location, motion.location, motion.action, last_g_score,
-                                         end_t, safe_interval.interval_start, safe_interval.interval_end, t))
+                                         end_t, safe_interval.interval_start, t))
                 {
                     // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
                     // << last_g_score << std::endl;
