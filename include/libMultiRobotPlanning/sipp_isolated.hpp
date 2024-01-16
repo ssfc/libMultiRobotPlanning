@@ -585,7 +585,7 @@ public:
     }
 
     bool sipp_search(const Location& start, const Action& waitAction,
-                PlanResult& solution, int startTime = 0)
+                PlanResult& solution, int start_time = 0)
     {
         SIPPPlanResult astar_solution;
         solution.cost = 0;
@@ -593,13 +593,13 @@ public:
         solution.actions.clear();
         solution.path.clear();
         size_t interval;
-        if (!m_env.find_safe_interval(start, startTime, interval))
+        if (!m_env.find_safe_interval(start, start_time, interval))
         {
             return false;
         }
 
-        bool success = m_astar.a_star_search(SIPPState(start, interval), astar_solution, startTime);
-        solution.cost = astar_solution.cost - startTime;
+        bool success = m_astar.a_star_search(SIPPState(start, interval), astar_solution, start_time);
+        solution.cost = astar_solution.cost - start_time;
         solution.fmin = astar_solution.fmin;
 
         for (size_t i = 0; i < astar_solution.actions.size(); ++i)
