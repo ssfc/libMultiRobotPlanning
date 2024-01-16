@@ -448,8 +448,7 @@ public:
     AStar(SIPPEnvironment& input_environment) : environment(input_environment)
     {}
 
-    bool a_star_search(const SIPPState& start_location, SIPPPlanResult& sipp_solution,
-                       int initialCost = 0)
+    bool a_star_search(const SIPPState& start_location, SIPPPlanResult& sipp_solution, int initialCost = 0)
     {
         sipp_solution.path.clear();
         sipp_solution.path.emplace_back(std::make_pair<>(start_location, 0));
