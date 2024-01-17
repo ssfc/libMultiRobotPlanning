@@ -142,15 +142,12 @@ struct SIPPPlanResult
 class Environment
 {
 public:
-    int num_rows;
     std::unordered_set<Location> obstacles;
     Location goal;
 
 public:
-    Environment(size_t input_dimy,
-             std::unordered_set<Location> input_obstacles, Location input_goal)
-        : num_rows(input_dimy),
-          obstacles(std::move(input_obstacles)),
+    Environment(std::unordered_set<Location> input_obstacles, Location input_goal)
+        : obstacles(std::move(input_obstacles)),
           goal(input_goal)
     {}
 };
@@ -387,7 +384,7 @@ public:
     bool location_valid(const Location& location)
     {
         return location.x >= 0 && location.x < num_columns &&
-               location.y >= 0 && location.y < m_env.num_rows &&
+               location.y >= 0 && location.y < num_rows &&
                m_env.obstacles.find(location) == m_env.obstacles.end();
     }
 
