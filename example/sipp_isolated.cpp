@@ -104,11 +104,9 @@ int main(int argc, char* argv[])
 
     // Plan
     PlanResult solution;
-    // bool success = sipp.sipp_search(start, Action::Wait, solution);
-    // bool success = sipp.sipp_search(start, Action::Wait, solution);
-    bool success = sipp.sipp_search(start, Action::Wait, solution);
+    bool is_success = sipp.sipp_search(start, Action::Wait, solution);
 
-    if (success)
+    if (is_success)
     {
         std::cout << "Planning successful! Total cost: " << solution.cost
                   << std::endl;
