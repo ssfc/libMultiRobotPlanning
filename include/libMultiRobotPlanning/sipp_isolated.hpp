@@ -2,6 +2,19 @@
 // Created by take_ on 2024/1/11.
 //
 
+/*! \brief SIPP Algorithm to find the shortest path with dynamic obstacles
+
+This class implements the SIPP algorithm. SIPP is an informed search algorithm
+that finds the shortest path for a given map and dynamic a-priori known
+obstacles. It can use a heuristic that needs to be admissible.
+
+Details of the algorithm can be found in the following paper:\n
+Mike Phillips and Maxim Likhachev:\n
+"SIPP:  Safe  Interval  Path  Planning  for  Dynamic  Environments". IEEE
+International Conference on Robotics and Automation (ICRA), 2011\n
+https://doi.org/10.1109/ICRA.2011.5980306
+*/
+
 #ifndef SIPP_ISOLATED_HPP
 #define SIPP_ISOLATED_HPP
 
@@ -671,88 +684,5 @@ public:
     }
 };
 
-
-
-// #include "util.hpp"
-// #include "sipp_low.hpp"
-
-
-/*! \brief SIPP Algorithm to find the shortest path with dynamic obstacles
-
-This class implements the SIPP algorithm. SIPP is an informed search algorithm
-that finds the shortest path for a given map and dynamic a-priori known
-obstacles. It can use a heuristic that needs to be admissible.
-
-Details of the algorithm can be found in the following paper:\n
-Mike Phillips and Maxim Likhachev:\n
-"SIPP:  Safe  Interval  Path  Planning  for  Dynamic  Environments". IEEE
-International Conference on Robotics and Automation (ICRA), 2011\n
-https://doi.org/10.1109/ICRA.2011.5980306
-*/
-
-class SIPP
-{
-private:
-    SIPPEnvironment m_env;
-    AStar m_astar;
-
-public:
-    SIPP(SIPPEnvironment environment) :
-      m_env(environment),
-      m_astar(m_env)
-    {}
-
-    void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
-    {
-        m_env.set_collision_intervals(location, intervals);
-    }
-
-    bool sipp_search(const Location& start, const Action& waitAction,
-                PlanResult& solution, int start_time = 0)
-    {
-        SIPPPlanResult astar_solution;
-        solution.cost = 0;
-        solution.fmin = 0;
-        solution.actions.clear();
-        solution.path.clear();
-        size_t interval;
-        if (!m_env.find_safe_interval(start, start_time, interval))
-        {
-            return false;
-        }
-
-        bool success = m_astar.a_star_search(SIPPState(start, interval), astar_solution, start_time);
-        solution.cost = astar_solution.cost - start_time;
-        solution.fmin = astar_solution.fmin;
-
-        for (size_t i = 0; i < astar_solution.actions.size(); ++i)
-        {
-            int wait_time = astar_solution.actions[i].second - astar_solution.actions[i].first.time;
-            if (wait_time == 0)
-            {
-                solution.path.emplace_back(
-                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second));
-                solution.actions.emplace_back(
-                    std::make_pair<>(astar_solution.actions[i].first.action, astar_solution.actions[i].second));
-            }
-            else
-            {
-                // additional wait action before
-                solution.path.emplace_back(
-                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second));
-                solution.actions.emplace_back(std::make_pair<>(waitAction, wait_time));
-                solution.path.emplace_back(
-                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second + wait_time));
-                solution.actions.emplace_back(
-                    std::make_pair<>(astar_solution.actions[i].first.action, astar_solution.actions[i].first.time));
-            }
-        }
-
-        solution.path.emplace_back(
-            std::make_pair<>(astar_solution.path.back().first.location, astar_solution.path.back().second));
-
-        return success;
-    }
-};
 
 #endif  // SIPP_ISOLATED_HPP
