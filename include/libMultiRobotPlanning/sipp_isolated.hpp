@@ -323,14 +323,14 @@ public:
     }
 
     // 根据每个地图位置的collision_intervals计算出location_to_safe_intervals堆
-    void generate_location_to_safe_intervals(const Location& location, const std::vector<Interval>& intervals)
+    void generate_location_to_safe_intervals(const Location& location, const std::vector<Interval>& collision_intervals)
     {
         location_to_safe_intervals.erase(location);
-        std::vector<Interval> sorted_intervals(intervals);
+        std::vector<Interval> sorted_intervals(collision_intervals);
         std::sort(sorted_intervals.begin(), sorted_intervals.end());
 
         // std::cout << location << ": " << std::endl;
-        if (intervals.size() > 0)
+        if (collision_intervals.size() > 0)
         {
             location_to_safe_intervals[location]; // create empty safe interval
             int start = 0;
