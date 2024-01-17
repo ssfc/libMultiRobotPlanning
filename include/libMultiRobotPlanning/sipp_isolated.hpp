@@ -326,8 +326,8 @@ public:
     void generate_location_to_safe_intervals(const Location& location, const std::vector<Interval>& collision_intervals)
     {
         location_to_safe_intervals.erase(location);
-        std::vector<Interval> sorted_intervals(collision_intervals);
-        std::sort(sorted_intervals.begin(), sorted_intervals.end());
+        std::vector<Interval> sorted_collision_intervals(collision_intervals);
+        std::sort(sorted_collision_intervals.begin(), sorted_collision_intervals.end());
 
         // std::cout << location << ": " << std::endl;
         if (collision_intervals.size() > 0)
@@ -336,7 +336,7 @@ public:
             int start = 0;
             int last_interval_end = 0;
 
-            for (const auto& interval : sorted_intervals)
+            for (const auto& interval : sorted_collision_intervals)
             {
                 // std::cout << "  ci: " << interval.interval_start << " - " << interval.end <<
                 // std::endl;
