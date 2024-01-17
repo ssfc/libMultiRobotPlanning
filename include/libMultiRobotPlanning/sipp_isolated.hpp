@@ -354,19 +354,6 @@ public:
         return sipp_neighbors;
     }
 
-    void onExpandNode(int gScore)
-    {
-        // const auto& interval_index =
-        // get_safe_intervals(sipp_state.location).at(sipp_state.interval_index);
-        // std::cout << "expand: " << sipp_state.location << "," << interval_index.interval_start << " to "
-        // << interval_index.interval_end << "(g: " << gScore << " f: " << fScore << ")" <<
-        // std::endl;
-        // This is called before get_neighbors(). We use the callback to find the
-        // current cost (=time) of the expanded node
-        last_g_score = gScore;
-    }
-
-
     void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
     {
         location_to_safe_intervals.erase(location);
@@ -485,7 +472,7 @@ public:
             // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
             // current := the node in open_set having the lowest f_score[] value
             SIPPNode current = open_set.top();
-            onExpandNode(current.g_score);
+            last_g_score = current.g_score;
 
             // A* LINE 11
             // if current = goal
