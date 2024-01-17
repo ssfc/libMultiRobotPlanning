@@ -155,45 +155,6 @@ public:
           obstacles(std::move(input_obstacles)),
           goal(input_goal)
     {}
-
-    bool location_valid(const Location& location)
-    {
-        return location.x >= 0 && location.x < num_columns &&
-               location.y >= 0 && location.y < num_rows &&
-               obstacles.find(location) == obstacles.end();
-    }
-
-    std::vector<Neighbor> get_neighbors(const Location& location)
-    {
-        // 注意! 这里的neighbor没有wait选项了！
-        std::vector<Neighbor> neighbors;
-
-        Location up(location.x, location.y + 1);
-        if (location_valid(up))
-        {
-            neighbors.emplace_back(Neighbor(up, Action::Up));
-        }
-
-        Location down(location.x, location.y - 1);
-        if (location_valid(down))
-        {
-            neighbors.emplace_back(Neighbor(down, Action::Down));
-        }
-
-        Location left(location.x - 1, location.y);
-        if (location_valid(left))
-        {
-            neighbors.emplace_back(Neighbor(left, Action::Left));
-        }
-
-        Location right(location.x + 1, location.y);
-        if (location_valid(right))
-        {
-            neighbors.emplace_back(Neighbor(right, Action::Right));
-        }
-
-        return neighbors;
-    }
 };
 
 class Interval
@@ -322,7 +283,7 @@ public:
     {
         std::vector<SIPPNeighbor> sipp_neighbors;
 
-        std::vector<Neighbor> motions = m_env.get_neighbors(sipp_state.location); // 地理上的邻居
+        std::vector<Neighbor> motions = get_neighbors(sipp_state.location); // 地理上的邻居
         for (const auto& motion : motions)
         {
             // std::cout << "gN " << motion.location << std::endl;
@@ -415,6 +376,45 @@ public:
         }
 
         return false;
+    }
+
+    bool location_valid(const Location& location)
+    {
+        return location.x >= 0 && location.x < m_env.num_columns &&
+               location.y >= 0 && location.y < m_env.num_rows &&
+               m_env.obstacles.find(location) == m_env.obstacles.end();
+    }
+
+    std::vector<Neighbor> get_neighbors(const Location& location)
+    {
+        // 注意! 这里的neighbor没有wait选项了！
+        std::vector<Neighbor> neighbors;
+
+        Location up(location.x, location.y + 1);
+        if (location_valid(up))
+        {
+            neighbors.emplace_back(Neighbor(up, Action::Up));
+        }
+
+        Location down(location.x, location.y - 1);
+        if (location_valid(down))
+        {
+            neighbors.emplace_back(Neighbor(down, Action::Down));
+        }
+
+        Location left(location.x - 1, location.y);
+        if (location_valid(left))
+        {
+            neighbors.emplace_back(Neighbor(left, Action::Left));
+        }
+
+        Location right(location.x + 1, location.y);
+        if (location_valid(right))
+        {
+            neighbors.emplace_back(Neighbor(right, Action::Right));
+        }
+
+        return neighbors;
     }
 
     // A* LINE 1
