@@ -288,7 +288,7 @@ class SIPPNode
 
 };
 
-class SIPPEnvironment
+class SIPP
 {
 private:
     Environment m_env;
@@ -302,7 +302,7 @@ private:
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
-    SIPPEnvironment(Environment env) : m_env(env)
+    SIPP(Environment env) : m_env(env)
     {}
 
     int admissible_heuristic(const SIPPState& sipp_state) // 和之前的没有区别嘛
