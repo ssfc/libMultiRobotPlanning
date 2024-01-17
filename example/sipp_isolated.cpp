@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
             collision_intervals.emplace_back(Interval(interval[0].as<int>(), interval[1].as<int>()));
         }
 
-        sipp.set_collision_intervals(state, collision_intervals);
+        sipp.generate_location_to_safe_intervals(state, collision_intervals);
     }
 
     // Plan
