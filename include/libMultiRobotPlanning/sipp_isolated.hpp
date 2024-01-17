@@ -165,6 +165,7 @@ public:
 
     std::vector<Neighbor> get_neighbors(const Location& location)
     {
+        // 注意! 这里的neighbor没有wait选项了！
         std::vector<Neighbor> neighbors;
 
         Location up(location.x, location.y + 1);
