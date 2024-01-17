@@ -90,6 +90,19 @@ int main(int argc, char* argv[])
                     config["environment"]["size"][1].as<int>(), obstacles, goal);
 
     SIPPEnvironment sipp_env(env);
+    for (const auto& node : config["environment"]["collisionIntervals"])
+    {
+        Location state(node["location"][0].as<int>(), node["location"][1].as<int>());
+
+        std::vector<Interval> collision_intervals;
+
+        for (const auto& interval : node["intervals"])
+        {
+            collision_intervals.emplace_back(Interval(interval[0].as<int>(), interval[1].as<int>()));
+        }
+
+        sipp_env.set_collision_intervals(state, collision_intervals);
+    }
 
     SIPP sipp(sipp_env);
     for (const auto& node : config["environment"]["collisionIntervals"])
@@ -109,7 +122,8 @@ int main(int argc, char* argv[])
     // Plan
     PlanResult solution;
     // bool success = sipp.sipp_search(start, Action::Wait, solution);
-    bool success = sipp.sipp_search(start, Action::Wait, solution);
+    // bool success = sipp.sipp_search(start, Action::Wait, solution);
+    bool success = sipp_env.sipp_search(start, Action::Wait, solution);
 
     if (success)
     {
