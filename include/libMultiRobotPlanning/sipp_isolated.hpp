@@ -307,7 +307,8 @@ public:
 
     int admissible_heuristic(const SIPPState& sipp_state) // 和之前的没有区别嘛
     {
-        return m_env.admissible_heuristic(sipp_state.location);
+        // return m_env.admissible_heuristic(sipp_state.location);
+        return std::abs(sipp_state.location.x - m_env.goal.x) + std::abs(sipp_state.location.y - m_env.goal.y);
     }
 
     // 从location_to_safe_intervals中找到对应location的safe_intervals
