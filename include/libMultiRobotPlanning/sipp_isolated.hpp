@@ -178,7 +178,7 @@ class SIPPNode
 public:
     SIPPState sipp_state;
     int f_score;
-    int g_score;
+    int g_score; // 这里的g值不再代表从起点到这里的路程，而是代表消耗的时间。
 
     // 定义 handle: 就是上面那个HeapHandle
     typename boost::heap::fibonacci_heap<SIPPNode>::handle_type handle;
@@ -545,6 +545,7 @@ public:
                     // tentative_g_score is the distance from start to the neighbor through current
                     // tentative_g_score := g_score[current] + d(current, neighbor)
                     int tentative_g_score = current.g_score + sipp_neighbor.cost;
+                    // 这里的g值不再代表从起点到这里的路程，而代表消耗的时间
 
                     // A* LINE 22
                     // if neighbor not in open_set
