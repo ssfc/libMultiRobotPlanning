@@ -295,6 +295,12 @@ private:
     int last_g_score;
     std::unordered_map<Location, std::vector<Interval> > location_to_safe_intervals;
 
+    // 定义openSet_t和fibHeapHandle_t
+    using OpenSet = boost::heap::fibonacci_heap<SIPPNode>;
+    using HeapHandle = typename OpenSet::handle_type;
+    // using OpenSet = boost::heap::d_ary_heap<SIPPNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+    // using HeapHandle = typename OpenSet::handle_type;
+
 public:
     SIPPEnvironment(Environment env) : m_env(env)
     {}
