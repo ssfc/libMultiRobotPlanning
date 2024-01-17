@@ -203,19 +203,6 @@ public:
     {
         // std::cout << "expand: " << location << "g: " << gScore << std::endl;
     }
-
-    bool is_command_valid(
-        int earliest_start_time,      // can start motion at this time
-        int earliest_arrival_time,    // can only arrive at (location+cmd)
-        int& t)
-    {
-        t = std::max<int>(earliest_arrival_time, earliest_start_time + 1);
-
-        // TODO(whoenig): need to check for swaps here...
-
-        // return t - 1 <= latestStartTime;
-        return true;
-    }
 };
 
 class Interval
@@ -326,6 +313,19 @@ public:
                    std::numeric_limits<int>::max(); // 为什么goal安全区间必须是无限大的右开区间？假设goal安全区间是[4, 10], 所有智能体的行动在时刻9终结，那么不可能安全区间直到10，而必然向右延伸到无穷大。所以goal安全区间必须是无限大的右开区间。
     }
 
+    bool is_command_valid(
+        int earliest_start_time,      // can start motion at this time
+        int earliest_arrival_time,    // can only arrive at (location+cmd)
+        int& t)
+    {
+        t = std::max<int>(earliest_arrival_time, earliest_start_time + 1);
+
+        // TODO(whoenig): need to check for swaps here...
+
+        // return t - 1 <= latestStartTime;
+        return true;
+    }
+
     // 这个函数对应的就是论文中的get_successors(state)
     std::vector<SIPPNeighbor> get_sipp_neighbors(const SIPPState& sipp_state)
     {
@@ -350,7 +350,7 @@ public:
                 if (safe_interval.interval_end >= start_t && safe_interval.interval_start - 1 <= end_t)
                 {
                     int t;
-                    if (m_env.is_command_valid(last_g_score, safe_interval.interval_start, t))
+                    if (is_command_valid(last_g_score, safe_interval.interval_start, t))
                     {
                         // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
                         // << last_g_score << std::endl;
