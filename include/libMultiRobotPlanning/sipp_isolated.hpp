@@ -564,18 +564,18 @@ public:
                     }
                     else
                     {
-                        auto handle = iter->second;
+                        auto updated_node_handle = iter->second;
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
-                        // << (*handle).g_score << std::endl;
+                        // << (*updated_node_handle).g_score << std::endl;
                         // We found this node before with a better path
-                        if (tentative_g_score < (*handle).g_score)
+                        if (tentative_g_score < (*updated_node_handle).g_score)
                         {
                             came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_g_score);
 
                             // update f and g_score
-                            (*handle).g_score = tentative_g_score;
-                            (*handle).f_score = tentative_g_score + admissible_heuristic(sipp_neighbor.sipp_state);
-                            open_set.increase(handle);
+                            (*updated_node_handle).g_score = tentative_g_score;
+                            (*updated_node_handle).f_score = tentative_g_score + admissible_heuristic(sipp_neighbor.sipp_state);
+                            open_set.increase(updated_node_handle);
                         }
                     }
 
