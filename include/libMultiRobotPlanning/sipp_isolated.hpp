@@ -354,7 +354,7 @@ public:
         return sipp_neighbors;
     }
 
-    void onExpandNode(const SIPPState& sipp_state, int fScore, int gScore)
+    void onExpandNode(int gScore)
     {
         // const auto& interval_index =
         // get_safe_intervals(sipp_state.location).at(sipp_state.interval_index);
@@ -485,7 +485,7 @@ public:
             // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
             // current := the node in open_set having the lowest f_score[] value
             SIPPNode current = open_set.top();
-            onExpandNode(current.location, current.f_score, current.g_score);
+            onExpandNode(current.g_score);
 
             // A* LINE 11
             // if current = goal
