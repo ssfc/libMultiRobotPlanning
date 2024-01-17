@@ -334,7 +334,7 @@ public:
         {
             location_to_safe_intervals[location]; // create empty safe interval
             int safe_interval_start = 0;
-            int last_interval_end = 0;
+            int last_collision_interval_end = 0;
 
             for (const auto& collision_interval : sorted_collision_intervals)
             {
@@ -351,10 +351,10 @@ public:
                 }
                 // }
                 safe_interval_start = collision_interval.interval_end + 1;
-                last_interval_end = collision_interval.interval_end;
+                last_collision_interval_end = collision_interval.interval_end;
             }
 
-            if (last_interval_end < std::numeric_limits<int>::max())
+            if (last_collision_interval_end < std::numeric_limits<int>::max())
             {
                 // assert(safe_interval_start < std::numeric_limits<int>::max());
                 location_to_safe_intervals[location].push_back({safe_interval_start, std::numeric_limits<int>::max()});
