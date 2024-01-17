@@ -333,7 +333,7 @@ public:
         if (collision_intervals.size() > 0)
         {
             location_to_safe_intervals[location]; // create empty safe interval
-            int start = 0;
+            int safe_interval_start = 0;
             int last_interval_end = 0;
 
             for (const auto& collision_interval : sorted_collision_intervals)
@@ -341,30 +341,30 @@ public:
                 // std::cout << "  ci: " << collision_interval.interval_start << " - " << collision_interval.end <<
                 // std::endl;
                 assert(collision_interval.interval_start <= collision_interval.interval_end);
-                assert(start <= collision_interval.interval_start);
-                // if (start + 1 != collision_interval.start - 1) {
-                // std::cout << start << "," << collision_interval.start << std::endl;
-                // assert(start + 1 < collision_interval.start - 1);
-                if (start <= collision_interval.interval_start - 1)
+                assert(safe_interval_start <= collision_interval.interval_start);
+                // if (safe_interval_start + 1 != collision_interval.safe_interval_start - 1) {
+                // std::cout << safe_interval_start << "," << collision_interval.safe_interval_start << std::endl;
+                // assert(safe_interval_start + 1 < collision_interval.safe_interval_start - 1);
+                if (safe_interval_start <= collision_interval.interval_start - 1)
                 {
-                    location_to_safe_intervals[location].push_back({start, collision_interval.interval_start - 1});
+                    location_to_safe_intervals[location].push_back({safe_interval_start, collision_interval.interval_start - 1});
                 }
                 // }
-                start = collision_interval.interval_end + 1;
+                safe_interval_start = collision_interval.interval_end + 1;
                 last_interval_end = collision_interval.interval_end;
             }
 
             if (last_interval_end < std::numeric_limits<int>::max())
             {
-                // assert(start < std::numeric_limits<int>::max());
-                location_to_safe_intervals[location].push_back({start, std::numeric_limits<int>::max()});
+                // assert(safe_interval_start < std::numeric_limits<int>::max());
+                location_to_safe_intervals[location].push_back({safe_interval_start, std::numeric_limits<int>::max()});
             }
         }
 
         // auto iter = location_to_safe_intervals.find(location);
         // if (iter != location_to_safe_intervals.interval_end()) {
         //   for (const auto& safe_interval : iter->second) {
-        //     std::cout << "  safe_interval: " << safe_interval.start << " - " << safe_interval.interval_end << std::endl;
+        //     std::cout << "  safe_interval: " << safe_interval.safe_interval_start << " - " << safe_interval.interval_end << std::endl;
         //   }
         // }
     }
