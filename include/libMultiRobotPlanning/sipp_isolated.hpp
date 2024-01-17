@@ -544,7 +544,7 @@ public:
                     // d(current,neighbor) is the weight of the edge from current to neighbor
                     // tentative_g_score is the distance from start to the neighbor through current
                     // tentative_g_score := g_score[current] + d(current, neighbor)
-                    int tentative_gScore = current.g_score + sipp_neighbor.cost;
+                    int tentative_g_score = current.g_score + sipp_neighbor.cost;
 
                     // A* LINE 22
                     // if neighbor not in open_set
@@ -553,27 +553,27 @@ public:
                     {  // Discover a new node
 
                         came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
-                              std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore)));
+                              std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_g_score)));
 
-                        int f_score = tentative_gScore + admissible_heuristic(sipp_neighbor.sipp_state);
-                        auto new_node_handle = open_set.push(SIPPNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
+                        int f_score = tentative_g_score + admissible_heuristic(sipp_neighbor.sipp_state);
+                        auto new_node_handle = open_set.push(SIPPNode(sipp_neighbor.sipp_state, f_score, tentative_g_score));
                         sippstate_to_heaphandle.insert(std::make_pair<>(sipp_neighbor.sipp_state, new_node_handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
-                        // tentative_gScore << std::endl;
+                        // tentative_g_score << std::endl;
                     }
                     else
                     {
                         auto handle = iter->second;
-                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
                         // We found this node before with a better path
-                        if (tentative_gScore < (*handle).g_score)
+                        if (tentative_g_score < (*handle).g_score)
                         {
-                            came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore);
+                            came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_g_score);
 
                             // update f and g_score
-                            int delta = (*handle).g_score - tentative_gScore;
-                            (*handle).g_score = tentative_gScore;
+                            int delta = (*handle).g_score - tentative_g_score;
+                            (*handle).g_score = tentative_g_score;
                             (*handle).f_score -= delta;
                             open_set.increase(handle);
                         }
