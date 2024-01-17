@@ -223,6 +223,7 @@ private:
 
     int num_columns;
     int num_rows;
+    std::unordered_set<Location> obstacles;
 
 
     int last_g_score;
@@ -235,10 +236,11 @@ private:
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
-    SIPP(Environment env, int input_num_columns, int input_num_rows)
+    SIPP(Environment env, int input_num_columns, int input_num_rows, std::unordered_set<Location> input_obstacles)
      : m_env(env),
        num_columns(input_num_columns),
-       num_rows(input_num_rows)
+       num_rows(input_num_rows),
+       obstacles(std::move(input_obstacles))
     {}
 
     int admissible_heuristic(const SIPPState& sipp_state) // 和之前的没有区别嘛
@@ -385,7 +387,7 @@ public:
     {
         return location.x >= 0 && location.x < num_columns &&
                location.y >= 0 && location.y < num_rows &&
-               m_env.obstacles.find(location) == m_env.obstacles.end();
+               obstacles.find(location) == obstacles.end();
     }
 
     std::vector<Neighbor> get_neighbors(const Location& location)
