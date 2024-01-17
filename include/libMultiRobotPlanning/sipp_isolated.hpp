@@ -222,7 +222,7 @@ private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
-
+    Location goal;
 
     int last_g_score;
     std::unordered_map<Location, std::vector<Interval> > location_to_safe_intervals;
@@ -234,16 +234,18 @@ private:
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
-    SIPP(Environment env, int input_num_columns, int input_num_rows, std::unordered_set<Location> input_obstacles)
+    SIPP(Environment env, int input_num_columns, int input_num_rows, std::unordered_set<Location> input_obstacles,
+      Location input_goal)
      : m_env(env),
        num_columns(input_num_columns),
        num_rows(input_num_rows),
-       obstacles(std::move(input_obstacles))
+       obstacles(std::move(input_obstacles)),
+       goal(input_goal)
     {}
 
     int admissible_heuristic(const SIPPState& sipp_state) // 和之前的没有区别嘛
     {
-        return std::abs(sipp_state.location.x - m_env.goal.x) + std::abs(sipp_state.location.y - m_env.goal.y);
+        return std::abs(sipp_state.location.x - goal.x) + std::abs(sipp_state.location.y - goal.y);
     }
 
     // 从location_to_safe_intervals中找到对应location的safe_intervals
@@ -263,7 +265,7 @@ public:
 
     bool is_solution(const SIPPState& sipp_state)
     {
-        return (sipp_state.location == m_env.goal) &&
+        return (sipp_state.location == goal) &&
                get_safe_intervals(sipp_state.location).at(sipp_state.interval_index).interval_end == std::numeric_limits<int>::max();
         // 为什么goal安全区间必须是无限大的右开区间？假设goal安全区间是[4, 10], 所有智能体的行动在时刻9终结，那么不可能安全区间直到10，而必然向右延伸到无穷大。所以goal安全区间必须是无限大的右开区间。
     }
