@@ -91,9 +91,23 @@ int main(int argc, char* argv[])
 
     SIPPEnvironment sipp_env(env);
 
-    // AStar a_star(env);
-    SIPP sipp(sipp_env);
+    AStar a_star(sipp_env);
+    for (const auto& node : config["environment"]["collisionIntervals"])
+    {
+        Location state(node["location"][0].as<int>(), node["location"][1].as<int>());
 
+        std::vector<Interval> collision_intervals;
+
+        for (const auto& interval : node["intervals"])
+        {
+            collision_intervals.emplace_back(Interval(interval[0].as<int>(), interval[1].as<int>()));
+        }
+
+        a_star.set_collision_intervals(state, collision_intervals);
+    }
+
+
+    SIPP sipp(sipp_env);
     for (const auto& node : config["environment"]["collisionIntervals"])
     {
         Location state(node["location"][0].as<int>(), node["location"][1].as<int>());
@@ -110,7 +124,8 @@ int main(int argc, char* argv[])
 
     // Plan
     PlanResult solution;
-    bool success = sipp.sipp_search(start, Action::Wait, solution);
+    // bool success = sipp.sipp_search(start, Action::Wait, solution);
+    bool success = a_star.sipp_search(start, Action::Wait, solution);
 
     if (success)
     {

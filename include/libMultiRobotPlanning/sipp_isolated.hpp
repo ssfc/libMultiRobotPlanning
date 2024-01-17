@@ -617,6 +617,58 @@ public:
 
         return false;
     }
+
+    void set_collision_intervals(const Location& location, const std::vector<Interval>& intervals)
+    {
+        environment.set_collision_intervals(location, intervals);
+    }
+
+    bool sipp_search(const Location& start, const Action& waitAction,
+                     PlanResult& solution, int start_time = 0)
+    {
+        SIPPPlanResult astar_solution;
+        solution.cost = 0;
+        solution.fmin = 0;
+        solution.actions.clear();
+        solution.path.clear();
+        size_t interval;
+        if (!environment.find_safe_interval(start, start_time, interval))
+        {
+            return false;
+        }
+
+        bool success = a_star_search(SIPPState(start, interval), astar_solution, start_time);
+        solution.cost = astar_solution.cost - start_time;
+        solution.fmin = astar_solution.fmin;
+
+        for (size_t i = 0; i < astar_solution.actions.size(); ++i)
+        {
+            int wait_time = astar_solution.actions[i].second - astar_solution.actions[i].first.time;
+            if (wait_time == 0)
+            {
+                solution.path.emplace_back(
+                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second));
+                solution.actions.emplace_back(
+                    std::make_pair<>(astar_solution.actions[i].first.action, astar_solution.actions[i].second));
+            }
+            else
+            {
+                // additional wait action before
+                solution.path.emplace_back(
+                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second));
+                solution.actions.emplace_back(std::make_pair<>(waitAction, wait_time));
+                solution.path.emplace_back(
+                    std::make_pair<>(astar_solution.path[i].first.location, astar_solution.path[i].second + wait_time));
+                solution.actions.emplace_back(
+                    std::make_pair<>(astar_solution.actions[i].first.action, astar_solution.actions[i].first.time));
+            }
+        }
+
+        solution.path.emplace_back(
+            std::make_pair<>(astar_solution.path.back().first.location, astar_solution.path.back().second));
+
+        return success;
+    }
 };
 
 
