@@ -205,7 +205,6 @@ public:
     }
 
     bool is_command_valid(
-        const Location& /*s1*/, const Location& /*s2*/, const Action& /*a*/,
         int earliest_start_time,      // can start motion at this time
         int earliest_arrival_time,    // can only arrive at (location+cmd)
         int& t)
@@ -351,8 +350,7 @@ public:
                 if (safe_interval.interval_end >= start_t && safe_interval.interval_start - 1 <= end_t)
                 {
                     int t;
-                    if (m_env.is_command_valid(sipp_state.location, motion.location, motion.action, last_g_score,
-                                               safe_interval.interval_start, t))
+                    if (m_env.is_command_valid(last_g_score, safe_interval.interval_start, t))
                     {
                         // std::cout << "  gN: " << motion.location << "," << i << "," << t << ","
                         // << last_g_score << std::endl;
