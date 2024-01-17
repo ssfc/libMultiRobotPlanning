@@ -163,11 +163,6 @@ public:
                obstacles.find(location) == obstacles.end();
     }
 
-    bool is_solution(const Location& location)
-    {
-        return location == goal;
-    }
-
     std::vector<Neighbor> get_neighbors(const Location& location)
     {
         std::vector<Neighbor> neighbors;
@@ -308,9 +303,9 @@ public:
 
     bool is_solution(const SIPPState& sipp_state)
     {
-        return m_env.is_solution(sipp_state.location) &&
-               get_safe_intervals(sipp_state.location).at(sipp_state.interval_index).interval_end ==
-                   std::numeric_limits<int>::max(); // 为什么goal安全区间必须是无限大的右开区间？假设goal安全区间是[4, 10], 所有智能体的行动在时刻9终结，那么不可能安全区间直到10，而必然向右延伸到无穷大。所以goal安全区间必须是无限大的右开区间。
+        return (sipp_state.location == m_env.goal) &&
+               get_safe_intervals(sipp_state.location).at(sipp_state.interval_index).interval_end == std::numeric_limits<int>::max();
+        // 为什么goal安全区间必须是无限大的右开区间？假设goal安全区间是[4, 10], 所有智能体的行动在时刻9终结，那么不可能安全区间直到10，而必然向右延伸到无穷大。所以goal安全区间必须是无限大的右开区间。
     }
 
     bool is_command_valid(
