@@ -463,7 +463,6 @@ public:
         auto root = SIPPNode(start_location, admissible_heuristic(start_location), initialCost);
         auto root_handle = open_set.push(root);
         sippstate_to_heaphandle.insert(std::make_pair<>(start_location, root_handle));
-        (*root_handle).handle = root_handle;
 
         // A* LINE 8
         // node that has already been evaluated. In other words, already been poped from open_set.
@@ -558,7 +557,6 @@ public:
 
                         int f_score = tentative_gScore + admissible_heuristic(sipp_neighbor.sipp_state);
                         auto handle = open_set.push(SIPPNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
-                        (*handle).handle = handle;
                         sippstate_to_heaphandle.insert(std::make_pair<>(sipp_neighbor.sipp_state, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
