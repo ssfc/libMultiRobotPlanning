@@ -336,22 +336,22 @@ public:
             int start = 0;
             int last_interval_end = 0;
 
-            for (const auto& interval : sorted_collision_intervals)
+            for (const auto& collision_interval : sorted_collision_intervals)
             {
-                // std::cout << "  ci: " << interval.interval_start << " - " << interval.end <<
+                // std::cout << "  ci: " << collision_interval.interval_start << " - " << collision_interval.end <<
                 // std::endl;
-                assert(interval.interval_start <= interval.interval_end);
-                assert(start <= interval.interval_start);
-                // if (start + 1 != interval.start - 1) {
-                // std::cout << start << "," << interval.start << std::endl;
-                // assert(start + 1 < interval.start - 1);
-                if (start <= interval.interval_start - 1)
+                assert(collision_interval.interval_start <= collision_interval.interval_end);
+                assert(start <= collision_interval.interval_start);
+                // if (start + 1 != collision_interval.start - 1) {
+                // std::cout << start << "," << collision_interval.start << std::endl;
+                // assert(start + 1 < collision_interval.start - 1);
+                if (start <= collision_interval.interval_start - 1)
                 {
-                    location_to_safe_intervals[location].push_back({start, interval.interval_start - 1});
+                    location_to_safe_intervals[location].push_back({start, collision_interval.interval_start - 1});
                 }
                 // }
-                start = interval.interval_end + 1;
-                last_interval_end = interval.interval_end;
+                start = collision_interval.interval_end + 1;
+                last_interval_end = collision_interval.interval_end;
             }
 
             if (last_interval_end < std::numeric_limits<int>::max())
