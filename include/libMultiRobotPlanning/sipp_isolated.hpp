@@ -142,16 +142,14 @@ struct SIPPPlanResult
 class Environment
 {
 public:
-    int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
     Location goal;
 
 public:
-    Environment(size_t input_dimx, size_t input_dimy,
+    Environment(size_t input_dimy,
              std::unordered_set<Location> input_obstacles, Location input_goal)
-        : num_columns(input_dimx),
-          num_rows(input_dimy),
+        : num_rows(input_dimy),
           obstacles(std::move(input_obstacles)),
           goal(input_goal)
     {}
