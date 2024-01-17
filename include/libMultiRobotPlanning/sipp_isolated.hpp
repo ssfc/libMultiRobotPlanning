@@ -443,7 +443,7 @@ class AStarNode
 
 };
 
-class AStar
+class SIPP
 {
 private:
     // inner class declaration.
@@ -457,7 +457,7 @@ private:
 
 public:
     // member funcs
-    AStar(SIPPEnvironment input_environment) : environment(input_environment)
+    SIPP(SIPPEnvironment input_environment) : environment(input_environment)
     {}
 
     // A* LINE 1

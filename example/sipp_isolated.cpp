@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 
     SIPPEnvironment sipp_env(env);
 
-    AStar a_star(sipp_env);
+    SIPP a_star(sipp_env);
     for (const auto& node : config["environment"]["collisionIntervals"])
     {
         Location state(node["location"][0].as<int>(), node["location"][1].as<int>());
