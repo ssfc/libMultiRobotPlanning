@@ -398,7 +398,7 @@ public:
 
 
 // inner class definition
-class AStarNode
+class SIPPNode
 {
    public:
     SIPPState location;
@@ -406,17 +406,17 @@ class AStarNode
     int g_score;
 
     // 定义 handle: 就是上面那个HeapHandle
-    typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
-    // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+    typename boost::heap::fibonacci_heap<SIPPNode>::handle_type handle;
+    // typename boost::heap::d_ary_heap<SIPPNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
    public:
-    AStarNode(const SIPPState& input_state, int input_fScore, int input_gScore)
+    SIPPNode(const SIPPState& input_state, int input_fScore, int input_gScore)
         : location(input_state),
           f_score(input_fScore),
           g_score(input_gScore)
     {}
 
-    bool operator<(const AStarNode& other) const
+    bool operator<(const SIPPNode& other) const
     {
         // Sort order
         // 1. lowest f_score
@@ -433,7 +433,7 @@ class AStarNode
         }
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
+    friend std::ostream& operator<<(std::ostream& os, const SIPPNode& node)
     {
         os << "location: " << node.location << " f_score: " << node.f_score
            << " g_score: " << node.g_score;
@@ -450,9 +450,9 @@ private:
     // member vars
     SIPPEnvironment environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
-    using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
+    using OpenSet = boost::heap::fibonacci_heap<SIPPNode>;
     using HeapHandle = typename OpenSet::handle_type;
-    // using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+    // using OpenSet = boost::heap::d_ary_heap<SIPPNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
@@ -497,7 +497,7 @@ public:
         // Initially, only the start node is known.
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
         // open_set := {start}
-        auto root = AStarNode(start_location,
+        auto root = SIPPNode(start_location,
           environment.admissible_heuristic(start_location), initialCost);
         auto root_handle = open_set.push(root);
         sippstate_to_heaphandle.insert(std::make_pair<>(start_location, root_handle));
@@ -516,7 +516,7 @@ public:
             // A* LINE 10
             // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
             // current := the node in open_set having the lowest f_score[] value
-            AStarNode current = open_set.top();
+            SIPPNode current = open_set.top();
             environment.onExpandNode(current.location, current.f_score, current.g_score);
 
             // A* LINE 11
@@ -596,7 +596,7 @@ public:
                                                                             tentative_gScore)));
 
                         int f_score = tentative_gScore + environment.admissible_heuristic(sipp_neighbor.sipp_state);
-                        auto handle = open_set.push(AStarNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
+                        auto handle = open_set.push(SIPPNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         sippstate_to_heaphandle.insert(std::make_pair<>(sipp_neighbor.sipp_state, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
