@@ -322,7 +322,7 @@ public:
         return sipp_neighbors;
     }
 
-    // 根据每个地图位置的collision_intervals计算出location_to_safe_intervals堆
+    // 根据每个地图位置的collision_intervals计算出相应位置的location_to_safe_intervals堆
     void generate_location_to_safe_intervals(const Location& location, const std::vector<Interval>& collision_intervals)
     {
         location_to_safe_intervals.erase(location);
