@@ -139,16 +139,6 @@ struct SIPPPlanResult
     int fmin;
 };
 
-class Environment
-{
-public:
-    Location goal;
-
-public:
-    Environment(Location input_goal)
-        : goal(input_goal)
-    {}
-};
 
 class Interval
 {
@@ -217,8 +207,6 @@ class SIPPNode
 class SIPP
 {
 private:
-    Environment m_env;
-
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
@@ -234,10 +222,9 @@ private:
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
-    SIPP(Environment env, int input_num_columns, int input_num_rows, std::unordered_set<Location> input_obstacles,
+    SIPP(int input_num_columns, int input_num_rows, std::unordered_set<Location> input_obstacles,
       Location input_goal)
-     : m_env(env),
-       num_columns(input_num_columns),
+     : num_columns(input_num_columns),
        num_rows(input_num_rows),
        obstacles(std::move(input_obstacles)),
        goal(input_goal)

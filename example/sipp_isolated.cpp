@@ -86,9 +86,7 @@ int main(int argc, char* argv[])
         obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
     }
 
-    Environment env(goal);
-
-    SIPP sipp(env, config["environment"]["size"][0].as<int>(), config["environment"]["size"][1].as<int>(),
+    SIPP sipp(config["environment"]["size"][0].as<int>(), config["environment"]["size"][1].as<int>(),
         obstacles, goal);
     for (const auto& node : config["environment"]["collisionIntervals"])
     {
