@@ -572,7 +572,7 @@ public:
                         if (tentative_gScore < (*handle).g_score)
                         {
                             came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore);
-                            
+
                             // update f and g_score
                             int delta = (*handle).g_score - tentative_gScore;
                             (*handle).g_score = tentative_gScore;
