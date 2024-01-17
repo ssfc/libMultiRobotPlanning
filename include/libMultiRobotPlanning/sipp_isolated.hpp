@@ -545,8 +545,7 @@ public:
                     {  // Discover a new node
 
                         came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
-                                                          std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
-                                                                            tentative_gScore)));
+                              std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore)));
 
                         int f_score = tentative_gScore + admissible_heuristic(sipp_neighbor.sipp_state);
                         auto handle = open_set.push(SIPPNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
