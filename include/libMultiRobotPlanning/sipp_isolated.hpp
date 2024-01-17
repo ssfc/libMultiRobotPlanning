@@ -435,7 +435,7 @@ class AStar
 private:
     // inner class declaration.
     // member vars
-    SIPPEnvironment& environment; // include map size, obstacle position, agent goal.
+    SIPPEnvironment environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -444,7 +444,7 @@ private:
 
 public:
     // member funcs
-    AStar(SIPPEnvironment& input_environment) : environment(input_environment)
+    AStar(SIPPEnvironment input_environment) : environment(input_environment)
     {}
 
     // A* LINE 1
