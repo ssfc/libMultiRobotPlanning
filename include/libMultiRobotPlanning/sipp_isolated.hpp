@@ -503,8 +503,7 @@ public:
         // Initially, only the start node is known.
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
         // open_set := {start}
-        auto root = SIPPNode(start_location,
-          environment.admissible_heuristic(start_location), initialCost);
+        auto root = SIPPNode(start_location, environment.admissible_heuristic(start_location), initialCost);
         auto root_handle = open_set.push(root);
         sippstate_to_heaphandle.insert(std::make_pair<>(start_location, root_handle));
         (*root_handle).handle = root_handle;
