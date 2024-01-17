@@ -62,18 +62,6 @@ public:
     }
 };
 
-struct SIPPStateHasher
-{
-    size_t operator()(const SIPPState& sipp_state) const
-    {
-        size_t seed = 0;
-        boost::hash_combine(seed, std::hash<Location>()(sipp_state.location));
-        boost::hash_combine(seed, sipp_state.interval_index);
-
-        return seed;
-    }
-};
-
 namespace std
 {
     template <>
