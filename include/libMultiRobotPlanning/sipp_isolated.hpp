@@ -193,11 +193,6 @@ public:
 
         return neighbors;
     }
-
-    void onExpandNode(const Location& /*location*/, int /*fScore*/, int /*gScore*/)
-    {
-        // std::cout << "expand: " << location << "g: " << gScore << std::endl;
-    }
 };
 
 class Interval
@@ -369,7 +364,6 @@ public:
         // This is called before get_neighbors(). We use the callback to find the
         // current cost (=time) of the expanded node
         last_g_score = gScore;
-        m_env.onExpandNode(sipp_state.location, fScore, gScore);
     }
 
 
