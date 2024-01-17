@@ -166,8 +166,8 @@ public:
 // inner class definition
 class SIPPNode
 {
-   public:
-    SIPPState location;
+public:
+    SIPPState sipp_state;
     int f_score;
     int g_score;
 
@@ -175,9 +175,9 @@ class SIPPNode
     typename boost::heap::fibonacci_heap<SIPPNode>::handle_type handle;
     // typename boost::heap::d_ary_heap<SIPPNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
-   public:
+public:
     SIPPNode(const SIPPState& input_state, int input_fScore, int input_gScore)
-        : location(input_state),
+        : sipp_state(input_state),
           f_score(input_fScore),
           g_score(input_gScore)
     {}
@@ -201,7 +201,7 @@ class SIPPNode
 
     friend std::ostream& operator<<(std::ostream& os, const SIPPNode& node)
     {
-        os << "location: " << node.location << " f_score: " << node.f_score
+        os << "location: " << node.sipp_state << " f_score: " << node.f_score
            << " g_score: " << node.g_score;
 
         return os;
@@ -474,14 +474,14 @@ public:
 
             // A* LINE 11
             // if current = goal
-            if (is_solution(current.location))
+            if (is_solution(current.sipp_state))
             {
                 // A* LINE 12
                 // total_path := {current}
 
                 sipp_solution.path.clear();
                 sipp_solution.actions.clear();
-                auto iter = came_from.find(current.location);
+                auto iter = came_from.find(current.sipp_state);
                 // A* LINE 13
                 // while current in cameFrom.Keys:
                 while (iter != came_from.end())
@@ -515,16 +515,16 @@ public:
             // A* LINE 17
             // open_set.Remove(current)
             open_set.pop();
-            sippstate_to_heaphandle.erase(current.location);
+            sippstate_to_heaphandle.erase(current.sipp_state);
 
             // A* LINE 18
             // add current to closed_set.
-            closed_set.insert(current.location);
+            closed_set.insert(current.sipp_state);
 
             // A* LINE 19
             // for each neighbor of current
             // traverse sipp_neighbors
-            std::vector<SIPPNeighbor> sipp_neighbors = get_sipp_neighbors(current.location);
+            std::vector<SIPPNeighbor> sipp_neighbors = get_sipp_neighbors(current.sipp_state);
             for (const SIPPNeighbor& sipp_neighbor : sipp_neighbors)
             {
                 // A* LINE 20
@@ -545,7 +545,7 @@ public:
                     {  // Discover a new node
 
                         came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
-                              std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore)));
+                              std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore)));
 
                         int f_score = tentative_gScore + admissible_heuristic(sipp_neighbor.sipp_state);
                         auto handle = open_set.push(SIPPNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
@@ -564,9 +564,11 @@ public:
                         {
                             came_from.erase(sipp_neighbor.sipp_state);
                             came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
-                                                              std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore)));
-                            // came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
+                                  std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore)));
+                            // came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost,
                             //                                                        tentative_gScore);
+
+                            // came_from[neighbor.time_location] = std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score);
 
                             // update f and g_score
                             int delta = (*handle).g_score - tentative_gScore;
