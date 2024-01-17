@@ -104,7 +104,7 @@ public:
     SIPPState sipp_state;
     //! action to get to the neighboring location
     SIPPAction action;
-    //! cost to get to the neighboring location, usually 1
+    //! cost to get to the neighboring location, usually not 1 in SIPP case
     int cost;
 
 public:
