@@ -141,7 +141,7 @@ struct SIPPPlanResult
 
 class Environment
 {
-private:
+public:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
