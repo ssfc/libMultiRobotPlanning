@@ -71,20 +71,27 @@ namespace std
         {
             size_t seed = 0;
 
-            boost::hash_combine(seed, std::hash<Location>()(sipp_state.location));
-            boost::hash_combine(seed, std::hash<int>()(sipp_state.interval_index));
+            boost::hash_combine(seed, sipp_state.location.x);
+            boost::hash_combine(seed, sipp_state.location.y);
+            boost::hash_combine(seed, sipp_state.interval_index);
 
             return seed;
         }
     };
 }
 
-struct SIPPAction
+class SIPPAction
 {
-    SIPPAction(const Action& action, int time) : action(action), time(time) {}
-
+public:
     Action action;
     int time;
+
+public:
+    SIPPAction() = default;
+    SIPPAction(const Action& action, int time)
+        : action(action),
+          time(time)
+    {}
 };
 
 class Neighbor
@@ -562,11 +569,11 @@ public:
                         // We found this node before with a better path
                         if (tentative_gScore < (*handle).g_score)
                         {
+                            // came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.sipp_state, sipp_neighbor.action, 0, 0);
+
                             came_from.erase(sipp_neighbor.sipp_state);
                             came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
                                   std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore)));
-                            // came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost,
-                            //                                                        tentative_gScore);
 
                             // came_from[neighbor.time_location] = std::make_tuple<>(current.time_location, neighbor.action, 1, tentative_g_score);
 
