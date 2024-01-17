@@ -225,6 +225,8 @@ class SIPP
 {
 private:
     Environment m_env;
+
+    int num_columns;
     int last_g_score;
     std::unordered_map<Location, std::vector<Interval> > location_to_safe_intervals;
 
@@ -235,7 +237,9 @@ private:
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
-    SIPP(Environment env) : m_env(env)
+    SIPP(Environment env, int input_num_columns)
+     : m_env(env),
+       num_columns(input_num_columns)
     {}
 
     int admissible_heuristic(const SIPPState& sipp_state) // 和之前的没有区别嘛
@@ -380,7 +384,7 @@ public:
 
     bool location_valid(const Location& location)
     {
-        return location.x >= 0 && location.x < m_env.num_columns &&
+        return location.x >= 0 && location.x < num_columns &&
                location.y >= 0 && location.y < m_env.num_rows &&
                m_env.obstacles.find(location) == m_env.obstacles.end();
     }
