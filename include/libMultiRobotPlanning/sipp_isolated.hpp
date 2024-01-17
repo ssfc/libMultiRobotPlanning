@@ -446,6 +446,177 @@ public:
 
         return false;
     }
+
+    // A* LINE 1
+    // A* finds a path from start to goal.
+    bool a_star_search(const SIPPState& start_location, SIPPPlanResult& sipp_solution, int initialCost = 0)
+    {
+        sipp_solution.path.clear();
+        sipp_solution.path.emplace_back(std::make_pair<>(start_location, 0));
+        sipp_solution.actions.clear();
+        sipp_solution.cost = 0;
+
+        // A* LINE 2
+        // For node n, came_from_list[n] is the node immediately preceding it on the cheapest path from the start
+        // to n currently known.
+        // came_from_list := an empty map
+        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,SIPPStateHasher> came_from;
+
+        // A* LINE 3
+        // For node n, g_score[n] is the cost of the cheapest path from start to n currently known.
+        // g_score := map with default value of Infinity
+        OpenSet open_set;
+        std::unordered_map<SIPPState, HeapHandle, SIPPStateHasher> sippstate_to_heaphandle;
+
+        // A* LINE 4
+        // g_score[start] := 0
+
+        // A* LINE 5
+        // For node n, f_score[n] := g_score[n] + h(n). f_score[n] represents our current best guess as to
+        // how cheap a path could be from start to finish if it goes through n.
+        // f_score := map with default value of Infinity
+
+        // A* LINE 6
+        // f_score[start] := h(start)
+
+        // A* LINE 7
+        // The set of discovered nodes that may need to be (re-)expanded.
+        // Initially, only the start node is known.
+        // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+        // open_set := {start}
+        auto root = SIPPNode(start_location, admissible_heuristic(start_location), initialCost);
+        auto root_handle = open_set.push(root);
+        sippstate_to_heaphandle.insert(std::make_pair<>(start_location, root_handle));
+        (*root_handle).handle = root_handle;
+
+        // A* LINE 8
+        // node that has already been evaluated. In other words, already been poped from open_set.
+        // closed_set := the empty set
+        std::unordered_set<SIPPState, SIPPStateHasher> closed_set;
+
+        // A* LINE 9
+        // while open_set is not empty
+        // int iter_low_level = 0;
+        while (!open_set.empty())
+        {
+            // A* LINE 10
+            // This operation can occur in O(Log(N)) time if open_set is a min-heap or a priority queue
+            // current := the node in open_set having the lowest f_score[] value
+            SIPPNode current = open_set.top();
+            onExpandNode(current.location, current.f_score, current.g_score);
+
+            // A* LINE 11
+            // if current = goal
+            if (is_solution(current.location))
+            {
+                // A* LINE 12
+                // total_path := {current}
+
+                sipp_solution.path.clear();
+                sipp_solution.actions.clear();
+                auto iter = came_from.find(current.location);
+                // A* LINE 13
+                // while current in cameFrom.Keys:
+                while (iter != came_from.end())
+                {
+                    // A* LINE 14
+                    // current := came_from[current]
+
+                    // A* LINE 15
+                    // total_path.prepend(current)
+
+                    sipp_solution.path.emplace_back(
+                        std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    sipp_solution.actions.emplace_back(std::make_pair<>(
+                        std::get<1>(iter->second), std::get<2>(iter->second)));
+                    iter = came_from.find(std::get<0>(iter->second));
+
+                    // A* LINE 16
+                    // return total_path
+                }
+
+                sipp_solution.path.emplace_back(std::make_pair<>
+                                                (start_location, initialCost));
+                std::reverse(sipp_solution.path.begin(), sipp_solution.path.end());
+                std::reverse(sipp_solution.actions.begin(), sipp_solution.actions.end());
+                sipp_solution.cost = current.g_score;
+                sipp_solution.fmin = current.f_score;
+
+                return true;
+            }
+
+            // A* LINE 17
+            // open_set.Remove(current)
+            open_set.pop();
+            sippstate_to_heaphandle.erase(current.location);
+
+            // A* LINE 18
+            // add current to closed_set.
+            closed_set.insert(current.location);
+
+            // A* LINE 19
+            // for each neighbor of current
+            // traverse sipp_neighbors
+            std::vector<SIPPNeighbor> sipp_neighbors = get_sipp_neighbors(current.location);
+            for (const SIPPNeighbor& sipp_neighbor : sipp_neighbors)
+            {
+                // A* LINE 20
+                // if neighbor not in closed_set
+                // 不在closed_set中
+                if (closed_set.find(sipp_neighbor.sipp_state) == closed_set.end())
+                {
+                    // A* LINE 21
+                    // d(current,neighbor) is the weight of the edge from current to neighbor
+                    // tentative_g_score is the distance from start to the neighbor through current
+                    // tentative_g_score := g_score[current] + d(current, neighbor)
+                    int tentative_gScore = current.g_score + sipp_neighbor.cost;
+
+                    // A* LINE 22
+                    // if neighbor not in open_set
+                    auto iter = sippstate_to_heaphandle.find(sipp_neighbor.sipp_state);
+                    if (iter == sippstate_to_heaphandle.end())
+                    {  // Discover a new node
+
+                        came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
+                                                          std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
+                                                                            tentative_gScore)));
+
+                        int f_score = tentative_gScore + admissible_heuristic(sipp_neighbor.sipp_state);
+                        auto handle = open_set.push(SIPPNode(sipp_neighbor.sipp_state, f_score, tentative_gScore));
+                        (*handle).handle = handle;
+                        sippstate_to_heaphandle.insert(std::make_pair<>(sipp_neighbor.sipp_state, handle));
+                        // std::cout << "  this is a new node " << f_score << "," <<
+                        // tentative_gScore << std::endl;
+                    }
+                    else
+                    {
+                        auto handle = iter->second;
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // << (*handle).g_score << std::endl;
+                        // We found this node before with a better path
+                        if (tentative_gScore < (*handle).g_score)
+                        {
+                            came_from.erase(sipp_neighbor.sipp_state);
+                            came_from.insert(std::make_pair<>(sipp_neighbor.sipp_state,
+                                                              std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost, tentative_gScore)));
+                            // came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.location, sipp_neighbor.action, sipp_neighbor.cost,
+                            //                                                        tentative_gScore);
+
+                            // update f and g_score
+                            int delta = (*handle).g_score - tentative_gScore;
+                            (*handle).g_score = tentative_gScore;
+                            (*handle).f_score -= delta;
+                            open_set.increase(handle);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return false;
+    }
+
 };
 
 
