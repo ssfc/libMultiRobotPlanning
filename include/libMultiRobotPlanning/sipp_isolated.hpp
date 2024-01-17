@@ -573,9 +573,8 @@ public:
                             came_from[sipp_neighbor.sipp_state] = std::make_tuple<>(current.sipp_state, sipp_neighbor.action, sipp_neighbor.cost, tentative_g_score);
 
                             // update f and g_score
-                            int delta = (*handle).g_score - tentative_g_score;
                             (*handle).g_score = tentative_g_score;
-                            (*handle).f_score -= delta;
+                            (*handle).f_score = tentative_g_score + admissible_heuristic(sipp_neighbor.sipp_state);
                             open_set.increase(handle);
                         }
                     }
