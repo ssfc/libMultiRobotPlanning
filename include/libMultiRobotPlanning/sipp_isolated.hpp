@@ -142,13 +142,11 @@ struct SIPPPlanResult
 class Environment
 {
 public:
-    std::unordered_set<Location> obstacles;
     Location goal;
 
 public:
-    Environment(std::unordered_set<Location> input_obstacles, Location input_goal)
-        : obstacles(std::move(input_obstacles)),
-          goal(input_goal)
+    Environment(Location input_goal)
+        : goal(input_goal)
     {}
 };
 

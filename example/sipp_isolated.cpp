@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
         obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
     }
 
-    Environment env(obstacles, goal);
+    Environment env(goal);
 
     SIPP sipp(env, config["environment"]["size"][0].as<int>(), config["environment"]["size"][1].as<int>(),
         obstacles);
