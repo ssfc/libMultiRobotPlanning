@@ -427,13 +427,13 @@ public:
         // For node n, came_from_list[n] is the node immediately preceding it on the cheapest path from the start
         // to n currently known.
         // came_from_list := an empty map
-        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>,std::hash<SIPPState>> came_from;
+        std::unordered_map<SIPPState, std::tuple<SIPPState,SIPPAction,int,int>> came_from;
 
         // A* LINE 3
         // For node n, g_score[n] is the cost of the cheapest path from start to n currently known.
         // g_score := map with default value of Infinity
         OpenSet open_set;
-        std::unordered_map<SIPPState, HeapHandle, std::hash<SIPPState>> sippstate_to_heaphandle;
+        std::unordered_map<SIPPState, HeapHandle> sippstate_to_heaphandle;
 
         // A* LINE 4
         // g_score[start] := 0
@@ -459,7 +459,7 @@ public:
         // A* LINE 8
         // node that has already been evaluated. In other words, already been poped from open_set.
         // closed_set := the empty set
-        std::unordered_set<SIPPState, std::hash<SIPPState>> closed_set;
+        std::unordered_set<SIPPState> closed_set;
 
         // A* LINE 9
         // while open_set is not empty
