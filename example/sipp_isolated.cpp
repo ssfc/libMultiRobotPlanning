@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
     Environment env(config["environment"]["size"][0].as<int>(),
                     config["environment"]["size"][1].as<int>(), obstacles, goal);
 
-    SIPP sipp_env(env);
+    SIPP sipp(env);
     for (const auto& node : config["environment"]["collisionIntervals"])
     {
         Location state(node["location"][0].as<int>(), node["location"][1].as<int>());
@@ -101,14 +101,14 @@ int main(int argc, char* argv[])
             collision_intervals.emplace_back(Interval(interval[0].as<int>(), interval[1].as<int>()));
         }
 
-        sipp_env.set_collision_intervals(state, collision_intervals);
+        sipp.set_collision_intervals(state, collision_intervals);
     }
 
     // Plan
     PlanResult solution;
     // bool success = sipp.sipp_search(start, Action::Wait, solution);
     // bool success = sipp.sipp_search(start, Action::Wait, solution);
-    bool success = sipp_env.sipp_search(start, Action::Wait, solution);
+    bool success = sipp.sipp_search(start, Action::Wait, solution);
 
     if (success)
     {
