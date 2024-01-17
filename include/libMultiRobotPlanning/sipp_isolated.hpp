@@ -46,6 +46,8 @@ public:
     size_t interval_index;
 
 public:
+    SIPPState() = default;
+
     SIPPState(const Location& input_state, size_t input_interval)
         : location(input_state),
           interval_index(input_interval)
