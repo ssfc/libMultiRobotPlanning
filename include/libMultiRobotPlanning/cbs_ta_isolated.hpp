@@ -74,7 +74,7 @@ struct hash<State> {
 }  // namespace std
 
 
-template <typename State, typename Action, typename Cost>
+template <typename Action, typename Cost>
 struct Neighbor
 {
     //! neighboring location
@@ -335,7 +335,7 @@ public:
         return atGoal && s.time > m_lastGoalConstraint;
     }
 
-    void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
+    void get_neighbors(const State& s, std::vector<Neighbor<Action, int> >& neighbors)
     {
         // std::cout << "#VC " << constraints.vertexConstraints.size() << std::endl;
         // for(const auto& vc : constraints.vertexConstraints) {
@@ -352,7 +352,7 @@ public:
                 {
                     atGoal = s.x == m_goal->x && s.y == m_goal->y;
                 }
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Wait, atGoal ? 0 : 1));
+                neighbors.emplace_back(Neighbor<Action, int>(n, Action::Wait, atGoal ? 0 : 1));
             }
         }
 
@@ -360,28 +360,28 @@ public:
             State n(s.time + 1, s.x - 1, s.y);
             if (location_valid(n) && transitionValid(s, n))
             {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Left, 1));
+                neighbors.emplace_back(Neighbor<Action, int>(n, Action::Left, 1));
             }
         }
         {
             State n(s.time + 1, s.x + 1, s.y);
             if (location_valid(n) && transitionValid(s, n))
             {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Right, 1));
+                neighbors.emplace_back(Neighbor<Action, int>(n, Action::Right, 1));
             }
         }
         {
             State n(s.time + 1, s.x, s.y + 1);
             if (location_valid(n) && transitionValid(s, n))
             {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Up, 1));
+                neighbors.emplace_back(Neighbor<Action, int>(n, Action::Up, 1));
             }
         }
         {
             State n(s.time + 1, s.x, s.y - 1);
             if (location_valid(n) && transitionValid(s, n))
             {
-                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Down, 1));
+                neighbors.emplace_back(Neighbor<Action, int>(n, Action::Down, 1));
             }
         }
     }
@@ -632,7 +632,7 @@ public:
         return m_env.is_solution(s);
     }
 
-    void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
+    void get_neighbors(const State& s, std::vector<Neighbor<Action, int> >& neighbors)
     {
         m_env.get_neighbors(s, neighbors);
     }
@@ -689,7 +689,7 @@ class AStar
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
-        std::vector<Neighbor<Location, Action, int> > neighbors;
+        std::vector<Neighbor<Action, int> > neighbors;
         neighbors.reserve(10);
 
         while (!open_set.empty())
@@ -728,7 +728,7 @@ class AStar
             // traverse neighbors
             neighbors.clear();
             environment.get_neighbors(current.location, neighbors);
-            for (const Neighbor<Location, Action, int>& neighbor : neighbors)
+            for (const Neighbor<Action, int>& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
                 {
