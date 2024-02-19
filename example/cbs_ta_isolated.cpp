@@ -4,7 +4,6 @@
 
 
 #include <libMultiRobotPlanning/cbs_ta_isolated.hpp>
-#include <libMultiRobotPlanning/timer.hpp>
 #include "shortest_path_heuristic.hpp"
 
 using libMultiRobotPlanning::NextBestAssignment;

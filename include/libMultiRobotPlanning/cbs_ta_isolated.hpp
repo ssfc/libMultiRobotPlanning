@@ -15,7 +15,7 @@
 
 #include <yaml-cpp/yaml.h>
 #include <libMultiRobotPlanning/next_best_assignment.hpp>
-
+#include <libMultiRobotPlanning/timer.hpp>
 
 #include "a_star.hpp"
 
