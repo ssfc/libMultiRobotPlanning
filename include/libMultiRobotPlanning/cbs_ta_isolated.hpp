@@ -20,15 +20,11 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "planresult.hpp"
 #include "util.hpp"
 
 #include "next_best_assignment.hpp"
 #include "timer.hpp"
 #include "shortest_path_heuristic.hpp"
-
-using libMultiRobotPlanning::PlanResult;
-
 
 using libMultiRobotPlanning::NextBestAssignment;
 
@@ -90,6 +86,18 @@ struct Neighbor
     {}
 };
 
+template <typename State, typename Action, typename Cost>
+struct PlanResult
+{
+    // path constructing locations and their g_score
+    std::vector<std::pair<State, Cost> > path;
+    //! actions and their cost
+    std::vector<std::pair<Action, Cost> > actions;
+    //! actual cost of the result
+    Cost cost;
+    //! lower bound of the cost (for suboptimal solvers)
+    Cost fmin;
+};
 
 struct Conflict {
     enum Type {
