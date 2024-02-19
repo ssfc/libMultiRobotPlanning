@@ -203,7 +203,9 @@ struct Constraints {
 
 class Environment
 {
-   public:
+
+
+public:
     Environment(size_t dimx, size_t dimy,
                 const std::unordered_set<Location>& obstacles,
                 const std::vector<State>& startStates,
@@ -340,9 +342,7 @@ class Environment
         }
     }
 
-    bool getFirstConflict(
-        const std::vector<PlanResult<State, Action, int> >& solution,
-        Conflict& result)
+    bool getFirstConflict(const std::vector<PlanResult<State, Action, int> >& solution, Conflict& result)
     {
         int max_t = 0;
         for (const auto& sol : solution)
@@ -471,8 +471,7 @@ class Environment
     {
         return m_numTaskAssignments;
     }
-
-   private:
+    
     State getState(size_t agentIdx,
                    const std::vector<PlanResult<State, Action, int> >& solution,
                    size_t t)
@@ -506,7 +505,7 @@ class Environment
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
 
-   private:
+private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
