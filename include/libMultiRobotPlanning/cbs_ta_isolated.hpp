@@ -188,7 +188,7 @@ struct Constraints {
 };
 
 
-template <typename Task, typename Environment>
+template <typename Location, typename Environment>
 class CBSTA {
    public:
     CBSTA(Environment& environment) : m_env(environment) {}
@@ -326,7 +326,7 @@ class CBSTA {
     struct HighLevelNode {
         std::vector<PlanResult<State, Action, int> > solution;
         std::vector<Constraints> constraints;
-        std::map<size_t, Task> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
+        std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
 
         int cost;
 
@@ -343,9 +343,9 @@ class CBSTA {
             // return id > n.id;
         }
 
-        Task* task(size_t idx)
+        Location* task(size_t idx)
         {
-            Task* task = nullptr;
+            Location* task = nullptr;
             auto iter = tasks.find(idx);
             if (iter != tasks.end()) {
                 task = &iter->second;
@@ -371,7 +371,7 @@ class CBSTA {
 
     struct LowLevelEnvironment {
         LowLevelEnvironment(Environment& env, size_t agentIdx,
-                            const Constraints& constraints, const Task* task)
+                            const Constraints& constraints, const Location* task)
             : m_env(env)
         // , m_agentIdx(agentIdx)
         // , m_constraints(constraints)
