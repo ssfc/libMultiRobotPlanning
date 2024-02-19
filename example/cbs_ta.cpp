@@ -597,3 +597,11 @@ int main(int argc, char* argv[]) {
 
   return 0;
 }
+
+
+// Test on ubuntu platform:
+// mkdir build; cd build
+// cmake .. ; make
+// ./cbs_ta -i ../test/mapfta_simple1_a1.yaml -o output.yaml
+// ./cbs_ta -i ../test/mapfta_simple1_a2.yaml -o output.yaml
+// ./cbs_ta -i ../test/mapfta_simple1_a3.yaml -o output.yaml
