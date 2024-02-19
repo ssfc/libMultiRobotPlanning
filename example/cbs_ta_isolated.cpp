@@ -393,11 +393,15 @@ int main(int argc, char* argv[])
 
     // sanity check: no identical start locations
     std::unordered_set<State> startStatesSet;
-    for (const auto& s : startStates) {
-        if (startStatesSet.find(s) != startStatesSet.end()) {
+    for (const auto& s : startStates)
+    {
+        if (startStatesSet.find(s) != startStatesSet.end())
+        {
             std::cout << "Identical start locations detected -> no solution!" << std::endl;
+
             return 0;
         }
+
         startStatesSet.insert(s);
     }
 
@@ -409,11 +413,13 @@ int main(int argc, char* argv[])
     bool success = cbs.search(startStates, solution);
     timer.stop();
 
-    if (success) {
+    if (success)
+    {
         std::cout << "Planning successful! " << std::endl;
         int64_t cost = 0;
         int64_t makespan = 0;
-        for (const auto& s : solution) {
+        for (const auto& s : solution)
+        {
             cost += s.cost;
             makespan = std::max<int64_t>(makespan, s.cost);
         }
@@ -427,7 +433,8 @@ int main(int argc, char* argv[])
         out << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
         out << "  numTaskAssignments: " << mapf.numTaskAssignments() << std::endl;
         out << "schedule:" << std::endl;
-        for (size_t a = 0; a < solution.size(); ++a) {
+        for (size_t a = 0; a < solution.size(); ++a)
+        {
             // std::cout << "Solution for: " << a << std::endl;
             // for (size_t i = 0; i < solution[a].actions.size(); ++i) {
             //   std::cout << solution[a].path[i].second << ": " <<
@@ -438,13 +445,16 @@ int main(int argc, char* argv[])
             // solution[a].path.back().first << std::endl;
 
             out << "  agent" << a << ":" << std::endl;
-            for (const auto& state : solution[a].path) {
+            for (const auto& state : solution[a].path)
+            {
                 out << "    - x: " << state.first.x << std::endl
                     << "      y: " << state.first.y << std::endl
                     << "      t: " << state.second << std::endl;
             }
         }
-    } else {
+    }
+    else
+    {
         std::cout << "Planning NOT successful!" << std::endl;
     }
 
