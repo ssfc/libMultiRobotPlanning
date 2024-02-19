@@ -113,8 +113,9 @@ struct PlanResult
     int fmin;
 };
 
-struct Conflict
+class Conflict
 {
+public:
     enum Type
     {
         Vertex,
@@ -131,6 +132,7 @@ struct Conflict
     int x2;
     int y2;
 
+public:
     friend std::ostream& operator<<(std::ostream& os, const Conflict& c)
     {
         switch (c.type)
