@@ -715,7 +715,7 @@ public:
 template <typename Environment, typename LocationHasher = std::hash<State> >
 class AStar
 {
-   private:
+private:
     // inner class declaration.
     class AStarNode;
 
@@ -727,7 +727,7 @@ class AStar
     // using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
     // using HeapHandle = typename OpenSet::handle_type;
 
-   public:
+public:
     // member funcs
     AStar(Environment& input_environment) : environment(input_environment) {}
 
