@@ -6,9 +6,6 @@
 #include "libMultiRobotPlanning/cbs_ta_isolated.hpp"
 
 
-using libMultiRobotPlanning::NextBestAssignment;
-
-
 
 std::ostream& operator<<(std::ostream& os, const Action& a)
 {
