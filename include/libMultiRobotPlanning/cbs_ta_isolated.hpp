@@ -712,8 +712,7 @@ public:
 };
 
 
-template <typename Action, typename Environment,
-          typename LocationHasher = std::hash<State> >
+template <typename Environment, typename LocationHasher = std::hash<State> >
 class AStar
 {
    private:
@@ -841,8 +840,8 @@ class AStar
 };
 
 // inner class definition
-template <typename Action, typename Environment, typename StateHasher>
-class AStar<Action, Environment, StateHasher>::AStarNode
+template <typename Environment, typename StateHasher>
+class AStar<Environment, StateHasher>::AStarNode
 {
 public:
     State location;
@@ -893,7 +892,7 @@ class CBSTA
 {
 private:
     Environment& m_env;
-    typedef AStar<Action, LowLevelEnvironment> LowLevelSearch_t;
+    typedef AStar<LowLevelEnvironment> LowLevelSearch_t;
 
 public:
     CBSTA(Environment& environment) : m_env(environment) {}
