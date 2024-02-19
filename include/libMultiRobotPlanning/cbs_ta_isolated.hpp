@@ -39,12 +39,14 @@ enum class Action
 };
 
 
-struct State
+class State
 {
+public:
     int time;
     int x;
     int y;
 
+public:
     State(int time, int x, int y) : time(time), x(x), y(y) {}
 
     bool operator==(const State& s) const
