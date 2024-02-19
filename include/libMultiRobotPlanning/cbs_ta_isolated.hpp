@@ -14,9 +14,8 @@
 #include <boost/program_options.hpp>
 
 #include <yaml-cpp/yaml.h>
-#include <libMultiRobotPlanning/next_best_assignment.hpp>
-#include <libMultiRobotPlanning/timer.hpp>
-
+#include "next_best_assignment.hpp"
+#include "timer.hpp"
 #include "a_star.hpp"
 
 enum class Action {
