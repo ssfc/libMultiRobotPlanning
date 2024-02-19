@@ -610,8 +610,9 @@ public:
 };
 
 
-struct HighLevelNode
+class HighLevelNode
 {
+public:
     std::vector<PlanResult> solution;
     std::vector<Constraints> constraints;
     std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
@@ -624,6 +625,7 @@ struct HighLevelNode
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
                                      boost::heap::mutable_<true> >::handle_type handle;
 
+public:
     bool operator<(const HighLevelNode& n) const
     {
         // if (cost != n.cost)
