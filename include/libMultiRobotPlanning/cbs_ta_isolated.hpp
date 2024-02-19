@@ -624,6 +624,10 @@ struct LowLevelEnvironment
 
 class CBSTA
 {
+private:
+    Environment& m_env;
+    typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
+
 public:
     CBSTA(Environment& environment) : m_env(environment) {}
 
@@ -769,13 +773,6 @@ public:
 
         return false;
     }
-
-private:
-
-
-private:
-    Environment& m_env;
-    typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
 };
 
 #endif  // CBS_TA_ISOLATED_HPP
