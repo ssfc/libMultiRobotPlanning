@@ -4,12 +4,12 @@
 
 
 #include <libMultiRobotPlanning/cbs_ta_isolated.hpp>
-#include "timer.hpp"
+#include <libMultiRobotPlanning/timer.hpp>
 #include "shortest_path_heuristic.hpp"
 
 using libMultiRobotPlanning::NextBestAssignment;
 
-///
+
 
 std::ostream& operator<<(std::ostream& os, const Action& a) {
     switch (a) {
