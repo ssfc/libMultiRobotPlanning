@@ -9,6 +9,14 @@
 
 #include "a_star.hpp"
 
+enum class Action {
+    Up,
+    Down,
+    Left,
+    Right,
+    Wait,
+};
+
 struct State {
     State(int time, int x, int y) : time(time), x(x), y(y) {}
 
