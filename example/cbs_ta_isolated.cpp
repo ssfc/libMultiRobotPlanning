@@ -157,13 +157,17 @@ class Environment {
             max_t = std::max<int>(max_t, sol.path.size());
         }
 
-        for (int t = 0; t < max_t; ++t) {
+        for (int t = 0; t < max_t; ++t)
+        {
             // check drive-drive vertex collisions
-            for (size_t i = 0; i < solution.size(); ++i) {
+            for (size_t i = 0; i < solution.size(); ++i)
+            {
                 State state1 = getState(i, solution, t);
-                for (size_t j = i + 1; j < solution.size(); ++j) {
+                for (size_t j = i + 1; j < solution.size(); ++j)
+                {
                     State state2 = getState(j, solution, t);
-                    if (state1.equalExceptTime(state2)) {
+                    if (state1.equalExceptTime(state2))
+                    {
                         result.time = t;
                         result.agent1 = i;
                         result.agent2 = j;
@@ -172,19 +176,23 @@ class Environment {
                         result.y1 = state1.y;
                         // std::cout << "VC " << t << "," << state1.x << "," << state1.y <<
                         // std::endl;
+
                         return true;
                     }
                 }
             }
+
             // drive-drive edge (swap)
-            for (size_t i = 0; i < solution.size(); ++i) {
+            for (size_t i = 0; i < solution.size(); ++i)
+            {
                 State state1a = getState(i, solution, t);
                 State state1b = getState(i, solution, t + 1);
-                for (size_t j = i + 1; j < solution.size(); ++j) {
+                for (size_t j = i + 1; j < solution.size(); ++j)
+                {
                     State state2a = getState(j, solution, t);
                     State state2b = getState(j, solution, t + 1);
-                    if (state1a.equalExceptTime(state2b) &&
-                        state1b.equalExceptTime(state2a)) {
+                    if (state1a.equalExceptTime(state2b) && state1b.equalExceptTime(state2a))
+                    {
                         result.time = t;
                         result.agent1 = i;
                         result.agent2 = j;
@@ -193,6 +201,7 @@ class Environment {
                         result.y1 = state1a.y;
                         result.x2 = state1b.x;
                         result.y2 = state1b.y;
+
                         return true;
                     }
                 }
@@ -202,15 +211,18 @@ class Environment {
         return false;
     }
 
-    void createConstraintsFromConflict(
-        const Conflict& conflict, std::map<size_t, Constraints>& constraints) {
-        if (conflict.type == Conflict::Vertex) {
+    void createConstraintsFromConflict(const Conflict& conflict, std::map<size_t, Constraints>& constraints)
+    {
+        if (conflict.type == Conflict::Vertex)
+        {
             Constraints c1;
             c1.vertexConstraints.emplace(
                 VertexConstraint(conflict.time, conflict.x1, conflict.y1));
             constraints[conflict.agent1] = c1;
             constraints[conflict.agent2] = c1;
-        } else if (conflict.type == Conflict::Edge) {
+        }
+        else if (conflict.type == Conflict::Edge)
+        {
             Constraints c1;
             c1.edgeConstraints.emplace(EdgeConstraint(
                 conflict.time, conflict.x1, conflict.y1, conflict.x2, conflict.y2));
@@ -222,15 +234,19 @@ class Environment {
         }
     }
 
-    void nextTaskAssignment(std::map<size_t, Location>& tasks) {
-        if (m_numTaskAssignments > m_maxTaskAssignments) {
+    void nextTaskAssignment(std::map<size_t, Location>& tasks)
+    {
+        if (m_numTaskAssignments > m_maxTaskAssignments)
+        {
             return;
         }
 
         int64_t cost = m_assignment.nextSolution(tasks);
-        if (!tasks.empty()) {
+        if (!tasks.empty())
+        {
             std::cout << "nextTaskAssignment: cost: " << cost << std::endl;
-            for (const auto& s : tasks) {
+            for (const auto& s : tasks)
+            {
                 std::cout << s.first << "->" << s.second << std::endl;
             }
 
@@ -238,47 +254,66 @@ class Environment {
         }
     }
 
-    void onExpandHighLevelNode(int /*cost*/) { m_highLevelExpanded++; }
+    void onExpandHighLevelNode(int /*cost*/)
+    {
+        m_highLevelExpanded++;
+    }
 
-    void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/,
-                              int /*gScore*/) {
+    void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
         m_lowLevelExpanded++;
     }
 
-    int highLevelExpanded() { return m_highLevelExpanded; }
+    int highLevelExpanded()
+    {
+        return m_highLevelExpanded;
+    }
 
-    int lowLevelExpanded() const { return m_lowLevelExpanded; }
+    int lowLevelExpanded() const
+    {
+        return m_lowLevelExpanded;
+    }
 
-    size_t numTaskAssignments() const { return m_numTaskAssignments; }
+    size_t numTaskAssignments() const
+    {
+        return m_numTaskAssignments;
+    }
 
-   private:
+private:
     State getState(size_t agentIdx,
                    const std::vector<PlanResult<State, Action, int> >& solution,
-                   size_t t) {
+                   size_t t)
+    {
         assert(agentIdx < solution.size());
-        if (t < solution[agentIdx].path.size()) {
+        if (t < solution[agentIdx].path.size())
+        {
             return solution[agentIdx].path[t].first;
         }
+
         assert(!solution[agentIdx].path.empty());
+
         return solution[agentIdx].path.back().first;
     }
 
-    bool location_valid(const State& s) {
+    bool location_valid(const State& s)
+    {
         assert(m_constraints);
         const auto& con = m_constraints->vertexConstraints;
+
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
                con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
     }
 
-    bool transitionValid(const State& s1, const State& s2) {
+    bool transitionValid(const State& s1, const State& s2)
+    {
         assert(m_constraints);
         const auto& con = m_constraints->edgeConstraints;
-        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) ==
-               con.end();
+
+        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
 
-   private:
+private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
@@ -296,34 +331,37 @@ class Environment {
     std::unordered_set<Location> m_goals;
 };
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     namespace po = boost::program_options;
     // Declare the supported options.
     po::options_description desc("Allowed options");
     std::string inputFile;
     std::string outputFile;
     size_t maxTaskAssignments;
-    desc.add_options()("help", "produce help message")(
-        "input,i", po::value<std::string>(&inputFile)->required(),
-        "input file (YAML)")("output,o",
-                             po::value<std::string>(&outputFile)->required(),
-                             "output file (YAML)")(
-        "maxTaskAssignments",
-        po::value<size_t>(&maxTaskAssignments)->default_value(1e9),
+    desc.add_options()("help", "produce help message")
+        ("input,i", po::value<std::string>(&inputFile)->required(), "input file (YAML)")
+        ("output,o", po::value<std::string>(&outputFile)->required(), "output file (YAML)")
+        ("maxTaskAssignments", po::value<size_t>(&maxTaskAssignments)->default_value(1e9),
         "maximum number of task assignments to try");
 
-    try {
+    try
+    {
         po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, desc), vm);
         po::notify(vm);
 
-        if (vm.count("help") != 0u) {
+        if (vm.count("help") != 0u)
+        {
             std::cout << desc << "\n";
             return 0;
         }
-    } catch (po::error& e) {
+    }
+    catch (po::error& e)
+    {
         std::cerr << e.what() << std::endl << std::endl;
         std::cerr << desc << std::endl;
+
         return 1;
     }
 
@@ -337,15 +375,18 @@ int main(int argc, char* argv[]) {
     int dimx = dim[0].as<int>();
     int dimy = dim[1].as<int>();
 
-    for (const auto& node : config["map"]["obstacles"]) {
+    for (const auto& node : config["map"]["obstacles"])
+    {
         obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
     }
 
-    for (const auto& node : config["agents"]) {
+    for (const auto& node : config["agents"])
+    {
         const auto& start = node["start"];
         startStates.emplace_back(State(0, start[0].as<int>(), start[1].as<int>()));
         goals.resize(goals.size() + 1);
-        for (const auto& goal : node["potentialGoals"]) {
+        for (const auto& goal : node["potentialGoals"])
+        {
             goals.back().emplace(Location(goal[0].as<int>(), goal[1].as<int>()));
         }
     }
