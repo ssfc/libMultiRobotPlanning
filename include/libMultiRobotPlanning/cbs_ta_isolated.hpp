@@ -9,12 +9,43 @@
 
 #include "a_star.hpp"
 
+struct State {
+    State(int time, int x, int y) : time(time), x(x), y(y) {}
+
+    bool operator==(const State& s) const {
+        return time == s.time && x == s.x && y == s.y;
+    }
+
+    bool equalExceptTime(const State& s) const { return x == s.x && y == s.y; }
+
+    friend std::ostream& operator<<(std::ostream& os, const State& s) {
+        return os << s.time << ": (" << s.x << "," << s.y << ")";
+        // return os << "(" << s.x << "," << s.y << ")";
+    }
+
+    int time;
+    int x;
+    int y;
+};
+
+namespace std {
+template <>
+struct hash<State> {
+    size_t operator()(const State& s) const {
+        size_t seed = 0;
+        boost::hash_combine(seed, s.time);
+        boost::hash_combine(seed, s.x);
+        boost::hash_combine(seed, s.y);
+        return seed;
+    }
+};
+}  // namespace std
+
 namespace libMultiRobotPlanning {
 
 /*!
   \example cbs_ta.cpp Example that solves the Multi-Agent Path-Finding (MAPF)
-  problem in a 2D grid world with up/down/left/right
-  actions
+  problem in a 2D grid world with up/down/left/right actions
 */
 
 /*! \brief Conflict-Based-Search with Optimal Task Assignment (CBS-TA) algorithm
@@ -23,11 +54,9 @@ to find tasks and collision-free paths jointly, minimizing sum-of-cost.
 This class implements the Conflict-Based-Search with Optimal Task Assignment
 (CBS-TA) algorithm.
 This algorithm assigns tasks and finds collision-free path for multiple agents
-with start and
-goal locations given for each agent.
+with start and goal locations given for each agent.
 CBS-TA is an extension of the CBS algorithms, operating in a search forest
-rather
-than a search tree (where each root node refers to a possible assignment).
+rather than a search tree (where each root node refers to a possible assignment).
 CBS-TA is optimal with respect to the sum-of-individual costs.
 
 Details of the algorithm can be found in the following paper:\n
