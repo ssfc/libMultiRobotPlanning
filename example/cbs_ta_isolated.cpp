@@ -15,7 +15,6 @@
 #include "timer.hpp"
 
 using libMultiRobotPlanning::CBSTA;
-using libMultiRobotPlanning::PlanResult;
 using libMultiRobotPlanning::NextBestAssignment;
 
 ///
