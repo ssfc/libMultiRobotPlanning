@@ -50,7 +50,7 @@ struct hash<State> {
 }  // namespace std
 
 
-template <typename State, typename Action, typename Cost, typename Conflict,
+template <typename Action, typename Cost, typename Conflict,
           typename Constraints, typename Task, typename Environment>
 class CBSTA {
    public:
