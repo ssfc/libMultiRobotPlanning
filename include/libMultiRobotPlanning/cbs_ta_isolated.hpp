@@ -712,7 +712,7 @@ public:
 };
 
 
-template <typename State, typename Action, typename Environment,
+template <typename Action, typename Environment,
           typename LocationHasher = std::hash<State> >
 class AStar
 {
@@ -841,11 +841,10 @@ class AStar
 };
 
 // inner class definition
-template <typename State, typename Action, typename Environment,
-          typename StateHasher>
-class AStar<State, Action, Environment, StateHasher>::AStarNode
+template <typename Action, typename Environment, typename StateHasher>
+class AStar<Action, Environment, StateHasher>::AStarNode
 {
-   public:
+public:
     State location;
     int f_score;
     int g_score;
@@ -854,7 +853,7 @@ class AStar<State, Action, Environment, StateHasher>::AStarNode
     typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
     // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
-   public:
+public:
     AStarNode(const State& input_state, int input_fScore, int input_gScore)
         : location(input_state),
           f_score(input_fScore),
@@ -894,7 +893,7 @@ class CBSTA
 {
 private:
     Environment& m_env;
-    typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
+    typedef AStar<Action, LowLevelEnvironment> LowLevelSearch_t;
 
 public:
     CBSTA(Environment& environment) : m_env(environment) {}
