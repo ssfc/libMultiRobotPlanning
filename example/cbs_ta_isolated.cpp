@@ -370,9 +370,8 @@ int main(int argc, char* argv[]) {
         startStatesSet.insert(s);
     }
 
-    Environment mapf(dimx, dimy, obstacles, startStates, goals,
-                     maxTaskAssignments);
-    CBSTA<Location, Environment> cbs(mapf);
+    Environment mapf(dimx, dimy, obstacles, startStates, goals, maxTaskAssignments);
+    CBSTA<Environment> cbs(mapf);
     std::vector<PlanResult<State, Action, int> > solution;
 
     Timer timer;

@@ -188,7 +188,7 @@ struct Constraints {
 };
 
 
-template <typename Location, typename Environment>
+template <typename Environment>
 class CBSTA {
    public:
     CBSTA(Environment& environment) : m_env(environment) {}
