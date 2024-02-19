@@ -203,7 +203,22 @@ struct Constraints {
 
 class Environment
 {
-
+private:
+    int num_columns;
+    int num_rows;
+    std::unordered_set<Location> obstacles;
+    size_t m_agentIdx;
+    const Location* m_goal;
+    const Constraints* m_constraints;
+    int m_lastGoalConstraint;
+    NextBestAssignment<size_t, Location> m_assignment;
+    size_t m_maxTaskAssignments;
+    size_t m_numTaskAssignments;
+    int m_highLevelExpanded;
+    int m_lowLevelExpanded;
+    ShortestPathHeuristic m_heuristic;
+    size_t m_numAgents;
+    std::unordered_set<Location> m_goals;
 
 public:
     Environment(size_t dimx, size_t dimy,
@@ -471,7 +486,7 @@ public:
     {
         return m_numTaskAssignments;
     }
-    
+
     State getState(size_t agentIdx,
                    const std::vector<PlanResult<State, Action, int> >& solution,
                    size_t t)
@@ -504,23 +519,6 @@ public:
 
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
-
-private:
-    int num_columns;
-    int num_rows;
-    std::unordered_set<Location> obstacles;
-    size_t m_agentIdx;
-    const Location* m_goal;
-    const Constraints* m_constraints;
-    int m_lastGoalConstraint;
-    NextBestAssignment<size_t, Location> m_assignment;
-    size_t m_maxTaskAssignments;
-    size_t m_numTaskAssignments;
-    int m_highLevelExpanded;
-    int m_lowLevelExpanded;
-    ShortestPathHeuristic m_heuristic;
-    size_t m_numAgents;
-    std::unordered_set<Location> m_goals;
 };
 
 
