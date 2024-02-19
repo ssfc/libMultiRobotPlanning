@@ -632,7 +632,8 @@ public:
     CBSTA(Environment& environment) : m_env(environment) {}
 
     bool search(const std::vector<State>& initialStates,
-                std::vector<PlanResult<State, Action, int> >& solution) {
+                std::vector<PlanResult<State, Action, int> >& solution)
+    {
         HighLevelNode start;
         size_t numAgents = initialStates.size();
         start.solution.resize(numAgents);
@@ -657,6 +658,7 @@ public:
                 LowLevelSearch_t lowLevel(llenv);
                 success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
             }
+            
             if (!success)
             {
                 return false;
