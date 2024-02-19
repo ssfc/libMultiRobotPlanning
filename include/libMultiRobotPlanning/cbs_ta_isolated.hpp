@@ -576,6 +576,52 @@ struct HighLevelNode
 };
 
 
+struct LowLevelEnvironment
+{
+   private:
+    Environment& m_env;
+    // size_t m_agentIdx;
+    // const Constraints& m_constraints;
+
+   public:
+    LowLevelEnvironment(Environment& env, size_t agentIdx,
+                        const Constraints& constraints, const Location* task)
+        : m_env(env)
+    // , m_agentIdx(agentIdx)
+    // , m_constraints(constraints)
+    {
+        m_env.setLowLevelContext(agentIdx, &constraints, task);
+    }
+
+    int admissible_heuristic(const State& s)
+    {
+        return m_env.admissible_heuristic(s);
+    }
+
+    bool is_solution(const State& s)
+    {
+        return m_env.is_solution(s);
+    }
+
+    void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
+    {
+        m_env.get_neighbors(s, neighbors);
+    }
+
+    void onExpandNode(const State& s, int fScore, int gScore)
+    {
+        // std::cout << "LL expand: " << s << std::endl;
+        m_env.onExpandLowLevelNode(s, fScore, gScore);
+    }
+
+    void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/)
+    {
+        // std::cout << "LL discover: " << s << std::endl;
+        // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
+    }
+};
+
+
 class CBSTA
 {
 public:
@@ -725,50 +771,7 @@ public:
     }
 
 private:
-    struct LowLevelEnvironment
-    {
-    private:
-        Environment& m_env;
-        // size_t m_agentIdx;
-        // const Constraints& m_constraints;
 
-    public:
-        LowLevelEnvironment(Environment& env, size_t agentIdx,
-                            const Constraints& constraints, const Location* task)
-            : m_env(env)
-        // , m_agentIdx(agentIdx)
-        // , m_constraints(constraints)
-        {
-            m_env.setLowLevelContext(agentIdx, &constraints, task);
-        }
-
-        int admissible_heuristic(const State& s)
-        {
-            return m_env.admissible_heuristic(s);
-        }
-
-        bool is_solution(const State& s)
-        {
-            return m_env.is_solution(s);
-        }
-
-        void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
-        {
-            m_env.get_neighbors(s, neighbors);
-        }
-
-        void onExpandNode(const State& s, int fScore, int gScore)
-        {
-            // std::cout << "LL expand: " << s << std::endl;
-            m_env.onExpandLowLevelNode(s, fScore, gScore);
-        }
-
-        void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/)
-        {
-            // std::cout << "LL discover: " << s << std::endl;
-            // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
-        }
-    };
 
 private:
     Environment& m_env;
