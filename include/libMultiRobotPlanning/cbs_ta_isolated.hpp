@@ -576,14 +576,14 @@ struct HighLevelNode
 };
 
 
-struct LowLevelEnvironment
+class LowLevelEnvironment
 {
-   private:
+private:
     Environment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
 
-   public:
+public:
     LowLevelEnvironment(Environment& env, size_t agentIdx,
                         const Constraints& constraints, const Location* task)
         : m_env(env)
