@@ -79,8 +79,7 @@ struct Conflict {
 };
 
 
-template <typename Conflict,
-          typename Constraints, typename Task, typename Environment>
+template <typename Constraints, typename Task, typename Environment>
 class CBSTA {
    public:
     CBSTA(Environment& environment) : m_env(environment) {}

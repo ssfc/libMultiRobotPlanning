@@ -481,8 +481,7 @@ int main(int argc, char* argv[]) {
 
     Environment mapf(dimx, dimy, obstacles, startStates, goals,
                      maxTaskAssignments);
-    CBSTA<Conflict, Constraints, Location, Environment>
-        cbs(mapf);
+    CBSTA<Constraints, Location, Environment> cbs(mapf);
     std::vector<PlanResult<State, Action, int> > solution;
 
     Timer timer;
