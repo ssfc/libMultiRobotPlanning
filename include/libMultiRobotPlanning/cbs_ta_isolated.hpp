@@ -86,21 +86,23 @@ struct Neighbor
     {}
 };
 
-template <typename Cost>
+
 struct PlanResult
 {
     // path constructing locations and their g_score
-    std::vector<std::pair<State, Cost> > path;
+    std::vector<std::pair<State, int> > path;
     //! actions and their cost
-    std::vector<std::pair<Action, Cost> > actions;
+    std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
-    Cost cost;
+    int cost;
     //! lower bound of the cost (for suboptimal solvers)
-    Cost fmin;
+    int fmin;
 };
 
-struct Conflict {
-    enum Type {
+struct Conflict
+{
+    enum Type
+    {
         Vertex,
         Edge,
     };
@@ -115,34 +117,42 @@ struct Conflict {
     int x2;
     int y2;
 
-    friend std::ostream& operator<<(std::ostream& os, const Conflict& c) {
-        switch (c.type) {
+    friend std::ostream& operator<<(std::ostream& os, const Conflict& c)
+    {
+        switch (c.type)
+        {
             case Vertex:
                 return os << c.time << ": Vertex(" << c.x1 << "," << c.y1 << ")";
             case Edge:
                 return os << c.time << ": Edge(" << c.x1 << "," << c.y1 << "," << c.x2
                           << "," << c.y2 << ")";
         }
+
         return os;
     }
 };
 
 
-struct VertexConstraint {
-    VertexConstraint(int time, int x, int y) : time(time), x(x), y(y) {}
+struct VertexConstraint
+{
     int time;
     int x;
     int y;
 
-    bool operator<(const VertexConstraint& other) const {
+    VertexConstraint(int time, int x, int y) : time(time), x(x), y(y) {}
+
+    bool operator<(const VertexConstraint& other) const
+    {
         return std::tie(time, x, y) < std::tie(other.time, other.x, other.y);
     }
 
-    bool operator==(const VertexConstraint& other) const {
+    bool operator==(const VertexConstraint& other) const
+    {
         return std::tie(time, x, y) == std::tie(other.time, other.x, other.y);
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& c) {
+    friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& c)
+    {
         return os << "VC(" << c.time << "," << c.x << "," << c.y << ")";
     }
 };
@@ -393,7 +403,7 @@ public:
         }
     }
 
-    bool getFirstConflict(const std::vector<PlanResult<int> >& solution, Conflict& result)
+    bool getFirstConflict(const std::vector<PlanResult>& solution, Conflict& result)
     {
         int max_t = 0;
         for (const auto& sol : solution)
@@ -524,7 +534,7 @@ public:
     }
 
     State getState(size_t agentIdx,
-                   const std::vector<PlanResult<int> >& solution,
+                   const std::vector<PlanResult>& solution,
                    size_t t)
     {
         assert(agentIdx < solution.size());
@@ -560,7 +570,7 @@ public:
 
 struct HighLevelNode
 {
-    std::vector<PlanResult<int> > solution;
+    std::vector<PlanResult> solution;
     std::vector<Constraints> constraints;
     std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
 
@@ -678,7 +688,7 @@ class AStar
     // member funcs
     AStar(Environment& input_environment) : environment(input_environment) {}
 
-    bool a_star_search(const Location& start_location, PlanResult<int>& solution,
+    bool a_star_search(const Location& start_location, PlanResult& solution,
                        int initialCost = 0)
     {
         solution.path.clear();
@@ -846,7 +856,7 @@ public:
     CBSTA(Environment& environment) : m_env(environment) {}
 
     bool search(const std::vector<State>& initialStates,
-                std::vector<PlanResult<int> >& solution)
+                std::vector<PlanResult>& solution)
     {
         HighLevelNode start;
         size_t numAgents = initialStates.size();

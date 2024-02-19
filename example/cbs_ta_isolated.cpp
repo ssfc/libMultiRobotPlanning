@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
 
     Environment mapf(dimx, dimy, obstacles, startStates, goals, maxTaskAssignments);
     CBSTA cbs(mapf);
-    std::vector<PlanResult<int> > solution;
+    std::vector<PlanResult> solution;
 
     Timer timer;
     bool success = cbs.search(startStates, solution);
