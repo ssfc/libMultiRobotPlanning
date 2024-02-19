@@ -49,8 +49,6 @@ struct hash<State> {
 };
 }  // namespace std
 
-namespace libMultiRobotPlanning {
-
 
 template <typename State, typename Action, typename Cost, typename Conflict,
           typename Constraints, typename Task, typename Environment>
@@ -275,7 +273,5 @@ class CBSTA {
     Environment& m_env;
     typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
 };
-
-}  // namespace libMultiRobotPlanning
 
 #endif  // CBS_TA_ISOLATED_HPP
