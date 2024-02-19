@@ -189,8 +189,9 @@ struct Constraints {
 
 
 template <typename Environment>
-class CBSTA {
-   public:
+class CBSTA
+{
+public:
     CBSTA(Environment& environment) : m_env(environment) {}
 
     bool search(const std::vector<State>& initialStates,
@@ -204,20 +205,23 @@ class CBSTA {
         start.isRoot = true;
         m_env.nextTaskAssignment(start.tasks);
 
-        for (size_t i = 0; i < initialStates.size(); ++i) {
+        for (size_t i = 0; i < initialStates.size(); ++i)
+        {
             // if (   i < solution.size()
             //     && solution[i].path.size() > 1) {
             //   start.solution[i] = solution[i];
             //   std::cout << "use existing solution for agent: " << i << std::endl;
             // } else {
             bool success = false;
-            if (!start.tasks.empty()) {
+            if (!start.tasks.empty())
+            {
                 LowLevelEnvironment llenv(m_env, i, start.constraints[i],
                                           start.task(i));
                 LowLevelSearch_t lowLevel(llenv);
                 success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
             }
-            if (!success) {
+            if (!success)
+            {
                 return false;
             }
             // }
@@ -226,15 +230,15 @@ class CBSTA {
 
         // std::priority_queue<HighLevelNode> open;
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-                                         boost::heap::mutable_<true> >
-            open;
+                                         boost::heap::mutable_<true> > open;
 
         auto handle = open.push(start);
         (*handle).handle = handle;
 
         solution.clear();
         int id = 1;
-        while (!open.empty()) {
+        while (!open.empty())
+        {
             HighLevelNode P = open.top();
             m_env.onExpandHighLevelNode(P.cost);
             // std::cout << "expand: " << P << std::endl;
@@ -242,18 +246,22 @@ class CBSTA {
             open.pop();
 
             Conflict conflict;
-            if (!m_env.getFirstConflict(P.solution, conflict)) {
+            if (!m_env.getFirstConflict(P.solution, conflict))
+            {
                 std::cout << "done; cost: " << P.cost << std::endl;
                 solution = P.solution;
+
                 return true;
             }
 
-            if (P.isRoot) {
+            if (P.isRoot)
+            {
                 // std::cout << "root node expanded; add new root" << std::endl;
                 HighLevelNode n;
                 m_env.nextTaskAssignment(n.tasks);
 
-                if (n.tasks.size() > 0) {
+                if (n.tasks.size() > 0)
+                {
                     n.solution.resize(numAgents);
                     n.constraints.resize(numAgents);
                     n.cost = 0;
@@ -261,17 +269,22 @@ class CBSTA {
                     n.isRoot = true;
 
                     bool allSuccessful = true;
-                    for (size_t i = 0; i < numAgents; ++i) {
+                    for (size_t i = 0; i < numAgents; ++i)
+                    {
                         LowLevelEnvironment llenv(m_env, i, n.constraints[i], n.task(i));
                         LowLevelSearch_t lowLevel(llenv);
                         bool success = lowLevel.a_star_search(initialStates[i], n.solution[i]);
-                        if (!success) {
+                        if (!success)
+                        {
                             allSuccessful = false;
                             break;
                         }
+
                         n.cost += n.solution[i].cost;
                     }
-                    if (allSuccessful) {
+
+                    if (allSuccessful)
+                    {
                         auto handle = open.push(n);
                         (*handle).handle = handle;
                         ++id;
@@ -287,7 +300,8 @@ class CBSTA {
 
             std::map<size_t, Constraints> constraints;
             m_env.createConstraintsFromConflict(conflict, constraints);
-            for (const auto& c : constraints) {
+            for (const auto& c : constraints)
+            {
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
                 // std::cout << "create child with id " << id << std::endl;
@@ -309,7 +323,8 @@ class CBSTA {
 
                 newNode.cost += newNode.solution[i].cost;
 
-                if (success) {
+                if (success)
+                {
                     // std::cout << "  success. cost: " << newNode.cost << std::endl;
                     auto handle = open.push(newNode);
                     (*handle).handle = handle;
@@ -322,8 +337,9 @@ class CBSTA {
         return false;
     }
 
-   private:
-    struct HighLevelNode {
+private:
+    struct HighLevelNode
+    {
         std::vector<PlanResult<State, Action, int> > solution;
         std::vector<Constraints> constraints;
         std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
@@ -334,10 +350,10 @@ class CBSTA {
         bool isRoot;
 
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-                                         boost::heap::mutable_<true> >::handle_type
-            handle;
+                                         boost::heap::mutable_<true> >::handle_type handle;
 
-        bool operator<(const HighLevelNode& n) const {
+        bool operator<(const HighLevelNode& n) const
+        {
             // if (cost != n.cost)
             return cost > n.cost;
             // return id > n.id;
@@ -347,29 +363,36 @@ class CBSTA {
         {
             Location* task = nullptr;
             auto iter = tasks.find(idx);
-            if (iter != tasks.end()) {
+            if (iter != tasks.end())
+            {
                 task = &iter->second;
             }
+
             return task;
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c) {
+        friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
+        {
             os << "id: " << c.id << " cost: " << c.cost << std::endl;
-            for (size_t i = 0; i < c.solution.size(); ++i) {
+            for (size_t i = 0; i < c.solution.size(); ++i)
+            {
                 os << "Agent: " << i << std::endl;
                 os << " States:" << std::endl;
-                for (size_t t = 0; t < c.solution[i].path.size(); ++t) {
+                for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+                {
                     os << "  " << c.solution[i].path[t].first << std::endl;
                 }
                 os << " Constraints:" << std::endl;
                 os << c.constraints[i];
                 os << " cost: " << c.solution[i].cost << std::endl;
             }
+
             return os;
         }
     };
 
-    struct LowLevelEnvironment {
+    struct LowLevelEnvironment
+    {
         LowLevelEnvironment(Environment& env, size_t agentIdx,
                             const Constraints& constraints, const Location* task)
             : m_env(env)
@@ -379,34 +402,40 @@ class CBSTA {
             m_env.setLowLevelContext(agentIdx, &constraints, task);
         }
 
-        int admissible_heuristic(const State& s) {
+        int admissible_heuristic(const State& s)
+        {
             return m_env.admissible_heuristic(s);
         }
 
-        bool is_solution(const State& s) { return m_env.is_solution(s); }
+        bool is_solution(const State& s)
+        {
+            return m_env.is_solution(s);
+        }
 
-        void get_neighbors(const State& s,
-                           std::vector<Neighbor<State, Action, int> >& neighbors) {
+        void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
+        {
             m_env.get_neighbors(s, neighbors);
         }
 
-        void onExpandNode(const State& s, int fScore, int gScore) {
+        void onExpandNode(const State& s, int fScore, int gScore)
+        {
             // std::cout << "LL expand: " << s << std::endl;
             m_env.onExpandLowLevelNode(s, fScore, gScore);
         }
 
-        void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {
+        void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/)
+        {
             // std::cout << "LL discover: " << s << std::endl;
             // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
         }
 
-       private:
+    private:
         Environment& m_env;
         // size_t m_agentIdx;
         // const Constraints& m_constraints;
     };
 
-   private:
+private:
     Environment& m_env;
     typedef AStar<State, Action, LowLevelEnvironment> LowLevelSearch_t;
 };
