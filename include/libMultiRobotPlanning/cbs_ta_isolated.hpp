@@ -17,7 +17,7 @@
 #include "next_best_assignment.hpp"
 #include "timer.hpp"
 #include "a_star.hpp"
-
+#include "shortest_path_heuristic.hpp"
 
 enum class Action {
     Up,
