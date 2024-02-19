@@ -86,7 +86,7 @@ struct Neighbor
     {}
 };
 
-template <typename Action, typename Cost>
+template <typename Cost>
 struct PlanResult
 {
     // path constructing locations and their g_score
@@ -393,7 +393,7 @@ public:
         }
     }
 
-    bool getFirstConflict(const std::vector<PlanResult<Action, int> >& solution, Conflict& result)
+    bool getFirstConflict(const std::vector<PlanResult<int> >& solution, Conflict& result)
     {
         int max_t = 0;
         for (const auto& sol : solution)
@@ -524,7 +524,7 @@ public:
     }
 
     State getState(size_t agentIdx,
-                   const std::vector<PlanResult<Action, int> >& solution,
+                   const std::vector<PlanResult<int> >& solution,
                    size_t t)
     {
         assert(agentIdx < solution.size());
@@ -560,7 +560,7 @@ public:
 
 struct HighLevelNode
 {
-    std::vector<PlanResult<Action, int> > solution;
+    std::vector<PlanResult<int> > solution;
     std::vector<Constraints> constraints;
     std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
 
@@ -678,7 +678,7 @@ class AStar
     // member funcs
     AStar(Environment& input_environment) : environment(input_environment) {}
 
-    bool a_star_search(const Location& start_location, PlanResult<Action, int>& solution,
+    bool a_star_search(const Location& start_location, PlanResult<int>& solution,
                        int initialCost = 0)
     {
         solution.path.clear();
@@ -846,7 +846,7 @@ public:
     CBSTA(Environment& environment) : m_env(environment) {}
 
     bool search(const std::vector<State>& initialStates,
-                std::vector<PlanResult<Action, int> >& solution)
+                std::vector<PlanResult<int> >& solution)
     {
         HighLevelNode start;
         size_t numAgents = initialStates.size();
