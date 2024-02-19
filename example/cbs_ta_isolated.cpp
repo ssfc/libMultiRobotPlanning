@@ -510,7 +510,7 @@ int main(int argc, char* argv[]) {
 
     Environment mapf(dimx, dimy, obstacles, startStates, goals,
                      maxTaskAssignments);
-    CBSTA<int, Conflict, Constraints, Location, Environment>
+    CBSTA<Conflict, Constraints, Location, Environment>
         cbs(mapf);
     std::vector<PlanResult<State, Action, int> > solution;
 

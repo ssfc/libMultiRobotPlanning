@@ -50,14 +50,14 @@ struct hash<State> {
 }  // namespace std
 
 
-template <typename Cost, typename Conflict,
+template <typename Conflict,
           typename Constraints, typename Task, typename Environment>
 class CBSTA {
    public:
     CBSTA(Environment& environment) : m_env(environment) {}
 
     bool search(const std::vector<State>& initialStates,
-                std::vector<PlanResult<State, Action, Cost> >& solution) {
+                std::vector<PlanResult<State, Action, int> >& solution) {
         HighLevelNode start;
         size_t numAgents = initialStates.size();
         start.solution.resize(numAgents);
@@ -187,11 +187,11 @@ class CBSTA {
 
    private:
     struct HighLevelNode {
-        std::vector<PlanResult<State, Action, Cost> > solution;
+        std::vector<PlanResult<State, Action, int> > solution;
         std::vector<Constraints> constraints;
         std::map<size_t, Task> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
 
-        Cost cost;
+        int cost;
 
         int id;
         bool isRoot;
@@ -242,23 +242,23 @@ class CBSTA {
             m_env.setLowLevelContext(agentIdx, &constraints, task);
         }
 
-        Cost admissible_heuristic(const State& s) {
+        int admissible_heuristic(const State& s) {
             return m_env.admissible_heuristic(s);
         }
 
         bool is_solution(const State& s) { return m_env.is_solution(s); }
 
         void get_neighbors(const State& s,
-                           std::vector<Neighbor<State, Action, Cost> >& neighbors) {
+                           std::vector<Neighbor<State, Action, int> >& neighbors) {
             m_env.get_neighbors(s, neighbors);
         }
 
-        void onExpandNode(const State& s, Cost fScore, Cost gScore) {
+        void onExpandNode(const State& s, int fScore, int gScore) {
             // std::cout << "LL expand: " << s << std::endl;
             m_env.onExpandLowLevelNode(s, fScore, gScore);
         }
 
-        void onDiscover(const State& /*s*/, Cost /*fScore*/, Cost /*gScore*/) {
+        void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {
             // std::cout << "LL discover: " << s << std::endl;
             // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
         }
