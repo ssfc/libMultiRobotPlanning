@@ -2,19 +2,10 @@
 // Created by take_ on 2024/2/19.
 //
 
-#include <fstream>
-#include <iostream>
-
-#include <boost/functional/hash.hpp>
-#include <boost/program_options.hpp>
-
-#include <yaml-cpp/yaml.h>
 
 #include <libMultiRobotPlanning/cbs_ta_isolated.hpp>
-#include <libMultiRobotPlanning/next_best_assignment.hpp>
 #include "timer.hpp"
 #include "shortest_path_heuristic.hpp"
-
 
 using libMultiRobotPlanning::NextBestAssignment;
 
