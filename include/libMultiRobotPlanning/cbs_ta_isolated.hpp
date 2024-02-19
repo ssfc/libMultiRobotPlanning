@@ -712,8 +712,8 @@ public:
 };
 
 
-template <typename Location, typename Action, typename Environment,
-          typename LocationHasher = std::hash<Location> >
+template <typename State, typename Action, typename Environment,
+          typename LocationHasher = std::hash<State> >
 class AStar
 {
    private:
@@ -732,7 +732,7 @@ class AStar
     // member funcs
     AStar(Environment& input_environment) : environment(input_environment) {}
 
-    bool a_star_search(const Location& start_location, PlanResult& solution,
+    bool a_star_search(const State& start_location, PlanResult& solution,
                        int initialCost = 0)
     {
         solution.path.clear();
@@ -741,9 +741,9 @@ class AStar
         solution.cost = 0;
 
         OpenSet open_set;
-        std::unordered_map<Location, HeapHandle, LocationHasher> location_to_heap;
-        std::unordered_set<Location, LocationHasher> closed_set;
-        std::unordered_map<Location, std::tuple<Location,Action,int,int>,LocationHasher> came_from;
+        std::unordered_map<State, HeapHandle, LocationHasher> location_to_heap;
+        std::unordered_set<State, LocationHasher> closed_set;
+        std::unordered_map<State, std::tuple<State,Action,int,int>,LocationHasher> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
                                               environment.admissible_heuristic(start_location), initialCost));
@@ -841,12 +841,12 @@ class AStar
 };
 
 // inner class definition
-template <typename Location, typename Action, typename Environment,
+template <typename State, typename Action, typename Environment,
           typename StateHasher>
-class AStar<Location, Action, Environment, StateHasher>::AStarNode
+class AStar<State, Action, Environment, StateHasher>::AStarNode
 {
    public:
-    Location location;
+    State location;
     int f_score;
     int g_score;
 
@@ -855,7 +855,7 @@ class AStar<Location, Action, Environment, StateHasher>::AStarNode
     // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
    public:
-    AStarNode(const Location& input_state, int input_fScore, int input_gScore)
+    AStarNode(const State& input_state, int input_fScore, int input_gScore)
         : location(input_state),
           f_score(input_fScore),
           g_score(input_gScore)
