@@ -149,12 +149,14 @@ public:
 };
 
 
-struct VertexConstraint
+class VertexConstraint
 {
+public:
     int time;
     int x;
     int y;
 
+public:
     VertexConstraint(int time, int x, int y) : time(time), x(x), y(y) {}
 
     bool operator<(const VertexConstraint& other) const
@@ -173,20 +175,25 @@ struct VertexConstraint
     }
 };
 
-namespace std {
-template <>
-struct hash<VertexConstraint> {
-    size_t operator()(const VertexConstraint& s) const {
-        size_t seed = 0;
-        boost::hash_combine(seed, s.time);
-        boost::hash_combine(seed, s.x);
-        boost::hash_combine(seed, s.y);
-        return seed;
-    }
-};
+namespace std
+{
+    template <>
+    struct hash<VertexConstraint>
+    {
+        size_t operator()(const VertexConstraint& s) const
+        {
+            size_t seed = 0;
+            boost::hash_combine(seed, s.time);
+            boost::hash_combine(seed, s.x);
+            boost::hash_combine(seed, s.y);
+
+            return seed;
+        }
+    };
 }  // namespace std
 
-struct EdgeConstraint {
+struct EdgeConstraint
+{
     EdgeConstraint(int time, int x1, int y1, int x2, int y2)
         : time(time), x1(x1), y1(y1), x2(x2), y2(y2) {}
     int time;
