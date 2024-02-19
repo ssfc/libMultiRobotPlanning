@@ -32,50 +32,6 @@ endif (DOXYGEN_FOUND)
 add_custom_target(clang-tidy
   COMMAND CMAKE_EXPORT_COMPILE_COMMANDS=ON run-clang-tidy ${CMAKE_CURRENT_SOURCE_DIR})
 
-# clang-format
-set(ALL_SOURCE_FILES
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/a_star.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/a_star_isolated.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/low_level.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/a_star_epsilon.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/a_star_epsilon_isolated.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/assignment.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/cbs.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/cbs_isolated.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/cbs_ta.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/ecbs.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/ecbs_isolated.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/ecbs_ta.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/neighbor.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/next_best_assignment.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/planresult.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/sipp.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/sipp_isolated.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libMultiRobotPlanning/util.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star_isolated.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star_epsilon.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/a_star_epsilon_isolated.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/assignment.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs_isolated.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/cbs_ta.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/ecbs.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/ecbs_isolated.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/ecbs_ta.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/mapf_prioritized_sipp.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/next_best_assignment.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/shortest_path_heuristic.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/shortest_path_heuristic.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/sipp.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/sipp_isolated.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/example/timer.hpp
-)
-
-add_custom_target(clang-format
-  COMMAND clang-format -i ${ALL_SOURCE_FILES}
-)
-
 # tests
 add_custom_target(run-test
   COMMAND python3 -m unittest discover -s ${CMAKE_CURRENT_SOURCE_DIR}/test
