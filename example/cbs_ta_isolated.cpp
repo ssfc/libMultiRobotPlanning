@@ -10,8 +10,10 @@ using libMultiRobotPlanning::NextBestAssignment;
 
 
 
-std::ostream& operator<<(std::ostream& os, const Action& a) {
-    switch (a) {
+std::ostream& operator<<(std::ostream& os, const Action& a)
+{
+    switch (a)
+    {
         case Action::Up:
             os << "Up";
             break;
@@ -28,12 +30,14 @@ std::ostream& operator<<(std::ostream& os, const Action& a) {
             os << "Wait";
             break;
     }
+
     return os;
 }
 
 
-class Environment {
-   public:
+class Environment
+{
+public:
     Environment(size_t dimx, size_t dimy,
                 const std::unordered_set<Location>& obstacles,
                 const std::vector<State>& startStates,
@@ -50,34 +54,45 @@ class Environment {
           m_numTaskAssignments(0),
           m_highLevelExpanded(0),
           m_lowLevelExpanded(0),
-          m_heuristic(dimx, dimy, obstacles) {
+          m_heuristic(dimx, dimy, obstacles)
+    {
         m_numAgents = startStates.size();
-        for (size_t i = 0; i < startStates.size(); ++i) {
-            for (const auto& goal : goals[i]) {
+        for (size_t i = 0; i < startStates.size(); ++i)
+        {
+            for (const auto& goal : goals[i])
+            {
                 m_assignment.setCost(
                     i, goal, m_heuristic.getValue(
                                  Location(startStates[i].x, startStates[i].y), goal));
                 m_goals.insert(goal);
             }
         }
+
         m_assignment.solve();
     }
 
     void setLowLevelContext(size_t agentIdx, const Constraints* constraints,
-                            const Location* task) {
+                            const Location* task)
+    {
         assert(constraints);
         m_agentIdx = agentIdx;
         m_goal = task;
         m_constraints = constraints;
         m_lastGoalConstraint = -1;
-        if (m_goal != nullptr) {
-            for (const auto& vc : constraints->vertexConstraints) {
-                if (vc.x == m_goal->x && vc.y == m_goal->y) {
+        if (m_goal != nullptr)
+        {
+            for (const auto& vc : constraints->vertexConstraints)
+            {
+                if (vc.x == m_goal->x && vc.y == m_goal->y)
+                {
                     m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
                 }
             }
-        } else {
-            for (const auto& vc : constraints->vertexConstraints) {
+        }
+        else
+        {
+            for (const auto& vc : constraints->vertexConstraints)
+            {
                 m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
             }
         }
@@ -85,24 +100,31 @@ class Environment {
         // std::endl;
     }
 
-    int admissible_heuristic(const State& s) {
-        if (m_goal != nullptr) {
+    int admissible_heuristic(const State& s)
+    {
+        if (m_goal != nullptr)
+        {
             return m_heuristic.getValue(Location(s.x, s.y), *m_goal);
-        } else {
+        }
+        else
+        {
             return 0;
         }
     }
 
-    bool is_solution(const State& s) {
+    bool is_solution(const State& s)
+    {
         bool atGoal = true;
-        if (m_goal != nullptr) {
+        if (m_goal != nullptr)
+        {
             atGoal = s.x == m_goal->x && s.y == m_goal->y;
         }
+
         return atGoal && s.time > m_lastGoalConstraint;
     }
 
-    void get_neighbors(const State& s,
-                       std::vector<Neighbor<State, Action, int> >& neighbors) {
+    void get_neighbors(const State& s, std::vector<Neighbor<State, Action, int> >& neighbors)
+    {
         // std::cout << "#VC " << constraints.vertexConstraints.size() << std::endl;
         // for(const auto& vc : constraints.vertexConstraints) {
         //   std::cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
@@ -111,49 +133,54 @@ class Environment {
         neighbors.clear();
         {
             State n(s.time + 1, s.x, s.y);
-            if (location_valid(n) && transitionValid(s, n)) {
+            if (location_valid(n) && transitionValid(s, n))
+            {
                 bool atGoal = true;
-                if (m_goal != nullptr) {
+                if (m_goal != nullptr)
+                {
                     atGoal = s.x == m_goal->x && s.y == m_goal->y;
                 }
-                neighbors.emplace_back(
-                    Neighbor<State, Action, int>(n, Action::Wait, atGoal ? 0 : 1));
+                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Wait, atGoal ? 0 : 1));
             }
         }
+
         {
             State n(s.time + 1, s.x - 1, s.y);
-            if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(
-                    Neighbor<State, Action, int>(n, Action::Left, 1));
+            if (location_valid(n) && transitionValid(s, n))
+            {
+                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Left, 1));
             }
         }
         {
             State n(s.time + 1, s.x + 1, s.y);
-            if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(
-                    Neighbor<State, Action, int>(n, Action::Right, 1));
+            if (location_valid(n) && transitionValid(s, n))
+            {
+                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Right, 1));
             }
         }
         {
             State n(s.time + 1, s.x, s.y + 1);
-            if (location_valid(n) && transitionValid(s, n)) {
+            if (location_valid(n) && transitionValid(s, n))
+            {
                 neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Up, 1));
             }
         }
         {
             State n(s.time + 1, s.x, s.y - 1);
-            if (location_valid(n) && transitionValid(s, n)) {
-                neighbors.emplace_back(
-                    Neighbor<State, Action, int>(n, Action::Down, 1));
+            if (location_valid(n) && transitionValid(s, n))
+            {
+                neighbors.emplace_back(Neighbor<State, Action, int>(n, Action::Down, 1));
             }
         }
     }
 
     bool getFirstConflict(
         const std::vector<PlanResult<State, Action, int> >& solution,
-        Conflict& result) {
+        Conflict& result)
+    {
         int max_t = 0;
-        for (const auto& sol : solution) {
+        for (const auto& sol : solution)
+        {
             max_t = std::max<int>(max_t, sol.path.size());
         }
 
