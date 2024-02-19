@@ -525,7 +525,6 @@ class Environment
 };
 
 
-template <typename Environment>
 class CBSTA
 {
 public:
