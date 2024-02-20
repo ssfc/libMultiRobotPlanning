@@ -159,7 +159,11 @@ public:
     int y;
 
 public:
-    VertexConstraint(int time, int x, int y) : time(time), x(x), y(y) {}
+    VertexConstraint(int input_time, int input_x, int input_y)
+     : time(input_time),
+       x(input_x),
+       y(input_y)
+    {}
 
     bool operator<(const VertexConstraint& other) const
     {
