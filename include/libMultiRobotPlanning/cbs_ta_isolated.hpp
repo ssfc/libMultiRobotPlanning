@@ -336,6 +336,62 @@ class AStarNode
 };
 
 
+class HighLevelNode
+{
+   public:
+    std::vector<PlanResult> solution;
+    std::vector<Constraints> constraints;
+    std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
+
+    int cost;
+
+    int id;
+    bool isRoot;
+
+    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
+                                     boost::heap::mutable_<true> >::handle_type handle;
+
+   public:
+    bool operator<(const HighLevelNode& n) const
+    {
+        // if (cost != n.cost)
+        return cost > n.cost;
+        // return id > n.id;
+    }
+
+    Location* task(size_t idx)
+    {
+        Location* task = nullptr;
+        auto iter = tasks.find(idx);
+        if (iter != tasks.end())
+        {
+            task = &iter->second;
+        }
+
+        return task;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
+    {
+        os << "id: " << c.id << " cost: " << c.cost << std::endl;
+        for (size_t i = 0; i < c.solution.size(); ++i)
+        {
+            os << "Agent: " << i << std::endl;
+            os << " States:" << std::endl;
+            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
+            {
+                os << "  " << c.solution[i].path[t].first << std::endl;
+            }
+            os << " Constraints:" << std::endl;
+            os << c.constraints[i];
+            os << " cost: " << c.solution[i].cost << std::endl;
+        }
+
+        return os;
+    }
+};
+
+
 class Environment
 {
 private:
@@ -653,62 +709,6 @@ public:
         const auto& con = m_constraints->edgeConstraints;
 
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
-    }
-};
-
-
-class HighLevelNode
-{
-public:
-    std::vector<PlanResult> solution;
-    std::vector<Constraints> constraints;
-    std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
-
-    int cost;
-
-    int id;
-    bool isRoot;
-
-    typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
-                                     boost::heap::mutable_<true> >::handle_type handle;
-
-public:
-    bool operator<(const HighLevelNode& n) const
-    {
-        // if (cost != n.cost)
-        return cost > n.cost;
-        // return id > n.id;
-    }
-
-    Location* task(size_t idx)
-    {
-        Location* task = nullptr;
-        auto iter = tasks.find(idx);
-        if (iter != tasks.end())
-        {
-            task = &iter->second;
-        }
-
-        return task;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
-    {
-        os << "id: " << c.id << " cost: " << c.cost << std::endl;
-        for (size_t i = 0; i < c.solution.size(); ++i)
-        {
-            os << "Agent: " << i << std::endl;
-            os << " States:" << std::endl;
-            for (size_t t = 0; t < c.solution[i].path.size(); ++t)
-            {
-                os << "  " << c.solution[i].path[t].first << std::endl;
-            }
-            os << " Constraints:" << std::endl;
-            os << c.constraints[i];
-            os << " cost: " << c.solution[i].cost << std::endl;
-        }
-
-        return os;
     }
 };
 
