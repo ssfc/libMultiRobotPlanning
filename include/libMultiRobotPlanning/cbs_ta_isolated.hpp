@@ -741,12 +741,6 @@ public:
         m_env.setLowLevelContext(agentIdx, &constraints, task);
     }
 
-    void onExpandNode(const State& s, int fScore, int gScore)
-    {
-        // std::cout << "LL expand: " << s << std::endl;
-        m_env.onExpandLowLevelNode(s, fScore, gScore);
-    }
-
     bool a_star_search(const State& start_location, PlanResult& solution, int initialCost = 0)
     {
         solution.path.clear();
@@ -770,7 +764,7 @@ public:
         while (!open_set.empty())
         {
             AStarNode current = open_set.top();
-            onExpandNode(current.location, current.f_score, current.g_score);
+            m_env.onExpandLowLevelNode(current.location, current.f_score, current.g_score);
 
             if (m_env.is_solution(current.location))
             {
