@@ -715,7 +715,7 @@ public:
 // inner class definition
 class AStarNode
 {
-   public:
+public:
     State location;
     int f_score;
     int g_score;
@@ -724,7 +724,7 @@ class AStarNode
     typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
     // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
-   public:
+public:
     AStarNode(const State& input_state, int input_fScore, int input_gScore)
         : location(input_state),
           f_score(input_fScore),
