@@ -237,23 +237,23 @@ struct hash<EdgeConstraint> {
 class Constraints
 {
 public:
-    std::unordered_set<VertexConstraint> vertexConstraints;
+    std::unordered_set<VertexConstraint> vertex_constraints;
     std::unordered_set<EdgeConstraint> edgeConstraints;
 
 public:
     void add(const Constraints& other)
     {
-        vertexConstraints.insert(other.vertexConstraints.begin(),
-                                 other.vertexConstraints.end());
+        vertex_constraints.insert(other.vertex_constraints.begin(),
+                                 other.vertex_constraints.end());
         edgeConstraints.insert(other.edgeConstraints.begin(),
                                other.edgeConstraints.end());
     }
 
     bool overlap(const Constraints& other) const
     {
-        for (const auto& vc : vertexConstraints)
+        for (const auto& vc : vertex_constraints)
         {
-            if (other.vertexConstraints.count(vc) > 0)
+            if (other.vertex_constraints.count(vc) > 0)
             {
                 return true;
             }
@@ -272,7 +272,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Constraints& c)
     {
-        for (const auto& vc : c.vertexConstraints)
+        for (const auto& vc : c.vertex_constraints)
         {
             os << vc << std::endl;
         }
@@ -457,7 +457,7 @@ public:
         m_lastGoalConstraint = -1;
         if (m_goal != nullptr)
         {
-            for (const auto& vc : constraints->vertexConstraints)
+            for (const auto& vc : constraints->vertex_constraints)
             {
                 if (vc.x == m_goal->x && vc.y == m_goal->y)
                 {
@@ -467,7 +467,7 @@ public:
         }
         else
         {
-            for (const auto& vc : constraints->vertexConstraints)
+            for (const auto& vc : constraints->vertex_constraints)
             {
                 m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
             }
@@ -501,8 +501,8 @@ public:
 
     void get_neighbors(const State& s, std::vector<Neighbor>& neighbors)
     {
-        // std::cout << "#VC " << constraints.vertexConstraints.size() << std::endl;
-        // for(const auto& vc : constraints.vertexConstraints) {
+        // std::cout << "#VC " << constraints.vertex_constraints.size() << std::endl;
+        // for(const auto& vc : constraints.vertex_constraints) {
         //   std::cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
         //   std::endl;
         // }
@@ -617,7 +617,7 @@ public:
         if (conflict.type == Conflict::Vertex)
         {
             Constraints c1;
-            c1.vertexConstraints.emplace(
+            c1.vertex_constraints.emplace(
                 VertexConstraint(conflict.time, conflict.x1, conflict.y1));
             constraints[conflict.agent1] = c1;
             constraints[conflict.agent2] = c1;
@@ -698,7 +698,7 @@ public:
     bool location_valid(const State& s)
     {
         assert(m_constraints);
-        const auto& con = m_constraints->vertexConstraints;
+        const auto& con = m_constraints->vertex_constraints;
 
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
