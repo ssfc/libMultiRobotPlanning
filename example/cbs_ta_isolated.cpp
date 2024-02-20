@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
     std::vector<PlanResult> solution;
 
     Timer timer;
-    bool success = cbsta.cbsta_search(startStates, solution);
+    bool success = mapf.cbsta_search(startStates, solution);
     timer.stop();
 
     if (success)
