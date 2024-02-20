@@ -414,7 +414,7 @@ private:
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
-    size_t m_agentIdx;
+    size_t agent_index;
     const Location* m_goal;
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
@@ -441,7 +441,7 @@ public:
         : num_columns(dimx),
           num_rows(dimy),
           obstacles(obstacles),
-          m_agentIdx(0),
+          agent_index(0),
           m_goal(nullptr),
           m_constraints(nullptr),
           m_lastGoalConstraint(-1),
@@ -466,10 +466,10 @@ public:
         m_assignment.solve();
     }
 
-    void setLowLevelContext(size_t agentIdx, const Constraints* constraints, const Location* task)
+    void setLowLevelContext(size_t input_agentIdx, const Constraints* constraints, const Location* task)
     {
         assert(constraints);
-        m_agentIdx = agentIdx;
+        agent_index = input_agentIdx;
         m_goal = task;
         m_constraints = constraints;
         m_lastGoalConstraint = -1;
