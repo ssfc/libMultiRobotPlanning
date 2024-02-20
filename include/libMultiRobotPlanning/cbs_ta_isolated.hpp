@@ -363,7 +363,6 @@ public:
 
     int cost;
 
-    int id;
     bool is_root;
 
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
@@ -374,7 +373,6 @@ public:
     {
         // if (cost != n.cost)
         return cost > n.cost;
-        // return id > n.id;
     }
 
     Location* task(size_t idx)
@@ -391,7 +389,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const HighLevelNode& c)
     {
-        os << "id: " << c.id << " cost: " << c.cost << std::endl;
+        os << " cost: " << c.cost << std::endl;
         for (size_t i = 0; i < c.solution.size(); ++i)
         {
             os << "Agent: " << i << std::endl;
@@ -843,7 +841,6 @@ public:
         start.solution.resize(numAgents);
         start.constraints.resize(numAgents);
         start.cost = 0;
-        start.id = 0;
         start.is_root = true;
         nextTaskAssignment(start.tasks);
 
@@ -877,7 +874,6 @@ public:
         (*handle).handle = handle;
 
         solution.clear();
-        int id = 1;
         while (!open.empty())
         {
             HighLevelNode P = open.top();
@@ -906,7 +902,6 @@ public:
                     n.solution.resize(numAgents);
                     n.constraints.resize(numAgents);
                     n.cost = 0;
-                    n.id = id;
                     n.is_root = true;
 
                     bool allSuccessful = true;
@@ -927,7 +922,6 @@ public:
                     {
                         auto handle = open.push(n);
                         (*handle).handle = handle;
-                        ++id;
                         std::cout << " new root added! cost: " << n.cost << std::endl;
                     }
                 }
@@ -944,9 +938,7 @@ public:
             {
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
-                // std::cout << "create child with id " << id << std::endl;
                 HighLevelNode newNode = P;
-                newNode.id = id;
                 // (optional) check that this constraint was not included already
                 // std::cout << newNode.constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
@@ -967,8 +959,6 @@ public:
                     auto handle = open.push(newNode);
                     (*handle).handle = handle;
                 }
-
-                ++id;
             }
         }
 
