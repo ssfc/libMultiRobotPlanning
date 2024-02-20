@@ -729,7 +729,7 @@ public:
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
 
-    bool a_star_search(const State& start_location, PlanResult& solution, int initialCost = 0)
+    bool low_level_search(const State& start_location, PlanResult& solution, int initialCost = 0)
     {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(start_location, 0));
@@ -853,7 +853,7 @@ public:
             if (!start.tasks.empty())
             {
                 setLowLevelContext(i, &start.constraints[i], start.task(i));
-                success = a_star_search(initialStates[i], start.solution[i]);
+                success = low_level_search(initialStates[i], start.solution[i]);
             }
 
             if (!success)
@@ -906,7 +906,7 @@ public:
                     for (size_t i = 0; i < numAgents; ++i)
                     {
                         setLowLevelContext(i, &n.constraints[i], n.task(i));
-                        bool success = a_star_search(initialStates[i], n.solution[i]);
+                        bool success = low_level_search(initialStates[i], n.solution[i]);
                         if (!success)
                         {
                             allSuccessful = false;
@@ -947,7 +947,7 @@ public:
                 newNode.cost -= newNode.solution[i].cost;
 
                 setLowLevelContext(i, &newNode.constraints[i], newNode.task(i));
-                bool success = a_star_search(initialStates[i], newNode.solution[i]);
+                bool success = low_level_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
 
