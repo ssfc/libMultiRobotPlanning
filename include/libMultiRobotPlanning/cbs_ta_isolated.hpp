@@ -454,12 +454,11 @@ public:
         m_numAgents = startStates.size();
         for (size_t i = 0; i < startStates.size(); ++i)
         {
-            for (const auto& goal : goals[i])
+            for (const auto& this_goal : goals[i])
             {
-                m_assignment.setCost(
-                    i, goal, m_heuristic.getValue(
-                                 Location(startStates[i].x, startStates[i].y), goal));
-                m_goals.insert(goal);
+                m_assignment.setCost(i, this_goal, m_heuristic.getValue(
+                                 Location(startStates[i].x, startStates[i].y), this_goal));
+                m_goals.insert(this_goal);
             }
         }
 
