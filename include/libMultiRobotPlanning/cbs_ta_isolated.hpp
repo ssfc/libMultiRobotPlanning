@@ -1031,7 +1031,7 @@ public:
                 LowLevelEnvironment llenv(m_env, i, start.constraints[i],
                                           start.task(i));
                 AStar lowLevel(llenv);
-                success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
+                success = llenv.a_star_search(initialStates[i], start.solution[i]);
             }
 
             if (!success)
@@ -1087,7 +1087,7 @@ public:
                     {
                         LowLevelEnvironment llenv(m_env, i, n.constraints[i], n.task(i));
                         AStar lowLevel(llenv);
-                        bool success = lowLevel.a_star_search(initialStates[i], n.solution[i]);
+                        bool success = llenv.a_star_search(initialStates[i], n.solution[i]);
                         if (!success)
                         {
                             allSuccessful = false;
@@ -1133,7 +1133,7 @@ public:
                 LowLevelEnvironment llenv(m_env, i, newNode.constraints[i],
                                           newNode.task(i));
                 AStar lowLevel(llenv);
-                bool success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
+                bool success = llenv.a_star_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
 
