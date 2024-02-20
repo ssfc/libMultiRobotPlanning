@@ -411,6 +411,11 @@ private:
     size_t m_numAgents;
     std::unordered_set<Location> m_goals;
 
+    using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
+    using HeapHandle = typename OpenSet::handle_type;
+    // using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+    // using HeapHandle = typename OpenSet::handle_type;
+
 public:
     Environment(size_t dimx, size_t dimy,
                 const std::unordered_set<Location>& obstacles,
