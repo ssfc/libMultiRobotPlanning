@@ -757,12 +757,6 @@ public:
         m_env.onExpandLowLevelNode(s, fScore, gScore);
     }
 
-    void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/)
-    {
-        // std::cout << "LL discover: " << s << std::endl;
-        // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
-    }
-
     bool a_star_search(const State& start_location, PlanResult& solution, int initialCost = 0)
     {
         solution.path.clear();
@@ -831,7 +825,6 @@ public:
                         auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
-                        onDiscover(neighbor.location, f_score, tentative_gScore);
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -851,8 +844,6 @@ public:
                         (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
-                        onDiscover(neighbor.location, (*handle).f_score,
-                                                         (*handle).g_score);
                     }
 
                     // Best path for this node so far
