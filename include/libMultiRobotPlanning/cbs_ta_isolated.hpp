@@ -712,7 +712,7 @@ public:
 };
 
 
-template <typename Environment>
+template <typename LowLevelEnvironment>
 class AStar
 {
 private:
@@ -720,7 +720,7 @@ private:
     class AStarNode;
 
     // member vars
-    Environment& environment; // include map size, obstacle position, agent goal.
+    LowLevelEnvironment& environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -729,7 +729,7 @@ private:
 
 public:
     // member funcs
-    AStar(Environment& input_environment) : environment(input_environment) {}
+    AStar(LowLevelEnvironment& input_environment) : environment(input_environment) {}
 
     bool a_star_search(const State& start_location, PlanResult& solution,
                        int initialCost = 0)
@@ -840,8 +840,8 @@ public:
 };
 
 // inner class definition
-template <typename Environment>
-class AStar<Environment>::AStarNode
+template <typename LowLevelEnvironment>
+class AStar<LowLevelEnvironment>::AStarNode
 {
 public:
     State location;
