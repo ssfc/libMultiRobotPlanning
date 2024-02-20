@@ -763,7 +763,7 @@ class AStar
 {
 private:
     // member vars
-    LowLevelEnvironment& environment; // include map size, obstacle position, agent goal.
+    LowLevelEnvironment& low_level_environment; // include map size, obstacle position, agent goal.
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -772,7 +772,7 @@ private:
 
 public:
     // member funcs
-    AStar(LowLevelEnvironment& input_environment) : environment(input_environment) {}
+    AStar(LowLevelEnvironment& input_environment) : low_level_environment(input_environment) {}
 
     bool a_star_search(const State& start_location, PlanResult& solution,
                        int initialCost = 0)
@@ -788,7 +788,7 @@ public:
         std::unordered_map<State, std::tuple<State,Action,int,int>,std::hash<State>> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
-                                              environment.admissible_heuristic(start_location), initialCost));
+                                              low_level_environment.admissible_heuristic(start_location), initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
@@ -798,9 +798,9 @@ public:
         while (!open_set.empty())
         {
             AStarNode current = open_set.top();
-            environment.onExpandNode(current.location, current.f_score, current.g_score);
+            low_level_environment.onExpandNode(current.location, current.f_score, current.g_score);
 
-            if (environment.is_solution(current.location))
+            if (low_level_environment.is_solution(current.location))
             {
                 solution.path.clear();
                 solution.actions.clear();
@@ -830,7 +830,7 @@ public:
 
             // traverse neighbors
             neighbors.clear();
-            environment.get_neighbors(current.location, neighbors);
+            low_level_environment.get_neighbors(current.location, neighbors);
             for (const Neighbor& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
@@ -839,11 +839,11 @@ public:
                     auto iter = location_to_heap.find(neighbor.location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + environment.admissible_heuristic(neighbor.location);
+                        int f_score = tentative_gScore + low_level_environment.admissible_heuristic(neighbor.location);
                         auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
-                        environment.onDiscover(neighbor.location, f_score, tentative_gScore);
+                        low_level_environment.onDiscover(neighbor.location, f_score, tentative_gScore);
                         // std::cout << "  this is a new node " << f_score << "," <<
                         // tentative_gScore << std::endl;
                     }
@@ -863,7 +863,7 @@ public:
                         (*handle).g_score = tentative_gScore;
                         (*handle).f_score -= delta;
                         open_set.increase(handle);
-                        environment.onDiscover(neighbor.location, (*handle).f_score,
+                        low_level_environment.onDiscover(neighbor.location, (*handle).f_score,
                                                (*handle).g_score);
                     }
 
