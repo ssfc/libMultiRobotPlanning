@@ -714,6 +714,109 @@ public:
 
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
+
+    bool a_star_search(const State& start_location, PlanResult& solution, int initialCost = 0)
+    {
+        solution.path.clear();
+        solution.path.emplace_back(std::make_pair<>(start_location, 0));
+        solution.actions.clear();
+        solution.cost = 0;
+
+        OpenSet open_set;
+        std::unordered_map<State, HeapHandle, std::hash<State>> location_to_heap;
+        std::unordered_set<State, std::hash<State>> closed_set;
+        std::unordered_map<State, std::tuple<State,Action,int,int>,std::hash<State>> came_from;
+
+        auto handle = open_set.push(AStarNode(start_location,
+                                              admissible_heuristic(start_location), initialCost));
+        location_to_heap.insert(std::make_pair<>(start_location, handle));
+        (*handle).handle = handle;
+
+        std::vector<Neighbor> neighbors;
+        neighbors.reserve(10);
+
+        while (!open_set.empty())
+        {
+            AStarNode current = open_set.top();
+            onExpandLowLevelNode(current.location, current.f_score, current.g_score);
+
+            if (is_solution(current.location))
+            {
+                solution.path.clear();
+                solution.actions.clear();
+                auto iter = came_from.find(current.location);
+                while (iter != came_from.end())
+                {
+                    solution.path.emplace_back(
+                        std::make_pair<>(iter->first, std::get<3>(iter->second)));
+                    solution.actions.emplace_back(std::make_pair<>(
+                        std::get<1>(iter->second), std::get<2>(iter->second)));
+                    iter = came_from.find(std::get<0>(iter->second));
+                }
+
+                solution.path.emplace_back(std::make_pair<>
+                                           (start_location, initialCost));
+                std::reverse(solution.path.begin(), solution.path.end());
+                std::reverse(solution.actions.begin(), solution.actions.end());
+                solution.cost = current.g_score;
+                solution.fmin = current.f_score;
+
+                return true;
+            }
+
+            open_set.pop();
+            location_to_heap.erase(current.location);
+            closed_set.insert(current.location);
+
+            // traverse neighbors
+            neighbors.clear();
+            get_neighbors(current.location, neighbors);
+            for (const Neighbor& neighbor : neighbors)
+            {
+                if (closed_set.find(neighbor.location) == closed_set.end())
+                {
+                    int tentative_gScore = current.g_score + neighbor.cost;
+                    auto iter = location_to_heap.find(neighbor.location);
+                    if (iter == location_to_heap.end())
+                    {  // Discover a new node
+                        int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
+                        auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
+                        (*handle).handle = handle;
+                        location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
+                        // std::cout << "  this is a new node " << f_score << "," <<
+                        // tentative_gScore << std::endl;
+                    }
+                    else
+                    {
+                        auto handle = iter->second;
+                        // std::cout << "  this is an old node: " << tentative_gScore << ","
+                        // << (*handle).g_score << std::endl;
+                        // We found this node before with a better path
+                        if (tentative_gScore >= (*handle).g_score)
+                        {
+                            continue;
+                        }
+
+                        // update f and g_score
+                        int delta = (*handle).g_score - tentative_gScore;
+                        (*handle).g_score = tentative_gScore;
+                        (*handle).f_score -= delta;
+                        open_set.increase(handle);
+                    }
+
+                    // Best path for this node so far
+                    // TODO: this is not the best way to update "came_from", but otherwise
+                    // default c'tors of Location and Action are required
+                    came_from.erase(neighbor.location);
+                    came_from.insert(std::make_pair<>(neighbor.location,
+                                                      std::make_tuple<>(current.location, neighbor.action, neighbor.cost,
+                                                                        tentative_gScore)));
+                }
+            }
+        }
+
+        return false;
+    }
 };
 
 
