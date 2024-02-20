@@ -954,7 +954,9 @@ private:
     Environment& m_env;
 
 public:
-    CBSTA(Environment& environment) : m_env(environment) {}
+    CBSTA(Environment& environment)
+     : m_env(environment)
+    {}
 
     bool cbsta_search(const std::vector<State>& initialStates, std::vector<PlanResult>& solution)
     {
