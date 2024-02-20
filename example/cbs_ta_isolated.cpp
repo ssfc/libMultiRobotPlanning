@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
         startStatesSet.insert(s);
     }
 
-    Environment mapf(dimx, dimy, obstacles, startStates, goals, maxTaskAssignments);
+    CBSTA mapf(dimx, dimy, obstacles, startStates, goals, maxTaskAssignments);
 
     std::vector<PlanResult> solution;
 

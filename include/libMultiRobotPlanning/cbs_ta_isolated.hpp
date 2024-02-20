@@ -392,7 +392,7 @@ class HighLevelNode
 };
 
 
-class Environment
+class CBSTA
 {
 private:
     int num_columns;
@@ -417,7 +417,7 @@ private:
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
-    Environment(size_t dimx, size_t dimy,
+    CBSTA(size_t dimx, size_t dimy,
                 const std::unordered_set<Location>& obstacles,
                 const std::vector<State>& startStates,
                 const std::vector<std::unordered_set<Location> >& goals,
