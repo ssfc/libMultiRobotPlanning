@@ -258,15 +258,15 @@ class Constraints
 {
 public:
     std::unordered_set<VertexConstraint> vertex_constraints;
-    std::unordered_set<EdgeConstraint> edgeConstraints;
+    std::unordered_set<EdgeConstraint> edge_constraints;
 
 public:
     void add(const Constraints& other)
     {
         vertex_constraints.insert(other.vertex_constraints.begin(),
                                  other.vertex_constraints.end());
-        edgeConstraints.insert(other.edgeConstraints.begin(),
-                               other.edgeConstraints.end());
+        edge_constraints.insert(other.edge_constraints.begin(),
+                               other.edge_constraints.end());
     }
 
     bool overlap(const Constraints& other) const
@@ -279,9 +279,9 @@ public:
             }
         }
 
-        for (const auto& ec : edgeConstraints)
+        for (const auto& ec : edge_constraints)
         {
-            if (other.edgeConstraints.count(ec) > 0)
+            if (other.edge_constraints.count(ec) > 0)
             {
                 return true;
             }
@@ -297,7 +297,7 @@ public:
             os << vc << std::endl;
         }
 
-        for (const auto& ec : c.edgeConstraints)
+        for (const auto& ec : c.edge_constraints)
         {
             os << ec << std::endl;
         }
@@ -645,11 +645,11 @@ public:
         else if (conflict.type == Conflict::Edge)
         {
             Constraints c1;
-            c1.edgeConstraints.emplace(EdgeConstraint(
+            c1.edge_constraints.emplace(EdgeConstraint(
                 conflict.time, conflict.x1, conflict.y1, conflict.x2, conflict.y2));
             constraints[conflict.agent1] = c1;
             Constraints c2;
-            c2.edgeConstraints.emplace(EdgeConstraint(
+            c2.edge_constraints.emplace(EdgeConstraint(
                 conflict.time, conflict.x2, conflict.y2, conflict.x1, conflict.y1));
             constraints[conflict.agent2] = c2;
         }
@@ -728,7 +728,7 @@ public:
     bool transitionValid(const State& s1, const State& s2)
     {
         assert(m_constraints);
-        const auto& con = m_constraints->edgeConstraints;
+        const auto& con = m_constraints->edge_constraints;
 
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
