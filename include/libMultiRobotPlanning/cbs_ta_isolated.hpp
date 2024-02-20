@@ -983,7 +983,7 @@ public:
                 success = llenv.a_star_search(initialStates[i], start.solution[i]);
 
                 // m_env.setLowLevelContext(agentIdx, &constraints, task);
-                // m_env.setLowLevelContext(i, start.constraints[i], start.task(i));
+                // m_env.setLowLevelContext(i, &start.constraints[i], start.task(i));
                 // success = m_env.a_star_search(initialStates[i], start.solution[i]);
             }
 

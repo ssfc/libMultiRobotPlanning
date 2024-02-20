@@ -169,5 +169,28 @@ int main(int argc, char* argv[])
 // mkdir build; cd build
 // cmake .. ; make
 // ./cbs_ta -i ../test/mapfta_simple1_a1.yaml -o output.yaml
+/*
+nextTaskAssignment: cost: 6
+0->(4,0)
+1->(3,0)
+nextTaskAssignment: cost: 6
+0->(3,0)
+1->(4,0)
+ new root added! cost: 6
+done; cost: 6
+Planning successful!
+ */
 // ./cbs_ta -i ../test/mapfta_simple1_a2.yaml -o output.yaml
+/*
+nextTaskAssignment: cost: 4
+0->(4,0)
+done; cost: 6
+Planning successful!
+ */
 // ./cbs_ta -i ../test/mapfta_simple1_a3.yaml -o output.yaml
+/*
+nextTaskAssignment: cost: 3
+0->(3,0)
+done; cost: 5
+Planning successful!
+ */
