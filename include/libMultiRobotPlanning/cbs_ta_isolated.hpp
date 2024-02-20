@@ -450,8 +450,7 @@ public:
         m_assignment.solve();
     }
 
-    void setLowLevelContext(size_t agentIdx, const Constraints* constraints,
-                            const Location* task)
+    void setLowLevelContext(size_t agentIdx, const Constraints* constraints, const Location* task)
     {
         assert(constraints);
         m_agentIdx = agentIdx;
