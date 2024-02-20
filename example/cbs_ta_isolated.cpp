@@ -107,6 +107,8 @@ int main(int argc, char* argv[])
     }
 
     Environment mapf(dimx, dimy, obstacles, startStates, goals, maxTaskAssignments);
+    // LowLevelEnvironment llenv(mapf, 0, start.constraints[0], start.task(0));
+
     CBSTA cbsta(mapf);
     std::vector<PlanResult> solution;
 
