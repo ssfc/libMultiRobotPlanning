@@ -109,8 +109,6 @@ struct PlanResult
     std::vector<std::pair<Action, int> > actions;
     //! actual cost of the result
     int cost;
-    //! lower bound of the cost (for suboptimal solvers)
-    int fmin;
 };
 
 class Conflict
@@ -759,7 +757,6 @@ public:
                 std::reverse(solution.path.begin(), solution.path.end());
                 std::reverse(solution.actions.begin(), solution.actions.end());
                 solution.cost = current.g_score;
-                solution.fmin = current.f_score;
 
                 return true;
             }
