@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
     std::vector<PlanResult> solution;
 
     Timer timer;
-    bool success = cbs.search(startStates, solution);
+    bool success = cbs.cbsta_search(startStates, solution);
     timer.stop();
 
     if (success)

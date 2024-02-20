@@ -891,8 +891,7 @@ private:
 public:
     CBSTA(Environment& environment) : m_env(environment) {}
 
-    bool search(const std::vector<State>& initialStates,
-                std::vector<PlanResult>& solution)
+    bool cbsta_search(const std::vector<State>& initialStates, std::vector<PlanResult>& solution)
     {
         HighLevelNode start;
         size_t numAgents = initialStates.size();
