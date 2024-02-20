@@ -1078,9 +1078,8 @@ public:
 
                 newNode.cost -= newNode.solution[i].cost;
 
-                LowLevelEnvironment llenv(m_env, i, newNode.constraints[i],
-                                          newNode.task(i));
-                bool success = llenv.a_star_search(initialStates[i], newNode.solution[i]);
+                m_env.setLowLevelContext(i, &newNode.constraints[i], newNode.task(i));
+                bool success = m_env.a_star_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
 
