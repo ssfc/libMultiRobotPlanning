@@ -292,7 +292,7 @@ public:
 // inner class definition
 class AStarNode
 {
-   public:
+public:
     State location;
     int f_score;
     int g_score;
@@ -301,7 +301,7 @@ class AStarNode
     typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
     // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
-   public:
+public:
     AStarNode(const State& input_state, int input_fScore, int input_gScore)
         : location(input_state),
           f_score(input_fScore),
@@ -338,7 +338,7 @@ class AStarNode
 
 class HighLevelNode
 {
-   public:
+public:
     std::vector<PlanResult> solution;
     std::vector<Constraints> constraints;
     std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
@@ -351,7 +351,7 @@ class HighLevelNode
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
                                      boost::heap::mutable_<true> >::handle_type handle;
 
-   public:
+public:
     bool operator<(const HighLevelNode& n) const
     {
         // if (cost != n.cost)
