@@ -741,16 +741,6 @@ public:
         m_env.setLowLevelContext(agentIdx, &constraints, task);
     }
 
-    bool is_solution(const State& s)
-    {
-        return m_env.is_solution(s);
-    }
-
-    void get_neighbors(const State& s, std::vector<Neighbor>& neighbors)
-    {
-        m_env.get_neighbors(s, neighbors);
-    }
-
     void onExpandNode(const State& s, int fScore, int gScore)
     {
         // std::cout << "LL expand: " << s << std::endl;
@@ -782,7 +772,7 @@ public:
             AStarNode current = open_set.top();
             onExpandNode(current.location, current.f_score, current.g_score);
 
-            if (is_solution(current.location))
+            if (m_env.is_solution(current.location))
             {
                 solution.path.clear();
                 solution.actions.clear();
@@ -812,7 +802,7 @@ public:
 
             // traverse neighbors
             neighbors.clear();
-            get_neighbors(current.location, neighbors);
+            m_env.get_neighbors(current.location, neighbors);
             for (const Neighbor& neighbor : neighbors)
             {
                 if (closed_set.find(neighbor.location) == closed_set.end())
