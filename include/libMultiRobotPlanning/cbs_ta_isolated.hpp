@@ -772,10 +772,11 @@ private:
 
 public:
     // member funcs
-    AStar(LowLevelEnvironment& input_environment) : low_level_environment(input_environment) {}
+    AStar(LowLevelEnvironment& input_environment)
+     : low_level_environment(input_environment)
+    {}
 
-    bool a_star_search(const State& start_location, PlanResult& solution,
-                       int initialCost = 0)
+    bool a_star_search(const State& start_location, PlanResult& solution, int initialCost = 0)
     {
         solution.path.clear();
         solution.path.emplace_back(std::make_pair<>(start_location, 0));
