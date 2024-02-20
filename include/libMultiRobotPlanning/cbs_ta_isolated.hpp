@@ -362,7 +362,6 @@ public:
     std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
 
     int cost;
-
     bool is_root;
 
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
@@ -371,7 +370,6 @@ public:
 public:
     bool operator<(const HighLevelNode& n) const
     {
-        // if (cost != n.cost)
         return cost > n.cost;
     }
 
@@ -465,16 +463,16 @@ public:
         m_assignment.solve();
     }
 
-    void setLowLevelContext(size_t input_agentIdx, const Constraints* constraints, const Location* task)
+    void setLowLevelContext(size_t input_agentIdx, const Constraints* input_constraints, const Location* task)
     {
-        assert(constraints);
+        assert(input_constraints);
         agent_index = input_agentIdx;
         goal = task;
-        m_constraints = constraints;
+        m_constraints = input_constraints;
         m_lastGoalConstraint = -1;
         if (goal != nullptr)
         {
-            for (const auto& vc : constraints->vertex_constraints)
+            for (const auto& vc : input_constraints->vertex_constraints)
             {
                 if (vc.x == goal->x && vc.y == goal->y)
                 {
@@ -484,7 +482,7 @@ public:
         }
         else
         {
-            for (const auto& vc : constraints->vertex_constraints)
+            for (const auto& vc : input_constraints->vertex_constraints)
             {
                 m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
             }
@@ -518,8 +516,9 @@ public:
 
     void get_neighbors(const State& s, std::vector<Neighbor>& neighbors)
     {
-        // std::cout << "#VC " << constraints.vertex_constraints.size() << std::endl;
-        // for(const auto& vc : constraints.vertex_constraints) {
+        // std::cout << "#VC " << input_constraints.vertex_constraints.size() << std::endl;
+        // for(const auto& vc : input_constraints.vertex_constraints)
+        // {
         //   std::cout << "  " << vc.time << "," << vc.x << "," << vc.y <<
         //   std::endl;
         // }
