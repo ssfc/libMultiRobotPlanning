@@ -720,7 +720,7 @@ public:
 
 class LowLevelEnvironment
 {
-private:
+public:
     Environment& m_env;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
@@ -739,11 +739,6 @@ public:
     // , m_constraints(constraints)
     {
         m_env.setLowLevelContext(agentIdx, &constraints, task);
-    }
-
-    int admissible_heuristic(const State& s)
-    {
-        return m_env.admissible_heuristic(s);
     }
 
     bool is_solution(const State& s)
@@ -775,7 +770,7 @@ public:
         std::unordered_map<State, std::tuple<State,Action,int,int>,std::hash<State>> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
-                                              admissible_heuristic(start_location), initialCost));
+                                              m_env.admissible_heuristic(start_location), initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
@@ -826,7 +821,7 @@ public:
                     auto iter = location_to_heap.find(neighbor.location);
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
-                        int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
+                        int f_score = tentative_gScore + m_env.admissible_heuristic(neighbor.location);
                         auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
