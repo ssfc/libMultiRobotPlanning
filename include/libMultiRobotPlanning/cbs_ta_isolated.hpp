@@ -979,12 +979,8 @@ public:
             bool success = false;
             if (!start.tasks.empty())
             {
-                LowLevelEnvironment llenv(m_env, i, start.constraints[i], start.task(i));
-                success = llenv.a_star_search(initialStates[i], start.solution[i]);
-
-                // m_env.setLowLevelContext(agentIdx, &constraints, task);
-                // m_env.setLowLevelContext(i, &start.constraints[i], start.task(i));
-                // success = m_env.a_star_search(initialStates[i], start.solution[i]);
+                m_env.setLowLevelContext(i, &start.constraints[i], start.task(i));
+                success = m_env.a_star_search(initialStates[i], start.solution[i]);
             }
 
             if (!success)
@@ -1038,8 +1034,8 @@ public:
                     bool allSuccessful = true;
                     for (size_t i = 0; i < numAgents; ++i)
                     {
-                        LowLevelEnvironment llenv(m_env, i, n.constraints[i], n.task(i));
-                        bool success = llenv.a_star_search(initialStates[i], n.solution[i]);
+                        m_env.setLowLevelContext(i, &n.constraints[i], n.task(i));
+                        bool success = m_env.a_star_search(initialStates[i], n.solution[i]);
                         if (!success)
                         {
                             allSuccessful = false;
