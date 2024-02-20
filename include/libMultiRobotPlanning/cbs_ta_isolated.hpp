@@ -415,7 +415,7 @@ private:
     int num_rows;
     std::unordered_set<Location> obstacles;
     size_t agent_index;
-    const Location* m_goal;
+    const Location* goal;
     const Constraints* m_constraints;
     int m_lastGoalConstraint;
     NextBestAssignment<size_t, Location> m_assignment;
@@ -442,7 +442,7 @@ public:
           num_rows(dimy),
           obstacles(obstacles),
           agent_index(0),
-          m_goal(nullptr),
+          goal(nullptr),
           m_constraints(nullptr),
           m_lastGoalConstraint(-1),
           m_maxTaskAssignments(maxTaskAssignments),
@@ -469,14 +469,14 @@ public:
     {
         assert(constraints);
         agent_index = input_agentIdx;
-        m_goal = task;
+        goal = task;
         m_constraints = constraints;
         m_lastGoalConstraint = -1;
-        if (m_goal != nullptr)
+        if (goal != nullptr)
         {
             for (const auto& vc : constraints->vertex_constraints)
             {
-                if (vc.x == m_goal->x && vc.y == m_goal->y)
+                if (vc.x == goal->x && vc.y == goal->y)
                 {
                     m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
                 }
@@ -495,9 +495,9 @@ public:
 
     int admissible_heuristic(const State& s)
     {
-        if (m_goal != nullptr)
+        if (goal != nullptr)
         {
-            return m_heuristic.getValue(Location(s.x, s.y), *m_goal);
+            return m_heuristic.getValue(Location(s.x, s.y), *goal);
         }
         else
         {
@@ -508,9 +508,9 @@ public:
     bool is_solution(const State& s)
     {
         bool atGoal = true;
-        if (m_goal != nullptr)
+        if (goal != nullptr)
         {
-            atGoal = s.x == m_goal->x && s.y == m_goal->y;
+            atGoal = s.x == goal->x && s.y == goal->y;
         }
 
         return atGoal && s.time > m_lastGoalConstraint;
@@ -529,9 +529,9 @@ public:
             if (location_valid(n) && transitionValid(s, n))
             {
                 bool atGoal = true;
-                if (m_goal != nullptr)
+                if (goal != nullptr)
                 {
-                    atGoal = s.x == m_goal->x && s.y == m_goal->y;
+                    atGoal = s.x == goal->x && s.y == goal->y;
                 }
                 neighbors.emplace_back(Neighbor(n, Action::Wait, atGoal ? 0 : 1));
             }
