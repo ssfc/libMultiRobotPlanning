@@ -364,7 +364,7 @@ public:
     int cost;
 
     int id;
-    bool isRoot;
+    bool is_root;
 
     typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
                                      boost::heap::mutable_<true> >::handle_type handle;
@@ -844,7 +844,7 @@ public:
         start.constraints.resize(numAgents);
         start.cost = 0;
         start.id = 0;
-        start.isRoot = true;
+        start.is_root = true;
         nextTaskAssignment(start.tasks);
 
         for (size_t i = 0; i < initialStates.size(); ++i)
@@ -895,7 +895,7 @@ public:
                 return true;
             }
 
-            if (P.isRoot)
+            if (P.is_root)
             {
                 // std::cout << "root node expanded; add new root" << std::endl;
                 HighLevelNode n;
@@ -907,7 +907,7 @@ public:
                     n.constraints.resize(numAgents);
                     n.cost = 0;
                     n.id = id;
-                    n.isRoot = true;
+                    n.is_root = true;
 
                     bool allSuccessful = true;
                     for (size_t i = 0; i < numAgents; ++i)
