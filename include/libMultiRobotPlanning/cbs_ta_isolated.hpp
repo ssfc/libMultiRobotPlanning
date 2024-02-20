@@ -764,6 +764,8 @@ class AStar
 private:
     // member vars
     LowLevelEnvironment& low_level_environment; // include map size, obstacle position, agent goal.
+    Environment& m_env;
+
     // 定义openSet_t和fibHeapHandle_t
     using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
     using HeapHandle = typename OpenSet::handle_type;
@@ -772,9 +774,12 @@ private:
 
 public:
     // member funcs
-    AStar(LowLevelEnvironment& input_environment)
-     : low_level_environment(input_environment)
+    AStar(LowLevelEnvironment& input_environment, Environment& environment)
+     : low_level_environment(input_environment),
+       m_env(environment)
     {}
+
+    // CBSTA(Environment& environment) : m_env(environment) {}
 
     bool a_star_search(const State& start_location, PlanResult& solution, int initialCost = 0)
     {
@@ -915,7 +920,7 @@ public:
             {
                 LowLevelEnvironment llenv(m_env, i, start.constraints[i],
                                           start.task(i));
-                AStar lowLevel(llenv);
+                AStar lowLevel(llenv, m_env);
                 success = lowLevel.a_star_search(initialStates[i], start.solution[i]);
             }
 
@@ -971,7 +976,7 @@ public:
                     for (size_t i = 0; i < numAgents; ++i)
                     {
                         LowLevelEnvironment llenv(m_env, i, n.constraints[i], n.task(i));
-                        AStar lowLevel(llenv);
+                        AStar lowLevel(llenv, m_env);
                         bool success = lowLevel.a_star_search(initialStates[i], n.solution[i]);
                         if (!success)
                         {
@@ -1017,7 +1022,7 @@ public:
 
                 LowLevelEnvironment llenv(m_env, i, newNode.constraints[i],
                                           newNode.task(i));
-                AStar lowLevel(llenv);
+                AStar lowLevel(llenv, m_env);
                 bool success = lowLevel.a_star_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
