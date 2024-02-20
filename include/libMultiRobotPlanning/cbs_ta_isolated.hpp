@@ -712,7 +712,7 @@ public:
 };
 
 
-template <typename Environment, typename LocationHasher = std::hash<State> >
+template <typename Environment>
 class AStar
 {
 private:
@@ -740,9 +740,9 @@ public:
         solution.cost = 0;
 
         OpenSet open_set;
-        std::unordered_map<State, HeapHandle, LocationHasher> location_to_heap;
-        std::unordered_set<State, LocationHasher> closed_set;
-        std::unordered_map<State, std::tuple<State,Action,int,int>,LocationHasher> came_from;
+        std::unordered_map<State, HeapHandle, std::hash<State>> location_to_heap;
+        std::unordered_set<State, std::hash<State>> closed_set;
+        std::unordered_map<State, std::tuple<State,Action,int,int>,std::hash<State>> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
                                               environment.admissible_heuristic(start_location), initialCost));
@@ -840,8 +840,8 @@ public:
 };
 
 // inner class definition
-template <typename Environment, typename StateHasher>
-class AStar<Environment, StateHasher>::AStarNode
+template <typename Environment>
+class AStar<Environment>::AStarNode
 {
 public:
     State location;
