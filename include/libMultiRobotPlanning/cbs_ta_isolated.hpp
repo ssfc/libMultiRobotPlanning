@@ -754,7 +754,7 @@ public:
         std::unordered_map<State, std::tuple<State,Action,int,int>,std::hash<State>> came_from;
 
         auto handle = open_set.push(AStarNode(start_location,
-                                              m_env.admissible_heuristic(start_location), initialCost));
+              m_env.admissible_heuristic(start_location), initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
 
