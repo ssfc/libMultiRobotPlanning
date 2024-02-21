@@ -918,6 +918,8 @@ public:
                 // std::cout << "root node expanded; add new root" << std::endl;
 
                 HighLevelNode new_node;
+                // A1 LINE 15
+                // root.assignment ← next_assignment()
                 nextTaskAssignment(new_node.tasks);
 
                 if (new_node.tasks.size() > 0)
