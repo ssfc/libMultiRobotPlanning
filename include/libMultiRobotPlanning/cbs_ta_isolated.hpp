@@ -826,6 +826,9 @@ public:
     }
 
 
+    // Algorithm 1: high-level of CBS-TA
+    // Input: Graph, start and goal locations, assignment matrix
+    // Result: optimal path for each agent
     bool cbsta_search(const std::vector<State>& initialStates, std::vector<PlanResult>& solution)
     {
         HighLevelNode start;
