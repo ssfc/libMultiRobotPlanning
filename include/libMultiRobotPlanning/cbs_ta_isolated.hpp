@@ -883,6 +883,9 @@ public:
         (*handle).handle = handle;
 
         solution.clear();
+
+        // A1 LINE 7
+        // while OPEN not empty do
         while (!open.empty())
         {
             HighLevelNode P = open.top();
