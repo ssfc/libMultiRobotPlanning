@@ -22,7 +22,7 @@ struct Node
     std::set<size_t> Oagents;  // agents that should not have an assignment
     std::map<size_t, Location> solution;
     long cost;
-    
+
     Node()
         : I(),
           O(),
@@ -89,6 +89,18 @@ struct Node
 
 class NextBestAssignment
 {
+private:
+    Assignment<size_t, Location> m_assignment;
+    std::map<std::pair<size_t, Location>, long> m_cost;
+    std::vector<size_t> m_agentsVec;
+    std::set<size_t> m_agentsSet;
+    // std::set<Location> m_tasksSet;
+    // size_t m_numAgents;
+    // size_t m_numTasks;
+    // std::vector<long> m_costMatrix;
+    std::priority_queue<Node> m_open;
+    size_t m_numMatching;
+
 public:
     NextBestAssignment(const Assignment<size_t, Location>& assignment = Assignment<size_t, Location>())
         : m_assignment(assignment),
@@ -294,18 +306,6 @@ protected:
     {
         return solution.size();
     }
-
-private:
-    Assignment<size_t, Location> m_assignment;
-    std::map<std::pair<size_t, Location>, long> m_cost;
-    std::vector<size_t> m_agentsVec;
-    std::set<size_t> m_agentsSet;
-    // std::set<Location> m_tasksSet;
-    // size_t m_numAgents;
-    // size_t m_numTasks;
-    // std::vector<long> m_costMatrix;
-    std::priority_queue<Node> m_open;
-    size_t m_numMatching;
 };
 
 
