@@ -22,7 +22,7 @@
 
 #include "util.hpp"
 
-#include "next_best_assignment.hpp"
+#include "next_best_assignment_isolated.hpp"
 #include "timer.hpp"
 #include "shortest_path_heuristic.hpp"
 
