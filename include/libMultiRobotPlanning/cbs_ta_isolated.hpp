@@ -916,35 +916,35 @@ public:
             if (best_node.is_root)
             {
                 // std::cout << "root node expanded; add new root" << std::endl;
-                HighLevelNode n;
-                nextTaskAssignment(n.tasks);
+                HighLevelNode new_node;
+                nextTaskAssignment(new_node.tasks);
 
-                if (n.tasks.size() > 0)
+                if (new_node.tasks.size() > 0)
                 {
-                    n.solution.resize(num_agents);
-                    n.all_agents_constraints.resize(num_agents);
-                    n.cost = 0;
-                    n.is_root = true;
+                    new_node.solution.resize(num_agents);
+                    new_node.all_agents_constraints.resize(num_agents);
+                    new_node.cost = 0;
+                    new_node.is_root = true;
 
                     bool allSuccessful = true;
                     for (size_t i = 0; i < num_agents; ++i)
                     {
-                        set_low_level_context(i, &n.all_agents_constraints[i], n.task(i));
-                        bool success = low_level_search(initialStates[i], n.solution[i]);
+                        set_low_level_context(i, &new_node.all_agents_constraints[i], new_node.task(i));
+                        bool success = low_level_search(initialStates[i], new_node.solution[i]);
                         if (!success)
                         {
                             allSuccessful = false;
                             break;
                         }
 
-                        n.cost += n.solution[i].cost;
+                        new_node.cost += new_node.solution[i].cost;
                     }
 
                     if (allSuccessful)
                     {
-                        auto handle = open.push(n);
+                        auto handle = open.push(new_node);
                         (*handle).handle = handle;
-                        std::cout << " new root added! cost: " << n.cost << std::endl;
+                        std::cout << " new root added! cost: " << new_node.cost << std::endl;
                     }
                 }
             }
