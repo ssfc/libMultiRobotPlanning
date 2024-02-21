@@ -917,6 +917,8 @@ public:
             {
                 // std::cout << "root node expanded; add new root" << std::endl;
 
+                // A1 LINE 13
+                // root ← new node
                 HighLevelNode new_node;
                 // A1 LINE 15
                 // root.assignment ← next_assignment()
@@ -924,12 +926,12 @@ public:
 
                 if (new_node.tasks.size() > 0)
                 {
-                    // A1 LINE 13
-                    // root ← new node
-                    new_node.is_root = true;
                     // A1 LINE 14
                     // root.constraints ← ∅
                     new_node.all_agents_constraints.resize(num_agents);
+                    // A1 LINE 16
+                    // root.is_root ← True
+                    new_node.is_root = true;
                     new_node.solution.resize(num_agents);
                     new_node.cost = 0;
 
