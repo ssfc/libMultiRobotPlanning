@@ -987,6 +987,8 @@ public:
                 // std::cout << new_constraint.second << std::endl;
                 assert(!new_node.all_agents_constraints[i].overlap(new_constraint.second));
 
+                // A1 LINE 23
+                // new_node.constraints ← best_node.constraints + (ai, s, t)
                 new_node.all_agents_constraints[i].add(new_constraint.second);
 
                 new_node.cost -= new_node.solution[i].cost;
