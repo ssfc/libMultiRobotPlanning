@@ -11,26 +11,10 @@
 #include <boost/graph/successive_shortest_path_nonnegative_weights.hpp>
 
 
-
-/*!
-  \example assignment.cpp example that takes cost mappings from a file
-*/
-
-/*! \brief Find optimal (lowest total cost) assignment
-
-This class can find the lowest sum-of-cost assignment
-for given agents and tasks. The costs must be integers, the agents and
-tasks can be of any user-specified type.
-
-This method is based on maximum flow formulation.
-
-\tparam Agent Type of the agent. Needs to be copy'able and comparable
-\tparam Task Type of task. Needs to be copy'able and comparable
-*/
 template <typename Agent, typename Task>
 class Assignment
 {
-   public:
+public:
     Assignment()
         : m_agents(), m_tasks(), m_graph(), m_sourceVertex(), m_sinkVertex()
     {
@@ -140,7 +124,7 @@ class Assignment
         return cost;
     }
 
-   protected:
+protected:
     typedef boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::bidirectionalS> graphTraits_t;
     typedef graphTraits_t::vertex_descriptor vertex_t;
     typedef graphTraits_t::edge_descriptor edge_t;
