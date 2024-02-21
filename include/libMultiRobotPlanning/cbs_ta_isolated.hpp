@@ -514,6 +514,24 @@ public:
         return atGoal && s.time > m_lastGoalConstraint;
     }
 
+    bool location_valid(const State& s)
+    {
+        assert(m_constraints);
+        const auto& con = m_constraints->vertex_constraints;
+
+        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
+               obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
+               con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
+    }
+
+    bool transitionValid(const State& s1, const State& s2)
+    {
+        assert(m_constraints);
+        const auto& con = m_constraints->edge_constraints;
+
+        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
+    }
+
     void get_neighbors(const State& s, std::vector<Neighbor>& neighbors)
     {
         // std::cout << "#VC " << input_constraints.vertex_constraints.size() << std::endl;
@@ -709,24 +727,6 @@ public:
         assert(!solution[agentIdx].path.empty());
 
         return solution[agentIdx].path.back().first;
-    }
-
-    bool location_valid(const State& s)
-    {
-        assert(m_constraints);
-        const auto& con = m_constraints->vertex_constraints;
-
-        return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
-               obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
-               con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
-    }
-
-    bool transitionValid(const State& s1, const State& s2)
-    {
-        assert(m_constraints);
-        const auto& con = m_constraints->edge_constraints;
-
-        return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
 
     bool low_level_search(const State& start_location, PlanResult& solution, int initialCost = 0)
