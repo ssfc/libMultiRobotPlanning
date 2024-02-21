@@ -935,6 +935,8 @@ public:
                     new_node.solution.resize(num_agents);
                     new_node.cost = 0;
 
+                    // A1 LINE 17
+                    // root.solution ← find individual paths using low-level()
                     bool allSuccessful = true;
                     for (size_t i = 0; i < num_agents; ++i)
                     {
