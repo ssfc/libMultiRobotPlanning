@@ -13,9 +13,18 @@
 
 class Assignment
 {
+private:
+    typedef boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::bidirectionalS> graphTraits_t;
+    typedef graphTraits_t::vertex_descriptor vertex_t;
+    typedef graphTraits_t::edge_descriptor edge_t;
+
 public:
     Assignment()
-        : m_agents(), m_tasks(), m_graph(), m_sourceVertex(), m_sinkVertex()
+        : m_agents(),
+       m_tasks(),
+       m_graph(),
+       m_sourceVertex(),
+       m_sinkVertex()
     {
         m_sourceVertex = boost::add_vertex(m_graph);
         m_sinkVertex = boost::add_vertex(m_graph);
@@ -124,9 +133,6 @@ public:
     }
 
 protected:
-    typedef boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::bidirectionalS> graphTraits_t;
-    typedef graphTraits_t::vertex_descriptor vertex_t;
-    typedef graphTraits_t::edge_descriptor edge_t;
 
     struct Vertex
     {
