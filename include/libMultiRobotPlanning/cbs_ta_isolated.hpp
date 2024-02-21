@@ -847,6 +847,8 @@ public:
         // root.is_root ← True
         root.is_root = true;
 
+        // A1 LINE 4
+        // root.solution ← find individual paths using low-level()
         for (size_t i = 0; i < initialStates.size(); ++i)
         {
             // if (   i < solution.size()
