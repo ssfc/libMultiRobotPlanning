@@ -955,6 +955,8 @@ public:
 
                     if (allSuccessful)
                     {
+                        // A1 LINE 19
+                        // insert root to OPEN
                         auto handle = open.push(new_node);
                         (*handle).handle = handle;
                         std::cout << " new root added! cost: " << new_node.cost << std::endl;
