@@ -8,7 +8,7 @@
 #include <queue>
 #include <set>
 
-#include <libMultiRobotPlanning/assignment.hpp>
+#include "assignment.hpp"
 
 namespace libMultiRobotPlanning {
 
