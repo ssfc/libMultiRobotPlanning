@@ -999,6 +999,8 @@ public:
                 // new_node.is_root ← False
                 new_node.cost -= new_node.solution[i].cost;
 
+                // A1 LINE 27
+                // Update new_node.solution by invoking low-level(ai)
                 set_low_level_context(i, &new_node.all_agents_constraints[i], new_node.task(i));
                 bool success = low_level_search(initialStates[i], new_node.solution[i]);
 
