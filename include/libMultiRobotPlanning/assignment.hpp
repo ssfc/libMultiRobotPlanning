@@ -195,7 +195,7 @@ private:
 
     agentsMap_t m_agents;
     tasksMap_t m_tasks;
-    
+
     graph_t m_graph;
     vertex_t m_sourceVertex;
     vertex_t m_sinkVertex;

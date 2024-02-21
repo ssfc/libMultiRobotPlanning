@@ -418,7 +418,7 @@ private:
     int last_goal_constraint;
     NextBestAssignment<size_t, Location> m_assignment;
     size_t m_maxTaskAssignments;
-    size_t m_numTaskAssignments;
+    size_t num_task_assignments;
     int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
     ShortestPathHeuristic heuristic_value;
@@ -444,7 +444,7 @@ public:
           agent_constraints(nullptr),
           last_goal_constraint(-1),
           m_maxTaskAssignments(maxTaskAssignments),
-          m_numTaskAssignments(0),
+          num_task_assignments(0),
           num_expanded_high_level_nodes(0),
           num_expanded_low_level_nodes(0),
           heuristic_value(dimx, dimy, obstacles)
@@ -677,7 +677,7 @@ public:
 
     void nextTaskAssignment(std::map<size_t, Location>& tasks)
     {
-        if (m_numTaskAssignments > m_maxTaskAssignments)
+        if (num_task_assignments > m_maxTaskAssignments)
         {
             return;
         }
@@ -691,7 +691,7 @@ public:
                 std::cout << s.first << "->" << s.second << std::endl;
             }
 
-            ++m_numTaskAssignments;
+            ++num_task_assignments;
         }
     }
 
@@ -707,7 +707,7 @@ public:
 
     size_t numTaskAssignments() const
     {
-        return m_numTaskAssignments;
+        return num_task_assignments;
     }
 
     State get_state(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
