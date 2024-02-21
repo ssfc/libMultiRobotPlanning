@@ -916,15 +916,18 @@ public:
             if (best_node.is_root)
             {
                 // std::cout << "root node expanded; add new root" << std::endl;
+
                 HighLevelNode new_node;
                 nextTaskAssignment(new_node.tasks);
 
                 if (new_node.tasks.size() > 0)
                 {
+                    // A1 LINE 13
+                    // root ← new node
+                    new_node.is_root = true;
                     new_node.solution.resize(num_agents);
                     new_node.all_agents_constraints.resize(num_agents);
                     new_node.cost = 0;
-                    new_node.is_root = true;
 
                     bool allSuccessful = true;
                     for (size_t i = 0; i < num_agents; ++i)
