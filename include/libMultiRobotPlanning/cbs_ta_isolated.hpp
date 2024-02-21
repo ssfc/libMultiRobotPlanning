@@ -463,7 +463,7 @@ public:
         m_assignment.solve();
     }
 
-    void setLowLevelContext(size_t input_agentIdx, const Constraints* input_constraints, const Location* task)
+    void set_low_level_context(size_t input_agentIdx, const Constraints* input_constraints, const Location* task)
     {
         assert(input_constraints);
         agent_index = input_agentIdx;
@@ -852,7 +852,7 @@ public:
             bool success = false;
             if (!start.tasks.empty())
             {
-                setLowLevelContext(i, &start.all_agents_constraints[i], start.task(i));
+                set_low_level_context(i, &start.all_agents_constraints[i], start.task(i));
                 success = low_level_search(initialStates[i], start.solution[i]);
             }
 
@@ -905,7 +905,7 @@ public:
                     bool allSuccessful = true;
                     for (size_t i = 0; i < num_agents; ++i)
                     {
-                        setLowLevelContext(i, &n.all_agents_constraints[i], n.task(i));
+                        set_low_level_context(i, &n.all_agents_constraints[i], n.task(i));
                         bool success = low_level_search(initialStates[i], n.solution[i]);
                         if (!success)
                         {
@@ -946,7 +946,7 @@ public:
 
                 newNode.cost -= newNode.solution[i].cost;
 
-                setLowLevelContext(i, &newNode.all_agents_constraints[i], newNode.task(i));
+                set_low_level_context(i, &newNode.all_agents_constraints[i], newNode.task(i));
                 bool success = low_level_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
