@@ -16,16 +16,21 @@ using libMultiRobotPlanning::Assignment;
 
 struct Node
 {
-    Node()
-        : I(), O(), Iagents(), Oagents(), solution(), cost(0)
-    {}
-
     std::set<std::pair<size_t, Location> > I;  // enforced assignment
     std::set<std::pair<size_t, Location> > O;  // invalid assignments
     std::set<size_t> Iagents;  // agents that must have an assignment
     std::set<size_t> Oagents;  // agents that should not have an assignment
     std::map<size_t, Location> solution;
     long cost;
+    
+    Node()
+        : I(),
+          O(),
+          Iagents(),
+          Oagents(),
+          solution(),
+          cost(0)
+    {}
 
     bool operator<(const Node& n) const
     {
