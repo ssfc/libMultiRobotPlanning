@@ -28,30 +28,34 @@ Multiagent Systems (AAMAS) Stockholm, Sweden, July 2018.
 \tparam Task Type of task. Needs to be copy'able and comparable
 */
 template <typename Agent, typename Task, typename Assignment = Assignment<Agent, Task> >
-class NextBestAssignment {
- public:
-  NextBestAssignment(const Assignment& assignment = Assignment()) : m_assignment(assignment), m_cost(), m_open(), m_numMatching(0) {}
+class NextBestAssignment
+{
+public:
+    NextBestAssignment(const Assignment& assignment = Assignment()) : m_assignment(assignment), m_cost(), m_open(), m_numMatching(0) {}
 
-  void setCost(const Agent& agent, const Task& task, long cost) {
-    // std::cout << "setCost: " << agent << "->" << task << ": " << cost <<
-    // std::endl;
-    m_cost[std::make_pair<>(agent, task)] = cost;
-    if (m_agentsSet.find(agent) == m_agentsSet.end()) {
-      m_agentsSet.insert(agent);
-      m_agentsVec.emplace_back(agent);
+    void setCost(const Agent& agent, const Task& task, long cost)
+    {
+        // std::cout << "setCost: " << agent << "->" << task << ": " << cost <<
+        // std::endl;
+        m_cost[std::make_pair<>(agent, task)] = cost;
+        if (m_agentsSet.find(agent) == m_agentsSet.end())
+        {
+            m_agentsSet.insert(agent);
+            m_agentsVec.emplace_back(agent);
+        }
+        // m_tasksSet.insert(task);
     }
-    // m_tasksSet.insert(task);
-  }
 
-  // find first (optimal) solution with minimal cost
-  void solve() {
-    const std::set<std::pair<Agent, Task> > I, O;
-    const std::set<Agent> Iagents, Oagents;
-    Node n;
-    n.cost = constrainedMatching(I, O, Iagents, Oagents, n.solution);
-    m_open.emplace(n);
-    m_numMatching = numMatching(n.solution);
-  }
+    // find first (optimal) solution with minimal cost
+    void solve()
+    {
+        const std::set<std::pair<Agent, Task> > I, O;
+        const std::set<Agent> Iagents, Oagents;
+        Node n;
+        n.cost = constrainedMatching(I, O, Iagents, Oagents, n.solution);
+        m_open.emplace(n);
+        m_numMatching = numMatching(n.solution);
+    }
 
   // find next solution
   long nextSolution(std::map<Agent, Task>& solution) {
