@@ -835,9 +835,9 @@ public:
     bool cbsta_search(const std::vector<State>& initialStates, std::vector<PlanResult>& solution)
     {
         HighLevelNode start;
-        size_t numAgents = initialStates.size();
-        start.solution.resize(numAgents);
-        start.all_agents_constraints.resize(numAgents);
+        size_t num_agents = initialStates.size();
+        start.solution.resize(num_agents);
+        start.all_agents_constraints.resize(num_agents);
         start.cost = 0;
         start.is_root = true;
         nextTaskAssignment(start.tasks);
@@ -897,13 +897,13 @@ public:
 
                 if (n.tasks.size() > 0)
                 {
-                    n.solution.resize(numAgents);
-                    n.all_agents_constraints.resize(numAgents);
+                    n.solution.resize(num_agents);
+                    n.all_agents_constraints.resize(num_agents);
                     n.cost = 0;
                     n.is_root = true;
 
                     bool allSuccessful = true;
-                    for (size_t i = 0; i < numAgents; ++i)
+                    for (size_t i = 0; i < num_agents; ++i)
                     {
                         setLowLevelContext(i, &n.all_agents_constraints[i], n.task(i));
                         bool success = low_level_search(initialStates[i], n.solution[i]);
