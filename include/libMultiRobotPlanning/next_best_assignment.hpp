@@ -13,8 +13,7 @@ namespace libMultiRobotPlanning {
 
 /*! \brief Find series of assignment, ordered by sum-of-cost
 
-This class can find a series of assignment, ordered by sum-of-cost (lowest
-first)
+This class can find a series of assignment, ordered by sum-of-cost (lowest first)
 for given agents and tasks. The costs must be integers, the agents and
 tasks can be of any user-specified type.
 
