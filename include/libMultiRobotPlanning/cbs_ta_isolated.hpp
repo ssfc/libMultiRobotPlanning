@@ -936,25 +936,25 @@ public:
             {
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
-                HighLevelNode newNode = P;
+                HighLevelNode new_node = P;
                 // (optional) check that this constraint was not included already
-                // std::cout << newNode.all_agents_constraints[i] << std::endl;
+                // std::cout << new_node.all_agents_constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
-                assert(!newNode.all_agents_constraints[i].overlap(c.second));
+                assert(!new_node.all_agents_constraints[i].overlap(c.second));
 
-                newNode.all_agents_constraints[i].add(c.second);
+                new_node.all_agents_constraints[i].add(c.second);
 
-                newNode.cost -= newNode.solution[i].cost;
+                new_node.cost -= new_node.solution[i].cost;
 
-                set_low_level_context(i, &newNode.all_agents_constraints[i], newNode.task(i));
-                bool success = low_level_search(initialStates[i], newNode.solution[i]);
+                set_low_level_context(i, &new_node.all_agents_constraints[i], new_node.task(i));
+                bool success = low_level_search(initialStates[i], new_node.solution[i]);
 
-                newNode.cost += newNode.solution[i].cost;
+                new_node.cost += new_node.solution[i].cost;
 
                 if (success)
                 {
-                    // std::cout << "  success. cost: " << newNode.cost << std::endl;
-                    auto handle = open.push(newNode);
+                    // std::cout << "  success. cost: " << new_node.cost << std::endl;
+                    auto handle = open.push(new_node);
                     (*handle).handle = handle;
                 }
             }
