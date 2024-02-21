@@ -849,6 +849,8 @@ public:
 
         // A1 LINE 4
         // root.solution ← find individual paths using low-level()
+        // A1 LINE 5
+        // root.cost ← SIC(root.solution)
         for (size_t i = 0; i < initialStates.size(); ++i)
         {
             // if (   i < solution.size()
