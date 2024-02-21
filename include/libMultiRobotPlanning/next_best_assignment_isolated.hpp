@@ -17,7 +17,12 @@ template <typename Task, typename Assignment = Assignment<size_t, Task> >
 class NextBestAssignment
 {
    public:
-    NextBestAssignment(const Assignment& assignment = Assignment()) : m_assignment(assignment), m_cost(), m_open(), m_numMatching(0) {}
+    NextBestAssignment(const Assignment& assignment = Assignment())
+        : m_assignment(assignment),
+          m_cost(),
+          m_open(),
+          m_numMatching(0)
+    {}
 
     void setCost(const size_t& agent, const Task& task, long cost)
     {
