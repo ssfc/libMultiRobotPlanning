@@ -973,6 +973,8 @@ public:
 
             std::map<size_t, Constraints> new_constraints;
             generate_constraints_from_conflict(conflict, new_constraints);
+            // A1 LINE 21
+            // for agent ai in Conflict do
             for (const auto& c : new_constraints)
             {
                 // std::cout << "Add HL node for " << c.first << std::endl;
