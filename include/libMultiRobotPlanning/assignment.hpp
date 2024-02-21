@@ -23,7 +23,8 @@ This method is based on maximum flow formulation.
 \tparam Task Type of task. Needs to be copy'able and comparable
 */
 template <typename Agent, typename Task>
-class Assignment {
+class Assignment
+{
 public:
     Assignment()
       : m_agents(), m_tasks(), m_graph(), m_sourceVertex(), m_sinkVertex()
