@@ -12,26 +12,7 @@
 
 namespace libMultiRobotPlanning {
 
-/*!
-  \example next_best_assignment.cpp example that takes cost mappings from a file
-*/
 
-/*! \brief Find series of assignment, ordered by sum-of-cost
-
-This class can find a series of assignment, ordered by sum-of-cost (lowest first)
-for given agents and tasks. The costs must be integers, the agents and
-tasks can be of any user-specified type.
-
-This method is a an iterative variant of k-best-assignment.
-Details of the algorithm can be found in the following paper:
-W. Hönig, S. Kiesel, A. Tinka, J. W. Durham, and N. Ayanian.
-"Conflict-Based Search with Optimal Task Assignment",
-In Proc. of the 17th International Conference on Autonomous Agents and
-Multiagent Systems (AAMAS) Stockholm, Sweden, July 2018.
-
-\tparam Agent Type of the agent. Needs to be copy'able and comparable
-\tparam Task Type of task. Needs to be copy'able and comparable
-*/
 template <typename Agent, typename Task, typename Assignment = Assignment<Agent, Task> >
 class NextBestAssignment
 {
