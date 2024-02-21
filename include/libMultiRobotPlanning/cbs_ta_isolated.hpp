@@ -903,6 +903,8 @@ public:
             // if best_node has no conflict then
             if (!get_first_conflict(best_node.solution, conflict))
             {
+                // A1 LINE 11
+                // return best_node.solution // best_node is goal
                 std::cout << "done; cost: " << best_node.cost << std::endl;
                 solution = best_node.solution;
 
