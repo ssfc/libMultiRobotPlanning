@@ -888,6 +888,8 @@ public:
         // while OPEN not empty do
         while (!open.empty())
         {
+            // A1 LINE 8
+            // best_node ← best node from OPEN // lowest solution cost
             HighLevelNode best_node = open.top();
             num_expanded_high_level_nodes++;
             // std::cout << "expand: " << best_node << std::endl;
