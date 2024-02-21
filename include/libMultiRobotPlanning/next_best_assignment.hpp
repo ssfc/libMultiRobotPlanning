@@ -95,41 +95,48 @@ public:
                 // fix assignment for agents 0...i
                 for (size_t j = 0; j < i; ++j)
                 {
-                  const Agent& agent = m_agentsVec[j];
-                  // n.I.insert(std::make_pair<>(agent, next.solution.at(agent)));
-                  const auto iter = solution.find(agent);
-                  if (iter != solution.end()) {
-                    n.I.insert(std::make_pair<>(agent, iter->second));
-                  } else {
-                    // this agent should keep having no solution =>
-                    // enforce that no task is allowed
-                    n.Oagents.insert(agent);
-                    // for (const auto& task : m_tasksSet) {
-                    //   n.O.insert(std::make_pair<>(agent, task));
-                    // }
-                  }
+                    const Agent& agent = m_agentsVec[j];
+                    // n.I.insert(std::make_pair<>(agent, next.solution.at(agent)));
+                    const auto iter = solution.find(agent);
+                    if (iter != solution.end())
+                    {
+                        n.I.insert(std::make_pair<>(agent, iter->second));
+                    }
+                    else
+                    {
+                        // this agent should keep having no solution =>
+                        // enforce that no task is allowed
+                        n.Oagents.insert(agent);
+                        // for (const auto& task : m_tasksSet) {
+                        //   n.O.insert(std::make_pair<>(agent, task));
+                        // }
+                    }
                 }
                 // n.O.insert(
                 //     std::make_pair<>(m_agentsVec[i], next.solution.at(m_agentsVec[i])));
                 const auto iter = solution.find(m_agentsVec[i]);
-                if (iter != solution.end()) {
-                  n.O.insert(std::make_pair<>(m_agentsVec[i], iter->second));
-                } else {
-                  // this agent should have a solution next
-                  // std::cout << "should have sol: " << m_agentsVec[i] << std::endl;
-                  n.Iagents.insert(m_agentsVec[i]);
+                if (iter != solution.end())
+                {
+                    n.O.insert(std::make_pair<>(m_agentsVec[i], iter->second));
+                }
+                else
+                {
+                    // this agent should have a solution next
+                    // std::cout << "should have sol: " << m_agentsVec[i] << std::endl;
+                    n.Iagents.insert(m_agentsVec[i]);
                 }
                 // std::cout << " consider adding: " << n << std::endl;
                 n.cost = constrainedMatching(n.I, n.O, n.Iagents, n.Oagents, n.solution);
-                if (n.solution.size() > 0) {
-                  m_open.push(n);
-                  // std::cout << "add: " << n << std::endl;
+                if (n.solution.size() > 0)
+                {
+                    m_open.push(n);
+                    // std::cout << "add: " << n << std::endl;
                 }
-          }
+            }
         }
 
         return result;
-  }
+    }
 
  protected:
   // I enforces that the respective pair is part of the solution
