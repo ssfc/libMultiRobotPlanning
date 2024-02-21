@@ -937,6 +937,8 @@ public:
 
                     // A1 LINE 17
                     // root.solution ← find individual paths using low-level()
+                    // A1 LINE 18
+                    // root.cost ← SIC(root.solution)
                     bool allSuccessful = true;
                     for (size_t i = 0; i < num_agents; ++i)
                     {
