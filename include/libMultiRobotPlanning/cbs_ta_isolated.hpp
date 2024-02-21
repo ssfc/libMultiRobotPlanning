@@ -993,6 +993,8 @@ public:
                 // new_node.constraints ← best_node.constraints + (ai, s, t)
                 new_node.all_agents_constraints[i].add(new_constraint.second);
 
+                // A1 LINE 25
+                // new_node.is_root ← False
                 new_node.cost -= new_node.solution[i].cost;
 
                 set_low_level_context(i, &new_node.all_agents_constraints[i], new_node.task(i));
