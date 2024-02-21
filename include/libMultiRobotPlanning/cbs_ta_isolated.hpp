@@ -700,7 +700,7 @@ public:
         return num_expanded_high_level_nodes;
     }
 
-    int lowLevelExpanded() const
+    int get_num_expanded_low_level_nodes() const
     {
         return num_expanded_low_level_nodes;
     }

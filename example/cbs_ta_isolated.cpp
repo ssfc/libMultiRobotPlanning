@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
         out << "  makespan: " << makespan << std::endl;
         out << "  runtime: " << timer.elapsedSeconds() << std::endl;
         out << "  num expanded high level nodes: " << mapf.get_num_expanded_high_level_nodes() << std::endl;
-        out << "  lowLevelExpanded: " << mapf.lowLevelExpanded() << std::endl;
+        out << "  num expanded low level nodes: " << mapf.get_num_expanded_low_level_nodes() << std::endl;
         out << "  numTaskAssignments: " << mapf.numTaskAssignments() << std::endl;
         out << "schedule:" << std::endl;
         for (size_t a = 0; a < solution.size(); ++a)
