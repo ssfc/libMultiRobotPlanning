@@ -930,9 +930,9 @@ public:
             // std::cout << "Found conflict at t=" << conflict.time << " type: " <<
             // conflict.type << std::endl;
 
-            std::map<size_t, Constraints> constraints;
-            createConstraintsFromConflict(conflict, constraints);
-            for (const auto& c : constraints)
+            std::map<size_t, Constraints> new_constraints;
+            createConstraintsFromConflict(conflict, new_constraints);
+            for (const auto& c : new_constraints)
             {
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
