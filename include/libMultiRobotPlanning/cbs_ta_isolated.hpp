@@ -834,10 +834,13 @@ public:
         HighLevelNode root;
         size_t num_agents = initialStates.size();
         root.solution.resize(num_agents);
-        // A1 LINE 1 root.constraints ← ∅
+        // A1 LINE 1
+        // root.constraints ← ∅
         root.all_agents_constraints.resize(num_agents);
         root.cost = 0;
         root.is_root = true;
+        // A1 LINE 2
+        // root.assignment ← first_assignment()
         nextTaskAssignment(root.tasks);
 
         for (size_t i = 0; i < initialStates.size(); ++i)
