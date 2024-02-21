@@ -505,13 +505,13 @@ public:
 
     bool is_solution(const State& s)
     {
-        bool atGoal = true;
+        bool at_goal = true;
         if (goal != nullptr)
         {
-            atGoal = s.x == goal->x && s.y == goal->y;
+            at_goal = s.x == goal->x && s.y == goal->y;
         }
 
-        return atGoal && s.time > m_lastGoalConstraint;
+        return at_goal && s.time > m_lastGoalConstraint;
     }
 
     bool location_valid(const State& s)
@@ -541,16 +541,19 @@ public:
         //   std::endl;
         // }
         neighbors.clear();
+
         {
             State n(s.time + 1, s.x, s.y);
             if (location_valid(n) && transition_valid(s, n))
             {
-                bool atGoal = true;
+                bool at_goal = true;
+
                 if (goal != nullptr)
                 {
-                    atGoal = s.x == goal->x && s.y == goal->y;
+                    at_goal = s.x == goal->x && s.y == goal->y;
                 }
-                neighbors.emplace_back(Neighbor(n, Action::Wait, atGoal ? 0 : 1));
+
+                neighbors.emplace_back(Neighbor(n, Action::Wait, at_goal ? 0 : 1));
             }
         }
 
@@ -561,6 +564,7 @@ public:
                 neighbors.emplace_back(Neighbor(n, Action::Left, 1));
             }
         }
+
         {
             State n(s.time + 1, s.x + 1, s.y);
             if (location_valid(n) && transition_valid(s, n))
@@ -568,6 +572,7 @@ public:
                 neighbors.emplace_back(Neighbor(n, Action::Right, 1));
             }
         }
+
         {
             State n(s.time + 1, s.x, s.y + 1);
             if (location_valid(n) && transition_valid(s, n))
@@ -575,6 +580,7 @@ public:
                 neighbors.emplace_back(Neighbor(n, Action::Up, 1));
             }
         }
+
         {
             State n(s.time + 1, s.x, s.y - 1);
             if (location_valid(n) && transition_valid(s, n))
