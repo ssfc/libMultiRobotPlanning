@@ -228,10 +228,10 @@ public:
                std::tie(other.time, other.x1, other.y1, other.x2, other.y2);
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& c)
+    friend std::ostream& operator<<(std::ostream& os, const EdgeConstraint& ec)
     {
-        return os << "EC(" << c.time << "," << c.x1 << "," << c.y1 << "," << c.x2
-                  << "," << c.y2 << ")";
+        return os << "EC(" << ec.time << "," << ec.x1 << "," << ec.y1 << "," << ec.x2
+                  << "," << ec.y2 << ")";
     }
 };
 
