@@ -877,6 +877,8 @@ public:
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
                                          boost::heap::mutable_<true> > open;
 
+        // A1 LINE 6
+        // insert root to OPEN
         auto handle = open.push(root);
         (*handle).handle = handle;
 
