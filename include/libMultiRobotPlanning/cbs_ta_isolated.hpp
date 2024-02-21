@@ -898,12 +898,12 @@ public:
 
             // A1 LINE 9
             // Validate the paths in best_node until a conflict occurs.
-            Conflict conflict;
+            Conflict best_node_conflict;
             // A1 LINE 10
             // if best_node has no conflict then
             // A1 LINE 20
             // Conflict ← (ai, aj, v, t) first conflict in best_node
-            if (!get_first_conflict(best_node.solution, conflict))
+            if (!get_first_conflict(best_node.solution, best_node_conflict))
             {
                 // A1 LINE 11
                 // return best_node.solution // best_node is goal
@@ -972,7 +972,7 @@ public:
             // conflict.type << std::endl;
 
             std::map<size_t, Constraints> new_constraints;
-            generate_constraints_from_conflict(conflict, new_constraints);
+            generate_constraints_from_conflict(best_node_conflict, new_constraints);
             // A1 LINE 21
             // for agent ai in Conflict do
             for (const auto& new_constraint : new_constraints)
