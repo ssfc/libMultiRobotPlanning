@@ -831,26 +831,26 @@ public:
     // Result: optimal path for each agent
     bool cbsta_search(const std::vector<State>& initialStates, std::vector<PlanResult>& solution)
     {
-        HighLevelNode start;
+        HighLevelNode root;
         size_t num_agents = initialStates.size();
-        start.solution.resize(num_agents);
-        start.all_agents_constraints.resize(num_agents);
-        start.cost = 0;
-        start.is_root = true;
-        nextTaskAssignment(start.tasks);
+        root.solution.resize(num_agents);
+        root.all_agents_constraints.resize(num_agents);
+        root.cost = 0;
+        root.is_root = true;
+        nextTaskAssignment(root.tasks);
 
         for (size_t i = 0; i < initialStates.size(); ++i)
         {
             // if (   i < solution.size()
             //     && solution[i].path.size() > 1) {
-            //   start.solution[i] = solution[i];
+            //   root.solution[i] = solution[i];
             //   std::cout << "use existing solution for agent: " << i << std::endl;
             // } else {
             bool success = false;
-            if (!start.tasks.empty())
+            if (!root.tasks.empty())
             {
-                set_low_level_context(i, &start.all_agents_constraints[i], start.task(i));
-                success = low_level_search(initialStates[i], start.solution[i]);
+                set_low_level_context(i, &root.all_agents_constraints[i], root.task(i));
+                success = low_level_search(initialStates[i], root.solution[i]);
             }
 
             if (!success)
@@ -858,14 +858,14 @@ public:
                 return false;
             }
             // }
-            start.cost += start.solution[i].cost;
+            root.cost += root.solution[i].cost;
         }
 
         // std::priority_queue<HighLevelNode> open;
         typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>,
                                          boost::heap::mutable_<true> > open;
 
-        auto handle = open.push(start);
+        auto handle = open.push(root);
         (*handle).handle = handle;
 
         solution.clear();
