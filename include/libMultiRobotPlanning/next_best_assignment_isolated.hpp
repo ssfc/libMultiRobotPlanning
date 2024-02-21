@@ -13,13 +13,13 @@
 namespace libMultiRobotPlanning {
 
 
-template <typename Agent, typename Task, typename Assignment = Assignment<Agent, Task> >
+template <typename Task, typename Assignment = Assignment<size_t, Task> >
 class NextBestAssignment
 {
    public:
     NextBestAssignment(const Assignment& assignment = Assignment()) : m_assignment(assignment), m_cost(), m_open(), m_numMatching(0) {}
 
-    void setCost(const Agent& agent, const Task& task, long cost)
+    void setCost(const size_t& agent, const Task& task, long cost)
     {
         // std::cout << "setCost: " << agent << "->" << task << ": " << cost <<
         // std::endl;
@@ -35,8 +35,8 @@ class NextBestAssignment
     // find first (optimal) solution with minimal cost
     void solve()
     {
-        const std::set<std::pair<Agent, Task> > I, O;
-        const std::set<Agent> Iagents, Oagents;
+        const std::set<std::pair<size_t, Task> > I, O;
+        const std::set<size_t> Iagents, Oagents;
         Node n;
         n.cost = constrainedMatching(I, O, Iagents, Oagents, n.solution);
         m_open.emplace(n);
@@ -44,7 +44,7 @@ class NextBestAssignment
     }
 
     // find next solution
-    long nextSolution(std::map<Agent, Task>& solution)
+    long nextSolution(std::map<size_t, Task>& solution)
     {
         solution.clear();
         if (m_open.empty())
@@ -62,7 +62,7 @@ class NextBestAssignment
         }
         long result = next.cost;
 
-        std::set<Agent> fixedAgents;
+        std::set<size_t> fixedAgents;
         for (const auto& c : next.I)
         {
             fixedAgents.insert(c.first);
@@ -81,7 +81,7 @@ class NextBestAssignment
                 // fix assignment for agents 0...i
                 for (size_t j = 0; j < i; ++j)
                 {
-                    const Agent& agent = m_agentsVec[j];
+                    const size_t& agent = m_agentsVec[j];
                     // n.I.insert(std::make_pair<>(agent, next.solution.at(agent)));
                     const auto iter = solution.find(agent);
                     if (iter != solution.end())
@@ -129,11 +129,11 @@ class NextBestAssignment
     // O enforces that the respective pair is not part of the solution
     // Iagents enforces that these agents must have a task assignment
     // Oagents enforces that these agents should not have any task assignment
-    long constrainedMatching(const std::set<std::pair<Agent, Task> >& I,
-                             const std::set<std::pair<Agent, Task> >& O,
-                             const std::set<Agent>& Iagents,
-                             const std::set<Agent>& Oagents,
-                             std::map<Agent, Task>& solution)
+    long constrainedMatching(const std::set<std::pair<size_t, Task> >& I,
+                             const std::set<std::pair<size_t, Task> >& O,
+                             const std::set<size_t>& Iagents,
+                             const std::set<size_t>& Oagents,
+                             std::map<size_t, Task>& solution)
     {
         // prepare assignment problem
 
@@ -201,7 +201,7 @@ class NextBestAssignment
         return cost(solution);
     }
 
-    long cost(const std::map<Agent, Task>& solution)
+    long cost(const std::map<size_t, Task>& solution)
     {
         long result = 0;
         for (const auto& entry : solution)
@@ -212,7 +212,7 @@ class NextBestAssignment
         return result;
     }
 
-    size_t numMatching(const std::map<Agent, Task>& solution)
+    size_t numMatching(const std::map<size_t, Task>& solution)
     {
         return solution.size();
     }
@@ -224,11 +224,11 @@ class NextBestAssignment
             : I(), O(), Iagents(), Oagents(), solution(), cost(0)
         {}
 
-        std::set<std::pair<Agent, Task> > I;  // enforced assignment
-        std::set<std::pair<Agent, Task> > O;  // invalid assignments
-        std::set<Agent> Iagents;  // agents that must have an assignment
-        std::set<Agent> Oagents;  // agents that should not have an assignment
-        std::map<Agent, Task> solution;
+        std::set<std::pair<size_t, Task> > I;  // enforced assignment
+        std::set<std::pair<size_t, Task> > O;  // invalid assignments
+        std::set<size_t> Iagents;  // agents that must have an assignment
+        std::set<size_t> Oagents;  // agents that should not have an assignment
+        std::map<size_t, Task> solution;
         long cost;
 
         bool operator<(const Node& n) const
@@ -287,9 +287,9 @@ class NextBestAssignment
 
    private:
     Assignment m_assignment;
-    std::map<std::pair<Agent, Task>, long> m_cost;
-    std::vector<Agent> m_agentsVec;
-    std::set<Agent> m_agentsSet;
+    std::map<std::pair<size_t, Task>, long> m_cost;
+    std::vector<size_t> m_agentsVec;
+    std::set<size_t> m_agentsSet;
     // std::set<Task> m_tasksSet;
     // size_t m_numAgents;
     // size_t m_numTasks;
