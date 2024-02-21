@@ -175,9 +175,9 @@ public:
         return std::tie(time, x, y) == std::tie(other.time, other.x, other.y);
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& c)
+    friend std::ostream& operator<<(std::ostream& os, const VertexConstraint& vc)
     {
-        return os << "VC(" << c.time << "," << c.x << "," << c.y << ")";
+        return os << "VC(" << vc.time << "," << vc.x << "," << vc.y << ")";
     }
 };
 
