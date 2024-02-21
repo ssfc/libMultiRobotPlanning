@@ -896,6 +896,8 @@ public:
 
             open.pop();
 
+            // A1 LINE 9
+            // Validate the paths in best_node until a conflict occurs.
             Conflict conflict;
             if (!get_first_conflict(best_node.solution, conflict))
             {
