@@ -979,6 +979,8 @@ public:
             {
                 // std::cout << "Add HL node for " << new_constraint.first << std::endl;
                 size_t i = new_constraint.first;
+                // A1 LINE 22
+                // new_node ← new node
                 HighLevelNode new_node = best_node;
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.all_agents_constraints[i] << std::endl;
