@@ -834,6 +834,7 @@ public:
         HighLevelNode root;
         size_t num_agents = initialStates.size();
         root.solution.resize(num_agents);
+        // A1 LINE 1 root.constraints ← ∅
         root.all_agents_constraints.resize(num_agents);
         root.cost = 0;
         root.is_root = true;
