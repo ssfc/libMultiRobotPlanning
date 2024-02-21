@@ -13,11 +13,11 @@
 namespace libMultiRobotPlanning {
 
 
-template <typename Location, typename Assignment = Assignment<size_t, Location> > // <size_t, Locaion>是agent2task
+template <typename Location> // <size_t, Locaion>是agent2task
 class NextBestAssignment
 {
    public:
-    NextBestAssignment(const Assignment& assignment = Assignment())
+    NextBestAssignment(const Assignment<size_t, Location>& assignment = Assignment<size_t, Location>())
         : m_assignment(assignment),
           m_cost(),
           m_open(),
@@ -291,7 +291,7 @@ class NextBestAssignment
     };
 
    private:
-    Assignment m_assignment;
+    Assignment<size_t, Location> m_assignment;
     std::map<std::pair<size_t, Location>, long> m_cost;
     std::vector<size_t> m_agentsVec;
     std::set<size_t> m_agentsSet;
