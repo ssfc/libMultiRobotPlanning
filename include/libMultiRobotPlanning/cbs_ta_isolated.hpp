@@ -26,8 +26,6 @@
 #include "timer.hpp"
 #include "shortest_path_heuristic.hpp"
 
-using libMultiRobotPlanning::NextBestAssignment;
-
 
 enum class Action
 {

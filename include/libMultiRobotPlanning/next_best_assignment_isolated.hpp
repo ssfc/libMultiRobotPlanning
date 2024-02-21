@@ -10,7 +10,8 @@
 
 #include "assignment.hpp"
 
-namespace libMultiRobotPlanning {
+using libMultiRobotPlanning::Assignment;
+
 
 
 struct Node
@@ -301,8 +302,6 @@ private:
     std::priority_queue<Node> m_open;
     size_t m_numMatching;
 };
-
-}  // namespace libMultiRobotPlanning
 
 
 #endif  // NEXT_BEST_ASSIGNMENT_ISOLATED_HPP
