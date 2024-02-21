@@ -419,7 +419,7 @@ private:
     NextBestAssignment<size_t, Location> m_assignment;
     size_t m_maxTaskAssignments;
     size_t m_numTaskAssignments;
-    int m_highLevelExpanded;
+    int num_expanded_high_level_nodes;
     int m_lowLevelExpanded;
     ShortestPathHeuristic m_heuristic;
     size_t m_numAgents;
@@ -445,7 +445,7 @@ public:
           last_goal_constraint(-1),
           m_maxTaskAssignments(maxTaskAssignments),
           m_numTaskAssignments(0),
-          m_highLevelExpanded(0),
+          num_expanded_high_level_nodes(0),
           m_lowLevelExpanded(0),
           m_heuristic(dimx, dimy, obstacles)
     {
@@ -697,7 +697,7 @@ public:
 
     void onExpandHighLevelNode(int /*cost*/)
     {
-        m_highLevelExpanded++;
+        num_expanded_high_level_nodes++;
     }
 
     void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/, int /*gScore*/)
@@ -707,7 +707,7 @@ public:
 
     int highLevelExpanded()
     {
-        return m_highLevelExpanded;
+        return num_expanded_high_level_nodes;
     }
 
     int lowLevelExpanded() const
