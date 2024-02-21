@@ -1004,6 +1004,8 @@ public:
                 set_low_level_context(i, &new_node.all_agents_constraints[i], new_node.task(i));
                 bool success = low_level_search(initialStates[i], new_node.solution[i]);
 
+                // A1 LINE 28
+                // new_node.cost ← SIC(new_node.solution)
                 new_node.cost += new_node.solution[i].cost;
 
                 if (success)
