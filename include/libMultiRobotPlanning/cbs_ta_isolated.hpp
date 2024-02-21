@@ -695,11 +695,6 @@ public:
         }
     }
 
-    void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/, int /*gScore*/)
-    {
-        num_expanded_low_level_nodes++;
-    }
-
     int highLevelExpanded()
     {
         return num_expanded_high_level_nodes;
@@ -753,7 +748,7 @@ public:
         while (!open_set.empty())
         {
             LowLevelNode current = open_set.top();
-            onExpandLowLevelNode(current.location, current.f_score, current.g_score);
+            num_expanded_low_level_nodes++;
 
             if (is_solution(current.location))
             {
