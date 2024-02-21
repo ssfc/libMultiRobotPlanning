@@ -695,11 +695,6 @@ public:
         }
     }
 
-    void onExpandHighLevelNode(int /*cost*/)
-    {
-        num_expanded_high_level_nodes++;
-    }
-
     void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/, int /*gScore*/)
     {
         num_expanded_low_level_nodes++;
@@ -881,7 +876,7 @@ public:
         while (!open.empty())
         {
             HighLevelNode P = open.top();
-            onExpandHighLevelNode(P.cost);
+            num_expanded_high_level_nodes++;
             // std::cout << "expand: " << P << std::endl;
 
             open.pop();
