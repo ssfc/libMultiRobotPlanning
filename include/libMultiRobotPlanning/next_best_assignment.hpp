@@ -57,7 +57,7 @@ public:
         m_numMatching = numMatching(n.solution);
     }
 
-  // find next solution
+    // find next solution
     long nextSolution(std::map<Agent, Task>& solution)
     {
         solution.clear();
@@ -138,143 +138,178 @@ public:
         return result;
     }
 
- protected:
-  // I enforces that the respective pair is part of the solution
-  // O enforces that the respective pair is not part of the solution
-  // Iagents enforces that these agents must have a task assignment
-  // Oagents enforces that these agents should not have any task assignment
-  long constrainedMatching(const std::set<std::pair<Agent, Task> >& I,
+protected:
+    // I enforces that the respective pair is part of the solution
+    // O enforces that the respective pair is not part of the solution
+    // Iagents enforces that these agents must have a task assignment
+    // Oagents enforces that these agents should not have any task assignment
+    long constrainedMatching(const std::set<std::pair<Agent, Task> >& I,
                            const std::set<std::pair<Agent, Task> >& O,
                            const std::set<Agent>& Iagents,
                            const std::set<Agent>& Oagents,
-                           std::map<Agent, Task>& solution) {
-    // prepare assignment problem
+                           std::map<Agent, Task>& solution)
+    {
+        // prepare assignment problem
 
-    m_assignment.clear();
+        m_assignment.clear();
 
-    for (const auto& c : I) {
-      if (Oagents.find(c.first) == Oagents.end()) {
-        m_assignment.setCost(c.first, c.second, 0);
-      }
-    }
-
-    for (const auto& c : m_cost) {
-      if (O.find(c.first) == O.end() &&
-          I.find(c.first) == I.end() &&
-          Oagents.find(c.first.first) == Oagents.end()) {
-        long costOffset = 1e9;// TODO: what is a good value here?
-        // all agents that should have any solution will get a lower cost offset
-        // enforcing this agents inclusion in the result
-        if (Iagents.find(c.first.first) != Iagents.end()) {
-          costOffset = 0;
+        for (const auto& c : I)
+        {
+            if (Oagents.find(c.first) == Oagents.end())
+            {
+                m_assignment.setCost(c.first, c.second, 0);
+            }
         }
-        m_assignment.setCost(c.first.first, c.first.second, c.second + costOffset);
-      }
+
+        for (const auto& c : m_cost)
+        {
+            if (O.find(c.first) == O.end() && I.find(c.first) == I.end() &&
+                Oagents.find(c.first.first) == Oagents.end())
+            {
+                long costOffset = 1e9;// TODO: what is a good value here?
+                // all agents that should have any solution will get a lower cost offset
+                // enforcing this agents inclusion in the result
+                if (Iagents.find(c.first.first) != Iagents.end())
+                {
+                    costOffset = 0;
+                }
+                m_assignment.setCost(c.first.first, c.first.second, c.second + costOffset);
+            }
+        }
+
+        m_assignment.solve(solution);
+        size_t matching = numMatching(solution);
+
+        // std::cout << "constrainedMatching: internal Solution: " << std::endl;
+        // for (const auto& c : solution) {
+        //   std::cout << "    " << c.first << "->" << c.second << std::endl;
+        // }
+
+        // check if all agents in Iagents have an assignment as requested
+        bool solutionValid = true;
+        for (const auto& agent : Iagents)
+        {
+            if (solution.find(agent) == solution.end())
+            {
+                solutionValid = false;
+                break;
+            }
+        }
+        // check that I constraints have been fulfilled
+        for (const auto& c : I)
+        {
+            const auto& iter = solution.find(c.first);
+            if (iter == solution.end() || !(iter->second == c.second))
+            {
+                solutionValid = false;
+                break;
+            }
+        }
+
+        if (!solutionValid || matching < m_numMatching)
+        {
+            solution.clear();
+            return std::numeric_limits<long>::max();
+        }
+
+        return cost(solution);
     }
 
-    m_assignment.solve(solution);
-    size_t matching = numMatching(solution);
+    long cost(const std::map<Agent, Task>& solution)
+    {
+        long result = 0;
+        for (const auto& entry : solution)
+        {
+            result += m_cost.at(entry);
+        }
 
-    // std::cout << "constrainedMatching: internal Solution: " << std::endl;
-    // for (const auto& c : solution) {
-    //   std::cout << "    " << c.first << "->" << c.second << std::endl;
-    // }
-
-    // check if all agents in Iagents have an assignment as requested
-    bool solutionValid = true;
-    for (const auto& agent : Iagents) {
-      if (solution.find(agent) == solution.end()) {
-        solutionValid = false;
-        break;
-      }
-    }
-    // check that I constraints have been fulfilled
-    for (const auto& c : I) {
-      const auto& iter = solution.find(c.first);
-      if (iter == solution.end()
-          || !(iter->second == c.second)) {
-        solutionValid = false;
-        break;
-      }
+        return result;
     }
 
-    if (!solutionValid || matching < m_numMatching) {
-      solution.clear();
-      return std::numeric_limits<long>::max();
-    }
-    return cost(solution);
-  }
-
-  long cost(const std::map<Agent, Task>& solution) {
-    long result = 0;
-    for (const auto& entry : solution) {
-      result += m_cost.at(entry);
-    }
-    return result;
-  }
-
-  size_t numMatching(const std::map<Agent, Task>& solution) {
-    return solution.size();
-  }
-
- private:
-  struct Node {
-    Node() : I(), O(), Iagents(), Oagents(), solution(), cost(0) {}
-
-    std::set<std::pair<Agent, Task> > I;  // enforced assignment
-    std::set<std::pair<Agent, Task> > O;  // invalid assignments
-    std::set<Agent> Iagents;  // agents that must have an assignment
-    std::set<Agent> Oagents;  // agents that should not have an assignment
-    std::map<Agent, Task> solution;
-    long cost;
-
-    bool operator<(const Node& n) const {
-      // Our heap is a maximum heap, so we invert the comperator function here
-      return cost > n.cost;
+    size_t numMatching(const std::map<Agent, Task>& solution)
+    {
+        return solution.size();
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Node& n) {
-      os << "Node with cost: " << n.cost << std::endl;
-      os << "  I: ";
-      for (const auto& c : n.I) {
-        os << c.first << "->" << c.second << ",";
-      }
-      os << std::endl;
-      os << "  O: ";
-      for (const auto& c : n.O) {
-        os << c.first << "->" << c.second << ",";
-      }
-      os << std::endl;
-      os << "  Iagents: ";
-      for (const auto& c : n.Iagents) {
-        os << c << ",";
-      }
-      os << std::endl;
-      os << "  Oagents: ";
-      for (const auto& c : n.Oagents) {
-        os << c << ",";
-      }
-      os << std::endl;
-      os << "  solution: ";
-      for (const auto& c : n.solution) {
-        os << "    " << c.first << "->" << c.second << std::endl;
-      }
-      os << std::endl;
-      return os;
-    }
-  };
+private:
+    struct Node
+    {
+        Node()
+            : I(), O(), Iagents(), Oagents(), solution(), cost(0)
+        {}
 
- private:
-  Assignment m_assignment;
-  std::map<std::pair<Agent, Task>, long> m_cost;
-  std::vector<Agent> m_agentsVec;
-  std::set<Agent> m_agentsSet;
-  // std::set<Task> m_tasksSet;
-  // size_t m_numAgents;
-  // size_t m_numTasks;
-  // std::vector<long> m_costMatrix;
-  std::priority_queue<Node> m_open;
-  size_t m_numMatching;
+        std::set<std::pair<Agent, Task> > I;  // enforced assignment
+        std::set<std::pair<Agent, Task> > O;  // invalid assignments
+        std::set<Agent> Iagents;  // agents that must have an assignment
+        std::set<Agent> Oagents;  // agents that should not have an assignment
+        std::map<Agent, Task> solution;
+        long cost;
+
+        bool operator<(const Node& n) const
+        {
+            // Our heap is a maximum heap, so we invert the comperator function here
+            return cost > n.cost;
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const Node& n)
+        {
+            os << "Node with cost: " << n.cost << std::endl;
+            os << "  I: ";
+
+            for (const auto& c : n.I)
+            {
+                os << c.first << "->" << c.second << ",";
+            }
+
+            os << std::endl;
+            os << "  O: ";
+
+            for (const auto& c : n.O)
+            {
+                os << c.first << "->" << c.second << ",";
+            }
+
+            os << std::endl;
+            os << "  Iagents: ";
+
+            for (const auto& c : n.Iagents)
+            {
+                os << c << ",";
+            }
+
+            os << std::endl;
+            os << "  Oagents: ";
+
+            for (const auto& c : n.Oagents)
+            {
+                os << c << ",";
+            }
+
+            os << std::endl;
+            os << "  solution: ";
+
+            for (const auto& c : n.solution)
+            {
+                os << "    " << c.first << "->" << c.second << std::endl;
+            }
+
+            os << std::endl;
+
+            return os;
+        }
+    };
+
+private:
+    Assignment m_assignment;
+    std::map<std::pair<Agent, Task>, long> m_cost;
+    std::vector<Agent> m_agentsVec;
+    std::set<Agent> m_agentsSet;
+    // std::set<Task> m_tasksSet;
+    // size_t m_numAgents;
+    // size_t m_numTasks;
+    // std::vector<long> m_costMatrix;
+    std::priority_queue<Node> m_open;
+    size_t m_numMatching;
 };
 
 }  // namespace libMultiRobotPlanning
