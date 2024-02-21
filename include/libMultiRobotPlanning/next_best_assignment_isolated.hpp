@@ -10,9 +10,6 @@
 
 #include "assignment_isolated.hpp"
 
-using libMultiRobotPlanning::Assignment;
-
-
 
 struct Node
 {

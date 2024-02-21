@@ -5,14 +5,12 @@
 #ifndef ASSIGNMENT_ISOLATED_HPP
 #define ASSIGNMENT_ISOLATED_HPP
 
-#pragma once
-
 #include <boost/bimap.hpp>
 #include <boost/graph/adjacency_list.hpp>
 // #include <boost/graph/find_flow_cost.hpp>
 #include <boost/graph/successive_shortest_path_nonnegative_weights.hpp>
 
-namespace libMultiRobotPlanning {
+
 
 /*!
   \example assignment.cpp example that takes cost mappings from a file
@@ -208,8 +206,6 @@ class Assignment
     vertex_t m_sourceVertex;
     vertex_t m_sinkVertex;
 };
-
-}  // namespace libMultiRobotPlanning
 
 
 #endif  // ASSIGNMENT_ISOLATED_HPP
