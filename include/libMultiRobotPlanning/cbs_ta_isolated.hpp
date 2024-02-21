@@ -358,7 +358,7 @@ class HighLevelNode
 {
 public:
     std::vector<PlanResult> solution;
-    std::vector<Constraints> constraints;
+    std::vector<Constraints> all_agents_constraints;
     std::map<size_t, Location> tasks; // maps from index to task (and does not contain an entry if no task was assigned)
 
     int cost;
@@ -397,7 +397,7 @@ public:
                 os << "  " << high_level_node.solution[i].path[t].first << std::endl;
             }
             os << " Constraints:" << std::endl;
-            os << high_level_node.constraints[i];
+            os << high_level_node.all_agents_constraints[i];
             os << " cost: " << high_level_node.solution[i].cost << std::endl;
         }
 
@@ -837,7 +837,7 @@ public:
         HighLevelNode start;
         size_t numAgents = initialStates.size();
         start.solution.resize(numAgents);
-        start.constraints.resize(numAgents);
+        start.all_agents_constraints.resize(numAgents);
         start.cost = 0;
         start.is_root = true;
         nextTaskAssignment(start.tasks);
@@ -852,7 +852,7 @@ public:
             bool success = false;
             if (!start.tasks.empty())
             {
-                setLowLevelContext(i, &start.constraints[i], start.task(i));
+                setLowLevelContext(i, &start.all_agents_constraints[i], start.task(i));
                 success = low_level_search(initialStates[i], start.solution[i]);
             }
 
@@ -898,14 +898,14 @@ public:
                 if (n.tasks.size() > 0)
                 {
                     n.solution.resize(numAgents);
-                    n.constraints.resize(numAgents);
+                    n.all_agents_constraints.resize(numAgents);
                     n.cost = 0;
                     n.is_root = true;
 
                     bool allSuccessful = true;
                     for (size_t i = 0; i < numAgents; ++i)
                     {
-                        setLowLevelContext(i, &n.constraints[i], n.task(i));
+                        setLowLevelContext(i, &n.all_agents_constraints[i], n.task(i));
                         bool success = low_level_search(initialStates[i], n.solution[i]);
                         if (!success)
                         {
@@ -938,15 +938,15 @@ public:
                 size_t i = c.first;
                 HighLevelNode newNode = P;
                 // (optional) check that this constraint was not included already
-                // std::cout << newNode.constraints[i] << std::endl;
+                // std::cout << newNode.all_agents_constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
-                assert(!newNode.constraints[i].overlap(c.second));
+                assert(!newNode.all_agents_constraints[i].overlap(c.second));
 
-                newNode.constraints[i].add(c.second);
+                newNode.all_agents_constraints[i].add(c.second);
 
                 newNode.cost -= newNode.solution[i].cost;
 
-                setLowLevelContext(i, &newNode.constraints[i], newNode.task(i));
+                setLowLevelContext(i, &newNode.all_agents_constraints[i], newNode.task(i));
                 bool success = low_level_search(initialStates[i], newNode.solution[i]);
 
                 newNode.cost += newNode.solution[i].cost;
