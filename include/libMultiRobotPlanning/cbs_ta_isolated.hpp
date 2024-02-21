@@ -422,7 +422,7 @@ private:
     int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
     ShortestPathHeuristic m_heuristic;
-    size_t m_numAgents;
+    size_t num_agents;
     std::unordered_set<Location> m_goals;
 
     using OpenSet = boost::heap::fibonacci_heap<LowLevelNode>;
@@ -449,7 +449,7 @@ public:
           num_expanded_low_level_nodes(0),
           m_heuristic(dimx, dimy, obstacles)
     {
-        m_numAgents = startStates.size();
+        num_agents = startStates.size();
         for (size_t i = 0; i < startStates.size(); ++i)
         {
             for (const auto& this_goal : goals[i])
