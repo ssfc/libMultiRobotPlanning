@@ -603,10 +603,10 @@ public:
             // check drive-drive vertex collisions
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                State state1 = getState(i, solution, t);
+                State state1 = get_state(i, solution, t);
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    State state2 = getState(j, solution, t);
+                    State state2 = get_state(j, solution, t);
                     if (state1.equalExceptTime(state2))
                     {
                         result.time = t;
@@ -626,12 +626,12 @@ public:
             // drive-drive edge (swap)
             for (size_t i = 0; i < solution.size(); ++i)
             {
-                State state1a = getState(i, solution, t);
-                State state1b = getState(i, solution, t + 1);
+                State state1a = get_state(i, solution, t);
+                State state1b = get_state(i, solution, t + 1);
                 for (size_t j = i + 1; j < solution.size(); ++j)
                 {
-                    State state2a = getState(j, solution, t);
-                    State state2b = getState(j, solution, t + 1);
+                    State state2a = get_state(j, solution, t);
+                    State state2b = get_state(j, solution, t + 1);
                     if (state1a.equalExceptTime(state2b) && state1b.equalExceptTime(state2a))
                     {
                         result.time = t;
@@ -710,9 +710,7 @@ public:
         return m_numTaskAssignments;
     }
 
-    State getState(size_t agentIdx,
-                   const std::vector<PlanResult>& solution,
-                   size_t t)
+    State get_state(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
     {
         assert(agentIdx < solution.size());
         if (t < solution[agentIdx].path.size())
