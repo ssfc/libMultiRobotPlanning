@@ -838,10 +838,14 @@ public:
         // root.constraints ← ∅
         root.all_agents_constraints.resize(num_agents);
         root.cost = 0;
-        root.is_root = true;
+
         // A1 LINE 2
         // root.assignment ← first_assignment()
         nextTaskAssignment(root.tasks);
+
+        // A1 LINE 3
+        // root.is_root ← True
+        root.is_root = true;
 
         for (size_t i = 0; i < initialStates.size(); ++i)
         {
