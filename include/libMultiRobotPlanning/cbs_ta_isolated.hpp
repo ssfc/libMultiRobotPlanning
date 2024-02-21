@@ -695,7 +695,7 @@ public:
         }
     }
 
-    int highLevelExpanded()
+    int get_num_expanded_high_level_nodes()
     {
         return num_expanded_high_level_nodes;
     }
