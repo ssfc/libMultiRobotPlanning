@@ -420,7 +420,7 @@ private:
     size_t m_maxTaskAssignments;
     size_t m_numTaskAssignments;
     int num_expanded_high_level_nodes;
-    int m_lowLevelExpanded;
+    int num_expanded_low_level_nodes;
     ShortestPathHeuristic m_heuristic;
     size_t m_numAgents;
     std::unordered_set<Location> m_goals;
@@ -446,7 +446,7 @@ public:
           m_maxTaskAssignments(maxTaskAssignments),
           m_numTaskAssignments(0),
           num_expanded_high_level_nodes(0),
-          m_lowLevelExpanded(0),
+          num_expanded_low_level_nodes(0),
           m_heuristic(dimx, dimy, obstacles)
     {
         m_numAgents = startStates.size();
@@ -702,7 +702,7 @@ public:
 
     void onExpandLowLevelNode(const State& /*s*/, int /*fScore*/, int /*gScore*/)
     {
-        m_lowLevelExpanded++;
+        num_expanded_low_level_nodes++;
     }
 
     int highLevelExpanded()
@@ -712,7 +712,7 @@ public:
 
     int lowLevelExpanded() const
     {
-        return m_lowLevelExpanded;
+        return num_expanded_low_level_nodes;
     }
 
     size_t numTaskAssignments() const
