@@ -983,6 +983,8 @@ public:
                 // new_node ← new node
                 // A1 LINE 24
                 // new_node.assignment ← best_node.assignment
+                // A1 LINE 26
+                // new_node.solution ← best_node.solution
                 HighLevelNode new_node = best_node;
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.all_agents_constraints[i] << std::endl;
