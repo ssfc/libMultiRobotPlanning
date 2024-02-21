@@ -524,7 +524,7 @@ public:
                con.find(VertexConstraint(s.time, s.x, s.y)) == con.end();
     }
 
-    bool transitionValid(const State& s1, const State& s2)
+    bool transition_valid(const State& s1, const State& s2)
     {
         assert(m_constraints);
         const auto& con = m_constraints->edge_constraints;
@@ -543,7 +543,7 @@ public:
         neighbors.clear();
         {
             State n(s.time + 1, s.x, s.y);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 bool atGoal = true;
                 if (goal != nullptr)
@@ -556,28 +556,28 @@ public:
 
         {
             State n(s.time + 1, s.x - 1, s.y);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 neighbors.emplace_back(Neighbor(n, Action::Left, 1));
             }
         }
         {
             State n(s.time + 1, s.x + 1, s.y);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 neighbors.emplace_back(Neighbor(n, Action::Right, 1));
             }
         }
         {
             State n(s.time + 1, s.x, s.y + 1);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 neighbors.emplace_back(Neighbor(n, Action::Up, 1));
             }
         }
         {
             State n(s.time + 1, s.x, s.y - 1);
-            if (location_valid(n) && transitionValid(s, n))
+            if (location_valid(n) && transition_valid(s, n))
             {
                 neighbors.emplace_back(Neighbor(n, Action::Down, 1));
             }
