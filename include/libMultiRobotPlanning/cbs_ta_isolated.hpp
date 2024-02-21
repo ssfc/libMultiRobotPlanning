@@ -911,6 +911,8 @@ public:
                 return true;
             }
 
+            // A1 LINE 12
+            // if best_node.is_root is True then
             if (best_node.is_root)
             {
                 // std::cout << "root node expanded; add new root" << std::endl;
