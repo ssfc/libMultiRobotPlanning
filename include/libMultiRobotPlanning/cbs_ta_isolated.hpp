@@ -899,6 +899,8 @@ public:
             // A1 LINE 9
             // Validate the paths in best_node until a conflict occurs.
             Conflict conflict;
+            // A1 LINE 10
+            // if best_node has no conflict then
             if (!get_first_conflict(best_node.solution, conflict))
             {
                 std::cout << "done; cost: " << best_node.cost << std::endl;
