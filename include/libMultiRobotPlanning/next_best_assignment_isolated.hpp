@@ -8,7 +8,7 @@
 #include <queue>
 #include <set>
 
-#include "assignment.hpp"
+#include "assignment_isolated.hpp"
 
 using libMultiRobotPlanning::Assignment;
 
