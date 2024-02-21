@@ -925,8 +925,10 @@ public:
                     // A1 LINE 13
                     // root ← new node
                     new_node.is_root = true;
-                    new_node.solution.resize(num_agents);
+                    // A1 LINE 14
+                    // root.constraints ← ∅
                     new_node.all_agents_constraints.resize(num_agents);
+                    new_node.solution.resize(num_agents);
                     new_node.cost = 0;
 
                     bool allSuccessful = true;
