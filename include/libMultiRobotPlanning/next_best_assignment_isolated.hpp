@@ -13,9 +13,77 @@
 namespace libMultiRobotPlanning {
 
 
+struct Node
+{
+    Node()
+        : I(), O(), Iagents(), Oagents(), solution(), cost(0)
+    {}
+
+    std::set<std::pair<size_t, Location> > I;  // enforced assignment
+    std::set<std::pair<size_t, Location> > O;  // invalid assignments
+    std::set<size_t> Iagents;  // agents that must have an assignment
+    std::set<size_t> Oagents;  // agents that should not have an assignment
+    std::map<size_t, Location> solution;
+    long cost;
+
+    bool operator<(const Node& n) const
+    {
+        // Our heap is a maximum heap, so we invert the comperator function here
+        return cost > n.cost;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Node& n)
+    {
+        os << "Node with cost: " << n.cost << std::endl;
+        os << "  I: ";
+
+        for (const auto& c : n.I)
+        {
+            os << c.first << "->" << c.second << ",";
+        }
+
+        os << std::endl;
+        os << "  O: ";
+
+        for (const auto& c : n.O)
+        {
+            os << c.first << "->" << c.second << ",";
+        }
+
+        os << std::endl;
+        os << "  Iagents: ";
+
+        for (const auto& c : n.Iagents)
+        {
+            os << c << ",";
+        }
+
+        os << std::endl;
+        os << "  Oagents: ";
+
+        for (const auto& c : n.Oagents)
+        {
+            os << c << ",";
+        }
+
+        os << std::endl;
+        os << "  solution: ";
+
+        for (const auto& c : n.solution)
+        {
+            os << "    " << c.first << "->" << c.second << std::endl;
+        }
+
+        os << std::endl;
+
+        return os;
+    }
+};
+
+
 class NextBestAssignment
 {
-   public:
+public:
     NextBestAssignment(const Assignment<size_t, Location>& assignment = Assignment<size_t, Location>())
         : m_assignment(assignment),
           m_cost(),
@@ -128,7 +196,7 @@ class NextBestAssignment
         return result;
     }
 
-   protected:
+protected:
     // I enforces that the respective pair is part of the solution
     // O enforces that the respective pair is not part of the solution
     // Iagents enforces that these agents must have a task assignment
@@ -221,75 +289,7 @@ class NextBestAssignment
         return solution.size();
     }
 
-   private:
-    struct Node
-    {
-        Node()
-            : I(), O(), Iagents(), Oagents(), solution(), cost(0)
-        {}
-
-        std::set<std::pair<size_t, Location> > I;  // enforced assignment
-        std::set<std::pair<size_t, Location> > O;  // invalid assignments
-        std::set<size_t> Iagents;  // agents that must have an assignment
-        std::set<size_t> Oagents;  // agents that should not have an assignment
-        std::map<size_t, Location> solution;
-        long cost;
-
-        bool operator<(const Node& n) const
-        {
-            // Our heap is a maximum heap, so we invert the comperator function here
-            return cost > n.cost;
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const Node& n)
-        {
-            os << "Node with cost: " << n.cost << std::endl;
-            os << "  I: ";
-
-            for (const auto& c : n.I)
-            {
-                os << c.first << "->" << c.second << ",";
-            }
-
-            os << std::endl;
-            os << "  O: ";
-
-            for (const auto& c : n.O)
-            {
-                os << c.first << "->" << c.second << ",";
-            }
-
-            os << std::endl;
-            os << "  Iagents: ";
-
-            for (const auto& c : n.Iagents)
-            {
-                os << c << ",";
-            }
-
-            os << std::endl;
-            os << "  Oagents: ";
-
-            for (const auto& c : n.Oagents)
-            {
-                os << c << ",";
-            }
-
-            os << std::endl;
-            os << "  solution: ";
-
-            for (const auto& c : n.solution)
-            {
-                os << "    " << c.first << "->" << c.second << std::endl;
-            }
-
-            os << std::endl;
-
-            return os;
-        }
-    };
-
-   private:
+private:
     Assignment<size_t, Location> m_assignment;
     std::map<std::pair<size_t, Location>, long> m_cost;
     std::vector<size_t> m_agentsVec;
