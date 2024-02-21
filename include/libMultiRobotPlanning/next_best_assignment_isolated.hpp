@@ -13,7 +13,6 @@
 namespace libMultiRobotPlanning {
 
 
-template <typename Location> // <size_t, Locaion>是agent2task
 class NextBestAssignment
 {
    public:

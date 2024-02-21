@@ -416,7 +416,7 @@ private:
     const Location* goal;
     const Constraints* agent_constraints;
     int last_goal_constraint;
-    NextBestAssignment<Location> m_assignment;
+    NextBestAssignment m_assignment;
     size_t m_maxTaskAssignments;
     size_t num_task_assignments;
     int num_expanded_high_level_nodes;
