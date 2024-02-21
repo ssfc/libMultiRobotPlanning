@@ -590,7 +590,7 @@ public:
         }
     }
 
-    bool getFirstConflict(const std::vector<PlanResult>& solution, Conflict& result)
+    bool get_first_conflict(const std::vector<PlanResult>& solution, Conflict& result)
     {
         int max_t = 0;
         for (const auto& sol : solution)
@@ -887,7 +887,7 @@ public:
             open.pop();
 
             Conflict conflict;
-            if (!getFirstConflict(P.solution, conflict))
+            if (!get_first_conflict(P.solution, conflict))
             {
                 std::cout << "done; cost: " << P.cost << std::endl;
                 solution = P.solution;
