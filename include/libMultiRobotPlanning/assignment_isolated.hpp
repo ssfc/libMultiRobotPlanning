@@ -15,9 +15,9 @@ class Assignment
 {
 private:
     using graphTraits_t = boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::bidirectionalS>;
-    typedef graphTraits_t::vertex_descriptor vertex_t;
-    typedef graphTraits_t::edge_descriptor edge_t;
-    typedef boost::bimap<size_t, vertex_t> agentsMap_t;
+    using vertex_t = graphTraits_t::vertex_descriptor;
+    using edge_t = graphTraits_t::edge_descriptor;
+    using agentsMap_t = boost::bimap<size_t, vertex_t>;
     typedef typename agentsMap_t::value_type agentsMapEntry_t;
     typedef boost::bimap<Location, vertex_t> tasksMap_t;
     typedef typename tasksMap_t::value_type tasksMapEntry_t;
