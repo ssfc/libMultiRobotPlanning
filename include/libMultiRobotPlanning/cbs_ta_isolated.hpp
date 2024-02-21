@@ -901,6 +901,8 @@ public:
             Conflict conflict;
             // A1 LINE 10
             // if best_node has no conflict then
+            // A1 LINE 20
+            // Conflict ← (ai, aj, v, t) first conflict in best_node
             if (!get_first_conflict(best_node.solution, conflict))
             {
                 // A1 LINE 11
