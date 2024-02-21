@@ -11,7 +11,7 @@
 #include <boost/graph/successive_shortest_path_nonnegative_weights.hpp>
 
 
-template <typename Agent, typename Task>
+template <typename Task>
 class Assignment
 {
 public:
@@ -45,7 +45,7 @@ public:
         }
     }
 
-    void setCost(const Agent& agent, const Task& task, long cost)
+    void setCost(const size_t& agent, const Task& task, long cost)
     {
         // std::cout << "setCost: " << agent << "->" << task << " cost: " << cost <<
         // std::endl;
@@ -81,7 +81,7 @@ public:
     }
 
     // find first (optimal) solution with minimal cost
-    long solve(std::map<Agent, Task>& solution)
+    long solve(std::map<size_t, Task>& solution)
     {
         using namespace boost;
 
@@ -178,7 +178,7 @@ protected:
     }
 
    private:
-    typedef boost::bimap<Agent, vertex_t> agentsMap_t;
+    typedef boost::bimap<size_t, vertex_t> agentsMap_t;
     typedef typename agentsMap_t::value_type agentsMapEntry_t;
     typedef boost::bimap<Task, vertex_t> tasksMap_t;
     typedef typename tasksMap_t::value_type tasksMapEntry_t;

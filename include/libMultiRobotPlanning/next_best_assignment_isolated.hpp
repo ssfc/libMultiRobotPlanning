@@ -87,7 +87,7 @@ struct Node
 class NextBestAssignment
 {
 private:
-    Assignment<size_t, Location> m_assignment;
+    Assignment<Location> m_assignment;
     std::map<std::pair<size_t, Location>, long> m_cost;
     std::vector<size_t> m_agentsVec;
     std::set<size_t> m_agentsSet;
@@ -99,7 +99,7 @@ private:
     size_t m_numMatching;
 
 public:
-    NextBestAssignment(const Assignment<size_t, Location>& assignment = Assignment<size_t, Location>())
+    NextBestAssignment(const Assignment<Location>& assignment = Assignment<Location>())
         : m_assignment(assignment),
           m_cost(),
           m_open(),
