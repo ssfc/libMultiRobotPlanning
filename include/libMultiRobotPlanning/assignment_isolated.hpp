@@ -17,6 +17,10 @@ private:
     typedef boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::bidirectionalS> graphTraits_t;
     typedef graphTraits_t::vertex_descriptor vertex_t;
     typedef graphTraits_t::edge_descriptor edge_t;
+    typedef boost::bimap<size_t, vertex_t> agentsMap_t;
+    typedef typename agentsMap_t::value_type agentsMapEntry_t;
+    typedef boost::bimap<Location, vertex_t> tasksMap_t;
+    typedef typename tasksMap_t::value_type tasksMapEntry_t;
 
 public:
     Assignment()
@@ -159,7 +163,7 @@ protected:
 
     typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, Vertex, Edge> graph_t;
 
-   protected:
+protected:
     void addOrUpdateEdge(vertex_t from, vertex_t to, long cost)
     {
         auto e = boost::edge(from, to, m_graph);
@@ -182,11 +186,7 @@ protected:
         }
     }
 
-   private:
-    typedef boost::bimap<size_t, vertex_t> agentsMap_t;
-    typedef typename agentsMap_t::value_type agentsMapEntry_t;
-    typedef boost::bimap<Location, vertex_t> tasksMap_t;
-    typedef typename tasksMap_t::value_type tasksMapEntry_t;
+private:
 
     agentsMap_t m_agents;
     tasksMap_t m_tasks;
