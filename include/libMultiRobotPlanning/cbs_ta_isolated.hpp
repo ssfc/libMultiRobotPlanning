@@ -975,17 +975,17 @@ public:
             generate_constraints_from_conflict(conflict, new_constraints);
             // A1 LINE 21
             // for agent ai in Conflict do
-            for (const auto& c : new_constraints)
+            for (const auto& new_constraint : new_constraints)
             {
-                // std::cout << "Add HL node for " << c.first << std::endl;
-                size_t i = c.first;
+                // std::cout << "Add HL node for " << new_constraint.first << std::endl;
+                size_t i = new_constraint.first;
                 HighLevelNode new_node = best_node;
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.all_agents_constraints[i] << std::endl;
-                // std::cout << c.second << std::endl;
-                assert(!new_node.all_agents_constraints[i].overlap(c.second));
+                // std::cout << new_constraint.second << std::endl;
+                assert(!new_node.all_agents_constraints[i].overlap(new_constraint.second));
 
-                new_node.all_agents_constraints[i].add(c.second);
+                new_node.all_agents_constraints[i].add(new_constraint.second);
 
                 new_node.cost -= new_node.solution[i].cost;
 
