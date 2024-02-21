@@ -414,8 +414,8 @@ private:
     std::unordered_set<Location> obstacles;
     size_t agent_index;
     const Location* goal;
-    const Constraints* m_constraints;
-    int m_lastGoalConstraint;
+    const Constraints* agent_constraints;
+    int last_goal_constraint;
     NextBestAssignment<size_t, Location> m_assignment;
     size_t m_maxTaskAssignments;
     size_t m_numTaskAssignments;
@@ -441,8 +441,8 @@ public:
           obstacles(obstacles),
           agent_index(0),
           goal(nullptr),
-          m_constraints(nullptr),
-          m_lastGoalConstraint(-1),
+          agent_constraints(nullptr),
+          last_goal_constraint(-1),
           m_maxTaskAssignments(maxTaskAssignments),
           m_numTaskAssignments(0),
           m_highLevelExpanded(0),
@@ -468,15 +468,15 @@ public:
         assert(input_constraints);
         agent_index = input_agentIdx;
         goal = task;
-        m_constraints = input_constraints;
-        m_lastGoalConstraint = -1;
+        agent_constraints = input_constraints;
+        last_goal_constraint = -1;
         if (goal != nullptr)
         {
             for (const auto& vc : input_constraints->vertex_constraints)
             {
                 if (vc.x == goal->x && vc.y == goal->y)
                 {
-                    m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
+                    last_goal_constraint = std::max(last_goal_constraint, vc.time);
                 }
             }
         }
@@ -484,10 +484,10 @@ public:
         {
             for (const auto& vc : input_constraints->vertex_constraints)
             {
-                m_lastGoalConstraint = std::max(m_lastGoalConstraint, vc.time);
+                last_goal_constraint = std::max(last_goal_constraint, vc.time);
             }
         }
-        // std::cout << "setLLCtx: " << agentIdx << " " << m_lastGoalConstraint <<
+        // std::cout << "setLLCtx: " << agentIdx << " " << last_goal_constraint <<
         // std::endl;
     }
 
@@ -511,13 +511,13 @@ public:
             at_goal = s.x == goal->x && s.y == goal->y;
         }
 
-        return at_goal && s.time > m_lastGoalConstraint;
+        return at_goal && s.time > last_goal_constraint;
     }
 
     bool location_valid(const State& s)
     {
-        assert(m_constraints);
-        const auto& con = m_constraints->vertex_constraints;
+        assert(agent_constraints);
+        const auto& con = agent_constraints->vertex_constraints;
 
         return s.x >= 0 && s.x < num_columns && s.y >= 0 && s.y < num_rows &&
                obstacles.find(Location(s.x, s.y)) == obstacles.end() &&
@@ -526,8 +526,8 @@ public:
 
     bool transition_valid(const State& s1, const State& s2)
     {
-        assert(m_constraints);
-        const auto& con = m_constraints->edge_constraints;
+        assert(agent_constraints);
+        const auto& con = agent_constraints->edge_constraints;
 
         return con.find(EdgeConstraint(s1.time, s1.x, s1.y, s2.x, s2.y)) == con.end();
     }
