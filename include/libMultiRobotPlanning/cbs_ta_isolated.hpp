@@ -888,22 +888,22 @@ public:
         // while OPEN not empty do
         while (!open.empty())
         {
-            HighLevelNode P = open.top();
+            HighLevelNode best_node = open.top();
             num_expanded_high_level_nodes++;
-            // std::cout << "expand: " << P << std::endl;
+            // std::cout << "expand: " << best_node << std::endl;
 
             open.pop();
 
             Conflict conflict;
-            if (!get_first_conflict(P.solution, conflict))
+            if (!get_first_conflict(best_node.solution, conflict))
             {
-                std::cout << "done; cost: " << P.cost << std::endl;
-                solution = P.solution;
+                std::cout << "done; cost: " << best_node.cost << std::endl;
+                solution = best_node.solution;
 
                 return true;
             }
 
-            if (P.is_root)
+            if (best_node.is_root)
             {
                 // std::cout << "root node expanded; add new root" << std::endl;
                 HighLevelNode n;
@@ -950,7 +950,7 @@ public:
             {
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
-                HighLevelNode new_node = P;
+                HighLevelNode new_node = best_node;
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.all_agents_constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
