@@ -308,7 +308,7 @@ public:
 
 
 // inner class definition
-class AStarNode
+class LowLevelNode
 {
 public:
     State location;
@@ -316,17 +316,17 @@ public:
     int g_score;
 
     // 定义 handle: 就是上面那个HeapHandle
-    typename boost::heap::fibonacci_heap<AStarNode>::handle_type handle;
-    // typename boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
+    typename boost::heap::fibonacci_heap<LowLevelNode>::handle_type handle;
+    // typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
 public:
-    AStarNode(const State& input_state, int input_fScore, int input_gScore)
+    LowLevelNode(const State& input_state, int input_fScore, int input_gScore)
         : location(input_state),
           f_score(input_fScore),
           g_score(input_gScore)
     {}
 
-    bool operator<(const AStarNode& other) const
+    bool operator<(const LowLevelNode& other) const
     {
         // Sort order
         // 1. lowest f_score
@@ -343,7 +343,7 @@ public:
         }
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const AStarNode& node)
+    friend std::ostream& operator<<(std::ostream& os, const LowLevelNode& node)
     {
         os << "location: " << node.location << " f_score: " << node.f_score
            << " g_score: " << node.g_score;
@@ -425,9 +425,9 @@ private:
     size_t m_numAgents;
     std::unordered_set<Location> m_goals;
 
-    using OpenSet = boost::heap::fibonacci_heap<AStarNode>;
+    using OpenSet = boost::heap::fibonacci_heap<LowLevelNode>;
     using HeapHandle = typename OpenSet::handle_type;
-    // using OpenSet = boost::heap::d_ary_heap<AStarNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
+    // using OpenSet = boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>;
     // using HeapHandle = typename OpenSet::handle_type;
 
 public:
@@ -741,7 +741,7 @@ public:
         std::unordered_set<State, std::hash<State>> closed_set;
         std::unordered_map<State, std::tuple<State,Action,int,int>,std::hash<State>> came_from;
 
-        auto handle = open_set.push(AStarNode(start_location,
+        auto handle = open_set.push(LowLevelNode(start_location,
                                               admissible_heuristic(start_location), initialCost));
         location_to_heap.insert(std::make_pair<>(start_location, handle));
         (*handle).handle = handle;
@@ -751,7 +751,7 @@ public:
 
         while (!open_set.empty())
         {
-            AStarNode current = open_set.top();
+            LowLevelNode current = open_set.top();
             onExpandLowLevelNode(current.location, current.f_score, current.g_score);
 
             if (is_solution(current.location))
@@ -793,7 +793,7 @@ public:
                     if (iter == location_to_heap.end())
                     {  // Discover a new node
                         int f_score = tentative_gScore + admissible_heuristic(neighbor.location);
-                        auto handle = open_set.push(AStarNode(neighbor.location, f_score, tentative_gScore));
+                        auto handle = open_set.push(LowLevelNode(neighbor.location, f_score, tentative_gScore));
                         (*handle).handle = handle;
                         location_to_heap.insert(std::make_pair<>(neighbor.location, handle));
                         // std::cout << "  this is a new node " << f_score << "," <<
