@@ -421,7 +421,7 @@ private:
     size_t m_numTaskAssignments;
     int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
-    ShortestPathHeuristic m_heuristic;
+    ShortestPathHeuristic heuristic_value;
     size_t num_agents;
     std::unordered_set<Location> m_goals;
 
@@ -447,14 +447,14 @@ public:
           m_numTaskAssignments(0),
           num_expanded_high_level_nodes(0),
           num_expanded_low_level_nodes(0),
-          m_heuristic(dimx, dimy, obstacles)
+          heuristic_value(dimx, dimy, obstacles)
     {
         num_agents = startStates.size();
         for (size_t i = 0; i < startStates.size(); ++i)
         {
             for (const auto& this_goal : goals[i])
             {
-                m_assignment.setCost(i, this_goal, m_heuristic.getValue(
+                m_assignment.setCost(i, this_goal, heuristic_value.getValue(
                                  Location(startStates[i].x, startStates[i].y), this_goal));
                 m_goals.insert(this_goal);
             }
@@ -495,7 +495,7 @@ public:
     {
         if (goal != nullptr)
         {
-            return m_heuristic.getValue(Location(s.x, s.y), *goal);
+            return heuristic_value.getValue(Location(s.x, s.y), *goal);
         }
         else
         {
