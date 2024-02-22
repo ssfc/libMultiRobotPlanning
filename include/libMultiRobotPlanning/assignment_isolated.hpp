@@ -11,18 +11,21 @@
 #include <boost/graph/successive_shortest_path_nonnegative_weights.hpp>
 
 
+using graphTraits_t = boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::bidirectionalS>;
+using vertex_t = graphTraits_t::vertex_descriptor;
+using edge_t = graphTraits_t::edge_descriptor;
+using agentsMap_t = boost::bimap<size_t, vertex_t>;
+using agentsMapEntry_t = agentsMap_t::value_type;
+using tasksMap_t = boost::bimap<Location, vertex_t>;
+using tasksMapEntry_t = tasksMap_t::value_type;
+
+
 class Assignment
 {
 private:
-    using graphTraits_t = boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::bidirectionalS>;
-    using vertex_t = graphTraits_t::vertex_descriptor;
-    using edge_t = graphTraits_t::edge_descriptor;
-    using agentsMap_t = boost::bimap<size_t, vertex_t>;
-    using agentsMapEntry_t = agentsMap_t::value_type;
-    using tasksMap_t = boost::bimap<Location, vertex_t>;
-    using tasksMapEntry_t = tasksMap_t::value_type;
 
     agentsMap_t m_agents;
+    tasksMap_t m_tasks;
 
 public:
     Assignment()
@@ -189,8 +192,6 @@ protected:
     }
 
 private:
-    tasksMap_t m_tasks;
-
     graph_t m_graph;
     vertex_t m_sourceVertex;
     vertex_t m_sinkVertex;
