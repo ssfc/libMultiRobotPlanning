@@ -53,11 +53,11 @@ using graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirecti
 class Assignment
 {
 private:
-    agentsMap_t agents;
-    tasksMap_t tasks;
-    graph_t graph;
-    vertex_t source_vertex;
-    vertex_t sink_vertex;
+    agentsMap_t agents; // boost::bimap<size_t, vertex_t>
+    tasksMap_t tasks; // boost::bimap<Location, vertex_t>;
+    graph_t graph; // boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, Vertex, Edge>;
+    vertex_t source_vertex; // graphTraits_t::vertex_descriptor;
+    vertex_t sink_vertex; // graphTraits_t::vertex_descriptor;
 
 public:
     Assignment()
