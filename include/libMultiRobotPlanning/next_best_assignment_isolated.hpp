@@ -11,7 +11,7 @@
 #include "assignment_isolated.hpp"
 
 
-struct Node
+struct ASGNode
 {
     std::set<std::pair<size_t, Location> > I;  // enforced assignment
     std::set<std::pair<size_t, Location> > O;  // invalid assignments
@@ -20,7 +20,7 @@ struct Node
     std::map<size_t, Location> solution;
     long cost;
 
-    Node()
+    ASGNode()
         : I(),
           O(),
           Iagents(),
@@ -29,15 +29,15 @@ struct Node
           cost(0)
     {}
 
-    bool operator<(const Node& n) const
+    bool operator<(const ASGNode& n) const
     {
         // Our heap is a maximum heap, so we invert the comperator function here
         return cost > n.cost;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Node& n)
+    friend std::ostream& operator<<(std::ostream& os, const ASGNode& n)
     {
-        os << "Node with cost: " << n.cost << std::endl;
+        os << "ASGNode with cost: " << n.cost << std::endl;
         os << "  I: ";
 
         for (const auto& c : n.I)
@@ -95,7 +95,7 @@ private:
     // size_t m_numAgents;
     // size_t m_numTasks;
     // std::vector<long> m_costMatrix;
-    std::priority_queue<Node> m_open;
+    std::priority_queue<ASGNode> m_open;
     size_t num_matching;
 
 public:
@@ -129,7 +129,7 @@ public:
     {
         const std::set<std::pair<size_t, Location> > I, O;
         const std::set<size_t> Iagents, Oagents;
-        Node n;
+        ASGNode n;
         n.cost = constrainedMatching(I, O, Iagents, Oagents, n.solution);
         m_open.emplace(n);
         num_matching = get_num_matching(n.solution);
@@ -144,7 +144,7 @@ public:
             return std::numeric_limits<long>::max();
         }
 
-        const Node next = m_open.top();
+        const ASGNode next = m_open.top();
         // std::cout << "next: " << next << std::endl;
         m_open.pop();
 
@@ -165,7 +165,7 @@ public:
         {
             if (fixedAgents.find(m_agentsVec[i]) == fixedAgents.end())
             {
-                Node n;
+                ASGNode n;
                 n.I = next.I;
                 n.O = next.O;
                 n.Iagents = next.Iagents;
