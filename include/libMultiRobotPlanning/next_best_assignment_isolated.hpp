@@ -91,7 +91,7 @@ class NextBestAssignment
 private:
     Assignment assignment;
     std::map<std::pair<size_t, Location>, long> map_cost;
-    std::vector<size_t> m_agentsVec;
+    std::vector<size_t> agents_vec;
     std::set<size_t> m_agentsSet;
     // std::set<Location> m_tasksSet;
     // size_t m_numAgents;
@@ -116,7 +116,7 @@ public:
         if (m_agentsSet.find(agent) == m_agentsSet.end())
         {
             m_agentsSet.insert(agent);
-            m_agentsVec.emplace_back(agent);
+            agents_vec.emplace_back(agent);
         }
         // m_tasksSet.insert(task);
     }
@@ -250,9 +250,9 @@ public:
         }
 
         // prepare for next query
-        for (size_t i = 0; i < m_agentsVec.size(); ++i)
+        for (size_t i = 0; i < agents_vec.size(); ++i)
         {
-            if (fixed_agents.find(m_agentsVec[i]) == fixed_agents.end())
+            if (fixed_agents.find(agents_vec[i]) == fixed_agents.end())
             {
                 ASGNode asg_node;
                 asg_node.I = next.I;
@@ -262,7 +262,7 @@ public:
                 // fix assignment for agents 0...i
                 for (size_t j = 0; j < i; ++j)
                 {
-                    const size_t& agent = m_agentsVec[j];
+                    const size_t& agent = agents_vec[j];
                     // asg_node.I.insert(std::make_pair<>(agent, next.solution.at(agent)));
                     const auto iter = solution.find(agent);
                     if (iter != solution.end())
@@ -280,17 +280,17 @@ public:
                     }
                 }
                 // asg_node.O.insert(
-                //     std::make_pair<>(m_agentsVec[i], next.solution.at(m_agentsVec[i])));
-                const auto iter = solution.find(m_agentsVec[i]);
+                //     std::make_pair<>(agents_vec[i], next.solution.at(agents_vec[i])));
+                const auto iter = solution.find(agents_vec[i]);
                 if (iter != solution.end())
                 {
-                    asg_node.O.insert(std::make_pair<>(m_agentsVec[i], iter->second));
+                    asg_node.O.insert(std::make_pair<>(agents_vec[i], iter->second));
                 }
                 else
                 {
                     // this agent should have a solution next
-                    // std::cout << "should have sol: " << m_agentsVec[i] << std::endl;
-                    asg_node.Iagents.insert(m_agentsVec[i]);
+                    // std::cout << "should have sol: " << agents_vec[i] << std::endl;
+                    asg_node.Iagents.insert(agents_vec[i]);
                 }
                 // std::cout << " consider adding: " << asg_node << std::endl;
                 asg_node.cost = constrained_matching(asg_node.I, asg_node.O,
