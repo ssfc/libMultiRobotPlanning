@@ -218,7 +218,7 @@ public:
         return result;
     }
 
-    long cost(const std::map<size_t, Location>& solution)
+    long get_cost(const std::map<size_t, Location>& solution)
     {
         long result = 0;
         for (const auto& entry : solution)
@@ -302,7 +302,7 @@ public:
             return std::numeric_limits<long>::max();
         }
 
-        return cost(solution);
+        return get_cost(solution);
     }
 };
 
