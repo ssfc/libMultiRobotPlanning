@@ -27,6 +27,27 @@ struct Vertex
 };
 
 
+struct Edge
+{
+    long cost;
+    long capacity;
+    long residualCapacity;
+    edge_t reverseEdge;
+    bool isReverseEdge;
+
+    Edge()
+        : cost(0),
+          capacity(0),
+          residualCapacity(0),
+          reverseEdge(),
+          isReverseEdge(false)
+    {}
+};
+
+
+using graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, Vertex, Edge>;
+
+
 class Assignment
 {
 private:
@@ -148,26 +169,6 @@ public:
         return cost;
     }
 
-protected:
-
-    struct Edge
-    {
-        long cost;
-        long capacity;
-        long residualCapacity;
-        edge_t reverseEdge;
-        bool isReverseEdge;
-
-        Edge()
-            : cost(0),
-              capacity(0),
-              residualCapacity(0),
-              reverseEdge(),
-              isReverseEdge(false)
-        {}
-    };
-
-    using graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, Vertex, Edge>;
 
 protected:
     void addOrUpdateEdge(vertex_t from, vertex_t to, long cost)
