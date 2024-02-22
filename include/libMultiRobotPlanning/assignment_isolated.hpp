@@ -163,7 +163,7 @@ protected:
         bool isReverseEdge;
     };
 
-    typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, Vertex, Edge> graph_t;
+    using graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, Vertex, Edge>;
 
 protected:
     void addOrUpdateEdge(vertex_t from, vertex_t to, long cost)
