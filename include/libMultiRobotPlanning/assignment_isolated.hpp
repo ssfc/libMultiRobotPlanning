@@ -54,12 +54,12 @@ class Assignment
 {
 private:
 
-    agentsMap_t m_agents;
+    agentsMap_t agents;
     tasksMap_t m_tasks;
 
 public:
     Assignment()
-        : m_agents(),
+        : agents(),
        m_tasks(),
        m_graph(),
        m_sourceVertex(),
@@ -73,7 +73,7 @@ public:
     {
         // std::cout << "Asg: clear" << std::endl;
         std::set<edge_t> edgesToRemove;
-        for (const auto& agent : m_agents)
+        for (const auto& agent : agents)
         {
             auto es = boost::out_edges(agent.right, m_graph);
             for (auto eit = es.first; eit != es.second; ++eit)
@@ -97,13 +97,13 @@ public:
         // std::cout << "set_cost: " << agent << "->" << task << " cost: " << cost <<
         // std::endl;
         // Lazily create vertex for agent
-        auto agentIter = m_agents.left.find(agent);
+        auto agentIter = agents.left.find(agent);
         vertex_t agentVertex;
-        if (agentIter == m_agents.left.end())
+        if (agentIter == agents.left.end())
         {
             agentVertex = boost::add_vertex(m_graph);
             addOrUpdateEdge(m_sourceVertex, agentVertex, 0);
-            m_agents.insert(agentsMapEntry_t(agent, agentVertex));
+            agents.insert(agentsMapEntry_t(agent, agentVertex));
         }
         else
         {
@@ -160,7 +160,7 @@ public:
                     vertex_t taskVertex = target(*eit2, m_graph);
                     if (m_graph[*eit2].residual_capacity == 0)
                     {
-                        solution[m_agents.right.at(agentVertex)] = m_tasks.right.at(taskVertex);
+                        solution[agents.right.at(agentVertex)] = m_tasks.right.at(taskVertex);
                         cost += m_graph[edge(agentVertex, taskVertex, m_graph).first].cost;
                         break;
                     }
