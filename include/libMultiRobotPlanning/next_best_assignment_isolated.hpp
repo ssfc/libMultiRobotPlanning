@@ -29,18 +29,18 @@ struct ASGNode
           cost(0)
     {}
 
-    bool operator<(const ASGNode& n) const
+    bool operator<(const ASGNode& node) const
     {
         // Our heap is a maximum heap, so we invert the comperator function here
-        return cost > n.cost;
+        return cost > node.cost;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const ASGNode& n)
+    friend std::ostream& operator<<(std::ostream& os, const ASGNode& node)
     {
-        os << "ASGNode with cost: " << n.cost << std::endl;
+        os << "ASGNode with cost: " << node.cost << std::endl;
         os << "  I: ";
 
-        for (const auto& c : n.I)
+        for (const auto& c : node.I)
         {
             os << c.first << "->" << c.second << ",";
         }
@@ -48,7 +48,7 @@ struct ASGNode
         os << std::endl;
         os << "  O: ";
 
-        for (const auto& c : n.O)
+        for (const auto& c : node.O)
         {
             os << c.first << "->" << c.second << ",";
         }
@@ -56,7 +56,7 @@ struct ASGNode
         os << std::endl;
         os << "  Iagents: ";
 
-        for (const auto& c : n.Iagents)
+        for (const auto& c : node.Iagents)
         {
             os << c << ",";
         }
@@ -64,7 +64,7 @@ struct ASGNode
         os << std::endl;
         os << "  Oagents: ";
 
-        for (const auto& c : n.Oagents)
+        for (const auto& c : node.Oagents)
         {
             os << c << ",";
         }
@@ -72,7 +72,7 @@ struct ASGNode
         os << std::endl;
         os << "  solution: ";
 
-        for (const auto& c : n.solution)
+        for (const auto& c : node.solution)
         {
             os << "    " << c.first << "->" << c.second << std::endl;
         }
