@@ -87,7 +87,7 @@ struct Node
 class NextBestAssignment
 {
 private:
-    Assignment m_assignment;
+    Assignment assignment;
     std::map<std::pair<size_t, Location>, long> m_cost;
     std::vector<size_t> m_agentsVec;
     std::set<size_t> m_agentsSet;
@@ -100,7 +100,7 @@ private:
 
 public:
     NextBestAssignment(const Assignment& assignment = Assignment())
-        : m_assignment(assignment),
+        : assignment(assignment),
           m_cost(),
           m_open(),
           num_matching(0)
@@ -229,13 +229,13 @@ protected:
     {
         // prepare assignment problem
 
-        m_assignment.clear();
+        assignment.clear();
 
         for (const auto& c : I)
         {
             if (Oagents.find(c.first) == Oagents.end())
             {
-                m_assignment.set_cost(c.first, c.second, 0);
+                assignment.set_cost(c.first, c.second, 0);
             }
         }
 
@@ -251,11 +251,11 @@ protected:
                 {
                     costOffset = 0;
                 }
-                m_assignment.set_cost(c.first.first, c.first.second, c.second + costOffset);
+                assignment.set_cost(c.first.first, c.first.second, c.second + costOffset);
             }
         }
 
-        m_assignment.solve(solution);
+        assignment.solve(solution);
         size_t matching = get_num_matching(solution);
 
         // std::cout << "constrainedMatching: internal Solution: " << std::endl;
