@@ -99,9 +99,9 @@ public:
         // std::cout << "set_cost: " << agent << "->" << task << " cost: " << cost <<
         // std::endl;
         // Lazily create vertex for agent
-        auto agentIter = agents.left.find(agent);
+        auto agent_iter = agents.left.find(agent);
         vertex_t agentVertex;
-        if (agentIter == agents.left.end())
+        if (agent_iter == agents.left.end())
         {
             agentVertex = boost::add_vertex(graph);
             addOrUpdateEdge(source_vertex, agentVertex, 0);
@@ -109,7 +109,7 @@ public:
         }
         else
         {
-            agentVertex = agentIter->second;
+            agentVertex = agent_iter->second;
         }
 
         // Lazily create vertex for task
