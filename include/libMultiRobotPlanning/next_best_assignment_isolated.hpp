@@ -15,7 +15,7 @@ class ASGNode
 {
 public:
     std::set<std::pair<size_t, Location> > solution_include;  // enforced assignment
-    std::set<std::pair<size_t, Location> > O;  // invalid assignments
+    std::set<std::pair<size_t, Location> > solution_exclude;  // invalid assignments
     std::set<size_t> Iagents;  // agents that must have an assignment
     std::set<size_t> Oagents;  // agents that should not have an assignment
     std::map<size_t, Location> solution;
@@ -24,7 +24,7 @@ public:
 public:
     ASGNode()
         : solution_include(),
-          O(),
+          solution_exclude(),
           Iagents(),
           Oagents(),
           solution(),
@@ -48,9 +48,9 @@ public:
         }
 
         os << std::endl;
-        os << "  O: ";
+        os << "  solution_exclude: ";
 
-        for (const auto& c : asg_node.O)
+        for (const auto& c : asg_node.solution_exclude)
         {
             os << c.first << "->" << c.second << ",";
         }
@@ -127,11 +127,11 @@ public:
     }
 
     // solution_include enforces that the respective pair is part of the solution
-    // O enforces that the respective pair is not part of the solution
+    // solution_exclude enforces that the respective pair is not part of the solution
     // Iagents enforces that these agents must have a task assignment
     // Oagents enforces that these agents should not have any task assignment
     long constrained_matching(const std::set<std::pair<size_t, Location> >& solution_include,
-                             const std::set<std::pair<size_t, Location> >& O,
+                             const std::set<std::pair<size_t, Location> >& solution_exclude,
                              const std::set<size_t>& Iagents,
                              const std::set<size_t>& Oagents,
                              std::map<size_t, Location>& solution)
@@ -150,7 +150,7 @@ public:
 
         for (const auto& c : map_cost)
         {
-            if (O.find(c.first) == O.end() && solution_include.find(c.first) == solution_include.end() &&
+            if (solution_exclude.find(c.first) == solution_exclude.end() && solution_include.find(c.first) == solution_include.end() &&
                 Oagents.find(c.first.first) == Oagents.end())
             {
                 long costOffset = 1e9;// TODO: what is a good value here?
@@ -205,10 +205,10 @@ public:
     // find first (optimal) solution with minimal cost
     void solve()
     {
-        const std::set<std::pair<size_t, Location> > solution_include, O;
+        const std::set<std::pair<size_t, Location> > solution_include, solution_exclude;
         const std::set<size_t> Iagents, Oagents;
         ASGNode asg_node;
-        asg_node.cost = constrained_matching(solution_include, O, Iagents, Oagents, asg_node.solution);
+        asg_node.cost = constrained_matching(solution_include, solution_exclude, Iagents, Oagents, asg_node.solution);
         asg_open.emplace(asg_node);
         num_matching = get_num_matching(asg_node.solution);
     }
@@ -256,7 +256,7 @@ public:
             {
                 ASGNode asg_node;
                 asg_node.solution_include = next.solution_include;
-                asg_node.O = next.O;
+                asg_node.solution_exclude = next.solution_exclude;
                 asg_node.Iagents = next.Iagents;
                 asg_node.Oagents = next.Oagents;
                 // fix assignment for agents 0...i
@@ -275,16 +275,16 @@ public:
                         // enforce that no task is allowed
                         asg_node.Oagents.insert(agent);
                         // for (const auto& task : m_tasksSet) {
-                        //   asg_node.O.insert(std::make_pair<>(agent, task));
+                        //   asg_node.solution_exclude.insert(std::make_pair<>(agent, task));
                         // }
                     }
                 }
-                // asg_node.O.insert(
+                // asg_node.solution_exclude.insert(
                 //     std::make_pair<>(agents_vec[i], next.solution.at(agents_vec[i])));
                 const auto iter = solution.find(agents_vec[i]);
                 if (iter != solution.end())
                 {
-                    asg_node.O.insert(std::make_pair<>(agents_vec[i], iter->second));
+                    asg_node.solution_exclude.insert(std::make_pair<>(agents_vec[i], iter->second));
                 }
                 else
                 {
@@ -293,7 +293,7 @@ public:
                     asg_node.Iagents.insert(agents_vec[i]);
                 }
                 // std::cout << " consider adding: " << asg_node << std::endl;
-                asg_node.cost = constrained_matching(asg_node.solution_include, asg_node.O,
+                asg_node.cost = constrained_matching(asg_node.solution_include, asg_node.solution_exclude,
                                                      asg_node.Iagents, asg_node.Oagents,
                                                      asg_node.solution);
 
