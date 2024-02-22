@@ -148,6 +148,12 @@ protected:
 
     struct Edge
     {
+        long cost;
+        long capacity;
+        long residualCapacity;
+        edge_t reverseEdge;
+        bool isReverseEdge;
+
         Edge()
             : cost(0),
               capacity(0),
@@ -155,12 +161,6 @@ protected:
               reverseEdge(),
               isReverseEdge(false)
         {}
-
-        long cost;
-        long capacity;
-        long residualCapacity;
-        edge_t reverseEdge;
-        bool isReverseEdge;
     };
 
     using graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, Vertex, Edge>;
