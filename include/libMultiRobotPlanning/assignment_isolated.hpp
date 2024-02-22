@@ -20,6 +20,13 @@ using tasksMap_t = boost::bimap<Location, vertex_t>;
 using tasksMapEntry_t = tasksMap_t::value_type;
 
 
+struct Vertex
+{
+    // boost::default_color_type color;
+    // edge_t predecessor;
+};
+
+
 class Assignment
 {
 private:
@@ -142,12 +149,6 @@ public:
     }
 
 protected:
-
-    struct Vertex
-    {
-        // boost::default_color_type color;
-        // edge_t predecessor;
-    };
 
     struct Edge
     {
