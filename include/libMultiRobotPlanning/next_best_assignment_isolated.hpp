@@ -11,8 +11,9 @@
 #include "assignment_isolated.hpp"
 
 
-struct ASGNode
+class ASGNode
 {
+public:
     std::set<std::pair<size_t, Location> > I;  // enforced assignment
     std::set<std::pair<size_t, Location> > O;  // invalid assignments
     std::set<size_t> Iagents;  // agents that must have an assignment
@@ -20,6 +21,7 @@ struct ASGNode
     std::map<size_t, Location> solution;
     long cost;
 
+public:
     ASGNode()
         : I(),
           O(),
