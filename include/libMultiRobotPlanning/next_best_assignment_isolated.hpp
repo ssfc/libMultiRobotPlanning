@@ -106,9 +106,9 @@ public:
           num_matching(0)
     {}
 
-    void setCost(const size_t& agent, const Location& task, long cost)
+    void set_cost(const size_t& agent, const Location& task, long cost)
     {
-        // std::cout << "setCost: " << agent << "->" << task << ": " << cost <<
+        // std::cout << "set_cost: " << agent << "->" << task << ": " << cost <<
         // std::endl;
         m_cost[std::make_pair<>(agent, task)] = cost;
         if (m_agentsSet.find(agent) == m_agentsSet.end())
@@ -235,7 +235,7 @@ protected:
         {
             if (Oagents.find(c.first) == Oagents.end())
             {
-                m_assignment.setCost(c.first, c.second, 0);
+                m_assignment.set_cost(c.first, c.second, 0);
             }
         }
 
@@ -251,7 +251,7 @@ protected:
                 {
                     costOffset = 0;
                 }
-                m_assignment.setCost(c.first.first, c.first.second, c.second + costOffset);
+                m_assignment.set_cost(c.first.first, c.first.second, c.second + costOffset);
             }
         }
 

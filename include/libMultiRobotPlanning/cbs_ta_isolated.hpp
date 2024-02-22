@@ -452,7 +452,7 @@ public:
         {
             for (const auto& this_goal : goals[i])
             {
-                m_assignment.setCost(i, this_goal, heuristic_value.getValue(
+                m_assignment.set_cost(i, this_goal, heuristic_value.getValue(
                                  Location(startStates[i].x, startStates[i].y), this_goal));
                 m_goals.insert(this_goal);
             }

@@ -59,9 +59,9 @@ public:
         }
     }
 
-    void setCost(const size_t& agent, const Location& task, long cost)
+    void set_cost(const size_t& agent, const Location& task, long cost)
     {
-        // std::cout << "setCost: " << agent << "->" << task << " cost: " << cost <<
+        // std::cout << "set_cost: " << agent << "->" << task << " cost: " << cost <<
         // std::endl;
         // Lazily create vertex for agent
         auto agentIter = m_agents.left.find(agent);
