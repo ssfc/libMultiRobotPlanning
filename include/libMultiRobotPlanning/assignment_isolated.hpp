@@ -94,6 +94,28 @@ public:
         }
     }
 
+    void addOrUpdateEdge(vertex_t from, vertex_t to, long cost)
+    {
+        auto e = boost::edge(from, to, graph);
+        if (e.second)
+        {
+            graph[e.first].cost = cost;
+            graph[graph[e.first].reverse_edge].cost = -cost;
+        }
+        else
+        {
+            auto e1 = boost::add_edge(from, to, graph);
+            graph[e1.first].cost = cost;
+            graph[e1.first].capacity = 1;
+            auto e2 = boost::add_edge(to, from, graph);
+            graph[e2.first].is_reverse_edge = true;
+            graph[e2.first].cost = -cost;
+            graph[e2.first].capacity = 0;
+            graph[e1.first].reverse_edge = e2.first;
+            graph[e2.first].reverse_edge = e1.first;
+        }
+    }
+
     void set_cost(const size_t& agent, const Location& task, long cost)
     {
         // std::cout << "set_cost: " << agent << "->" << task << " cost: " << cost <<
@@ -171,30 +193,6 @@ public:
         }
 
         return cost;
-    }
-
-
-protected:
-    void addOrUpdateEdge(vertex_t from, vertex_t to, long cost)
-    {
-        auto e = boost::edge(from, to, graph);
-        if (e.second)
-        {
-            graph[e.first].cost = cost;
-            graph[graph[e.first].reverse_edge].cost = -cost;
-        }
-        else
-        {
-            auto e1 = boost::add_edge(from, to, graph);
-            graph[e1.first].cost = cost;
-            graph[e1.first].capacity = 1;
-            auto e2 = boost::add_edge(to, from, graph);
-            graph[e2.first].is_reverse_edge = true;
-            graph[e2.first].cost = -cost;
-            graph[e2.first].capacity = 0;
-            graph[e1.first].reverse_edge = e2.first;
-            graph[e2.first].reverse_edge = e1.first;
-        }
     }
 };
 
