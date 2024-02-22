@@ -92,7 +92,7 @@ private:
     Assignment assignment;
     std::map<std::pair<size_t, Location>, long> map_cost;
     std::vector<size_t> agents_vec;
-    std::set<size_t> m_agentsSet;
+    std::set<size_t> agents_set;
     // std::set<Location> m_tasksSet;
     // size_t m_numAgents;
     // size_t m_numTasks;
@@ -113,9 +113,9 @@ public:
         // std::cout << "set_cost: " << agent << "->" << task << ": " << cost <<
         // std::endl;
         map_cost[std::make_pair<>(agent, task)] = cost;
-        if (m_agentsSet.find(agent) == m_agentsSet.end())
+        if (agents_set.find(agent) == agents_set.end())
         {
-            m_agentsSet.insert(agent);
+            agents_set.insert(agent);
             agents_vec.emplace_back(agent);
         }
         // m_tasksSet.insert(task);
