@@ -276,12 +276,12 @@ public:
         // }
 
         // check if all agents in Iagents have an assignment as requested
-        bool solutionValid = true;
+        bool solution_valid = true;
         for (const auto& agent : Iagents)
         {
             if (solution.find(agent) == solution.end())
             {
-                solutionValid = false;
+                solution_valid = false;
                 break;
             }
         }
@@ -291,12 +291,12 @@ public:
             const auto& iter = solution.find(c.first);
             if (iter == solution.end() || !(iter->second == c.second))
             {
-                solutionValid = false;
+                solution_valid = false;
                 break;
             }
         }
 
-        if (!solutionValid || matching < num_matching)
+        if (!solution_valid || matching < num_matching)
         {
             solution.clear();
             return std::numeric_limits<long>::max();
