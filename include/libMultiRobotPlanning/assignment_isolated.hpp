@@ -55,7 +55,7 @@ class Assignment
 private:
     agentsMap_t agents;
     tasksMap_t tasks;
-    graph_t m_graph;
+    graph_t graph;
     vertex_t m_sourceVertex;
     vertex_t m_sinkVertex;
 
@@ -63,12 +63,12 @@ public:
     Assignment()
         : agents(),
        tasks(),
-       m_graph(),
+       graph(),
        m_sourceVertex(),
        m_sinkVertex()
     {
-        m_sourceVertex = boost::add_vertex(m_graph);
-        m_sinkVertex = boost::add_vertex(m_graph);
+        m_sourceVertex = boost::add_vertex(graph);
+        m_sinkVertex = boost::add_vertex(graph);
     }
 
     void clear()
@@ -77,20 +77,20 @@ public:
         std::set<edge_t> edgesToRemove;
         for (const auto& agent : agents)
         {
-            auto es = boost::out_edges(agent.right, m_graph);
+            auto es = boost::out_edges(agent.right, graph);
             for (auto eit = es.first; eit != es.second; ++eit)
             {
-                if (!m_graph[*eit].is_reverse_edge)
+                if (!graph[*eit].is_reverse_edge)
                 {
                     edgesToRemove.insert(*eit);
-                    edgesToRemove.insert(m_graph[*eit].reverse_edge);
+                    edgesToRemove.insert(graph[*eit].reverse_edge);
                 }
             }
         }
 
         for (const auto& e : edgesToRemove)
         {
-            boost::remove_edge(e, m_graph);
+            boost::remove_edge(e, graph);
         }
     }
 
@@ -103,7 +103,7 @@ public:
         vertex_t agentVertex;
         if (agentIter == agents.left.end())
         {
-            agentVertex = boost::add_vertex(m_graph);
+            agentVertex = boost::add_vertex(graph);
             addOrUpdateEdge(m_sourceVertex, agentVertex, 0);
             agents.insert(agentsMapEntry_t(agent, agentVertex));
         }
@@ -117,7 +117,7 @@ public:
         vertex_t taskVertex;
         if (taskIter == tasks.left.end())
         {
-            taskVertex = boost::add_vertex(m_graph);
+            taskVertex = boost::add_vertex(graph);
             addOrUpdateEdge(taskVertex, m_sinkVertex, 0);
             tasks.insert(tasksMapEntry_t(task, taskVertex));
         }
@@ -135,35 +135,35 @@ public:
         using namespace boost;
 
         successive_shortest_path_nonnegative_weights(
-            m_graph, m_sourceVertex, m_sinkVertex,
-            boost::capacity_map(get(&Edge::capacity, m_graph))
-                .residual_capacity_map(get(&Edge::residual_capacity, m_graph))
-                .weight_map(get(&Edge::cost, m_graph))
-                .reverse_edge_map(get(&Edge::reverse_edge, m_graph)));
+            graph, m_sourceVertex, m_sinkVertex,
+            boost::capacity_map(get(&Edge::capacity, graph))
+                .residual_capacity_map(get(&Edge::residual_capacity, graph))
+                .weight_map(get(&Edge::cost, graph))
+                .reverse_edge_map(get(&Edge::reverse_edge, graph)));
 
         // long cost = find_flow_cost(
-        //   m_graph,
-        //   boost::capacity_map(get(&Edge::capacity, m_graph))
-        //   .residual_capacity_map(get(&Edge::residual_capacity, m_graph))
-        //   .weight_map(get(&Edge::cost, m_graph)));
+        //   graph,
+        //   boost::capacity_map(get(&Edge::capacity, graph))
+        //   .residual_capacity_map(get(&Edge::residual_capacity, graph))
+        //   .weight_map(get(&Edge::cost, graph)));
         long cost = 0;
 
         // find solution
         solution.clear();
-        auto es = out_edges(m_sourceVertex, m_graph);
+        auto es = out_edges(m_sourceVertex, graph);
         for (auto eit = es.first; eit != es.second; ++eit)
         {
-            vertex_t agentVertex = target(*eit, m_graph);
-            auto es2 = out_edges(agentVertex, m_graph);
+            vertex_t agentVertex = target(*eit, graph);
+            auto es2 = out_edges(agentVertex, graph);
             for (auto eit2 = es2.first; eit2 != es2.second; ++eit2)
             {
-                if (!m_graph[*eit2].is_reverse_edge)
+                if (!graph[*eit2].is_reverse_edge)
                 {
-                    vertex_t taskVertex = target(*eit2, m_graph);
-                    if (m_graph[*eit2].residual_capacity == 0)
+                    vertex_t taskVertex = target(*eit2, graph);
+                    if (graph[*eit2].residual_capacity == 0)
                     {
                         solution[agents.right.at(agentVertex)] = tasks.right.at(taskVertex);
-                        cost += m_graph[edge(agentVertex, taskVertex, m_graph).first].cost;
+                        cost += graph[edge(agentVertex, taskVertex, graph).first].cost;
                         break;
                     }
                 }
@@ -177,23 +177,23 @@ public:
 protected:
     void addOrUpdateEdge(vertex_t from, vertex_t to, long cost)
     {
-        auto e = boost::edge(from, to, m_graph);
+        auto e = boost::edge(from, to, graph);
         if (e.second)
         {
-            m_graph[e.first].cost = cost;
-            m_graph[m_graph[e.first].reverse_edge].cost = -cost;
+            graph[e.first].cost = cost;
+            graph[graph[e.first].reverse_edge].cost = -cost;
         }
         else
         {
-            auto e1 = boost::add_edge(from, to, m_graph);
-            m_graph[e1.first].cost = cost;
-            m_graph[e1.first].capacity = 1;
-            auto e2 = boost::add_edge(to, from, m_graph);
-            m_graph[e2.first].is_reverse_edge = true;
-            m_graph[e2.first].cost = -cost;
-            m_graph[e2.first].capacity = 0;
-            m_graph[e1.first].reverse_edge = e2.first;
-            m_graph[e2.first].reverse_edge = e1.first;
+            auto e1 = boost::add_edge(from, to, graph);
+            graph[e1.first].cost = cost;
+            graph[e1.first].capacity = 1;
+            auto e2 = boost::add_edge(to, from, graph);
+            graph[e2.first].is_reverse_edge = true;
+            graph[e2.first].cost = -cost;
+            graph[e2.first].capacity = 0;
+            graph[e1.first].reverse_edge = e2.first;
+            graph[e2.first].reverse_edge = e1.first;
         }
     }
 };
