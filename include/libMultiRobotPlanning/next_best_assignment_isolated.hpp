@@ -96,14 +96,14 @@ private:
     // size_t m_numTasks;
     // std::vector<long> m_costMatrix;
     std::priority_queue<Node> m_open;
-    size_t m_numMatching;
+    size_t num_matching;
 
 public:
     NextBestAssignment(const Assignment& assignment = Assignment())
         : m_assignment(assignment),
           m_cost(),
           m_open(),
-          m_numMatching(0)
+          num_matching(0)
     {}
 
     void setCost(const size_t& agent, const Location& task, long cost)
@@ -127,7 +127,7 @@ public:
         Node n;
         n.cost = constrainedMatching(I, O, Iagents, Oagents, n.solution);
         m_open.emplace(n);
-        m_numMatching = numMatching(n.solution);
+        num_matching = numMatching(n.solution);
     }
 
     // find next solution
@@ -279,7 +279,7 @@ protected:
             }
         }
 
-        if (!solutionValid || matching < m_numMatching)
+        if (!solutionValid || matching < num_matching)
         {
             solution.clear();
             return std::numeric_limits<long>::max();
