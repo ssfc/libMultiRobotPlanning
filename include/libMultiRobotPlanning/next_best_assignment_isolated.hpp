@@ -91,12 +91,10 @@ class NextBestAssignment
 private:
     Assignment assignment;
     std::map<std::pair<size_t, Location>, long> map_cost;
+
     std::vector<size_t> agents_vec;
     std::set<size_t> agents_set;
-    // std::set<Location> m_tasksSet;
-    // size_t m_numAgents;
-    // size_t m_numTasks;
-    // std::vector<long> m_costMatrix;
+
     std::priority_queue<ASGNode> asg_open;
     size_t num_matching;
 
