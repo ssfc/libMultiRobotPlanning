@@ -293,8 +293,10 @@ public:
                     asg_node.Iagents.insert(m_agentsVec[i]);
                 }
                 // std::cout << " consider adding: " << asg_node << std::endl;
-                asg_node.cost = constrained_matching(asg_node.I, asg_node.O, asg_node.Iagents, asg_node.Oagents,
+                asg_node.cost = constrained_matching(asg_node.I, asg_node.O,
+                                                     asg_node.Iagents, asg_node.Oagents,
                                                      asg_node.solution);
+
                 if (asg_node.solution.size() > 0)
                 {
                     asg_open.push(asg_node);
