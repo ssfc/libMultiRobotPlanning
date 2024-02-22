@@ -243,16 +243,16 @@ public:
         }
         long result = next.cost;
 
-        std::set<size_t> fixedAgents;
+        std::set<size_t> fixed_agents;
         for (const auto& c : next.I)
         {
-            fixedAgents.insert(c.first);
+            fixed_agents.insert(c.first);
         }
 
         // prepare for next query
         for (size_t i = 0; i < m_agentsVec.size(); ++i)
         {
-            if (fixedAgents.find(m_agentsVec[i]) == fixedAgents.end())
+            if (fixed_agents.find(m_agentsVec[i]) == fixed_agents.end())
             {
                 ASGNode asg_node;
                 asg_node.I = next.I;
