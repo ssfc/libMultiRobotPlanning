@@ -218,6 +218,16 @@ public:
         return result;
     }
 
+    long cost(const std::map<size_t, Location>& solution)
+    {
+        long result = 0;
+        for (const auto& entry : solution)
+        {
+            result += map_cost.at(entry);
+        }
+
+        return result;
+    }
 
     // I enforces that the respective pair is part of the solution
     // O enforces that the respective pair is not part of the solution
@@ -293,17 +303,6 @@ public:
         }
 
         return cost(solution);
-    }
-
-    long cost(const std::map<size_t, Location>& solution)
-    {
-        long result = 0;
-        for (const auto& entry : solution)
-        {
-            result += map_cost.at(entry);
-        }
-
-        return result;
     }
 };
 
