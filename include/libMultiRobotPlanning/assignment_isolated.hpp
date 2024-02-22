@@ -74,7 +74,7 @@ public:
     void clear()
     {
         // std::cout << "Asg: clear" << std::endl;
-        std::set<edge_t> edgesToRemove;
+        std::set<edge_t> edges_to_remove;
         for (const auto& agent : agents)
         {
             auto es = boost::out_edges(agent.right, graph);
@@ -82,13 +82,13 @@ public:
             {
                 if (!graph[*eit].is_reverse_edge)
                 {
-                    edgesToRemove.insert(*eit);
-                    edgesToRemove.insert(graph[*eit].reverse_edge);
+                    edges_to_remove.insert(*eit);
+                    edges_to_remove.insert(graph[*eit].reverse_edge);
                 }
             }
         }
 
-        for (const auto& e : edgesToRemove)
+        for (const auto& e : edges_to_remove)
         {
             boost::remove_edge(e, graph);
         }
