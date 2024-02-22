@@ -129,10 +129,10 @@ public:
     {
         const std::set<std::pair<size_t, Location> > I, O;
         const std::set<size_t> Iagents, Oagents;
-        ASGNode n;
-        n.cost = constrainedMatching(I, O, Iagents, Oagents, n.solution);
-        m_open.emplace(n);
-        num_matching = get_num_matching(n.solution);
+        ASGNode node;
+        node.cost = constrainedMatching(I, O, Iagents, Oagents, node.solution);
+        m_open.emplace(node);
+        num_matching = get_num_matching(node.solution);
     }
 
     // find next solution
