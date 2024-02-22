@@ -165,50 +165,50 @@ public:
         {
             if (fixedAgents.find(m_agentsVec[i]) == fixedAgents.end())
             {
-                ASGNode n;
-                n.I = next.I;
-                n.O = next.O;
-                n.Iagents = next.Iagents;
-                n.Oagents = next.Oagents;
+                ASGNode node;
+                node.I = next.I;
+                node.O = next.O;
+                node.Iagents = next.Iagents;
+                node.Oagents = next.Oagents;
                 // fix assignment for agents 0...i
                 for (size_t j = 0; j < i; ++j)
                 {
                     const size_t& agent = m_agentsVec[j];
-                    // n.I.insert(std::make_pair<>(agent, next.solution.at(agent)));
+                    // node.I.insert(std::make_pair<>(agent, next.solution.at(agent)));
                     const auto iter = solution.find(agent);
                     if (iter != solution.end())
                     {
-                        n.I.insert(std::make_pair<>(agent, iter->second));
+                        node.I.insert(std::make_pair<>(agent, iter->second));
                     }
                     else
                     {
                         // this agent should keep having no solution =>
                         // enforce that no task is allowed
-                        n.Oagents.insert(agent);
+                        node.Oagents.insert(agent);
                         // for (const auto& task : m_tasksSet) {
-                        //   n.O.insert(std::make_pair<>(agent, task));
+                        //   node.O.insert(std::make_pair<>(agent, task));
                         // }
                     }
                 }
-                // n.O.insert(
+                // node.O.insert(
                 //     std::make_pair<>(m_agentsVec[i], next.solution.at(m_agentsVec[i])));
                 const auto iter = solution.find(m_agentsVec[i]);
                 if (iter != solution.end())
                 {
-                    n.O.insert(std::make_pair<>(m_agentsVec[i], iter->second));
+                    node.O.insert(std::make_pair<>(m_agentsVec[i], iter->second));
                 }
                 else
                 {
                     // this agent should have a solution next
                     // std::cout << "should have sol: " << m_agentsVec[i] << std::endl;
-                    n.Iagents.insert(m_agentsVec[i]);
+                    node.Iagents.insert(m_agentsVec[i]);
                 }
-                // std::cout << " consider adding: " << n << std::endl;
-                n.cost = constrainedMatching(n.I, n.O, n.Iagents, n.Oagents, n.solution);
-                if (n.solution.size() > 0)
+                // std::cout << " consider adding: " << node << std::endl;
+                node.cost = constrainedMatching(node.I, node.O, node.Iagents, node.Oagents, node.solution);
+                if (node.solution.size() > 0)
                 {
-                    m_open.push(n);
-                    // std::cout << "add: " << n << std::endl;
+                    m_open.push(node);
+                    // std::cout << "add: " << node << std::endl;
                 }
             }
         }
