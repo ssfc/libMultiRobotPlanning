@@ -97,14 +97,14 @@ private:
     // size_t m_numAgents;
     // size_t m_numTasks;
     // std::vector<long> m_costMatrix;
-    std::priority_queue<ASGNode> m_open;
+    std::priority_queue<ASGNode> asg_open;
     size_t num_matching;
 
 public:
     NextBestAssignment(const Assignment& assignment = Assignment())
         : assignment(assignment),
           m_cost(),
-          m_open(),
+          asg_open(),
           num_matching(0)
     {}
 
@@ -133,7 +133,7 @@ public:
         const std::set<size_t> Iagents, Oagents;
         ASGNode node;
         node.cost = constrainedMatching(I, O, Iagents, Oagents, node.solution);
-        m_open.emplace(node);
+        asg_open.emplace(node);
         num_matching = get_num_matching(node.solution);
     }
 
@@ -141,14 +141,14 @@ public:
     long find_next_solution(std::map<size_t, Location>& solution)
     {
         solution.clear();
-        if (m_open.empty())
+        if (asg_open.empty())
         {
             return std::numeric_limits<long>::max();
         }
 
-        const ASGNode next = m_open.top();
+        const ASGNode next = asg_open.top();
         // std::cout << "next: " << next << std::endl;
-        m_open.pop();
+        asg_open.pop();
 
         for (const auto& entry : next.solution)
         {
@@ -209,7 +209,7 @@ public:
                 node.cost = constrainedMatching(node.I, node.O, node.Iagents, node.Oagents, node.solution);
                 if (node.solution.size() > 0)
                 {
-                    m_open.push(node);
+                    asg_open.push(node);
                     // std::cout << "add: " << node << std::endl;
                 }
             }
