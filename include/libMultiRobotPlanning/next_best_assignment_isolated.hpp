@@ -119,6 +119,11 @@ public:
         // m_tasksSet.insert(task);
     }
 
+    size_t get_num_matching(const std::map<size_t, Location>& solution)
+    {
+        return solution.size();
+    }
+
     // find first (optimal) solution with minimal cost
     void solve()
     {
@@ -297,11 +302,6 @@ protected:
         }
 
         return result;
-    }
-
-    size_t get_num_matching(const std::map<size_t, Location>& solution)
-    {
-        return solution.size();
     }
 };
 
