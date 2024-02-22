@@ -126,6 +126,82 @@ public:
         return solution.size();
     }
 
+    // I enforces that the respective pair is part of the solution
+    // O enforces that the respective pair is not part of the solution
+    // Iagents enforces that these agents must have a task assignment
+    // Oagents enforces that these agents should not have any task assignment
+    long constrainedMatching(const std::set<std::pair<size_t, Location> >& I,
+                             const std::set<std::pair<size_t, Location> >& O,
+                             const std::set<size_t>& Iagents,
+                             const std::set<size_t>& Oagents,
+                             std::map<size_t, Location>& solution)
+    {
+        // prepare assignment problem
+
+        assignment.clear();
+
+        for (const auto& c : I)
+        {
+            if (Oagents.find(c.first) == Oagents.end())
+            {
+                assignment.set_cost(c.first, c.second, 0);
+            }
+        }
+
+        for (const auto& c : map_cost)
+        {
+            if (O.find(c.first) == O.end() && I.find(c.first) == I.end() &&
+                Oagents.find(c.first.first) == Oagents.end())
+            {
+                long costOffset = 1e9;// TODO: what is a good value here?
+                // all agents that should have any solution will get a lower cost offset
+                // enforcing this agents inclusion in the result
+                if (Iagents.find(c.first.first) != Iagents.end())
+                {
+                    costOffset = 0;
+                }
+                assignment.set_cost(c.first.first, c.first.second, c.second + costOffset);
+            }
+        }
+
+        assignment.solve(solution);
+        size_t matching = get_num_matching(solution);
+
+        // std::cout << "constrainedMatching: internal Solution: " << std::endl;
+        // for (const auto& c : solution) {
+        //   std::cout << "    " << c.first << "->" << c.second << std::endl;
+        // }
+
+        // check if all agents in Iagents have an assignment as requested
+        bool solution_valid = true;
+        for (const auto& agent : Iagents)
+        {
+            if (solution.find(agent) == solution.end())
+            {
+                solution_valid = false;
+                break;
+            }
+        }
+        // check that I constraints have been fulfilled
+        for (const auto& c : I)
+        {
+            const auto& iter = solution.find(c.first);
+            if (iter == solution.end() || !(iter->second == c.second))
+            {
+                solution_valid = false;
+                break;
+            }
+        }
+
+        if (!solution_valid || matching < num_matching)
+        {
+            solution.clear();
+            return std::numeric_limits<long>::max();
+        }
+
+        return get_cost(solution);
+    }
+
     // find first (optimal) solution with minimal cost
     void solve()
     {
@@ -135,6 +211,17 @@ public:
         node.cost = constrainedMatching(I, O, Iagents, Oagents, node.solution);
         asg_open.emplace(node);
         num_matching = get_num_matching(node.solution);
+    }
+
+    long get_cost(const std::map<size_t, Location>& solution)
+    {
+        long result = 0;
+        for (const auto& entry : solution)
+        {
+            result += map_cost.at(entry);
+        }
+
+        return result;
     }
 
     // find next solution
@@ -216,93 +303,6 @@ public:
         }
 
         return result;
-    }
-
-    long get_cost(const std::map<size_t, Location>& solution)
-    {
-        long result = 0;
-        for (const auto& entry : solution)
-        {
-            result += map_cost.at(entry);
-        }
-
-        return result;
-    }
-
-    // I enforces that the respective pair is part of the solution
-    // O enforces that the respective pair is not part of the solution
-    // Iagents enforces that these agents must have a task assignment
-    // Oagents enforces that these agents should not have any task assignment
-    long constrainedMatching(const std::set<std::pair<size_t, Location> >& I,
-                             const std::set<std::pair<size_t, Location> >& O,
-                             const std::set<size_t>& Iagents,
-                             const std::set<size_t>& Oagents,
-                             std::map<size_t, Location>& solution)
-    {
-        // prepare assignment problem
-
-        assignment.clear();
-
-        for (const auto& c : I)
-        {
-            if (Oagents.find(c.first) == Oagents.end())
-            {
-                assignment.set_cost(c.first, c.second, 0);
-            }
-        }
-
-        for (const auto& c : map_cost)
-        {
-            if (O.find(c.first) == O.end() && I.find(c.first) == I.end() &&
-                Oagents.find(c.first.first) == Oagents.end())
-            {
-                long costOffset = 1e9;// TODO: what is a good value here?
-                // all agents that should have any solution will get a lower cost offset
-                // enforcing this agents inclusion in the result
-                if (Iagents.find(c.first.first) != Iagents.end())
-                {
-                    costOffset = 0;
-                }
-                assignment.set_cost(c.first.first, c.first.second, c.second + costOffset);
-            }
-        }
-
-        assignment.solve(solution);
-        size_t matching = get_num_matching(solution);
-
-        // std::cout << "constrainedMatching: internal Solution: " << std::endl;
-        // for (const auto& c : solution) {
-        //   std::cout << "    " << c.first << "->" << c.second << std::endl;
-        // }
-
-        // check if all agents in Iagents have an assignment as requested
-        bool solution_valid = true;
-        for (const auto& agent : Iagents)
-        {
-            if (solution.find(agent) == solution.end())
-            {
-                solution_valid = false;
-                break;
-            }
-        }
-        // check that I constraints have been fulfilled
-        for (const auto& c : I)
-        {
-            const auto& iter = solution.find(c.first);
-            if (iter == solution.end() || !(iter->second == c.second))
-            {
-                solution_valid = false;
-                break;
-            }
-        }
-
-        if (!solution_valid || matching < num_matching)
-        {
-            solution.clear();
-            return std::numeric_limits<long>::max();
-        }
-
-        return get_cost(solution);
     }
 };
 
