@@ -34,14 +34,14 @@ struct Edge
     long cost;
     long capacity;
     long residual_capacity;
-    edge_t reverseEdge;
+    edge_t reverse_edge;
     bool isReverseEdge;
 
     Edge()
         : cost(0),
           capacity(0),
           residual_capacity(0),
-          reverseEdge(),
+          reverse_edge(),
           isReverseEdge(false)
     {}
 };
@@ -81,7 +81,7 @@ public:
                 if (!m_graph[*eit].isReverseEdge)
                 {
                     edgesToRemove.insert(*eit);
-                    edgesToRemove.insert(m_graph[*eit].reverseEdge);
+                    edgesToRemove.insert(m_graph[*eit].reverse_edge);
                 }
             }
         }
@@ -137,7 +137,7 @@ public:
             boost::capacity_map(get(&Edge::capacity, m_graph))
                 .residual_capacity_map(get(&Edge::residual_capacity, m_graph))
                 .weight_map(get(&Edge::cost, m_graph))
-                .reverse_edge_map(get(&Edge::reverseEdge, m_graph)));
+                .reverse_edge_map(get(&Edge::reverse_edge, m_graph)));
 
         // long cost = find_flow_cost(
         //   m_graph,
@@ -179,7 +179,7 @@ protected:
         if (e.second)
         {
             m_graph[e.first].cost = cost;
-            m_graph[m_graph[e.first].reverseEdge].cost = -cost;
+            m_graph[m_graph[e.first].reverse_edge].cost = -cost;
         }
         else
         {
@@ -190,8 +190,8 @@ protected:
             m_graph[e2.first].isReverseEdge = true;
             m_graph[e2.first].cost = -cost;
             m_graph[e2.first].capacity = 0;
-            m_graph[e1.first].reverseEdge = e2.first;
-            m_graph[e2.first].reverseEdge = e1.first;
+            m_graph[e1.first].reverse_edge = e2.first;
+            m_graph[e2.first].reverse_edge = e1.first;
         }
     }
 
