@@ -53,9 +53,11 @@ using graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirecti
 class Assignment
 {
 private:
-
     agentsMap_t agents;
     tasksMap_t tasks;
+    graph_t m_graph;
+    vertex_t m_sourceVertex;
+    vertex_t m_sinkVertex;
 
 public:
     Assignment()
@@ -194,11 +196,6 @@ protected:
             m_graph[e2.first].reverse_edge = e1.first;
         }
     }
-
-private:
-    graph_t m_graph;
-    vertex_t m_sourceVertex;
-    vertex_t m_sinkVertex;
 };
 
 
