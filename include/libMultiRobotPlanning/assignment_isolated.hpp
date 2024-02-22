@@ -35,14 +35,14 @@ struct Edge
     long capacity;
     long residual_capacity;
     edge_t reverse_edge;
-    bool isReverseEdge;
+    bool is_reverse_edge;
 
     Edge()
         : cost(0),
           capacity(0),
           residual_capacity(0),
           reverse_edge(),
-          isReverseEdge(false)
+          is_reverse_edge(false)
     {}
 };
 
@@ -78,7 +78,7 @@ public:
             auto es = boost::out_edges(agent.right, m_graph);
             for (auto eit = es.first; eit != es.second; ++eit)
             {
-                if (!m_graph[*eit].isReverseEdge)
+                if (!m_graph[*eit].is_reverse_edge)
                 {
                     edgesToRemove.insert(*eit);
                     edgesToRemove.insert(m_graph[*eit].reverse_edge);
@@ -155,7 +155,7 @@ public:
             auto es2 = out_edges(agentVertex, m_graph);
             for (auto eit2 = es2.first; eit2 != es2.second; ++eit2)
             {
-                if (!m_graph[*eit2].isReverseEdge)
+                if (!m_graph[*eit2].is_reverse_edge)
                 {
                     vertex_t taskVertex = target(*eit2, m_graph);
                     if (m_graph[*eit2].residual_capacity == 0)
@@ -187,7 +187,7 @@ protected:
             m_graph[e1.first].cost = cost;
             m_graph[e1.first].capacity = 1;
             auto e2 = boost::add_edge(to, from, m_graph);
-            m_graph[e2.first].isReverseEdge = true;
+            m_graph[e2.first].is_reverse_edge = true;
             m_graph[e2.first].cost = -cost;
             m_graph[e2.first].capacity = 0;
             m_graph[e1.first].reverse_edge = e2.first;
