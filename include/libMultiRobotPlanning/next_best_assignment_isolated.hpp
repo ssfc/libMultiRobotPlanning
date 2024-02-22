@@ -127,7 +127,7 @@ public:
         Node n;
         n.cost = constrainedMatching(I, O, Iagents, Oagents, n.solution);
         m_open.emplace(n);
-        num_matching = numMatching(n.solution);
+        num_matching = get_num_matching(n.solution);
     }
 
     // find next solution
@@ -251,7 +251,7 @@ protected:
         }
 
         m_assignment.solve(solution);
-        size_t matching = numMatching(solution);
+        size_t matching = get_num_matching(solution);
 
         // std::cout << "constrainedMatching: internal Solution: " << std::endl;
         // for (const auto& c : solution) {
@@ -299,7 +299,7 @@ protected:
         return result;
     }
 
-    size_t numMatching(const std::map<size_t, Location>& solution)
+    size_t get_num_matching(const std::map<size_t, Location>& solution)
     {
         return solution.size();
     }
