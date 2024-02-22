@@ -31,18 +31,18 @@ public:
           cost(0)
     {}
 
-    bool operator<(const ASGNode& node) const
+    bool operator<(const ASGNode& asg_node) const
     {
         // Our heap is a maximum heap, so we invert the comperator function here
-        return cost > node.cost;
+        return cost > asg_node.cost;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const ASGNode& node)
+    friend std::ostream& operator<<(std::ostream& os, const ASGNode& asg_node)
     {
-        os << "ASGNode with cost: " << node.cost << std::endl;
+        os << "ASGNode with cost: " << asg_node.cost << std::endl;
         os << "  I: ";
 
-        for (const auto& c : node.I)
+        for (const auto& c : asg_node.I)
         {
             os << c.first << "->" << c.second << ",";
         }
@@ -50,7 +50,7 @@ public:
         os << std::endl;
         os << "  O: ";
 
-        for (const auto& c : node.O)
+        for (const auto& c : asg_node.O)
         {
             os << c.first << "->" << c.second << ",";
         }
@@ -58,7 +58,7 @@ public:
         os << std::endl;
         os << "  Iagents: ";
 
-        for (const auto& c : node.Iagents)
+        for (const auto& c : asg_node.Iagents)
         {
             os << c << ",";
         }
@@ -66,7 +66,7 @@ public:
         os << std::endl;
         os << "  Oagents: ";
 
-        for (const auto& c : node.Oagents)
+        for (const auto& c : asg_node.Oagents)
         {
             os << c << ",";
         }
@@ -74,7 +74,7 @@ public:
         os << std::endl;
         os << "  solution: ";
 
-        for (const auto& c : node.solution)
+        for (const auto& c : asg_node.solution)
         {
             os << "    " << c.first << "->" << c.second << std::endl;
         }
@@ -207,10 +207,10 @@ public:
     {
         const std::set<std::pair<size_t, Location> > I, O;
         const std::set<size_t> Iagents, Oagents;
-        ASGNode node;
-        node.cost = constrained_matching(I, O, Iagents, Oagents, node.solution);
-        asg_open.emplace(node);
-        num_matching = get_num_matching(node.solution);
+        ASGNode asg_node;
+        asg_node.cost = constrained_matching(I, O, Iagents, Oagents, asg_node.solution);
+        asg_open.emplace(asg_node);
+        num_matching = get_num_matching(asg_node.solution);
     }
 
     long get_cost(const std::map<size_t, Location>& solution)
@@ -254,50 +254,51 @@ public:
         {
             if (fixedAgents.find(m_agentsVec[i]) == fixedAgents.end())
             {
-                ASGNode node;
-                node.I = next.I;
-                node.O = next.O;
-                node.Iagents = next.Iagents;
-                node.Oagents = next.Oagents;
+                ASGNode asg_node;
+                asg_node.I = next.I;
+                asg_node.O = next.O;
+                asg_node.Iagents = next.Iagents;
+                asg_node.Oagents = next.Oagents;
                 // fix assignment for agents 0...i
                 for (size_t j = 0; j < i; ++j)
                 {
                     const size_t& agent = m_agentsVec[j];
-                    // node.I.insert(std::make_pair<>(agent, next.solution.at(agent)));
+                    // asg_node.I.insert(std::make_pair<>(agent, next.solution.at(agent)));
                     const auto iter = solution.find(agent);
                     if (iter != solution.end())
                     {
-                        node.I.insert(std::make_pair<>(agent, iter->second));
+                        asg_node.I.insert(std::make_pair<>(agent, iter->second));
                     }
                     else
                     {
                         // this agent should keep having no solution =>
                         // enforce that no task is allowed
-                        node.Oagents.insert(agent);
+                        asg_node.Oagents.insert(agent);
                         // for (const auto& task : m_tasksSet) {
-                        //   node.O.insert(std::make_pair<>(agent, task));
+                        //   asg_node.O.insert(std::make_pair<>(agent, task));
                         // }
                     }
                 }
-                // node.O.insert(
+                // asg_node.O.insert(
                 //     std::make_pair<>(m_agentsVec[i], next.solution.at(m_agentsVec[i])));
                 const auto iter = solution.find(m_agentsVec[i]);
                 if (iter != solution.end())
                 {
-                    node.O.insert(std::make_pair<>(m_agentsVec[i], iter->second));
+                    asg_node.O.insert(std::make_pair<>(m_agentsVec[i], iter->second));
                 }
                 else
                 {
                     // this agent should have a solution next
                     // std::cout << "should have sol: " << m_agentsVec[i] << std::endl;
-                    node.Iagents.insert(m_agentsVec[i]);
+                    asg_node.Iagents.insert(m_agentsVec[i]);
                 }
-                // std::cout << " consider adding: " << node << std::endl;
-                node.cost = constrained_matching(node.I, node.O, node.Iagents, node.Oagents, node.solution);
-                if (node.solution.size() > 0)
+                // std::cout << " consider adding: " << asg_node << std::endl;
+                asg_node.cost = constrained_matching(asg_node.I, asg_node.O, asg_node.Iagents, asg_node.Oagents,
+                                                     asg_node.solution);
+                if (asg_node.solution.size() > 0)
                 {
-                    asg_open.push(node);
-                    // std::cout << "add: " << node << std::endl;
+                    asg_open.push(asg_node);
+                    // std::cout << "add: " << asg_node << std::endl;
                 }
             }
         }
