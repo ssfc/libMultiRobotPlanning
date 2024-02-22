@@ -14,8 +14,10 @@
 using graphTraits_t = boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::bidirectionalS>;
 using vertex_t = graphTraits_t::vertex_descriptor;
 using edge_t = graphTraits_t::edge_descriptor;
+
 using agentsMap_t = boost::bimap<size_t, vertex_t>;
 using agentsMapEntry_t = agentsMap_t::value_type;
+
 using tasksMap_t = boost::bimap<Location, vertex_t>;
 using tasksMapEntry_t = tasksMap_t::value_type;
 
@@ -31,14 +33,14 @@ struct Edge
 {
     long cost;
     long capacity;
-    long residualCapacity;
+    long residual_capacity;
     edge_t reverseEdge;
     bool isReverseEdge;
 
     Edge()
         : cost(0),
           capacity(0),
-          residualCapacity(0),
+          residual_capacity(0),
           reverseEdge(),
           isReverseEdge(false)
     {}
@@ -133,14 +135,14 @@ public:
         successive_shortest_path_nonnegative_weights(
             m_graph, m_sourceVertex, m_sinkVertex,
             boost::capacity_map(get(&Edge::capacity, m_graph))
-                .residual_capacity_map(get(&Edge::residualCapacity, m_graph))
+                .residual_capacity_map(get(&Edge::residual_capacity, m_graph))
                 .weight_map(get(&Edge::cost, m_graph))
                 .reverse_edge_map(get(&Edge::reverseEdge, m_graph)));
 
         // long cost = find_flow_cost(
         //   m_graph,
         //   boost::capacity_map(get(&Edge::capacity, m_graph))
-        //   .residual_capacity_map(get(&Edge::residualCapacity, m_graph))
+        //   .residual_capacity_map(get(&Edge::residual_capacity, m_graph))
         //   .weight_map(get(&Edge::cost, m_graph)));
         long cost = 0;
 
@@ -156,7 +158,7 @@ public:
                 if (!m_graph[*eit2].isReverseEdge)
                 {
                     vertex_t taskVertex = target(*eit2, m_graph);
-                    if (m_graph[*eit2].residualCapacity == 0)
+                    if (m_graph[*eit2].residual_capacity == 0)
                     {
                         solution[m_agents.right.at(agentVertex)] = m_tasks.right.at(taskVertex);
                         cost += m_graph[edge(agentVertex, taskVertex, m_graph).first].cost;
