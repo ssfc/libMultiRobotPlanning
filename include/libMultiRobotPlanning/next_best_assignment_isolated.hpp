@@ -90,7 +90,7 @@ class NextBestAssignment
 {
 private:
     Assignment assignment;
-    std::map<std::pair<size_t, Location>, long> m_cost;
+    std::map<std::pair<size_t, Location>, long> map_cost;
     std::vector<size_t> m_agentsVec;
     std::set<size_t> m_agentsSet;
     // std::set<Location> m_tasksSet;
@@ -103,7 +103,7 @@ private:
 public:
     NextBestAssignment(const Assignment& assignment = Assignment())
         : assignment(assignment),
-          m_cost(),
+          map_cost(),
           asg_open(),
           num_matching(0)
     {}
@@ -112,7 +112,7 @@ public:
     {
         // std::cout << "set_cost: " << agent << "->" << task << ": " << cost <<
         // std::endl;
-        m_cost[std::make_pair<>(agent, task)] = cost;
+        map_cost[std::make_pair<>(agent, task)] = cost;
         if (m_agentsSet.find(agent) == m_agentsSet.end())
         {
             m_agentsSet.insert(agent);
@@ -241,7 +241,7 @@ protected:
             }
         }
 
-        for (const auto& c : m_cost)
+        for (const auto& c : map_cost)
         {
             if (O.find(c.first) == O.end() && I.find(c.first) == I.end() &&
                 Oagents.find(c.first.first) == Oagents.end())
@@ -300,7 +300,7 @@ protected:
         long result = 0;
         for (const auto& entry : solution)
         {
-            result += m_cost.at(entry);
+            result += map_cost.at(entry);
         }
 
         return result;
