@@ -94,7 +94,7 @@ public:
         }
     }
 
-    void addOrUpdateEdge(vertex_t from, vertex_t to, long cost)
+    void add_or_update_edge(vertex_t from, vertex_t to, long cost)
     {
         auto e = boost::edge(from, to, graph);
         if (e.second)
@@ -126,7 +126,7 @@ public:
         if (agent_iter == agents.left.end())
         {
             agent_vertex = boost::add_vertex(graph);
-            addOrUpdateEdge(source_vertex, agent_vertex, 0);
+            add_or_update_edge(source_vertex, agent_vertex, 0);
             agents.insert(agentsMapEntry_t(agent, agent_vertex));
         }
         else
@@ -140,7 +140,7 @@ public:
         if (taskIter == tasks.left.end())
         {
             taskVertex = boost::add_vertex(graph);
-            addOrUpdateEdge(taskVertex, sink_vertex, 0);
+            add_or_update_edge(taskVertex, sink_vertex, 0);
             tasks.insert(tasksMapEntry_t(task, taskVertex));
         }
         else
@@ -148,7 +148,7 @@ public:
             taskVertex = taskIter->second;
         }
 
-        addOrUpdateEdge(agent_vertex, taskVertex, cost);
+        add_or_update_edge(agent_vertex, taskVertex, cost);
     }
 
     // find first (optimal) solution with minimal cost
