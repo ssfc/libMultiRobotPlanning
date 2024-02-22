@@ -57,7 +57,7 @@ private:
     tasksMap_t tasks;
     graph_t graph;
     vertex_t source_vertex;
-    vertex_t m_sinkVertex;
+    vertex_t sink_vertex;
 
 public:
     Assignment()
@@ -65,10 +65,10 @@ public:
        tasks(),
        graph(),
        source_vertex(),
-       m_sinkVertex()
+       sink_vertex()
     {
         source_vertex = boost::add_vertex(graph);
-        m_sinkVertex = boost::add_vertex(graph);
+        sink_vertex = boost::add_vertex(graph);
     }
 
     void clear()
@@ -118,7 +118,7 @@ public:
         if (taskIter == tasks.left.end())
         {
             taskVertex = boost::add_vertex(graph);
-            addOrUpdateEdge(taskVertex, m_sinkVertex, 0);
+            addOrUpdateEdge(taskVertex, sink_vertex, 0);
             tasks.insert(tasksMapEntry_t(task, taskVertex));
         }
         else
@@ -135,7 +135,7 @@ public:
         using namespace boost;
 
         successive_shortest_path_nonnegative_weights(
-            graph, source_vertex, m_sinkVertex,
+            graph, source_vertex, sink_vertex,
             boost::capacity_map(get(&Edge::capacity, graph))
                 .residual_capacity_map(get(&Edge::residual_capacity, graph))
                 .weight_map(get(&Edge::cost, graph))
