@@ -218,7 +218,7 @@ public:
         return result;
     }
 
-protected:
+
     // I enforces that the respective pair is part of the solution
     // O enforces that the respective pair is not part of the solution
     // Iagents enforces that these agents must have a task assignment
