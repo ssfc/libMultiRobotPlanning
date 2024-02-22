@@ -100,16 +100,16 @@ public:
         // std::endl;
         // Lazily create vertex for agent
         auto agent_iter = agents.left.find(agent);
-        vertex_t agentVertex;
+        vertex_t agent_vertex;
         if (agent_iter == agents.left.end())
         {
-            agentVertex = boost::add_vertex(graph);
-            addOrUpdateEdge(source_vertex, agentVertex, 0);
-            agents.insert(agentsMapEntry_t(agent, agentVertex));
+            agent_vertex = boost::add_vertex(graph);
+            addOrUpdateEdge(source_vertex, agent_vertex, 0);
+            agents.insert(agentsMapEntry_t(agent, agent_vertex));
         }
         else
         {
-            agentVertex = agent_iter->second;
+            agent_vertex = agent_iter->second;
         }
 
         // Lazily create vertex for task
@@ -126,7 +126,7 @@ public:
             taskVertex = taskIter->second;
         }
 
-        addOrUpdateEdge(agentVertex, taskVertex, cost);
+        addOrUpdateEdge(agent_vertex, taskVertex, cost);
     }
 
     // find first (optimal) solution with minimal cost
@@ -153,8 +153,8 @@ public:
         auto es = out_edges(source_vertex, graph);
         for (auto eit = es.first; eit != es.second; ++eit)
         {
-            vertex_t agentVertex = target(*eit, graph);
-            auto es2 = out_edges(agentVertex, graph);
+            vertex_t agent_vertex = target(*eit, graph);
+            auto es2 = out_edges(agent_vertex, graph);
             for (auto eit2 = es2.first; eit2 != es2.second; ++eit2)
             {
                 if (!graph[*eit2].is_reverse_edge)
@@ -162,8 +162,8 @@ public:
                     vertex_t taskVertex = target(*eit2, graph);
                     if (graph[*eit2].residual_capacity == 0)
                     {
-                        solution[agents.right.at(agentVertex)] = tasks.right.at(taskVertex);
-                        cost += graph[edge(agentVertex, taskVertex, graph).first].cost;
+                        solution[agents.right.at(agent_vertex)] = tasks.right.at(taskVertex);
+                        cost += graph[edge(agent_vertex, taskVertex, graph).first].cost;
                         break;
                     }
                 }
