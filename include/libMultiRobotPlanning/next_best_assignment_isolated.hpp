@@ -130,7 +130,7 @@ public:
     // O enforces that the respective pair is not part of the solution
     // Iagents enforces that these agents must have a task assignment
     // Oagents enforces that these agents should not have any task assignment
-    long constrainedMatching(const std::set<std::pair<size_t, Location> >& I,
+    long constrained_matching(const std::set<std::pair<size_t, Location> >& I,
                              const std::set<std::pair<size_t, Location> >& O,
                              const std::set<size_t>& Iagents,
                              const std::set<size_t>& Oagents,
@@ -167,7 +167,7 @@ public:
         assignment.solve(solution);
         size_t matching = get_num_matching(solution);
 
-        // std::cout << "constrainedMatching: internal Solution: " << std::endl;
+        // std::cout << "constrained_matching: internal Solution: " << std::endl;
         // for (const auto& c : solution) {
         //   std::cout << "    " << c.first << "->" << c.second << std::endl;
         // }
@@ -208,7 +208,7 @@ public:
         const std::set<std::pair<size_t, Location> > I, O;
         const std::set<size_t> Iagents, Oagents;
         ASGNode node;
-        node.cost = constrainedMatching(I, O, Iagents, Oagents, node.solution);
+        node.cost = constrained_matching(I, O, Iagents, Oagents, node.solution);
         asg_open.emplace(node);
         num_matching = get_num_matching(node.solution);
     }
@@ -293,7 +293,7 @@ public:
                     node.Iagents.insert(m_agentsVec[i]);
                 }
                 // std::cout << " consider adding: " << node << std::endl;
-                node.cost = constrainedMatching(node.I, node.O, node.Iagents, node.Oagents, node.solution);
+                node.cost = constrained_matching(node.I, node.O, node.Iagents, node.Oagents, node.solution);
                 if (node.solution.size() > 0)
                 {
                     asg_open.push(node);

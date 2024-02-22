@@ -414,7 +414,7 @@ private:
     const Location* goal;
     const Constraints* agent_constraints;
     int last_goal_constraint;
-    NextBestAssignment m_assignment;
+    NextBestAssignment next_best_assignment;
     size_t m_maxTaskAssignments;
     size_t num_task_assignments;
     int num_expanded_high_level_nodes;
@@ -452,13 +452,13 @@ public:
         {
             for (const auto& this_goal : goals[i])
             {
-                m_assignment.set_cost(i, this_goal, heuristic_value.getValue(
+                next_best_assignment.set_cost(i, this_goal, heuristic_value.getValue(
                                  Location(startStates[i].x, startStates[i].y), this_goal));
                 m_goals.insert(this_goal);
             }
         }
 
-        m_assignment.solve();
+        next_best_assignment.solve();
     }
 
     void set_low_level_context(size_t input_agentIdx, const Constraints* input_constraints, const Location* task)
@@ -680,7 +680,7 @@ public:
             return;
         }
 
-        int64_t cost = m_assignment.find_next_solution(tasks);
+        int64_t cost = next_best_assignment.find_next_solution(tasks);
         if (!tasks.empty())
         {
             std::cout << "nextTaskAssignment: cost: " << cost << std::endl;
