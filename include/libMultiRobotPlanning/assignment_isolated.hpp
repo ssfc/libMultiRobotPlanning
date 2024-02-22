@@ -136,19 +136,19 @@ public:
 
         // Lazily create vertex for task
         auto taskIter = tasks.left.find(task);
-        vertex_t taskVertex;
+        vertex_t task_vertex;
         if (taskIter == tasks.left.end())
         {
-            taskVertex = boost::add_vertex(graph);
-            add_or_update_edge(taskVertex, sink_vertex, 0);
-            tasks.insert(tasksMapEntry_t(task, taskVertex));
+            task_vertex = boost::add_vertex(graph);
+            add_or_update_edge(task_vertex, sink_vertex, 0);
+            tasks.insert(tasksMapEntry_t(task, task_vertex));
         }
         else
         {
-            taskVertex = taskIter->second;
+            task_vertex = taskIter->second;
         }
 
-        add_or_update_edge(agent_vertex, taskVertex, cost);
+        add_or_update_edge(agent_vertex, task_vertex, cost);
     }
 
     // find first (optimal) solution with minimal cost
@@ -181,11 +181,11 @@ public:
             {
                 if (!graph[*eit2].is_reverse_edge)
                 {
-                    vertex_t taskVertex = target(*eit2, graph);
+                    vertex_t task_vertex = target(*eit2, graph);
                     if (graph[*eit2].residual_capacity == 0)
                     {
-                        solution[agents.right.at(agent_vertex)] = tasks.right.at(taskVertex);
-                        cost += graph[edge(agent_vertex, taskVertex, graph).first].cost;
+                        solution[agents.right.at(agent_vertex)] = tasks.right.at(task_vertex);
+                        cost += graph[edge(agent_vertex, task_vertex, graph).first].cost;
                         break;
                     }
                 }
