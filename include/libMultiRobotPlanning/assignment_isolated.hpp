@@ -56,7 +56,7 @@ private:
     agentsMap_t agents;
     tasksMap_t tasks;
     graph_t graph;
-    vertex_t m_sourceVertex;
+    vertex_t source_vertex;
     vertex_t m_sinkVertex;
 
 public:
@@ -64,10 +64,10 @@ public:
         : agents(),
        tasks(),
        graph(),
-       m_sourceVertex(),
+       source_vertex(),
        m_sinkVertex()
     {
-        m_sourceVertex = boost::add_vertex(graph);
+        source_vertex = boost::add_vertex(graph);
         m_sinkVertex = boost::add_vertex(graph);
     }
 
@@ -104,7 +104,7 @@ public:
         if (agentIter == agents.left.end())
         {
             agentVertex = boost::add_vertex(graph);
-            addOrUpdateEdge(m_sourceVertex, agentVertex, 0);
+            addOrUpdateEdge(source_vertex, agentVertex, 0);
             agents.insert(agentsMapEntry_t(agent, agentVertex));
         }
         else
@@ -135,7 +135,7 @@ public:
         using namespace boost;
 
         successive_shortest_path_nonnegative_weights(
-            graph, m_sourceVertex, m_sinkVertex,
+            graph, source_vertex, m_sinkVertex,
             boost::capacity_map(get(&Edge::capacity, graph))
                 .residual_capacity_map(get(&Edge::residual_capacity, graph))
                 .weight_map(get(&Edge::cost, graph))
@@ -150,7 +150,7 @@ public:
 
         // find solution
         solution.clear();
-        auto es = out_edges(m_sourceVertex, graph);
+        auto es = out_edges(source_vertex, graph);
         for (auto eit = es.first; eit != es.second; ++eit)
         {
             vertex_t agentVertex = target(*eit, graph);
