@@ -55,12 +55,12 @@ class Assignment
 private:
 
     agentsMap_t agents;
-    tasksMap_t m_tasks;
+    tasksMap_t tasks;
 
 public:
     Assignment()
         : agents(),
-       m_tasks(),
+       tasks(),
        m_graph(),
        m_sourceVertex(),
        m_sinkVertex()
@@ -111,13 +111,13 @@ public:
         }
 
         // Lazily create vertex for task
-        auto taskIter = m_tasks.left.find(task);
+        auto taskIter = tasks.left.find(task);
         vertex_t taskVertex;
-        if (taskIter == m_tasks.left.end())
+        if (taskIter == tasks.left.end())
         {
             taskVertex = boost::add_vertex(m_graph);
             addOrUpdateEdge(taskVertex, m_sinkVertex, 0);
-            m_tasks.insert(tasksMapEntry_t(task, taskVertex));
+            tasks.insert(tasksMapEntry_t(task, taskVertex));
         }
         else
         {
@@ -160,7 +160,7 @@ public:
                     vertex_t taskVertex = target(*eit2, m_graph);
                     if (m_graph[*eit2].residual_capacity == 0)
                     {
-                        solution[agents.right.at(agentVertex)] = m_tasks.right.at(taskVertex);
+                        solution[agents.right.at(agentVertex)] = tasks.right.at(taskVertex);
                         cost += m_graph[edge(agentVertex, taskVertex, m_graph).first].cost;
                         break;
                     }
