@@ -680,7 +680,7 @@ public:
             return;
         }
 
-        int64_t cost = m_assignment.nextSolution(tasks);
+        int64_t cost = m_assignment.find_next_solution(tasks);
         if (!tasks.empty())
         {
             std::cout << "nextTaskAssignment: cost: " << cost << std::endl;

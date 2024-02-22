@@ -136,7 +136,7 @@ public:
     }
 
     // find next solution
-    long nextSolution(std::map<size_t, Location>& solution)
+    long find_next_solution(std::map<size_t, Location>& solution)
     {
         solution.clear();
         if (m_open.empty())
