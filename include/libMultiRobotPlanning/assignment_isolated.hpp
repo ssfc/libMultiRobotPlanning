@@ -88,9 +88,9 @@ public:
             }
         }
 
-        for (const auto& e : edges_to_remove)
+        for (const auto& edge : edges_to_remove)
         {
-            boost::remove_edge(e, graph);
+            boost::remove_edge(edge, graph);
         }
     }
 
