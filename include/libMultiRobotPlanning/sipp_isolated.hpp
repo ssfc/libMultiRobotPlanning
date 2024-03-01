@@ -8,7 +8,7 @@ This class implements the SIPP algorithm. SIPP is an informed search algorithm
 that finds the shortest path for a given map and dynamic a-priori known
 obstacles. It can use a heuristic that needs to be admissible.
 
-Details of the algorithm can be found in the following paper:\n
+Details of the algorithm can be found in the following paper:
 Mike Phillips and Maxim Likhachev:\n
 "SIPP:  Safe  Interval  Path  Planning  for  Dynamic  Environments". IEEE
 International Conference on Robotics and Automation (ICRA), 2011\n

@@ -134,6 +134,7 @@ int main(int argc, char* argv[])
     {
         std::cout << "Planning NOT successful!" << std::endl;
     }
+    // std::cout << "hello" << std::endl;
 
     return 0;
 }
