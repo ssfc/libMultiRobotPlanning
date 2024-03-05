@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra CMakeFiles/cbs_isolated.dir/example/cbs_isolated.cpp.o -o cbs_isolated  -Wl,-rpath,/home/ssfc/anaconda3/lib /home/ssfc/anaconda3/lib/libboost_program_options.so.1.82.0 -lyaml-cpp 

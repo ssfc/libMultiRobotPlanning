@@ -1,0 +1,87 @@
+[
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/a_star.dir/example/a_star.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/a_star.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/a_star.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/a_star_isolated.dir/example/a_star_isolated.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/a_star_isolated.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/a_star_isolated.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/a_star_epsilon.dir/example/a_star_epsilon.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/a_star_epsilon.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/a_star_epsilon.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/a_star_epsilon_isolated.dir/example/a_star_epsilon_isolated.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/a_star_epsilon_isolated.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/a_star_epsilon_isolated.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/assignment.dir/example/assignment.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/assignment.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/assignment.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/cbs_roadmap.dir/example/cbs_roadmap.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/cbs_roadmap.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/cbs_roadmap.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/cbs.dir/example/cbs.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/cbs.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/cbs.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/cbs_isolated.dir/example/cbs_isolated.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/cbs_isolated.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/cbs_isolated.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/cbs_ta.dir/example/cbs_ta.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/cbs_ta.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/cbs_ta.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/cbs_ta_isolated.dir/example/cbs_ta_isolated.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/cbs_ta_isolated.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/cbs_ta_isolated.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/ecbs.dir/example/ecbs.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/ecbs.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/ecbs.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/ecbs_isolated.dir/example/ecbs_isolated.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/ecbs_isolated.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/ecbs_isolated.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/ecbs_ta.dir/example/ecbs_ta.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/ecbs_ta.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/ecbs_ta.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/next_best_assignment.dir/example/next_best_assignment.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/next_best_assignment.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/next_best_assignment.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/sipp.dir/example/sipp.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/sipp.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/sipp.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/sipp_isolated.dir/example/sipp_isolated.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/sipp_isolated.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/sipp_isolated.cpp"
+},
+{
+  "directory": "/home/ssfc/libMultiRobotPlanning/build",
+  "command": "/usr/bin/c++ -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_PROGRAM_OPTIONS_NO_LIB -I/home/ssfc/libMultiRobotPlanning/include -isystem /home/ssfc/anaconda3/include  -Wall -Wextra -std=c++17 -o CMakeFiles/mapf_prioritized_sipp.dir/example/mapf_prioritized_sipp.cpp.o -c /home/ssfc/libMultiRobotPlanning/example/mapf_prioritized_sipp.cpp",
+  "file": "/home/ssfc/libMultiRobotPlanning/example/mapf_prioritized_sipp.cpp"
+}
+]
