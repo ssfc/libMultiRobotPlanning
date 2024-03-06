@@ -16,8 +16,8 @@ def precheck_indices(edge_a, edge_b):
 def precheck_bounding_box(E, p0, p1, q0, q1):
     """Check if the bounding boxes spanning the two line segments overlap.
     Returns True if the bounding boxes overlap, False otherwise."""
-    box_p = np.stack([np.min([p0, p1], axis=0), np.max([p0, p1], axis=0)])
-    box_q = np.stack([np.min([q0, q1], axis=0), np.max([q0, q1], axis=0)])
+    box_p = np.stack([np.min([p0, p1], axis=0), np.max([p0, p1], axis=0)]).astype(np.float64)
+    box_q = np.stack([np.min([q0, q1], axis=0), np.max([q0, q1], axis=0)]).astype(np.float64)
     box_p += np.stack([-np.diagonal(E), np.diagonal(E)])
     box_q += np.stack([-np.diagonal(E), np.diagonal(E)])
     return np.logical_and(box_p[1, :] > box_q[0, :],
