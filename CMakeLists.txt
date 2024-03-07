@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
+set(VCPKG_ROOT C:/Users/take_/.vcpkg-clion/vcpkg/)
+set(CMAKE_TOOLCHAIN_FILE C:/Users/take_/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake)
+
 project(libMultiRobotPlanning)
 
 set(Boost_INCLUDE_DIR c:/MinGW/include/)
@@ -10,7 +13,7 @@ find_package(Boost REQUIRED COMPONENTS program_options)
 include_directories(${Boost_INCLUDE_DIR})
 
 find_package(PkgConfig)
-pkg_check_modules(YamlCpp yaml-cpp)
+find_package(yaml-cpp CONFIG REQUIRED)
 
 # check if Doxygen is installed
 find_package(Doxygen)
