@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <map>
+#include <utility>
 #include <vector>
 
 #include <boost/functional/hash.hpp>
@@ -231,10 +232,6 @@ public:
     TimeLocation time_location;
     int f_score;
     int g_score;
-
-    // 定义 handle: 就是上面那个HeapHandle
-    // typename boost::heap::fibonacci_heap<LowLevelNode>::handle_type handle;
-    typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true>>::handle_type handle;
 
 public:
     LowLevelNode(const TimeLocation& input_state, int input_f_score, int input_g_score)
