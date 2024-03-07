@@ -5,13 +5,14 @@
 #ifndef A_STAR_ISOLATED_HPP
 #define A_STAR_ISOLATED_HPP
 
-#include <boost/heap/fibonacci_heap.hpp>
-#include <boost/heap/d_ary_heap.hpp>
 #include <fstream>
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+#include <boost/heap/fibonacci_heap.hpp>
+#include <boost/heap/d_ary_heap.hpp>
 
 #include "util.hpp"
 
@@ -98,8 +99,8 @@ class AStar
 {
 private:
     // member vars
-    int num_columns;
-    int num_rows;
+    size_t num_columns;
+    size_t num_rows;
     std::unordered_set<Location> obstacles;
     Location start;
     Location goal;
@@ -121,14 +122,14 @@ public:
           : num_columns(input_num_columns),
             num_rows(input_num_rows),
             obstacles(std::move(input_obstacles)),
-            start(std::move(input_start)),
-            goal(std::move(input_goal)),
+            start(input_start),
+            goal(input_goal),
             num_expanded_nodes(0),
             num_generated_nodes(0)
     {}
 
     // This function can return 0 if no suitable heuristic is available.
-    int calculate_h(const Location& current_location)
+    int calculate_h(const Location& current_location) const
     {
         return abs(current_location.x - goal.x) + abs(current_location.y - goal.y);
     }
