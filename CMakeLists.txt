@@ -66,7 +66,7 @@ target_link_libraries(a_star ${Boost_LIBRARIES})
 
 ## a_star_isolated
 add_executable(a_star_isolated
-        include/libMultiRobotPlanning/a_star_isolated.hpp example/a_star_isolated.cpp
+        a_star_isolated.hpp a_star_isolated.cpp
         include/libMultiRobotPlanning/util.hpp)
 target_link_libraries(a_star_isolated ${Boost_LIBRARIES})
 

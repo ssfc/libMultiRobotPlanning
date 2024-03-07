@@ -14,7 +14,7 @@
 #include <boost/heap/fibonacci_heap.hpp>
 #include <boost/heap/d_ary_heap.hpp>
 
-#include "util.hpp"
+#include "include/libMultiRobotPlanning/util.hpp"
 
 
 enum class Action // 模板类Action实例化

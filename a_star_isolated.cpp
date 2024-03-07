@@ -8,7 +8,7 @@
 #include <boost/functional/hash.hpp>
 #include <boost/program_options.hpp>
 
-#include <libMultiRobotPlanning/a_star_isolated.hpp>
+#include "a_star_isolated.hpp"
 
 using namespace std;
 
