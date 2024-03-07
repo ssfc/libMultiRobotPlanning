@@ -157,28 +157,28 @@ public:
 
         if (location_valid(north_neighbor))
         {
-            children.emplace_back(Child(north_neighbor, Action::Up, 1));
+            children.emplace_back(north_neighbor, Action::Up, 1);
         }
 
         Location south_neighbor(location.x, location.y - 1);
 
         if (location_valid(south_neighbor))
         {
-            children.emplace_back(Child(south_neighbor, Action::Down, 1));
+            children.emplace_back(south_neighbor, Action::Down, 1);
         }
 
         Location west_neighbor(location.x - 1, location.y);
 
         if (location_valid(west_neighbor))
         {
-            children.emplace_back(Child(west_neighbor, Action::Left, 1));
+            children.emplace_back(west_neighbor, Action::Left, 1);
         }
 
         Location east_neighbor(location.x + 1, location.y);
 
         if (location_valid(east_neighbor))
         {
-            children.emplace_back(Child(east_neighbor, Action::Right, 1));
+            children.emplace_back(east_neighbor, Action::Right, 1);
         }
 
         return children;
