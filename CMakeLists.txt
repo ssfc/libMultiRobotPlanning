@@ -2,7 +2,13 @@ cmake_minimum_required(VERSION 3.5)
 
 project(libMultiRobotPlanning)
 
+set(Boost_INCLUDE_DIR c:/MinGW/include/)
+set(Boost_LIBRARY_DIR c:/MinGW/lib/)
+
 find_package(Boost REQUIRED COMPONENTS program_options)
+
+include_directories(${Boost_INCLUDE_DIR})
+
 find_package(PkgConfig)
 pkg_check_modules(YamlCpp yaml-cpp)
 
@@ -59,7 +65,9 @@ add_executable(a_star example/a_star.cpp)
 target_link_libraries(a_star ${Boost_LIBRARIES})
 
 ## a_star_isolated
-add_executable(a_star_isolated example/a_star_isolated.cpp)
+add_executable(a_star_isolated
+        include/libMultiRobotPlanning/a_star_isolated.hpp example/a_star_isolated.cpp
+        include/libMultiRobotPlanning/util.hpp)
 target_link_libraries(a_star_isolated ${Boost_LIBRARIES})
 
 ## a_star_epsilon
