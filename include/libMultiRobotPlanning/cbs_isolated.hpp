@@ -318,7 +318,7 @@ public:
     }
 
     // low level 工具函数
-    int calculate_h(const Location& location)
+    int calculate_h(const Location& location) const
     {
         // cout << "H: " <<  time_location << " " << m_heuristic[low_level_agent_index][time_location.x + num_columns *
         // time_location.y] << endl;
@@ -390,7 +390,7 @@ public:
         && !is_element_of_vertex_constraints(wait_neighbor)
         && !is_element_of_edge_constraints(time_location, wait_neighbor))
         {
-            neighbors.emplace_back(Neighbor(wait_neighbor, Action::Wait));
+            neighbors.emplace_back(wait_neighbor, Action::Wait);
         }
 
         TimeLocation west_neighbor(time_location.time_step + 1, Location(time_location.location.x - 1, time_location.location.y));
@@ -399,7 +399,7 @@ public:
         && !is_element_of_vertex_constraints(west_neighbor)
         && !is_element_of_edge_constraints(time_location, west_neighbor))
         {
-            neighbors.emplace_back(Neighbor(west_neighbor, Action::East));
+            neighbors.emplace_back(west_neighbor, Action::East);
         }
 
         TimeLocation east_neighbor(time_location.time_step + 1, Location(time_location.location.x + 1, time_location.location.y));
@@ -408,7 +408,7 @@ public:
         && !is_element_of_vertex_constraints(east_neighbor)
         && !is_element_of_edge_constraints(time_location, east_neighbor))
         {
-            neighbors.emplace_back(Neighbor(east_neighbor, Action::West));
+            neighbors.emplace_back(east_neighbor, Action::West);
         }
 
         TimeLocation north_neighbor(time_location.time_step + 1, Location(time_location.location.x, time_location.location.y + 1));
@@ -417,7 +417,7 @@ public:
         && !is_element_of_vertex_constraints(north_neighbor)
         && !is_element_of_edge_constraints(time_location, north_neighbor))
         {
-            neighbors.emplace_back(Neighbor(north_neighbor, Action::North));
+            neighbors.emplace_back(north_neighbor, Action::North);
         }
 
         TimeLocation south_neighbor(time_location.time_step + 1, Location(time_location.location.x, time_location.location.y - 1));
@@ -426,7 +426,7 @@ public:
         && !is_element_of_vertex_constraints(south_neighbor)
         && !is_element_of_edge_constraints(time_location, south_neighbor))
         {
-            neighbors.emplace_back(Neighbor(south_neighbor, Action::South));
+            neighbors.emplace_back(south_neighbor, Action::South);
         }
 
         return neighbors;
