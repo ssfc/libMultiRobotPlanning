@@ -309,11 +309,11 @@ public:
                     // tentative_g_score := gScore[current] + d(current, neighbor)
                     // cost of the cheapest path from start to n currently known
                     int tentative_g_score = current.g_score + neighbor.cost;
-                    auto pair_found = location_to_heaphandle.find(neighbor.location);
+                    auto map_found = location_to_heaphandle.find(neighbor.location);
 
                     // A* LINE 22
                     // 坐标不在堆中就不比较直接加（毕竟原g值是inf, 新g值肯定更小）
-                    if (pair_found == location_to_heaphandle.end())
+                    if (map_found == location_to_heaphandle.end())
                     {
                         // A* LINE 23
                         // cameFrom[neighbor] := current
@@ -336,7 +336,8 @@ public:
                     // A* LINE 27
                     else // 坐标在堆中。
                     {
-                        auto neighbor_handle = pair_found->second; // Location所具有的其他特征。
+                        auto neighbor_handle =
+                            map_found->second; // Location所具有的其他特征。
                         // std::cout << "  this is an old node: " << tentative_g_score << ","
                         // << (*handle).g_score << std::endl;
 
