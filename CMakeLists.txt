@@ -104,7 +104,8 @@ add_executable(cbs_ta example/cbs_ta.cpp)
 target_link_libraries(cbs_ta ${Boost_LIBRARIES} yaml-cpp)
 
 ## cbs_ta_isolated
-add_executable(cbs_ta_isolated example/cbs_ta_isolated.cpp)
+add_executable(cbs_ta_isolated
+        include/libMultiRobotPlanning/cbs_ta_isolated.hpp example/cbs_ta_isolated.cpp)
 target_link_libraries(cbs_ta_isolated ${Boost_LIBRARIES} yaml-cpp)
 
 ## ecbs
