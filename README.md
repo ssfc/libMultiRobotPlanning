@@ -27,7 +27,7 @@ The following algorithms are currently supported:
 
 Tested on Ubuntu 16.04.
 
-```
+```shell
 mkdir build
 cd build
 cmake ..
@@ -44,7 +44,7 @@ make
 
 ## Run specific tests
 
-```
+```shell
 python3 ../test/test_next_best_assignment.py TestNextBestAssignment.test_1by2
 ```
 
