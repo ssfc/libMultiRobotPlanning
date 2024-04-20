@@ -1,12 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
-
-set(VCPKG_ROOT C:/Users/take_/.vcpkg-clion/vcpkg/)
-set(CMAKE_TOOLCHAIN_FILE C:/Users/take_/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake)
-
 project(libMultiRobotPlanning)
 
-set(Boost_INCLUDE_DIR c:/MinGW/include/)
-set(Boost_LIBRARY_DIR c:/MinGW/lib/)
+set(Boost_INCLUDE_DIR c:/MinGW_distro/include/)
+set(Boost_LIBRARY_DIR c:/MinGW_distro/lib/)
 
 find_package(Boost REQUIRED COMPONENTS program_options)
 
