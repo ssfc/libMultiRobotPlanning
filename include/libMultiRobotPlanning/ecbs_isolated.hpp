@@ -749,7 +749,6 @@ public:
           disappear_at_goal(input_disappearAtGoal),
           start_time(clock())
     {
-        std::cout << "hello" << std::endl;
         std::string file_format = input_filename.substr(input_filename.length() - 4);
         if(file_format == ".txt")
         {
@@ -1016,22 +1015,22 @@ public:
         return solution[agentIdx].path.back().first;
     }
 
-    bool high_level_search(const std::vector<TimeLocation>& initialStates,
-                           std::vector<PlanResult>& solution)
+    bool high_level_search(std::vector<PlanResult>& solution)
     {
         HighLevelNode root;
-        root.solution.resize(initialStates.size());
-        root.constraints.resize(initialStates.size());
+        std::cout << "agent size: " << start_time_locations.size() << std::endl;
+        root.solution.resize(start_time_locations.size());
+        root.constraints.resize(start_time_locations.size());
         root.cost = 0;
         root.LB = 0;
 
-        for (size_t i = 0; i < initialStates.size(); i++)
+        for (size_t i = 0; i < start_time_locations.size(); i++)
         {
             if (i < solution.size() && solution[i].path.size() > 1)
             {
-                std::cout << initialStates[i] << " " << solution[i].path.front().first
+                std::cout << start_time_locations[i] << " " << solution[i].path.front().first
                           << std::endl;
-                assert(initialStates[i] == solution[i].path.front().first);
+                assert(start_time_locations[i] == solution[i].path.front().first);
                 root.solution[i] = solution[i];
                 std::cout << "use existing solution for agent: " << i << std::endl;
             }
@@ -1044,7 +1043,7 @@ public:
                                disappear_at_goal,
                                i, root.constraints[i],
                                root.solution, factor_w);
-                bool success = low_level.low_level_search(initialStates[i], root.solution[i], num_expanded_low_level_nodes);
+                bool success = low_level.low_level_search(start_time_locations[i], root.solution[i], num_expanded_low_level_nodes);
                 if (!success)
                 {
                     return false;
@@ -1143,7 +1142,7 @@ public:
                                disappear_at_goal,
                                i, new_node.constraints[i],
                                new_node.solution, factor_w);
-                bool success = low_level.low_level_search(initialStates[i], new_node.solution[i], num_expanded_low_level_nodes);
+                bool success = low_level.low_level_search(start_time_locations[i], new_node.solution[i], num_expanded_low_level_nodes);
 
                 new_node.cost += new_node.solution[i].cost;
                 new_node.LB += new_node.solution[i].fmin;

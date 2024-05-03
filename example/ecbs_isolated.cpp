@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
     std::vector<PlanResult> solution;
     Timer timer;
 
-    bool success = mapf.high_level_search(mapf.start_time_locations, solution);
+    bool success = mapf.high_level_search(solution);
     timer.stop();
 
 
