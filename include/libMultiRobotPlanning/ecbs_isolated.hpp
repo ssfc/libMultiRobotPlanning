@@ -1019,14 +1019,14 @@ public:
                 new_node.cost -= new_node.solution[i].cost;
                 new_node.LB -= new_node.solution[i].fmin;
 
-                LowLevel llenv(num_columns,
+                LowLevel low_level(num_columns,
                                num_rows,
                                obstacles,
                                goals,
                                disappear_at_goal,
                                i, new_node.constraints[i],
                                new_node.solution, factor_w);
-                bool success = llenv.low_level_search(initialStates[i], new_node.solution[i], num_expanded_low_level_nodes);
+                bool success = low_level.low_level_search(initialStates[i], new_node.solution[i], num_expanded_low_level_nodes);
 
                 new_node.cost += new_node.solution[i].cost;
                 new_node.LB += new_node.solution[i].fmin;
