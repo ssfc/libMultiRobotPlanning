@@ -278,7 +278,7 @@ private:
     bool disappear_at_goal;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
-    const std::vector<PlanResult>& m_solution;
+    const std::vector<PlanResult>& all_agents_paths;
     float factor_w;
 
     using openSet_t = typename boost::heap::d_ary_heap<LowLevelNode, boost::heap::arity<2>,
@@ -332,7 +332,7 @@ public:
        disappear_at_goal(input_m_disappearAtGoal),
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
-              m_solution(solution),
+       all_agents_paths(solution),
               factor_w(input_factor_w)
     {
         set_low_level_context(agentIdx, &constraints);
@@ -358,11 +358,11 @@ public:
                std::abs(s.location.y - goals[m_agentIdx].y);
     }
 
-    TimeLocation get_time_location(size_t agentIdx, const std::vector<PlanResult>& solution, size_t t)
+    TimeLocation get_time_location(size_t _agent_index, const std::vector<PlanResult>& solution, size_t t)
     {
-        if (t < solution[agentIdx].path.size())
+        if (t < solution[_agent_index].path.size())
         {
-            return solution[agentIdx].path[t].first;
+            return solution[_agent_index].path[t].first;
         }
 
         if (disappear_at_goal)
@@ -370,20 +370,20 @@ public:
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
             // This will cause all calls to equalExceptTime(.) to return false.
-            return TimeLocation(-1, Location(-1 * (agentIdx+1), -1));
+            return TimeLocation(-1, Location(-1 * (_agent_index +1), -1));
         }
 
-        return solution[agentIdx].path.back().first;
+        return solution[_agent_index].path.back().first;
     }
 
     int get_num_vertex_conflicts(const TimeLocation& _state)
     {
         int num_vertex_conflicts = 0;
-        for (size_t i = 0; i < m_solution.size(); i++)
+        for (size_t i = 0; i < all_agents_paths.size(); i++)
         {
-            if (i != m_agentIdx && !m_solution[i].path.empty())
+            if (i != m_agentIdx && !all_agents_paths[i].path.empty())
             {
-                TimeLocation state2 = get_time_location(i, m_solution, _state.time_step);
+                TimeLocation state2 = get_time_location(i, all_agents_paths, _state.time_step);
                 if (_state.location == state2.location)
                 {
                     num_vertex_conflicts++;
@@ -397,12 +397,12 @@ public:
     int get_num_edge_conflicts(const TimeLocation& s1a, const TimeLocation& s1b)
     {
         int num_edge_conflicts = 0;
-        for (size_t i = 0; i < m_solution.size(); i++)
+        for (size_t i = 0; i < all_agents_paths.size(); i++)
         {
-            if (i != m_agentIdx && !m_solution[i].path.empty())
+            if (i != m_agentIdx && !all_agents_paths[i].path.empty())
             {
-                TimeLocation s2a = get_time_location(i, m_solution, s1a.time_step);
-                TimeLocation s2b = get_time_location(i, m_solution, s1b.time_step);
+                TimeLocation s2a = get_time_location(i, all_agents_paths, s1a.time_step);
+                TimeLocation s2b = get_time_location(i, all_agents_paths, s1b.time_step);
                 if ((s1a.location==s2b.location) && (s1b.location == s2a.location))
                 {
                     num_edge_conflicts++;
@@ -580,6 +580,7 @@ public:
                         // std::cout << "  this is a new node" << std::endl;
                         int f_score =
                                 tentative_g_score + admissible_heuristic(neighbor.time_location);
+                        // 为单个智能体运行A*，其中优先考虑与其他智能体路径不冲突的路径
                         int focal_heuristic =
                                 current.focal_heuristic +
                                 get_num_vertex_conflicts(neighbor.time_location) +
