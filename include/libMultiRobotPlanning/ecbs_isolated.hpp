@@ -376,15 +376,15 @@ public:
         return solution[agentIdx].path.back().first;
     }
 
-    int get_num_vertex_conflicts(const TimeLocation& s)
+    int get_num_vertex_conflicts(const TimeLocation& _state)
     {
         int num_vertex_conflicts = 0;
         for (size_t i = 0; i < m_solution.size(); i++)
         {
             if (i != m_agentIdx && !m_solution[i].path.empty())
             {
-                TimeLocation state2 = get_time_location(i, m_solution, s.time_step);
-                if (s.location == state2.location)
+                TimeLocation state2 = get_time_location(i, m_solution, _state.time_step);
+                if (_state.location == state2.location)
                 {
                     num_vertex_conflicts++;
                 }
