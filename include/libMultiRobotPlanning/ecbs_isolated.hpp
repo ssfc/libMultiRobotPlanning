@@ -688,7 +688,7 @@ public:
 
     int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
-    bool m_disappearAtGoal;
+    bool disappear_at_goal;
 
     std::vector<PlanResult> m_solution;
     float factor_w;
@@ -722,11 +722,9 @@ public:
               num_rows(dimy),
               obstacles(std::move(obstacles)),
               goals(std::move(input_goals)),
-              m_constraints(nullptr),
-              max_goal_constraint_time(-1),
               num_expanded_high_level_nodes(0),
               num_expanded_low_level_nodes(0),
-              m_disappearAtGoal(disappearAtGoal),
+       disappear_at_goal(disappearAtGoal),
               factor_w(input_w)
     {
     }
@@ -889,7 +887,7 @@ public:
             return solution[agentIdx].path[t].first;
         }
 
-        if (m_disappearAtGoal)
+        if (disappear_at_goal)
         {
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
@@ -925,7 +923,7 @@ public:
                                num_rows,
                                obstacles,
                                goals,
-                               m_disappearAtGoal,
+                               disappear_at_goal,
                                i, root.constraints[i],
                                root.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], root.solution[i], num_expanded_low_level_nodes);
@@ -1024,7 +1022,7 @@ public:
                                num_rows,
                                obstacles,
                                goals,
-                               m_disappearAtGoal,
+                               disappear_at_goal,
                                i, new_node.constraints[i],
                                new_node.solution, factor_w);
                 bool success = llenv.low_level_search(initialStates[i], new_node.solution[i], num_expanded_low_level_nodes);
