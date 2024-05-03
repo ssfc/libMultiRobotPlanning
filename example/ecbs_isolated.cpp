@@ -140,15 +140,16 @@ int main(int argc, char* argv[])
 
     // sanity check: no identical start locations
     std::unordered_set<TimeLocation> start_time_location_set;
-    for (const auto& s : _start_states)
+    for (const auto& _state : _start_states)
     {
-        if (start_time_location_set.find(s) != start_time_location_set.end())
+        if (start_time_location_set.find(_state) != start_time_location_set.end())
         {
             std::cout << "Identical start locations detected -> no solution!" << std::endl;
 
             return 0;
         }
-        start_time_location_set.insert(s);
+
+        start_time_location_set.insert(_state);
     }
 
     ECBS mapf(_num_columns, _num_rows, _obstacles, _goals, disappearAtGoal, w);
