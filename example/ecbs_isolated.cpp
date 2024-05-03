@@ -8,7 +8,6 @@
 #include <boost/functional/hash.hpp>
 #include <boost/program_options.hpp>
 
-#include <yaml-cpp/yaml.h>
 
 #include <libMultiRobotPlanning/ecbs_isolated.hpp>
 #include "timer.hpp"
@@ -150,7 +149,7 @@ int main(int argc, char* argv[])
 
         start_time_location_set.insert(_state);
     }
-    
+
     ECBS mapf(_num_columns, _num_rows, _obstacles, _goals, disappearAtGoal, w);
     std::vector<PlanResult> solution;
 
