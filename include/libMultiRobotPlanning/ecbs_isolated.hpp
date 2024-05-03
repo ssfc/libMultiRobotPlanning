@@ -322,14 +322,14 @@ public:
              int input_num_rows,
              std::unordered_set<Location> input_obstacles,
              std::vector<Location> input_goals,
-             bool input_m_disappearAtGoal,
+             bool _disappear_at_goal,
              size_t agentIdx, const Constraints& constraints,
              const std::vector<PlanResult>& _all_agents_paths, float input_factor_w)
             : num_columns(input_num_columns),
               num_rows(input_num_rows),
               obstacles(input_obstacles),
               goals(input_goals),
-       disappear_at_goal(input_m_disappearAtGoal),
+       disappear_at_goal(_disappear_at_goal),
             // , agent_index(agentIdx)
             // , agent_constraints(constraints)
        all_agents_paths(_all_agents_paths),
