@@ -5,8 +5,6 @@
 #ifndef A_STAR_EPSILON_ISOLATED_HPP
 #define A_STAR_EPSILON_ISOLATED_HPP
 
-#pragma once
-
 #include <boost/heap/fibonacci_heap.hpp>
 
 #include <boost/heap/d_ary_heap.hpp>
@@ -14,8 +12,6 @@
 #include <unordered_set>
 
 #include "util.hpp"
-#include "neighbor.hpp"
-#include "planresult.hpp"
 
 // #define REBUILT_FOCAL_LIST
 // #define CHECK_FOCAL_LIST
