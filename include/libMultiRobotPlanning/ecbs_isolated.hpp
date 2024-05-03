@@ -272,7 +272,7 @@ private:
     int num_rows;
     std::unordered_set<Location> obstacles;
     std::vector<Location> goals;
-    int agent_index; // 因为需要计算和其他agent的冲突数, 所以需要agent_index
+    size_t agent_index; // 因为需要计算和其他agent的冲突数, 所以需要agent_index
     const Constraints* agent_constraints; // 单一agent的constraints
     int max_goal_constraint_time;
     bool disappear_at_goal;
