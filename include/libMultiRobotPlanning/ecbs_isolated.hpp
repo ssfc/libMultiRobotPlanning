@@ -749,6 +749,7 @@ public:
           disappear_at_goal(input_disappearAtGoal),
           start_time(clock())
     {
+        std::cout << "hello" << std::endl;
         std::string file_format = input_filename.substr(input_filename.length() - 4);
         if(file_format == ".txt")
         {
@@ -756,6 +757,7 @@ public:
             if (fromfile.is_open())
             {
                 fromfile >> num_rows >> num_columns;
+                std::cout << num_rows << " " << num_columns << std::endl;
 
                 std::vector<std::vector<int>> map;
                 map.resize(num_rows);

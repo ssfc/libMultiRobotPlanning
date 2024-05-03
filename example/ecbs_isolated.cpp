@@ -73,6 +73,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    /*
     YAML::Node config = YAML::LoadFile(inputFile);
 
     std::unordered_set<Location> obstacles;
@@ -107,13 +108,24 @@ int main(int argc, char* argv[])
         }
         start_time_location_set.insert(s);
     }
+     */
 
+    /*
     ECBS mapf(dimx, dimy, obstacles, goals, disappearAtGoal, w);
     std::vector<PlanResult> solution;
 
     Timer timer;
     bool success = mapf.high_level_search(startStates, solution);
     timer.stop();
+     */
+
+    ECBS mapf(inputFile, w);
+    std::vector<PlanResult> solution;
+    Timer timer;
+
+    bool success = mapf.high_level_search(mapf.start_time_locations, solution);
+    timer.stop();
+
 
     if (success)
     {
