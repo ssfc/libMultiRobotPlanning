@@ -286,9 +286,9 @@ public:
 
     int admissible_heuristic(const TimeLocation& s)
     {
-        // cout << "H: " <<  s << " " << m_heuristic[m_agentIdx][s.x + num_columns *
+        // cout << "H: " <<  s << " " << m_heuristic[agent_index][s.x + num_columns *
         // s.y] << endl;
-        // return m_heuristic[m_agentIdx][s.x + num_columns * s.y];
+        // return m_heuristic[agent_index][s.x + num_columns * s.y];
         return abs(s.location.x - m_goals[m_agentIdx].x) +
                abs(s.location.y - m_goals[m_agentIdx].y);
     }

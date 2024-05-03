@@ -272,11 +272,11 @@ private:
     int num_rows;
     std::unordered_set<Location> obstacles;
     std::vector<Location> goals;
-    int m_agentIdx;
+    int agent_index; // 因为需要计算和其他agent的冲突数, 所以需要agent_index
     const Constraints* m_constraints;
     int max_goal_constraint_time;
     bool disappear_at_goal;
-    // size_t m_agentIdx;
+    // size_t agent_index;
     // const Constraints& m_constraints;
     const std::vector<PlanResult>& all_agents_paths;
     float factor_w;
@@ -330,7 +330,7 @@ public:
               obstacles(input_obstacles),
               goals(input_goals),
        disappear_at_goal(input_m_disappearAtGoal),
-            // , m_agentIdx(agentIdx)
+            // , agent_index(agentIdx)
             // , m_constraints(constraints)
        all_agents_paths(solution),
               factor_w(input_factor_w)
@@ -340,12 +340,12 @@ public:
 
     void set_low_level_context(size_t agentIdx, const Constraints* constraints)
     {
-        m_agentIdx = agentIdx;
+        agent_index = agentIdx;
         m_constraints = constraints;
         max_goal_constraint_time = -1;
         for (const auto& vc : constraints->vertexConstraints)
         {
-            if (vc.x == goals[m_agentIdx].x && vc.y == goals[m_agentIdx].y)
+            if (vc.x == goals[agent_index].x && vc.y == goals[agent_index].y)
             {
                 max_goal_constraint_time = std::max(max_goal_constraint_time, vc.time);
             }
@@ -354,8 +354,8 @@ public:
 
     int admissible_heuristic(const TimeLocation& s)
     {
-        return std::abs(s.location.x - goals[m_agentIdx].x) +
-               std::abs(s.location.y - goals[m_agentIdx].y);
+        return std::abs(s.location.x - goals[agent_index].x) +
+               std::abs(s.location.y - goals[agent_index].y);
     }
 
     TimeLocation get_time_location(size_t _agent_index, const std::vector<PlanResult>& solution, size_t t)
@@ -381,7 +381,7 @@ public:
         int num_vertex_conflicts = 0;
         for (size_t i = 0; i < all_agents_paths.size(); i++)
         {
-            if (i != m_agentIdx && !all_agents_paths[i].path.empty())
+            if (i != agent_index && !all_agents_paths[i].path.empty())
             {
                 TimeLocation state2 = get_time_location(i, all_agents_paths, _state.time_step);
                 if (_state.location == state2.location)
@@ -399,7 +399,7 @@ public:
         int num_edge_conflicts = 0;
         for (size_t i = 0; i < all_agents_paths.size(); i++)
         {
-            if (i != m_agentIdx && !all_agents_paths[i].path.empty())
+            if (i != agent_index && !all_agents_paths[i].path.empty())
             {
                 TimeLocation s2a = get_time_location(i, all_agents_paths, s1a.time_step);
                 TimeLocation s2b = get_time_location(i, all_agents_paths, s1b.time_step);
@@ -415,8 +415,8 @@ public:
 
     bool is_solution(const TimeLocation& s)
     {
-        return s.location.x == goals[m_agentIdx].x
-               && s.location.y == goals[m_agentIdx].y
+        return s.location.x == goals[agent_index].x
+               && s.location.y == goals[agent_index].y
                && s.time_step > max_goal_constraint_time;
     }
 

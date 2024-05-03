@@ -367,7 +367,7 @@ class ECBS {
         Environment& env, size_t agentIdx, const Constraints& constraints,
         const std::vector<PlanResult<State, Action, Cost> >& solution)
         : m_env(env)
-          // , m_agentIdx(agentIdx)
+          // , agent_index(agentIdx)
           // , m_constraints(constraints)
           ,
           m_solution(solution) {
@@ -398,19 +398,19 @@ class ECBS {
     void onExpandNode(const State& s, Cost fScore, Cost gScore) {
       // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
       // << gScore << std::endl;
-      // m_env.onExpandLowLevelNode(s, fScore, gScore, m_agentIdx,
+      // m_env.onExpandLowLevelNode(s, fScore, gScore, agent_index,
       // m_constraints);
       m_env.onExpandLowLevelNode(s, fScore, gScore);
     }
 
     void onDiscover(const State& /*s*/, Cost /*fScore*/, Cost /*gScore*/) {
       // std::cout << "LL discover: " << s << std::endl;
-      // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
+      // m_env.onDiscoverLowLevel(s, agent_index, m_constraints);
     }
 
    private:
     Environment& m_env;
-    // size_t m_agentIdx;
+    // size_t agent_index;
     // const Constraints& m_constraints;
     const std::vector<PlanResult<State, Action, Cost> >& m_solution;
   };

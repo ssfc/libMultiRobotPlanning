@@ -264,7 +264,7 @@ class CBSTA {
     LowLevelEnvironment(Environment& env, size_t agentIdx,
                         const Constraints& constraints, const Task* task)
         : m_env(env)
-    // , m_agentIdx(agentIdx)
+    // , agent_index(agentIdx)
     // , m_constraints(constraints)
     {
       m_env.setLowLevelContext(agentIdx, &constraints, task);
@@ -288,12 +288,12 @@ class CBSTA {
 
     void onDiscover(const State& /*s*/, Cost /*fScore*/, Cost /*gScore*/) {
       // std::cout << "LL discover: " << s << std::endl;
-      // m_env.onDiscoverLowLevel(s, m_agentIdx, m_constraints);
+      // m_env.onDiscoverLowLevel(s, agent_index, m_constraints);
     }
 
    private:
     Environment& m_env;
-    // size_t m_agentIdx;
+    // size_t agent_index;
     // const Constraints& m_constraints;
   };
 
