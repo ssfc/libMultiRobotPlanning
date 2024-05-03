@@ -73,6 +73,12 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    int _num_columns;
+    int _num_rows;
+    std::unordered_set<Location> _obstacles;
+    std::vector<Location> _goals;
+    std::vector<TimeLocation> _start_states;
+
     YAML::Node config = YAML::LoadFile(inputFile);
 
     /*
@@ -118,13 +124,9 @@ int main(int argc, char* argv[])
         fromfile.close();
         */
 
-    std::unordered_set<Location> _obstacles;
-    std::vector<Location> _goals;
-    std::vector<TimeLocation> _start_states;
-
     const auto& dim = config["map"]["dimensions"];
-    int _num_columns = dim[0].as<int>();
-    int _num_rows = dim[1].as<int>();
+    _num_columns = dim[0].as<int>();
+    _num_rows = dim[1].as<int>();
 
     for (const auto& node : config["map"]["_obstacles"]) {
         _obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
