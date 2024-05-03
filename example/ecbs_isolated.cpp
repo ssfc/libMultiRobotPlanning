@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
                 if (c == '@')
                 {
                     map[i][j] = 0;
-                    obstacles.insert(Location(j, i));
+                    _obstacles.insert(Location(j, i));
                 }
                 else if (c == '.') {
                     map[i][j] = 1;
@@ -106,41 +106,41 @@ int main(int argc, char* argv[])
 
         fromfile >> num_agents;
         start_time_locations.resize(num_agents);
-        goals.resize(num_agents);
+        _goals.resize(num_agents);
         for (int i = 0; i < num_agents; i++)
         {
             fromfile >> start_time_locations[i].location.x;
             fromfile >> start_time_locations[i].location.y;
-            fromfile >> goals[i].x;
-            fromfile >> goals[i].y;
+            fromfile >> _goals[i].x;
+            fromfile >> _goals[i].y;
         }
 
         fromfile.close();
         */
 
-    std::unordered_set<Location> obstacles;
-    std::vector<Location> goals;
-    std::vector<TimeLocation> startStates;
+    std::unordered_set<Location> _obstacles;
+    std::vector<Location> _goals;
+    std::vector<TimeLocation> _start_states;
 
     const auto& dim = config["map"]["dimensions"];
     int _num_columns = dim[0].as<int>();
     int _num_rows = dim[1].as<int>();
 
-    for (const auto& node : config["map"]["obstacles"]) {
-        obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
+    for (const auto& node : config["map"]["_obstacles"]) {
+        _obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
     }
 
     for (const auto& node : config["agents"]) {
         const auto& start = node["start"];
         const auto& goal = node["goal"];
-        startStates.emplace_back(TimeLocation(0, Location(start[0].as<int>(), start[1].as<int>())));
-        // std::cout << "s: " << startStates.back() << std::endl;
-        goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
+        _start_states.emplace_back(TimeLocation(0, Location(start[0].as<int>(), start[1].as<int>())));
+        // std::cout << "s: " << _start_states.back() << std::endl;
+        _goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }
 
     // sanity check: no identical start locations
     std::unordered_set<TimeLocation> start_time_location_set;
-    for (const auto& s : startStates)
+    for (const auto& s : _start_states)
     {
         if (start_time_location_set.find(s) != start_time_location_set.end())
         {
@@ -151,11 +151,11 @@ int main(int argc, char* argv[])
         start_time_location_set.insert(s);
     }
 
-    ECBS mapf(_num_columns, _num_rows, obstacles, goals, disappearAtGoal, w);
+    ECBS mapf(_num_columns, _num_rows, _obstacles, _goals, disappearAtGoal, w);
     std::vector<PlanResult> solution;
 
     Timer timer;
-    bool success = mapf.high_level_search(startStates, solution);
+    bool success = mapf.high_level_search(_start_states, solution);
     timer.stop();
 
     if (success)
