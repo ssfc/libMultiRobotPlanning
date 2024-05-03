@@ -324,7 +324,7 @@ public:
              std::vector<Location> input_goals,
              bool input_m_disappearAtGoal,
              size_t agentIdx, const Constraints& constraints,
-             const std::vector<PlanResult>& solution, float input_factor_w)
+             const std::vector<PlanResult>& _all_agents_paths, float input_factor_w)
             : num_columns(input_num_columns),
               num_rows(input_num_rows),
               obstacles(input_obstacles),
@@ -332,7 +332,7 @@ public:
        disappear_at_goal(input_m_disappearAtGoal),
             // , agent_index(agentIdx)
             // , agent_constraints(constraints)
-       all_agents_paths(solution),
+       all_agents_paths(_all_agents_paths),
               factor_w(input_factor_w)
     {
         set_low_level_context(agentIdx, &constraints);
