@@ -682,9 +682,13 @@ public:
 class ECBS
 {
 public:
+    std::string map_file;
     int num_columns;
     int num_rows;
     std::unordered_set<Location> obstacles;
+
+    size_t num_agents;
+    std::vector<TimeLocation> start_time_locations;
     std::vector<Location> goals;
 
     int num_expanded_high_level_nodes;
@@ -693,6 +697,9 @@ public:
 
     std::vector<PlanResult> m_solution;
     float factor_w;
+
+    // debug var
+    double start_time;
 
     using openSet_t = typename boost::heap::d_ary_heap<HighLevelNode, boost::heap::arity<2>, boost::heap::mutable_<true> >;
     using handle_t = typename openSet_t::handle_type;
@@ -728,6 +735,114 @@ public:
        disappear_at_goal(disappearAtGoal),
               factor_w(input_w)
     {
+    }
+
+    ECBS(const std::string& input_filename, float input_w,
+                 bool input_disappearAtGoal = false)
+        : // agent_constraints(nullptr),
+          map_file(input_filename),
+          num_columns(0),
+          num_rows(0),
+          num_agents(1),
+          num_expanded_high_level_nodes(0),
+          num_expanded_low_level_nodes(0),
+          disappear_at_goal(input_disappearAtGoal),
+          start_time(clock())
+    {
+        std::string file_format = input_filename.substr(input_filename.length() - 4);
+        if(file_format == ".txt")
+        {
+            std::ifstream fromfile(input_filename);
+            if (fromfile.is_open())
+            {
+                fromfile >> num_rows >> num_columns;
+
+                std::vector<std::vector<int>> map;
+                map.resize(num_rows);
+                for (int i = 0; i < num_rows; i++) {
+                    map[i].resize(num_columns);
+                }
+
+                for (int i = 0; i < num_rows; i++)
+                {
+                    for (int j = 0; j < num_columns; j++)
+                    {
+                        char c;
+                        fromfile >> c;
+                        if (c == '@')
+                        {
+                            map[i][j] = 0;
+                            obstacles.insert(Location(j, i));
+                        }
+                        else if (c == '.') {
+                            map[i][j] = 1;
+                        }
+                    }
+                }
+
+                fromfile >> num_agents;
+                start_time_locations.resize(num_agents);
+                goals.resize(num_agents);
+                for (int i = 0; i < num_agents; i++)
+                {
+                    fromfile >> start_time_locations[i].location.x;
+                    fromfile >> start_time_locations[i].location.y;
+                    fromfile >> goals[i].x;
+                    fromfile >> goals[i].y;
+                }
+
+                fromfile.close();
+                std::cout << "read txt file successfully." << std::endl;
+            }
+            else
+            {
+                std::cerr << "Error opening txt file." << std::endl;
+            }
+        }
+        /*
+        else if(file_format == "yaml")
+        {
+            YAML::Node config = YAML::LoadFile(input_filename);
+
+            const auto& dim = config["map"]["dimensions"];
+            num_columns = dim[0].as<int>();
+            num_rows = dim[1].as<int>();
+
+            for (const auto& node : config["map"]["obstacles"])
+            {
+                obstacles.insert(Location(node[0].as<int>(), node[1].as<int>()));
+            }
+
+            for (const auto& node : config["agents"])
+            {
+                const auto& start = node["start"];
+                const auto& goal = node["goal"];
+                start_time_locations.emplace_back(0, Location(start[0].as<int>(), start[1].as<int>()));
+                // cout << "s: " << start_time_locations.back() << endl;
+                goals.emplace_back(goal[0].as<int>(), goal[1].as<int>());
+            }
+
+            num_agents = goals.size();
+        }
+         */
+        else
+        {
+            std::cerr << "file format not support" << std::endl;
+        }
+
+        // sanity check: no identical start locations
+        std::unordered_set<TimeLocation> start_time_location_set;
+        for (const auto& s : start_time_locations)
+        {
+            if (start_time_location_set.find(s) != start_time_location_set.end())
+            {
+                std::cout << "Identical start locations detected -> no all_agents_paths!" << std::endl;
+
+                break;
+            }
+
+            start_time_location_set.insert(s);
+        }
     }
 
     ECBS(const ECBS&) = delete;
