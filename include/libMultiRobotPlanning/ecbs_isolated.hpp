@@ -982,18 +982,18 @@ public:
             }
 
             auto h = focal_set.top();
-            HighLevelNode P = *h;
+            HighLevelNode best_node = *h;
             num_expanded_high_level_nodes++;
-            // std::cout << "expand: " << P << std::endl;
+            // std::cout << "expand: " << best_node << std::endl;
 
             focal_set.pop();
             open_set.erase(h);
 
             Conflict conflict;
-            if (!get_all_paths_first_conflict(P.solution, conflict))
+            if (!get_all_paths_first_conflict(best_node.solution, conflict))
             {
-                // std::cout << "done; cost: " << P.cost << std::endl;
-                solution = P.solution;
+                // std::cout << "done; cost: " << best_node.cost << std::endl;
+                solution = best_node.solution;
 
                 return true;
             }
@@ -1009,7 +1009,7 @@ public:
             {
                 // std::cout << "Add HL node for " << c.first << std::endl;
                 size_t i = c.first;
-                HighLevelNode new_node = P;
+                HighLevelNode new_node = best_node;
                 // (optional) check that this constraint was not included already
                 // std::cout << new_node.constraints[i] << std::endl;
                 // std::cout << c.second << std::endl;
