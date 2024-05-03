@@ -273,11 +273,11 @@ private:
     std::unordered_set<Location> obstacles;
     std::vector<Location> goals;
     int agent_index; // 因为需要计算和其他agent的冲突数, 所以需要agent_index
-    const Constraints* m_constraints;
+    const Constraints* agent_constraints; // 单一agent的constraints
     int max_goal_constraint_time;
     bool disappear_at_goal;
     // size_t agent_index;
-    // const Constraints& m_constraints;
+    // const Constraints& agent_constraints;
     const std::vector<PlanResult>& all_agents_paths;
     float factor_w;
 
@@ -331,7 +331,7 @@ public:
               goals(input_goals),
        disappear_at_goal(input_m_disappearAtGoal),
             // , agent_index(agentIdx)
-            // , m_constraints(constraints)
+            // , agent_constraints(constraints)
        all_agents_paths(solution),
               factor_w(input_factor_w)
     {
@@ -341,7 +341,7 @@ public:
     void set_low_level_context(size_t agentIdx, const Constraints* constraints)
     {
         agent_index = agentIdx;
-        m_constraints = constraints;
+        agent_constraints = constraints;
         max_goal_constraint_time = -1;
         for (const auto& vc : constraints->vertexConstraints)
         {
@@ -422,7 +422,7 @@ public:
 
     bool location_valid(const TimeLocation& s)
     {
-        const auto& con = m_constraints->vertexConstraints;
+        const auto& con = agent_constraints->vertexConstraints;
         return s.location.x >= 0 && s.location.x < num_columns
                && s.location.y >= 0 && s.location.y < num_rows
                && obstacles.find(Location(s.location.x, s.location.y)) == obstacles.end()
@@ -431,7 +431,7 @@ public:
 
     bool transition_valid(const TimeLocation& s1, const TimeLocation& s2)
     {
-        const auto& con = m_constraints->edgeConstraints;
+        const auto& con = agent_constraints->edgeConstraints;
         return con.find(EdgeConstraint(s1.time_step, s1.location.x, s1.location.y, s2.location.x, s2.location.y)) ==
                con.end();
     }

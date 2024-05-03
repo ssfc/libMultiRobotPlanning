@@ -445,7 +445,7 @@ class ECBSTA {
         const std::vector<PlanResult<State, Action, Cost> >& solution)
         : m_env(env)
           // , agent_index(agentIdx)
-          // , m_constraints(constraints)
+          // , agent_constraints(constraints)
           ,
           m_solution(solution) {
       m_env.setLowLevelContext(agentIdx, &constraints, task);
@@ -476,19 +476,19 @@ class ECBSTA {
       // std::cout << "LL expand: " << s << " fScore: " << fScore << " gScore: "
       // << gScore << std::endl;
       // m_env.onExpandLowLevelNode(s, fScore, gScore, agent_index,
-      // m_constraints);
+      // agent_constraints);
       m_env.onExpandLowLevelNode(s, fScore, gScore);
     }
 
     void onDiscover(const State& /*s*/, Cost /*fScore*/, Cost /*gScore*/) {
       // std::cout << "LL discover: " << s << std::endl;
-      // m_env.onDiscoverLowLevel(s, agent_index, m_constraints);
+      // m_env.onDiscoverLowLevel(s, agent_index, agent_constraints);
     }
 
    private:
     Environment& m_env;
     // size_t agent_index;
-    // const Constraints& m_constraints;
+    // const Constraints& agent_constraints;
     const std::vector<PlanResult<State, Action, Cost> >& m_solution;
   };
 
