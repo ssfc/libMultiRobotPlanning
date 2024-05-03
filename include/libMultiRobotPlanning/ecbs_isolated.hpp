@@ -275,7 +275,7 @@ private:
     int m_agentIdx;
     const Constraints* m_constraints;
     int max_goal_constraint_time;
-    bool m_disappearAtGoal;
+    bool disappear_at_goal;
     // size_t m_agentIdx;
     // const Constraints& m_constraints;
     const std::vector<PlanResult>& m_solution;
@@ -329,7 +329,7 @@ public:
               num_rows(input_num_rows),
               obstacles(input_obstacles),
               goals(input_goals),
-              m_disappearAtGoal(input_m_disappearAtGoal),
+       disappear_at_goal(input_m_disappearAtGoal),
             // , m_agentIdx(agentIdx)
             // , m_constraints(constraints)
               m_solution(solution),
@@ -365,7 +365,7 @@ public:
             return solution[agentIdx].path[t].first;
         }
 
-        if (m_disappearAtGoal)
+        if (disappear_at_goal)
         {
             // This is a trick to avoid changing the rest of the code significantly
             // After an agent disappeared, put it at a unique but invalid position
