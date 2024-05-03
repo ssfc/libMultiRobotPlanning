@@ -76,54 +76,50 @@ int main(int argc, char* argv[])
     int _num_columns;
     int _num_rows;
     std::unordered_set<Location> _obstacles;
+    int _num_agents;
     std::vector<Location> _goals;
     std::vector<TimeLocation> _start_states;
 
-    YAML::Node config = YAML::LoadFile(inputFile);
+    // YAML::Node config = YAML::LoadFile(inputFile);
 
-    /*
+
     std::ifstream fromfile(inputFile);
-    if (fromfile.is_open())
-    {
-        fromfile >> num_rows >> num_columns;
+    if (fromfile.is_open()) {
+        fromfile >> _num_rows >> _num_columns;
 
         std::vector<std::vector<int>> map;
-        map.resize(num_rows);
-        for (int i = 0; i < num_rows; i++) {
-            map[i].resize(num_columns);
+        map.resize(_num_rows);
+        for (int i = 0; i < _num_rows; i++) {
+            map[i].resize(_num_columns);
         }
 
-        for (int i = 0; i < num_rows; i++)
-        {
-            for (int j = 0; j < num_columns; j++)
-            {
+        for (int i = 0; i < _num_rows; i++) {
+            for (int j = 0; j < _num_columns; j++) {
                 char c;
                 fromfile >> c;
-                if (c == '@')
-                {
+                if (c == '@') {
                     map[i][j] = 0;
                     _obstacles.insert(Location(j, i));
-                }
-                else if (c == '.') {
+                } else if (c == '.') {
                     map[i][j] = 1;
                 }
             }
         }
 
-        fromfile >> num_agents;
-        start_time_locations.resize(num_agents);
-        _goals.resize(num_agents);
-        for (int i = 0; i < num_agents; i++)
-        {
-            fromfile >> start_time_locations[i].location.x;
-            fromfile >> start_time_locations[i].location.y;
+        fromfile >> _num_agents;
+        _start_states.resize(_num_agents);
+        _goals.resize(_num_agents);
+        for (int i = 0; i < _num_agents; i++) {
+            fromfile >> _start_states[i].location.x;
+            fromfile >> _start_states[i].location.y;
             fromfile >> _goals[i].x;
             fromfile >> _goals[i].y;
         }
 
         fromfile.close();
-        */
+    }
 
+    /*
     const auto& dim = config["map"]["dimensions"];
     _num_columns = dim[0].as<int>();
     _num_rows = dim[1].as<int>();
@@ -139,6 +135,7 @@ int main(int argc, char* argv[])
         // std::cout << "s: " << _start_states.back() << std::endl;
         _goals.emplace_back(Location(goal[0].as<int>(), goal[1].as<int>()));
     }
+     */
 
     // sanity check: no identical start locations
     std::unordered_set<TimeLocation> start_time_location_set;
@@ -153,7 +150,7 @@ int main(int argc, char* argv[])
 
         start_time_location_set.insert(_state);
     }
-
+    
     ECBS mapf(_num_columns, _num_rows, _obstacles, _goals, disappearAtGoal, w);
     std::vector<PlanResult> solution;
 
