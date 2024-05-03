@@ -685,8 +685,7 @@ public:
     int num_rows;
     std::unordered_set<Location> obstacles;
     std::vector<Location> goals;
-    const Constraints* m_constraints;
-    int max_goal_constraint_time;
+
     int num_expanded_high_level_nodes;
     int num_expanded_low_level_nodes;
     bool m_disappearAtGoal;
