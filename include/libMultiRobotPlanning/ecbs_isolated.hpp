@@ -920,14 +920,14 @@ public:
             }
             else
             {
-                LowLevel llenv(num_columns,
+                LowLevel low_level(num_columns,
                                num_rows,
                                obstacles,
                                goals,
                                disappear_at_goal,
                                i, root.constraints[i],
                                root.solution, factor_w);
-                bool success = llenv.low_level_search(initialStates[i], root.solution[i], num_expanded_low_level_nodes);
+                bool success = low_level.low_level_search(initialStates[i], root.solution[i], num_expanded_low_level_nodes);
                 if (!success)
                 {
                     return false;
