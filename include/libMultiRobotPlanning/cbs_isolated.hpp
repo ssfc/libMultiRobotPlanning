@@ -327,7 +327,7 @@ public:
     }
 
     // low level 工具函数
-    bool is_solution(const TimeLocation& time_location)
+    bool is_solution(const TimeLocation& time_location) const
     {
         return time_location.location == goal && time_location.time_step > max_goal_constraint_time;
         // 显然，max_goal_constraint_time越小越好。
