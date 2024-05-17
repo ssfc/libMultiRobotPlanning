@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(libMultiRobotPlanning)
 
 set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake")
-
+set(CMAKE_PREFIX_PATH "C:/vcpkg/installed/x64-windows")
 
 find_package(Boost REQUIRED COMPONENTS program_options)
 
