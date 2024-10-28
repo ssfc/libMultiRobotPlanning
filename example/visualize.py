@@ -23,6 +23,7 @@ class Animation:
         self.map = _map
         self.schedule = _schedule
 
+        # 计算地图的纵横比 aspect
         aspect = _map["map"]["dimensions"][0] / _map["map"]["dimensions"][1]
 
         self.fig = plt.figure(frameon=False, figsize=(4 * aspect, 4))
