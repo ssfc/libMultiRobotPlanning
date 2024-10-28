@@ -18,11 +18,11 @@ Colors = ['orange']  #, 'blue', 'green']
 
 
 class Animation:
-    def __init__(self, map, schedule):
-        self.map = map
-        self.schedule = schedule
+    def __init__(self, _map, _schedule):
+        self.map = _map
+        self.schedule = _schedule
 
-        aspect = map["map"]["dimensions"][0] / map["map"]["dimensions"][1]
+        aspect = _map["map"]["dimensions"][0] / _map["map"]["dimensions"][1]
 
         self.fig = plt.figure(frameon=False, figsize=(4 * aspect, 4))
         self.ax = self.fig.add_subplot(111, aspect='equal')
@@ -36,8 +36,8 @@ class Animation:
         # create boundary patch
         x_min = -0.5
         y_min = -0.5
-        x_max = map["map"]["dimensions"][0] - 0.5
-        y_max = map["map"]["dimensions"][1] - 0.5
+        x_max = _map["map"]["dimensions"][0] - 0.5
+        y_max = _map["map"]["dimensions"][1] - 0.5
 
         # self.ax.relim()
         plt.xlim(x_min, x_max)
@@ -49,14 +49,14 @@ class Animation:
         # self.ax.axis('off')
 
         self.patches.append(Rectangle((x_min, y_min), x_max - x_min, y_max - y_min, facecolor='none', edgecolor='red'))
-        for o in map["map"]["obstacles"]:
+        for o in _map["map"]["obstacles"]:
             x, y = o[0], o[1]
             self.patches.append(Rectangle((x - 0.5, y - 0.5), 1, 1, facecolor='red', edgecolor='red'))
 
         # create agents:
         self.T = 0
         # draw goals first
-        for d, i in zip(map["agents"], range(0, len(map["agents"]))):
+        for d, i in zip(_map["agents"], range(0, len(_map["agents"]))):
             if "goal" in d:
                 goals = [d["goal"]]
             if "potentialGoals" in d:
@@ -66,13 +66,13 @@ class Animation:
                     Rectangle((goal[0] - 0.25, goal[1] - 0.25), 0.5, 0.5, facecolor=Colors[i % len(Colors)],
                               edgecolor='black', alpha=0.5))
 
-        for d, i in zip(map["agents"], range(0, len(map["agents"]))):
+        for d, i in zip(_map["agents"], range(0, len(_map["agents"]))):
             name = d["name"]
             self.agents[name] = Circle((d["start"][0], d["start"][1]), 0.3, facecolor=Colors[i % len(Colors)],
                                        edgecolor='black')
             self.agents[name].original_face_color = Colors[i % len(Colors)]
             self.patches.append(self.agents[name])
-            self.T = max(self.T, schedule["schedule"][name][-1]["t"])
+            self.T = max(self.T, _schedule["schedule"][name][-1]["t"])
             self.agent_names[name] = self.ax.text(d["start"][0], d["start"][1], name.replace('agent', ''))
             self.agent_names[name].set_horizontalalignment('center')
             self.agent_names[name].set_verticalalignment('center')
