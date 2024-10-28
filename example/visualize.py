@@ -146,7 +146,7 @@ class Animation:
             for j in range(i + 1, len(agents_array)):
                 d1 = agents_array[i]
                 d2 = agents_array[j]
-                pos1 = np.array(d1.center)
+                pos1 = np.array(d1.center)  # agent 的坐标位置（以 NumPy 数组形式）
                 pos2 = np.array(d2.center)
                 if np.linalg.norm(pos1 - pos2) < 0.7:
                     d1.set_facecolor('red')
