@@ -96,6 +96,7 @@ class Animation:
 
         # self.fig.tight_layout()
 
+        # 指定 animate_func 和 init_func 作为每帧的更新和初始化函数，并设置帧数为 T + 1。每帧以 100 毫秒的间隔更新。
         self.anim = animation.FuncAnimation(self.fig, self.animate_func,
                                             init_func=self.init_func,
                                             frames=int(self.T + 1) * 10,
