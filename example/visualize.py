@@ -188,20 +188,20 @@ class Animation:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("map", help="input file containing map")
-    parser.add_argument("schedule", help="schedule for agents")
+    parser.add_argument("map", help="input file containing map")  # 输入的地图文件
+    parser.add_argument("schedule", help="schedule for agents")  # 包含 agent 移动时间表的文件。
     parser.add_argument('--video', dest='video', default=None,
                         help="output video file (or leave empty to show on screen)")
-    parser.add_argument("--speed", type=int, default=1, help="speedup-factor")
+    parser.add_argument("--speed", type=int, default=1, help="speedup-factor")  # 指定动画播放的加速倍数
     args = parser.parse_args()
 
     with open(args.map) as map_file:
-        map = yaml.safe_load(map_file)
+        map = yaml.safe_load(map_file)  # 将地图文件加载为字典对象
 
     with open(args.schedule) as states_file:
-        schedule = yaml.safe_load(states_file)
+        schedule = yaml.safe_load(states_file)  # 将时间表文件加载为字典对象。
 
-    animation = Animation(map, schedule)
+    animation = Animation(map, schedule)  # 创建 Animation 实例，将地图和时间表数据传入，设置动画对象。
 
     if args.video:
         animation.save(args.video, args.speed)
