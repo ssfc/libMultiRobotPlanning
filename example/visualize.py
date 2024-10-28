@@ -174,6 +174,7 @@ class Animation:
         else:
             return np.array([float(d[-1]["x"]), float(d[-1]["y"])])
 
+        # 计算时间间隔。
         dt = d[idx]["t"] - d[idx - 1]["t"]
         t = (t - d[idx - 1]["t"]) / dt
         pos = (posNext - posLast) * t + posLast
