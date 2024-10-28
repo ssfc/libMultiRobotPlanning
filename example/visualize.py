@@ -113,7 +113,7 @@ class Animation:
         # savefig_kwargs={"pad_inches": 0, "bbox_inches": "tight"})
 
     def show(self):
-        plt.show()
+        plt.show()  # 将当前创建的 matplotlib 图形窗口显示出来。
 
     def init_func(self):
         for p in self.patches:
