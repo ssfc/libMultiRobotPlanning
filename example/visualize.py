@@ -18,6 +18,7 @@ Colors = ['orange']  #, 'blue', 'green']
 
 
 class Animation:
+    # 构造函数接受 map 和 schedule 参数，分别用于提供地图信息和路径调度信息。
     def __init__(self, _map, _schedule):
         self.map = _map
         self.schedule = _schedule
