@@ -150,7 +150,7 @@ class Animation:
                 pos2 = np.array(d2.center)
                 # 如果两个 agent 的距离小于 0.7，则认为发生碰撞。
                 if np.linalg.norm(pos1 - pos2) < 0.7:
-                    d1.set_facecolor('red')
+                    d1.set_facecolor('red')  # 将碰撞的两个 agent 标记为红色。
                     d2.set_facecolor('red')
                     print("COLLISION! (agent-agent) ({}, {})".format(i, j))
 
