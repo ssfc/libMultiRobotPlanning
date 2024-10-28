@@ -107,7 +107,7 @@ class Animation:
     def save(self, file_name, speed):
         self.anim.save(
             file_name,
-            "ffmpeg",
+            "ffmpeg",  # 指定使用 ffmpeg 编码器保存视频。
             fps=10 * speed,
             dpi=200),
         # savefig_kwargs={"pad_inches": 0, "bbox_inches": "tight"})
