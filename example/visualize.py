@@ -38,6 +38,8 @@ class Animation:
         self.artists = []
         self.agents = dict()
         self.agent_names = dict()
+
+        # 根据 map 数据中定义的地图尺寸，定义了边界范围
         # create boundary patch
         x_min = -0.5
         y_min = -0.5
