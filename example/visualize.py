@@ -148,6 +148,7 @@ class Animation:
                 d2 = agents_array[j]
                 pos1 = np.array(d1.center)  # agent 的坐标位置（以 NumPy 数组形式）
                 pos2 = np.array(d2.center)
+                # 如果两个 agent 的距离小于 0.7，则认为发生碰撞。
                 if np.linalg.norm(pos1 - pos2) < 0.7:
                     d1.set_facecolor('red')
                     d2.set_facecolor('red')
