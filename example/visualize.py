@@ -117,6 +117,7 @@ class Animation:
 
     # 在开始动画前将所有的图形元素（如补丁和文本）添加到绘图区域中
     def init_func(self):
+        # self.patches 是一个包含矩形和圆形等图形元素的列表，表示障碍物、边界、目标位置以及其他可视化对象。
         for p in self.patches:
             self.ax.add_patch(p)
         for a in self.artists:
