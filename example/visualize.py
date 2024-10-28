@@ -170,8 +170,10 @@ class Animation:
         elif idx < len(d):
             posLast = np.array([float(d[idx - 1]["x"]), float(d[idx - 1]["y"])])
             posNext = np.array([float(d[idx]["x"]), float(d[idx]["y"])])
+        # t 超出最后一个时间戳，返回最后一个位置 [d[-1]["x"], d[-1]["y"]]。
         else:
             return np.array([float(d[-1]["x"]), float(d[-1]["y"])])
+
         dt = d[idx]["t"] - d[idx - 1]["t"]
         t = (t - d[idx - 1]["t"]) / dt
         pos = (posNext - posLast) * t + posLast
