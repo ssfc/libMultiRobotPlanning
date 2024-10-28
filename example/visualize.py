@@ -34,13 +34,13 @@ class Animation:
         self.agents = dict()
         self.agent_names = dict()
         # create boundary patch
-        xmin = -0.5
+        x_min = -0.5
         ymin = -0.5
         xmax = map["map"]["dimensions"][0] - 0.5
         ymax = map["map"]["dimensions"][1] - 0.5
 
         # self.ax.relim()
-        plt.xlim(xmin, xmax)
+        plt.xlim(x_min, xmax)
         plt.ylim(ymin, ymax)
         # self.ax.set_xticks([])
         # self.ax.set_yticks([])
@@ -48,7 +48,7 @@ class Animation:
         # self.ax.axis('tight')
         # self.ax.axis('off')
 
-        self.patches.append(Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, facecolor='none', edgecolor='red'))
+        self.patches.append(Rectangle((x_min, ymin), xmax - x_min, ymax - ymin, facecolor='none', edgecolor='red'))
         for o in map["map"]["obstacles"]:
             x, y = o[0], o[1]
             self.patches.append(Rectangle((x - 0.5, y - 0.5), 1, 1, facecolor='red', edgecolor='red'))
