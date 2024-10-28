@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
-import yaml
-import matplotlib
-# matplotlib.use("Agg")
+
+from matplotlib import animation
 from matplotlib.patches import Circle, Rectangle, Arrow
 from matplotlib.collections import PatchCollection
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib import animation
-import matplotlib.animation as manimation
+
 import argparse
+import matplotlib
+# matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import matplotlib.animation as manimation
 import math
+import numpy as np
+import yaml
+
 
 Colors = ['orange']  #, 'blue', 'green']
 
