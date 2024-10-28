@@ -5,11 +5,11 @@ from matplotlib.patches import Circle, Rectangle, Arrow
 from matplotlib.collections import PatchCollection
 
 import argparse
+import math
 import matplotlib
 # matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.animation as manimation
-import math
 import numpy as np
 import yaml
 
