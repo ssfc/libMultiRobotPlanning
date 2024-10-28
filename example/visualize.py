@@ -55,6 +55,7 @@ class Animation:
         # self.ax.axis('tight')
         # self.ax.axis('off')
 
+        # 遍历障碍物信息，将每个障碍物位置绘制为红色的方块。
         self.patches.append(Rectangle((x_min, y_min), x_max - x_min, y_max - y_min, facecolor='none', edgecolor='red'))
         for o in _map["map"]["obstacles"]:
             x, y = o[0], o[1]
