@@ -134,7 +134,7 @@ class Animation:
             pos = self.get_state(i / 10, agent)  # 获取当前时间步 i / 10 下 agent 的位置。
             p = (pos[0], pos[1])  # 将位置数据转换为坐标元组 p。
             self.agents[agent_name].center = p  # 更新每个 agent 的 center 属性，以更改其在画布中的位置。
-            self.agent_names[agent_name].set_position(p)
+            self.agent_names[agent_name].set_position(p)  # 将文本标签与 agent 的当前位置对齐。
 
         # reset all colors
         for _, agent in self.agents.items():
