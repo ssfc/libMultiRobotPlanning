@@ -131,7 +131,7 @@ class Animation:
         # 遍历 self.schedule["schedule"] 中每个 agent 的路径。
         for agent_name in self.schedule["schedule"]:
             agent = schedule["schedule"][agent_name]
-            pos = self.getState(i / 10, agent)
+            pos = self.get_state(i / 10, agent)
             p = (pos[0], pos[1])
             self.agents[agent_name].center = p
             self.agent_names[agent_name].set_position(p)
@@ -155,7 +155,7 @@ class Animation:
 
         return self.patches + self.artists
 
-    def getState(self, t, d):
+    def get_state(self, t, d):
         idx = 0
         while idx < len(d) and d[idx]["t"] < t:
             idx += 1
