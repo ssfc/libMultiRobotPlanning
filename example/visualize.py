@@ -163,6 +163,7 @@ class Animation:
         while idx < len(d) and d[idx]["t"] < t:
             idx += 1
 
+        # t 小于 d 中的第一个时间戳，返回第一个位置 [d[0]["x"], d[0]["y"]]。
         if idx == 0:
             return np.array([float(d[0]["x"]), float(d[0]["y"])])
         elif idx < len(d):
