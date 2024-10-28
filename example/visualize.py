@@ -153,7 +153,7 @@ class Animation:
                     d1.set_facecolor('red')  # 将碰撞的两个 agent 标记为红色。
                     d2.set_facecolor('red')
                     print("COLLISION! (agent-agent) ({}, {})".format(i, j))
-
+        # 返回包含所有图形元素和文本标签的列表，以便在 FuncAnimation 的每一帧中刷新图形。
         return self.patches + self.artists
 
     # 在给定时间 t 获取 agent 在路径 d 上的插值位置
