@@ -178,6 +178,7 @@ class Animation:
         dt = d[idx]["t"] - d[idx - 1]["t"]
         # 归一化时间 t 到 [0, 1] 范围。
         t = (t - d[idx - 1]["t"]) / dt
+        # 根据 t 的比例在 posLast 和 posNext 之间进行线性插值。
         pos = (posNext - posLast) * t + posLast
         return pos
 
