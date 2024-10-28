@@ -176,6 +176,7 @@ class Animation:
 
         # 计算时间间隔。
         dt = d[idx]["t"] - d[idx - 1]["t"]
+        # 归一化时间 t 到 [0, 1] 范围。
         t = (t - d[idx - 1]["t"]) / dt
         pos = (posNext - posLast) * t + posLast
         return pos
