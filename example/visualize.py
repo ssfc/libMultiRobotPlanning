@@ -122,6 +122,7 @@ class Animation:
         for p in self.patches:
             self.ax.add_patch(p)
         # self.artists 是一个包含艺术元素的列表，通常为文本元素，用于展示每个 agent 的名称或其他信息。
+        # 遍历 self.artists 中的每个艺术元素（文本）并将其添加到 ax 中。
         for a in self.artists:
             self.ax.add_artist(a)
         return self.patches + self.artists
