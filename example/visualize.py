@@ -120,6 +120,7 @@ class Animation:
         # self.patches 是一个包含矩形和圆形等图形元素的列表，表示障碍物、边界、目标位置以及其他可视化对象。
         for p in self.patches:
             self.ax.add_patch(p)
+        # self.artists 是一个包含艺术元素的列表，通常为文本元素，用于展示每个 agent 的名称或其他信息。
         for a in self.artists:
             self.ax.add_artist(a)
         return self.patches + self.artists
