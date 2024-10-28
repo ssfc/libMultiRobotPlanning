@@ -115,6 +115,7 @@ class Animation:
     def show(self):
         plt.show()  # 将当前创建的 matplotlib 图形窗口显示出来。
 
+    # 在开始动画前将所有的图形元素（如补丁和文本）添加到绘图区域中
     def init_func(self):
         for p in self.patches:
             self.ax.add_patch(p)
