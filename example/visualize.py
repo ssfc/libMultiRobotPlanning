@@ -75,6 +75,7 @@ class Animation:
                     Rectangle((goal[0] - 0.25, goal[1] - 0.25), 0.5, 0.5, facecolor=Colors[i % len(Colors)],
                               edgecolor='black', alpha=0.5))
 
+        # 创建一个代表代理的圆形对象，并将其起始位置设为 start 坐标。
         for d, i in zip(_map["agents"], range(0, len(_map["agents"]))):
             name = d["name"]
             self.agents[name] = Circle((d["start"][0], d["start"][1]), 0.3, facecolor=Colors[i % len(Colors)],
