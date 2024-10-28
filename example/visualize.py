@@ -63,6 +63,7 @@ class Animation:
 
         # create agents:
         self.T = 0
+        # 为每个代理的目标位置绘制半透明方块表示，颜色基于预定义的 Colors 数组。
         # draw goals first
         for d, i in zip(_map["agents"], range(0, len(_map["agents"]))):
             if "goal" in d:
