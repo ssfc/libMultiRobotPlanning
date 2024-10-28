@@ -28,6 +28,7 @@ class Animation:
 
         # 创建了一个无边框的图形 fig
         self.fig = plt.figure(frameon=False, figsize=(4 * aspect, 4))
+        # 将绘图区 ax 设置为长宽比例相等。
         self.ax = self.fig.add_subplot(111, aspect='equal')
         self.fig.subplots_adjust(left=0, right=1, bottom=0, top=1, wspace=None, hspace=None)
         # self.ax.set_frame_on(False)
