@@ -131,7 +131,7 @@ class Animation:
         # 遍历 self.schedule["schedule"] 中每个 agent 的路径。
         for agent_name in self.schedule["schedule"]:
             agent = schedule["schedule"][agent_name]
-            pos = self.get_state(i / 10, agent)
+            pos = self.get_state(i / 10, agent)  # 获取当前时间步 i / 10 下 agent 的位置。
             p = (pos[0], pos[1])
             self.agents[agent_name].center = p
             self.agent_names[agent_name].set_position(p)
