@@ -128,6 +128,7 @@ class Animation:
         return self.patches + self.artists
 
     def animate_func(self, i):
+        # 遍历 self.schedule["schedule"] 中每个 agent 的路径。
         for agent_name in self.schedule["schedule"]:
             agent = schedule["schedule"][agent_name]
             pos = self.getState(i / 10, agent)
