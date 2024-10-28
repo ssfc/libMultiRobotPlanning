@@ -140,7 +140,7 @@ class Animation:
         for _, agent in self.agents.items():
             agent.set_facecolor(agent.original_face_color)
 
-        # check drive-drive collisions
+        # check agent-agent collisions
         agents_array = [agent for _, agent in self.agents.items()]
         for i in range(0, len(agents_array)):
             for j in range(i + 1, len(agents_array)):
