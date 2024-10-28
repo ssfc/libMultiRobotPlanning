@@ -26,6 +26,7 @@ class Animation:
         # 计算地图的纵横比 aspect
         aspect = _map["map"]["dimensions"][0] / _map["map"]["dimensions"][1]
 
+        # 创建了一个无边框的图形 fig
         self.fig = plt.figure(frameon=False, figsize=(4 * aspect, 4))
         self.ax = self.fig.add_subplot(111, aspect='equal')
         self.fig.subplots_adjust(left=0, right=1, bottom=0, top=1, wspace=None, hspace=None)
