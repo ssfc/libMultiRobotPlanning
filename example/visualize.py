@@ -166,6 +166,7 @@ class Animation:
         # t 小于 d 中的第一个时间戳，返回第一个位置 [d[0]["x"], d[0]["y"]]。
         if idx == 0:
             return np.array([float(d[0]["x"]), float(d[0]["y"])])
+        # t 位于 d[idx - 1] 和 d[idx] 之间，计算插值。
         elif idx < len(d):
             posLast = np.array([float(d[idx - 1]["x"]), float(d[idx - 1]["y"])])
             posNext = np.array([float(d[idx]["x"]), float(d[idx]["y"])])
