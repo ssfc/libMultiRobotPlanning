@@ -157,9 +157,12 @@ class Animation:
 
     # 在给定时间 t 获取 agent 在路径 d 上的插值位置
     def get_state(self, t, d):
+
+        # 找到第一个时间大于或等于 t 的位置。
         idx = 0
         while idx < len(d) and d[idx]["t"] < t:
             idx += 1
+
         if idx == 0:
             return np.array([float(d[0]["x"]), float(d[0]["y"])])
         elif idx < len(d):
