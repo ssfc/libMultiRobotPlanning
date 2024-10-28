@@ -103,6 +103,7 @@ class Animation:
                                             interval=100,
                                             blit=True)
 
+    # speed：控制视频播放的速度。
     def save(self, file_name, speed):
         self.anim.save(
             file_name,
