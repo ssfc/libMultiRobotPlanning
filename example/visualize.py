@@ -180,6 +180,8 @@ class Animation:
         t = (t - d[idx - 1]["t"]) / dt
         # 根据 t 的比例在 posLast 和 posNext 之间进行线性插值。
         pos = (posNext - posLast) * t + posLast
+
+        # 返回 t 时刻的插值位置。
         return pos
 
 
