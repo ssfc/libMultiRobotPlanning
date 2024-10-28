@@ -84,6 +84,7 @@ class Animation:
             self.patches.append(self.agents[name])
             # 通过 self.T 保存调度中最后一个时间步数。
             self.T = max(self.T, _schedule["schedule"][name][-1]["t"])
+            # 在代理起始位置显示名称标注。
             self.agent_names[name] = self.ax.text(d["start"][0], d["start"][1], name.replace('agent', ''))
             self.agent_names[name].set_horizontalalignment('center')
             self.agent_names[name].set_verticalalignment('center')
