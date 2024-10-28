@@ -155,6 +155,7 @@ class Animation:
 
         return self.patches + self.artists
 
+    # 在给定时间 t 获取 agent 在路径 d 上的插值位置
     def get_state(self, t, d):
         idx = 0
         while idx < len(d) and d[idx]["t"] < t:
