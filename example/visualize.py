@@ -208,5 +208,5 @@ if __name__ == "__main__":
     else:
         animation.show()
 
-# Run on windows platform: 
+# Run on windows platform:
 # python visualize.py ../benchmark/32x32_obst204/map_32by32_obst204_agents10_ex1.yaml output.yaml
